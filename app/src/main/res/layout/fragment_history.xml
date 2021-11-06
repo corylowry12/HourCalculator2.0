@@ -14,7 +14,7 @@
                 android:layout_width="match_parent"
                 app:title="History"
                 app:titleCentered="true"
-                android:background="@color/colorPrimary"
+                android:background="?attr/appBarBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -30,5 +30,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/materialToolBarHistory"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contentDescription="scroll to top"
+        app:fabSize="mini"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="15dp"
+        app:srcCompat="@drawable/ic_arrow_upward_24px" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
