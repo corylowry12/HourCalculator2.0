@@ -3,15 +3,19 @@
     <style name="Theme.MyApplication" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-
+        <item name="backgroundColor">#ffffff</item>
         <item name="colorPrimaryDark">@color/darkTeal</item>
 
         <item name="textColor">#000000</item>
         <item name="settingsIconTint">@color/lightIconTint</item>
 
-        <item name="cardBackgroundColor">@color/cardLightBackground</item>
+        <item name="cardBackground">@color/cardLightBackground</item>
         <item name="appBarBackground">@color/colorPrimary</item>
         <item name="historyItemMenuTint">@android:color/black</item>
+    </style>
+
+    <style name="AMOLED" parent="ThemeOverlay.MaterialComponents.Dark">
+       <item name="backgroundColor">#000000</item>
     </style>
 
     <style name="pink_accent">
@@ -19,6 +23,8 @@
         <item name="colorAccent">@color/pinkAccent</item>
         <item name="colorPrimaryDark">@color/darkPink</item>
         <item name="appBarBackground">@color/pinkAccent</item>
+        <item name="cardBackground">@color/cardPink</item>
+        <item name="selectedTint">@color/pinkAccent</item>
     </style>
 
     <style name="teal_accent">
@@ -26,6 +32,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/darkTeal</item>
         <item name="appBarBackground">@color/colorPrimary</item>
+        <item name="cardBackground">@color/cardTeal</item>
+        <item name="selectedTint">@color/colorPrimary</item>
     </style>
 
     <style name="orange_accent">
@@ -33,6 +41,8 @@
         <item name="colorAccent">@color/orangeAccent</item>
         <item name="colorPrimaryDark">@color/darkOrangeAccent</item>
         <item name="appBarBackground">@color/orangeAccent</item>
+        <item name="cardBackground">@color/cardOrange</item>
+        <item name="selectedTint">@color/orangeAccent</item>
     </style>
 
     <style name="red_accent">
@@ -40,6 +50,8 @@
         <item name="colorAccent">@color/redAccent</item>
         <item name="colorPrimaryDark">@color/darkRed</item>
         <item name="appBarBackground">@color/redAccent</item>
+        <item name="cardBackground">@color/cardRed</item>
+        <item name="selectedTint">@color/redAccent</item>
     </style>
 
     <style name="system_accent">
