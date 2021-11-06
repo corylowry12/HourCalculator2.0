@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="PrivateResource"
         tools:visibility="visible"
+        app:cardBackgroundColor="?attr/cardBackground"
         style="?attr/materialCardViewElevatedStyle">
 
         <RelativeLayout
