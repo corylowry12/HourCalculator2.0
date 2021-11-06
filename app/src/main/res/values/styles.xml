@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MyApplication" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <item name="colorPrimaryDark">@color/darkTeal</item>
+
+        <item name="textColor">#000000</item>
+        <item name="settingsIconTint">@color/lightIconTint</item>
+
+        <item name="cardBackgroundColor">@color/cardLightBackground</item>
+        <item name="appBarBackground">@color/colorPrimary</item>
+        <item name="historyItemMenuTint">@android:color/black</item>
+    </style>
+</resources>
