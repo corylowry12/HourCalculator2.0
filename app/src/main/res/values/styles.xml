@@ -13,4 +13,40 @@
         <item name="appBarBackground">@color/colorPrimary</item>
         <item name="historyItemMenuTint">@android:color/black</item>
     </style>
+
+    <style name="pink_accent">
+        <item name="colorPrimary">@color/pinkAccent</item>
+        <item name="colorAccent">@color/pinkAccent</item>
+        <item name="colorPrimaryDark">@color/darkPink</item>
+        <item name="appBarBackground">@color/pinkAccent</item>
+    </style>
+
+    <style name="teal_accent">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/darkTeal</item>
+        <item name="appBarBackground">@color/colorPrimary</item>
+    </style>
+
+    <style name="orange_accent">
+        <item name="colorPrimary">@color/orangeAccent</item>
+        <item name="colorAccent">@color/orangeAccent</item>
+        <item name="colorPrimaryDark">@color/darkOrangeAccent</item>
+        <item name="appBarBackground">@color/orangeAccent</item>
+    </style>
+
+    <style name="red_accent">
+        <item name="colorPrimary">@color/redAccent</item>
+        <item name="colorAccent">@color/redAccent</item>
+        <item name="colorPrimaryDark">@color/darkRed</item>
+        <item name="appBarBackground">@color/redAccent</item>
+    </style>
+
+    <style name="system_accent">
+        <item name="colorPrimary">@color/pixelAccent</item>
+        <item name="colorAccent">@color/pixelAccent</item>
+        <item name="colorPrimaryDark">@color/pixelAccentDark</item>
+        <item name="appBarBackground">@color/pixelAccent</item>
+    </style>
+
 </resources>
