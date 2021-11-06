@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.fragments.AppearanceFragment
 import com.cory.hourcalculator.fragments.HistoryFragment
 import com.cory.hourcalculator.fragments.HomeFragment
 import com.cory.hourcalculator.fragments.SettingsFragment
@@ -23,6 +25,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val accentColor = AccentColor(this)
+        when {
+            accentColor.loadAccent() == 0 -> {
+                theme.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                theme.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                theme.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                theme.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                theme.applyStyle(R.style.system_accent, true)
+            }
+        }
         setContentView(R.layout.activity_main)
 
         replaceFragment(homeFragment)
@@ -40,7 +60,23 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        bottom_nav.itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.colorPrimaryLightAppBar))
+        when {
+            accentColor.loadAccent() == 0 -> {
+                bottom_nav.itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.colorPrimaryLightAppBar))
+            }
+            accentColor.loadAccent() == 1 -> {
+                bottom_nav.itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.colorPrimaryPinkAppBar))
+            }
+            accentColor.loadAccent() == 2 -> {
+                bottom_nav.itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.colorPrimaryOrangeAppBar))
+            }
+            accentColor.loadAccent() == 3 -> {
+                bottom_nav.itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.colorPrimaryRedAppBar))
+            }
+            accentColor.loadAccent() == 4 -> {
+                bottom_nav.itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.colorPrimaryPixelAppBar))
+            }
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -60,6 +96,9 @@ class MainActivity : AppCompatActivity() {
             else if (settingsFragment.isVisible) {
                 transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
             }
+            else {
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+            }
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
@@ -77,5 +116,24 @@ class MainActivity : AppCompatActivity() {
         val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.ic_home1)
         badge.isVisible = true
         badge.number = dbHandler.getCount()
+    }
+
+    fun goBack(fragment: Fragment) {
+        if (fragment == AppearanceFragment()) {
+            val transaction = supportFragmentManager.beginTransaction()
+
+            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
+            transaction.commit()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (AppearanceFragment().isVisible) {
+            Toast.makeText(this, "Visible", Toast.LENGTH_LONG).show()
+        }
     }
 }
