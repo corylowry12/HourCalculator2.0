@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireActivity(), "break time not empty $totalHoursWithBreak", Toast.LENGTH_LONG).show()
 
                 savingHours(totalHours, inTimeTotal, outTimeTotal, breakTime.text.toString())
-                infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal"
+                infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
             }
             else {
                 savingHours(totalHours, inTimeTotal, outTimeTotal, "0")
