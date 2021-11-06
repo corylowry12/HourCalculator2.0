@@ -28,9 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val bottom_nav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
-        val badge = bottom_nav.getOrCreateBadge(R.id.ic_home1)
-        badge.isVisible = true
-        badge.number = dbHandler.getCount()
+        changeBadgeNumber()
 
         bottom_nav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -47,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         if (fragment != null) {
             val transaction = supportFragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
         }
@@ -54,11 +53,14 @@ class MainActivity : AppCompatActivity() {
 
     fun update() {
 
+       changeBadgeNumber()
 
+        historyFragment.update()
+    }
+
+    fun changeBadgeNumber() {
         val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.ic_home1)
         badge.isVisible = true
         badge.number = dbHandler.getCount()
-
-        historyFragment.update()
     }
 }

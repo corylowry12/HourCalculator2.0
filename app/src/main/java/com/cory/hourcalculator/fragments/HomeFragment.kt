@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.textfield.TextInputEditText
@@ -33,7 +34,6 @@ class HomeFragment : Fragment() {
        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
 
         calculateButton?.setOnClickListener {
-            Toast.makeText(activity, "Hello world", Toast.LENGTH_LONG).show()
 
             calculate()
         }
@@ -134,6 +134,11 @@ class HomeFragment : Fragment() {
                 infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal"
             }
 
+            val runnable = Runnable {
+                (context as MainActivity).changeBadgeNumber()
+            }
+
+            MainActivity().runOnUiThread(runnable)
         }
     }
 
