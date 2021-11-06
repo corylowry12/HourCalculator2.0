@@ -16,8 +16,7 @@
         app:menu="@menu/menu"
         android:background="?attr/appBarBackground"
         app:itemIconTint="@android:color/black"
-        app:itemTextColor="@android:color/white"
-        android:foregroundTint="@color/colorPrimary"/>
+        app:itemTextColor="@android:color/white"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"
