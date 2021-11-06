@@ -18,15 +18,15 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:statusBarScrim="?attr/colorPrimaryVariant">
+           >
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
                 app:layout_collapseMode="pin"
+                android:elevation="0dp"
                 app:title="Settings"
                 android:background="@android:color/transparent"
                 app:titleCentered="true">
@@ -54,10 +54,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -125,10 +126,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -195,10 +197,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -266,10 +269,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -338,12 +342,13 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                style="?attr/materialCardViewElevatedStyle"
                 app:layout_constraintTop_toBottomOf="@+id/cardView11">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -414,10 +419,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView5">
@@ -489,10 +495,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reviewCardView">
@@ -564,10 +571,11 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2">
@@ -639,10 +647,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2">
@@ -713,7 +722,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
@@ -787,7 +796,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
@@ -861,7 +870,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
@@ -935,7 +944,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
