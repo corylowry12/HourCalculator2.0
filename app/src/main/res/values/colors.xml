@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#26A69A</color>
-    <color name="colorPrimaryLightAppBar">#90DAD2</color>
+
+    <color name="colorAccent">#26A69A</color>
     <color name="lightIconTint">#000000</color>
 
     <color name="cardLightBackground">#E8E8E8</color>
 
-    <color name="darkRed">#8E2421</color>
+    <color name="darkRed">#501513</color>
     <color name="darkTeal">#1E7C73</color>
     <color name="darkPink">#B35F88</color>
+
+    <color name="colorPrimaryLightAppBar">#90DAD2</color>
+    <color name="colorPrimaryPinkAppBar">#F89FCC</color>
+    <color name="colorPrimaryOrangeAppBar">#FA986B</color>
+    <color name="colorPrimaryRedAppBar">#873A3A</color>
+    <color name="colorPrimaryPixelAppBar" tools:targetApi="s">@android:color/system_accent1_200</color>
 
     <color name="pinkAccent">#FA7DBD</color>
     <color name="orangeAccent">#FA773B</color>
     <color name="darkOrangeAccent">#C65E2F</color>
-    <color name="redAccent">#C41D1D</color>
+    <color name="redAccent">#831313</color>
 
     <color name="pixelAccent" tools:targetApi="s">@android:color/system_accent1_400</color>
     <color name="pixelAccentDark" tools:targetApi="s">@android:color/system_accent1_700</color>
