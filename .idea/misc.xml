@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/activity_main.xml" value="0.30842391304347827" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_appearance.xml" value="0.2081447963800905" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_history.xml" value="0.2203125" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_home.xml" value="0.2203125" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_settings.xml" value="0.2203125" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/list_row.xml" value="0.2203125" />
         <entry key="..\:/HourCalculator4/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/app/src/main/res/drawable/circleimagevieworange.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/app/src/main/res/drawable/circleimageviewsystemaccent.xml" value="0.24375" />
