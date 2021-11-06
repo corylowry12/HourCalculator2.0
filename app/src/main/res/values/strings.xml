@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Hour Calculator</string>
 
+    <string name="app_name">Hour Calculator</string>
     <string name="in_time_adapter">In Time: %1$s</string>
     <string name="out_time_adapter">Out Time: %1$s</string>
     <string name="total_time_adapter">Total Time: %1$s</string>
     <string name="date_adapter">Date: %1$s</string>
+
 </resources>
