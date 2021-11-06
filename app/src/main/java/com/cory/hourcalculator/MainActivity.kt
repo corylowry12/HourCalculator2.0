@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.HistoryFragment
 import com.cory.hourcalculator.fragments.HomeFragment
@@ -44,8 +45,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment != null) {
+
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+
+            if (homeFragment.isVisible) {
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+            }
+            else if (historyFragment.isVisible && fragment == homeFragment) {
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+            }
+            else if (historyFragment.isVisible && fragment == settingsFragment) {
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+            }
+            else if (settingsFragment.isVisible) {
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+            }
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
         }
