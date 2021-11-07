@@ -14,8 +14,8 @@
         <item name="historyItemMenuTint">@android:color/black</item>
     </style>
 
-    <style name="AMOLED" parent="ThemeOverlay.MaterialComponents.Dark">
-       <item name="backgroundColor">#000000</item>
+    <style name="Theme.DarkTheme" parent="ThemeOverlay.MaterialComponents.Dark">
+       <item name="backgroundColor">#555555</item>
     </style>
 
     <style name="pink_accent">

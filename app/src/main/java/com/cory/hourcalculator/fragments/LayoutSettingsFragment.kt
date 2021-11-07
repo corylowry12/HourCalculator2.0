@@ -15,8 +15,8 @@ import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.HistoryToggleData
 import com.cory.hourcalculator.classes.VibrationData
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 
 class LayoutSettingsFragment : Fragment() {
 
@@ -26,7 +26,7 @@ class LayoutSettingsFragment : Fragment() {
     ): View? {
         val darkThemeData = DarkThemeData(requireContext())
         if (darkThemeData.loadDarkModeState()) {
-            activity?.setTheme(R.style.AMOLED)
+            activity?.setTheme(R.style.Theme_DarkTheme)
         } else {
             activity?.setTheme(R.style.Theme_MyApplication)
         }
@@ -53,6 +53,13 @@ class LayoutSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarLayoutSettings)
+
+        topAppBar?.setNavigationOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
+        }
+
         val vibrationData = VibrationData(requireContext())
         val enableVibration = activity?.findViewById<RadioButton>(R.id.enableVibration)
         val disableVibration = activity?.findViewById<RadioButton>(R.id.disableVibration)

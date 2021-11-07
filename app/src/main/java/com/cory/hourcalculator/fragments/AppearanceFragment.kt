@@ -28,7 +28,7 @@ class AppearanceFragment : Fragment() {
     ): View? {
         val darkThemeData = DarkThemeData(requireContext())
         if (darkThemeData.loadDarkModeState()) {
-            activity?.setTheme(R.style.AMOLED)
+            activity?.setTheme(R.style.Theme_DarkTheme)
         } else {
             activity?.setTheme(R.style.Theme_MyApplication)
         }
