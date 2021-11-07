@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.HistoryToggleData
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.AppearanceFragment
 import com.cory.hourcalculator.fragments.HistoryFragment
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         val bottom_nav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         changeBadgeNumber()
+
+        toggleHistory()
 
         bottom_nav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -118,16 +121,10 @@ class MainActivity : AppCompatActivity() {
         badge.number = dbHandler.getCount()
     }
 
-    fun goBack(fragment: Fragment) {
-        if (fragment == AppearanceFragment()) {
-            val transaction = supportFragmentManager.beginTransaction()
+    fun toggleHistory() {
+        val historyToggleData = HistoryToggleData(this)
 
-            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
-            transaction.commit()
-        }
+        findViewById<BottomNavigationView>(R.id.bottom_nav).menu.findItem(R.id.ic_home1).isVisible = historyToggleData.loadHistoryState()
     }
 
     override fun onBackPressed() {

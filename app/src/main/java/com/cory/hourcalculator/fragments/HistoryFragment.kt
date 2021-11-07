@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
 import android.widget.ListView
@@ -21,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class HistoryFragment : Fragment() {
 
     private var output : String = ""
+    val dataList = ArrayList<HashMap<String, String>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,7 +117,6 @@ class HistoryFragment : Fragment() {
     private fun loadIntoList() {
 
         val dbHandler = DBHelper(requireContext(), null)
-        val dataList = ArrayList<HashMap<String, String>>()
 
         var y = 0.0
 

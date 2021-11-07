@@ -7,6 +7,20 @@
 android:background="?attr/backgroundColor"
     tools:context=".fragments.AppearanceFragment">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolBarAppearance"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:title="Appearance Settings"
+        app:layout_collapseMode="pin"
+        app:titleCentered="true"
+        android:background="?attr/appBarBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="?attr/textColor"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -14,7 +28,7 @@ android:background="?attr/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/materialToolBarAppearance">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -70,11 +84,22 @@ android:background="?attr/backgroundColor"
                 </RadioGroup>
             </androidx.cardview.widget.CardView>
 
+            <com.kieronquinn.monetcompat.view.MonetSwitch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mainSwitch"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Stuff"
+                android:layout_below="@id/themeCardView"/>
+
             <TextView
                 android:id="@+id/accentSettingsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/themeCardView"
+                android:layout_below="@id/mainSwitch"
                 android:gravity="center"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"

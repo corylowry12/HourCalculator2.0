@@ -10,6 +10,7 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.FragmentManager
 import com.cory.hourcalculator.MainActivity
@@ -89,6 +90,7 @@ class CustomAdapter(
 
                             }
                         }
+
                         val runnable = Runnable {
                             (context as MainActivity).update()
                             Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show()

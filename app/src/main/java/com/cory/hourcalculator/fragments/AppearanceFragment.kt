@@ -18,6 +18,7 @@ import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
+import com.google.android.material.appbar.MaterialToolbar
 
 class AppearanceFragment : Fragment() {
 
@@ -31,11 +32,36 @@ class AppearanceFragment : Fragment() {
         } else {
             activity?.setTheme(R.style.Theme_MyApplication)
         }
+
+        val accentColor = AccentColor(requireContext())
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                activity?.theme?.applyStyle(R.style.system_accent, true)
+            }
+        }
         return inflater.inflate(R.layout.fragment_appearance, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
+
+        topAppBar?.setNavigationOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
+        }
 
         val darkThemeData = DarkThemeData(requireContext())
 
