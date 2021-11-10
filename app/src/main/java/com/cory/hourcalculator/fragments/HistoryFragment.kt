@@ -72,6 +72,7 @@ class HistoryFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
             }
         }
+
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
