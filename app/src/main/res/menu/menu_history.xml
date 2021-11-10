@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 <item
     android:id="@+id/info"
     android:title="Info"
@@ -8,4 +9,26 @@
     android:icon="@drawable/ic_baseline_info_24"
     android:iconTint="?attr/historyItemMenuTint"
     />
+
+    <item
+        android:id="@+id/mnuSort"
+        android:icon="@drawable/ic_sort_24px"
+        android:title="Sort"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
+        <menu>
+            <item
+                android:id="@+id/menuSortByLastEntered"
+                android:title="Sort by last entered" />
+            <item
+                android:id="@+id/menuSortByFirstEntered"
+                android:title="Sort by first entered" />
+            <item
+                android:id="@+id/menuSortByMostHours"
+                android:title="Sort by most hours" />
+            <item
+                android:id="@+id/menuSortByLeastHours"
+                android:title="Sort by least hours" />
+        </menu>
+    </item>
 </menu>
