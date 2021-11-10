@@ -69,11 +69,18 @@ class HomeFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
             }
         }
+
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val runnable = Runnable {
+            (activity as MainActivity).setActiveTab()
+        }
+
+        MainActivity().runOnUiThread(runnable)
 
         val breakTextBox = activity?.findViewById<TextInputEditText>(R.id.breakTime)
         val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
