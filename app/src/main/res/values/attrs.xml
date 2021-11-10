@@ -5,6 +5,8 @@
     <attr name="settingsIconTint" type="color" />
     <attr name="cardBackground" format="color" />
 
+    <attr name="settingsTextColor" format="color" />
+
     <attr name="appBarBackground" format="color" />
 
     <attr name="historyItemMenuTint" format="color" />
