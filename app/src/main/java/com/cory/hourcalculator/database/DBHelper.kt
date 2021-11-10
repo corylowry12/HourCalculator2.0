@@ -39,10 +39,11 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun update(id: String, intime: String, outtime: String, total: String, dayOfWeek: String) {
+    fun update(id: String, intime: String, outtime: String, total: String, dayOfWeek: String, breakTime: String) {
         val values = ContentValues()
         values.put(COLUMN_IN, intime)
         values.put(COLUMN_OUT, outtime)
+        values.put(COLUMN_BREAK, breakTime)
         values.put(COLUMN_TOTAL, total)
         values.put(COLUMN_DAY, dayOfWeek)
 

@@ -16,8 +16,14 @@ import androidx.fragment.app.FragmentManager
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.fragments.AppearanceFragment
+import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.fragments.HistoryFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.appcompat.app.AppCompatActivity
+import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.IdData
+
 
 class CustomAdapter(
     private val context: Context,
@@ -38,7 +44,7 @@ class CustomAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("ViewHolder")
+    @SuppressLint("ViewHolder", "Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val dbHandler = DBHelper(context, null)
         val dataitem = dataList[position]
@@ -99,7 +105,7 @@ class CustomAdapter(
                         MainActivity().runOnUiThread(runnable)
                     }
                     R.id.menu4 -> {
-                        val alertDialog = MaterialAlertDialogBuilder(context)
+                        val alertDialog = MaterialAlertDialogBuilder(context, AccentColor(context).alertTheme(context))
                         alertDialog.setTitle("Delete All?")
                         alertDialog.setMessage("Would you like to delete all?")
                         alertDialog.setPositiveButton("Yes") { _, _ ->
@@ -117,7 +123,7 @@ class CustomAdapter(
                         val alert = alertDialog.create()
                         alert.show()
                     }
-                    /*R.id.menu5 -> {
+                    R.id.menu5 -> {
                         dataList.clear()
                         val cursor = dbHandler.getAllRow(context)
                         cursor!!.moveToPosition(position)
@@ -128,6 +134,7 @@ class CustomAdapter(
                             map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
                             map["intime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
                             map["out"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                            map["break"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
                             map["total"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
                             map["day"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
                             dataList.add(map)
@@ -135,18 +142,21 @@ class CustomAdapter(
                             cursor.moveToNext()
 
                         }
-                        if ((map["intime"].toString().contains(context.getString(R.string.am)) || map["intime"].toString().contains(context.getString(R.string.pm))) &&
-                            (map["out"].toString().contains(context.getString(R.string.am)) || map["out"].toString().contains(context.getString(R.string.pm)))
+                        if ((map["intime"].toString().contains("am") || map["intime"].toString().contains("pm")) &&
+                            (map["out"].toString().contains("am") || map["out"].toString().contains("pm"))
                         ) {
-                            val intent = Intent(context, EditActivity::class.java)
-                            intent.putExtra("id", position.toString())
-                            (context as HistoryActivity).startActivity(intent)
-                            (context).overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+
+                                val idData = IdData(context)
+                            idData.setID(position)
+                            val manager = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                            manager.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                            manager.replace(R.id.fragment_container, EditHours()).addToBackStack(null)
+                            manager.commit()
 
                         } else {
-                            Toast.makeText(context, context.getString(R.string.cant_edit), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Cant edit", Toast.LENGTH_SHORT).show()
                         }
-                    }*/
+                    }
                 }
                true
             }

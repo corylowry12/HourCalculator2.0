@@ -1,19 +1,26 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.BreakTextBoxVisiblityClass
+import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,6 +32,25 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
+                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                }
+            }
+        }
+
         val accentColor = AccentColor(requireContext())
         when {
             accentColor.loadAccent() == 0 -> {
@@ -48,6 +74,31 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val breakTextBox = activity?.findViewById<TextInputEditText>(R.id.breakTime)
+        val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
+        val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
+        val breakTextBoxVisiblityClass = BreakTextBoxVisiblityClass(requireContext())
+
+        if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
+            breakTextBox?.visibility = View.GONE
+            breakTextView?.visibility = View.GONE
+            breakTextViewInput?.visibility = View.GONE
+        }
+        else {
+            breakTextBox?.visibility = View.VISIBLE
+            breakTextView?.visibility = View.VISIBLE
+            breakTextViewInput?.visibility = View.VISIBLE
+        }
+
+        val constraintLayout = activity?.findViewById<ConstraintLayout>(R.id.homeConstraintLayout)
+        constraintLayout?.setOnClickListener {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (imm.isAcceptingText) {
+                imm.hideSoftInputFromWindow(constraintLayout.windowToken, 0)
+                breakTextBox?.clearFocus()
+            }
+        }
 
        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
 
@@ -160,7 +211,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    var counter = 1
     private fun savingHours(totalHours: Double, inTimeTotal: String, outTimeTotal: String, breakTime: String) {
 
         val dbHandler = DBHelper(requireContext(), null)
@@ -169,6 +219,5 @@ class HomeFragment : Fragment() {
         val day2 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         val dayOfWeek = day.format(day2)
         dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours.toString(), dayOfWeek, breakTime)
-        counter += 1
     }
 }

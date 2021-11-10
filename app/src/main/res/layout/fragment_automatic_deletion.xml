@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Enable History Automatic Deletion"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp" />
 
                     <RadioButton
@@ -68,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Disable History Automatic Deletion"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp" />
                 </RadioGroup>
             </androidx.cardview.widget.CardView>

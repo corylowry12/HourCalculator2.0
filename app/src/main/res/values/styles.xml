@@ -7,15 +7,26 @@
         <item name="colorPrimaryDark">@color/darkTeal</item>
 
         <item name="textColor">#000000</item>
+
+        <item name="settingsTextColor">@android:color/black</item>
         <item name="settingsIconTint">@color/lightIconTint</item>
 
         <item name="cardBackground">@color/cardLightBackground</item>
         <item name="appBarBackground">@color/colorPrimary</item>
         <item name="historyItemMenuTint">@android:color/black</item>
+        <item name = "notSelectedTint">@color/colorPrimary</item>
     </style>
 
     <style name="Theme.DarkTheme" parent="ThemeOverlay.MaterialComponents.Dark">
-       <item name="backgroundColor">#555555</item>
+       <item name="backgroundColor">#1f1d1f</item>
+        <item name="textColor">@android:color/white</item>
+        <item name="settingsTextColor">@android:color/black</item>
+    </style>
+
+    <style name="Theme.AMOLED" parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="backgroundColor">#000000</item>
+        <item name="textColor">@android:color/white</item>
+        <item name="settingsTextColor">@android:color/black</item>
     </style>
 
     <style name="pink_accent">
@@ -55,10 +66,56 @@
     </style>
 
     <style name="system_accent">
-        <item name="colorPrimary">@color/pixelAccent</item>
-        <item name="colorAccent">@color/pixelAccent</item>
-        <item name="colorPrimaryDark">@color/pixelAccentDark</item>
-        <item name="appBarBackground">@color/pixelAccent</item>
+        <item name="colorPrimary">@color/systemAccent</item>
+        <item name="colorAccent">@color/systemAccent</item>
+        <item name="colorPrimaryDark">@color/systemAccentDark</item>
+        <item name="appBarBackground">@color/systemAccent</item>
+        <item name="cardBackground">@color/cardSystem</item>
+        <item name="selectedTint">@color/systemAccent</item>
     </style>
 
+    <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/darkTeal</item>
+        <item name="colorSecondary">@android:color/black</item>
+        <item name="colorSurface">@color/colorPrimaryLightDialog</item>
+        <item name="colorOnSurface">@android:color/black</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+    </style>
+
+    <style name="AlertDialogStylePink" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/darkPink</item>
+        <item name="colorSecondary">@android:color/black</item>
+        <item name="colorSurface">@color/pinkDialog</item>
+        <item name="colorOnSurface">@android:color/black</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+    </style>
+
+    <style name="AlertDialogStyleOrange" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/darkOrangeAccent</item>
+        <item name="colorSecondary">@android:color/black</item>
+        <item name="colorSurface">@color/orangeDialog</item>
+        <item name="colorOnSurface">@android:color/black</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+    </style>
+
+    <style name="AlertDialogStyleRed" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/darkRed</item>
+        <item name="colorSecondary">@android:color/black</item>
+        <item name="colorSurface">@color/redDialog</item>
+        <item name="colorOnSurface">@android:color/black</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+    </style>
+
+    <style name="AlertDialogStyleSystemAccent" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/systemAccentDark</item>
+        <item name="colorSecondary">@android:color/black</item>
+        <item name="colorSurface">@color/systemAccentDialog</item>
+        <item name="colorOnSurface">@android:color/black</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+    </style>
 </resources>

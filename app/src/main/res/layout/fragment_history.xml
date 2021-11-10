@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.HistoryFragment"
-    android:tag="history">
+    android:tag="history"
+    android:background="?attr/backgroundColor">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolBarHistory"
@@ -30,6 +31,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/materialToolBarHistory"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/noHoursStoredTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="There are currently no hours stored"
+        android:textAlignment="center"
+        android:textColor="?attr/textColor"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonHistory"

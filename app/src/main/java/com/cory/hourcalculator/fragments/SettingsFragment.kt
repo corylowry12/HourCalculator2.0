@@ -1,14 +1,23 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.classes.LinkClass
+import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SettingsFragment : Fragment() {
 
@@ -16,6 +25,25 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
+                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                }
+            }
+        }
+
         val accentColor = AccentColor(requireContext())
         when {
             accentColor.loadAccent() == 0 -> {
@@ -102,6 +130,44 @@ class SettingsFragment : Fragment() {
         patchNotesCardView?.setOnClickListener {
             openPatchNotesFragment()
         }
+
+        LinkClass(requireContext()).setLink("https://github.com/")
+
+        val githubHeading = activity?.findViewById<TextView>(R.id.textViewGithubHeading)
+        val githubSubtitle = activity?.findViewById<TextView>(R.id.textViewGithubCaption)
+        val githubImage = activity?.findViewById<ImageView>(R.id.githubImage)
+        val githubCardView = activity?.findViewById<CardView>(R.id.cardViewGithub)
+
+        githubHeading?.setOnClickListener {
+            openWebviewFragment()
+        }
+        githubSubtitle?.setOnClickListener {
+            openWebviewFragment()
+        }
+        githubImage?.setOnClickListener {
+            openWebviewFragment()
+        }
+        githubCardView?.setOnClickListener {
+            openWebviewFragment()
+        }
+
+        val deleteDataHeading = activity?.findViewById<TextView>(R.id.deleteDataHeading)
+        val deleteDataSubtitle = activity?.findViewById<TextView>(R.id.deleteDataSubtitle)
+        val deleteDataImage = activity?.findViewById<ImageView>(R.id.deleteDataImage)
+        val deleteDataCardView = activity?.findViewById<CardView>(R.id.deleteDataCardView)
+
+        deleteDataHeading?.setOnClickListener {
+            showDeleteDataAlert()
+        }
+        deleteDataSubtitle?.setOnClickListener {
+            showDeleteDataAlert()
+        }
+        deleteDataImage?.setOnClickListener {
+            showDeleteDataAlert()
+        }
+        deleteDataCardView?.setOnClickListener {
+            showDeleteDataAlert()
+        }
     }
 
     fun openAppearanceFragment() {
@@ -134,5 +200,35 @@ class SettingsFragment : Fragment() {
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, PatchNotesFragment())?.addToBackStack(null)
         transaction?.commit()
+    }
+
+    fun openWebviewFragment() {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+
+        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+        transaction?.replace(R.id.fragment_container, WebviewFragment())?.addToBackStack(null)
+        transaction?.commit()
+    }
+
+    fun showDeleteDataAlert() {
+        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme(requireContext()))
+        alert.setTitle("Warning")
+        alert.setMessage("Would you like to delete all app data?")
+        alert.setPositiveButton("Yes") { _, _ ->
+            val dbHandler = DBHelper(requireContext(), null)
+            requireContext().getSharedPreferences("file", 0).edit().clear().apply()
+            requireContext().cacheDir.deleteRecursively()
+            dbHandler.deleteAll()
+            Toast.makeText(requireContext(), "App Data Cleared", Toast.LENGTH_LONG).show()
+            Handler(Looper.getMainLooper()).postDelayed({
+                val intent = requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
+                intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                activity?.finish()
+            }, 1500)
+        }
+        alert.setNegativeButton("No", null)
+        alert.show()
     }
 }

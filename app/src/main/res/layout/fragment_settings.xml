@@ -11,7 +11,8 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        app:liftOnScroll="true">
+        app:liftOnScroll="true"
+        android:background="?attr/backgroundColor">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -79,14 +80,15 @@
 
                     <TextView
                         android:id="@+id/themeHeading"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
                         android:text="Appearance"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImage"
                         app:layout_constraintStart_toEndOf="@id/appearanceImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,7 +103,8 @@
                         android:paddingBottom="4dp"
                         android:text="Customize the theme of the app"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImage"
                         app:layout_constraintStart_toEndOf="@id/appearanceImage"
                         app:layout_constraintTop_toBottomOf="@id/themeHeading" />
 
@@ -157,7 +160,7 @@
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
                         android:text="Layout Settings"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintStart_toEndOf="@id/layoutImage"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -171,13 +174,15 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="Layout Settings Subtitle"
+                        android:text="Customize the layout settings of the app"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintEnd_toStartOf="@id/layoutSettingsChevron"
                         app:layout_constraintStart_toEndOf="@id/layoutImage"
                         app:layout_constraintTop_toBottomOf="@id/layout" />
 
                     <ImageView
+                        android:id="@+id/layoutSettingsChevron"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
@@ -222,14 +227,15 @@
 
                     <TextView
                         android:id="@+id/deletionHeading"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
                         android:text="Automatic Deletion"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/automaticChevron"
                         app:layout_constraintStart_toEndOf="@id/deletionImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -242,8 +248,9 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="deletion settings"
+                        android:text="Customize whether hours are automatically deleted"
                         android:textSize="12sp"
+                        android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toStartOf="@id/automaticChevron"
                         app:layout_constraintStart_toEndOf="@id/deletionImage"
                         app:layout_constraintTop_toBottomOf="@id/deletionHeading" />
@@ -294,14 +301,15 @@
 
                     <TextView
                         android:id="@+id/patchNotesHeading"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="Change Log"
-                        android:textColor="?attr/textColor"
+                        android:text="Patch Log"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/patchNotesChevron"
                         app:layout_constraintStart_toEndOf="@id/patchNotesImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -314,8 +322,9 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="changes in this update"
+                        android:text="View changes in this update"
                         android:textSize="12sp"
+                        android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toStartOf="@id/patchNotesChevron"
                         app:layout_constraintStart_toEndOf="@id/patchNotesImage"
                         app:layout_constraintTop_toBottomOf="@id/patchNotesHeading" />
@@ -376,7 +385,7 @@
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
                         android:text="Leave a review"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@id/leaveAReviewChevron"
                         app:layout_constraintStart_toEndOf="@id/reviewImage"
@@ -390,8 +399,8 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="Leave a review subtitle"
-                        android:textColor="?attr/textColor"
+                        android:text="Leave a review to give feedback about the app"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@id/leaveAReviewChevron"
                         app:layout_constraintStart_toEndOf="@id/reviewImage"
@@ -452,7 +461,7 @@
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
                         android:text="Report a bug"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@id/reportABugChevron"
                         app:layout_constraintStart_toEndOf="@id/reportABug"
@@ -466,8 +475,8 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="report a bug"
-                        android:textColor="?attr/textColor"
+                        android:text="Report a bug that you are facing"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@id/reportABugChevron"
                         app:layout_constraintStart_toEndOf="@id/reportABug"
@@ -527,8 +536,8 @@
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="Github Heading"
-                        android:textColor="?attr/textColor"
+                        android:text="View Github Repository"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@id/githubChevron"
                         app:layout_constraintStart_toEndOf="@id/githubImage"
@@ -542,8 +551,8 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="github caption"
-                        android:textColor="?attr/textColor"
+                        android:text="View github repository to stay up to date on app progress or report an issue"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@id/githubChevron"
                         app:layout_constraintStart_toEndOf="@id/githubImage"
@@ -603,8 +612,8 @@
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="Delete app data"
-                        android:textColor="?attr/textColor"
+                        android:text="Delete App Data"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@id/deleteDataChevron"
                         app:layout_constraintStart_toEndOf="@id/deleteDataImage"
@@ -618,8 +627,8 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="delete all app data"
-                        android:textColor="?attr/textColor"
+                        android:text="Delete all cache and app data"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@id/deleteDataChevron"
                         app:layout_constraintStart_toEndOf="@id/deleteDataImage"

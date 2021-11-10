@@ -3,9 +3,9 @@
     android:shape="oval"
     android:thicknessRatio="1.9"
     android:useLevel="false" >
-    <solid android:color="@color/pixelAccent" />
+    <solid android:color="@color/systemAccent" />
 
     <stroke
         android:width="10dp"
-        android:color="@color/pixelAccent" />
+        android:color="@color/systemAccent" />
 </shape>

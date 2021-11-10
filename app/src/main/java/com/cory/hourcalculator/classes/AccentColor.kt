@@ -2,6 +2,8 @@ package com.cory.hourcalculator.classes
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.widget.Toast
 import com.cory.hourcalculator.R
 
 class AccentColor(context: Context) {
@@ -21,33 +23,24 @@ class AccentColor(context: Context) {
         return (state)
     }
 
-   /* fun alertTheme(context: Context): Int {
+    fun alertTheme(context: Context): Int {
         val state = sharedPreferences.getInt("Accent", 0)
 
         val darkThemeData = DarkThemeData(context)
 
-        if (state == 0 && !darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleLight
-        } else if (state == 0 && darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleDark
-        } else if (state == 1 && !darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleLight_pink
-        } else if (state == 1 && darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleDark_pink
-        } else if (state == 2 && !darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleLight_orange
-        } else if (state == 2 && darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleDark_orange
-        } else if (state == 3 && !darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleLight_red
-        } else if (state == 3 && darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleDark_red
-        } else if (state == 4 && !darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleLight_system
-        } else if (state == 4 && darkThemeData.loadDarkModeState()) {
-            return R.style.AlertDialogStyleDark_system
-        }
+        if (state == 0) {
+            return R.style.AlertDialogStyle
 
-        return R.style.AlertDialogStyleDark
-    }*/
+        } else if (state == 1) {
+            return R.style.AlertDialogStylePink
+        } else if (state == 2) {
+            return R.style.AlertDialogStyleOrange
+        } else if (state == 3) {
+            return R.style.AlertDialogStyleRed
+        } else if (state == 4) {
+            return R.style.AlertDialogStyleSystemAccent
+        }
+        Toast.makeText(context.applicationContext, darkThemeData.loadDarkModeState().toString() , Toast.LENGTH_LONG).show()
+        return R.style.AlertDialogStyle
+    }
 }

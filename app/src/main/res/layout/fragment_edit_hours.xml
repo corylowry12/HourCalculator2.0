@@ -2,44 +2,43 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment"
-    android:id="@+id/homeConstraintLayout"
-    android:background="?attr/backgroundColor">
-
-    <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolBar"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                app:title="Hour Calculator"
-                app:layout_collapseMode="pin"
-                app:titleCentered="true"
-                android:background="?attr/appBarBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="?attr/textColor"/>
+    android:background="?attr/backgroundColor"
+    tools:context=".fragments.EditHours">
 
     <TimePicker
-        android:id="@+id/timePickerInTime"
+        android:id="@+id/timePickerInTimeEdit"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="115dp"
         android:timePickerMode="spinner"
-        android:descendantFocusability="blocksDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <TimePicker
-        android:id="@+id/timePickerOutTime"
+        android:id="@+id/timePickerOutTimeEdit"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="115dp"
         android:timePickerMode="spinner"
-        android:descendantFocusability="blocksDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Out"
+        android:textAlignment="center"
+        android:textColor="?attr/textColor"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerInTimeEdit" />
 
     <TextView
         android:id="@+id/textViewBreak"
@@ -52,43 +51,30 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePickerOutTime" />
+        app:layout_constraintTop_toBottomOf="@+id/timePickerOutTimeEdit" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/textViewBreak"
+        android:hint="15"
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/breakTime"
+            android:id="@+id/breakTimeEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="2"
             android:digits="1234567890"
-            android:hint="15"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Out"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePickerInTime" />
-
     <Button
-        android:id="@+id/calculateButton1"
+        android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textView2"
@@ -96,7 +82,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Calculate"
+        android:text="Update"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/outlinedTextField" />
@@ -106,30 +93,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4sp"
+        android:layout_marginEnd="20dp"
         android:gravity="center_horizontal"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:textAlignment="center"
+        android:textColor="?attr/textColor"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calculateButton1"
+        app:layout_constraintTop_toBottomOf="@+id/saveButton"
         tools:hint="Total Hours: 6.42"
-        tools:visibility="visible"
-        android:textColor="?attr/textColor"/>
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8sp"
         android:text="In"
         android:textAlignment="center"
+        android:textColor="?attr/textColor"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/timePickerInTime"
+        app:layout_constraintBottom_toTopOf="@+id/timePickerInTimeEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/materialToolBar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginTop="8dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
