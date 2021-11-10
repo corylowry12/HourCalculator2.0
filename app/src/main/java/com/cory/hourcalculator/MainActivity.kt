@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity() {
         bottom_nav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.ic_home -> replaceFragment(homeFragment)
-                R.id.ic_home1 -> replaceFragment(historyFragment)
-                R.id.ic_home2 -> replaceFragment(settingsFragment)
+                R.id.history -> replaceFragment(historyFragment)
+                R.id.settings -> replaceFragment(settingsFragment)
             }
             true
         }
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeBadgeNumber() {
-        val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.ic_home1)
+        val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
         badge.isVisible = true
         badge.number = dbHandler.getCount()
     }
@@ -124,13 +124,12 @@ class MainActivity : AppCompatActivity() {
     fun toggleHistory() {
         val historyToggleData = HistoryToggleData(this)
 
-        findViewById<BottomNavigationView>(R.id.bottom_nav).menu.findItem(R.id.ic_home1).isVisible = historyToggleData.loadHistoryState()
+        findViewById<BottomNavigationView>(R.id.bottom_nav).menu.findItem(R.id.history).isVisible = historyToggleData.loadHistoryState()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if (AppearanceFragment().isVisible) {
-            Toast.makeText(this, "Visible", Toast.LENGTH_LONG).show()
-        }
+    fun setActiveTab() {
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.menu.findItem(R.id.ic_home).isChecked = true
     }
 }
