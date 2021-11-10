@@ -17,17 +17,24 @@
     <color name="colorPrimaryRedAppBar">#ff6659</color>
     <color name="colorPrimaryPixelAppBar" tools:targetApi="s">@android:color/system_accent1_200</color>
 
+    <color name="colorPrimaryLightDialog">#8FC5BF</color>
+    <color name="pinkDialog">#FFCFEA</color>
+    <color name="orangeDialog">#FDB492</color>
+    <color name="redDialog">#FA9890</color>
+    <color name="systemAccentDialog" tools:targetApi="s">@android:color/system_accent1_100</color>
+
     <color name="cardPink">#ffc1e3</color>
     <color name="cardTeal">#64d8cb</color>
     <color name="cardOrange">#FA986B</color>
     <color name="cardRed">#ff6659</color>
+    <color name="cardSystem" tools:targetApi="s">@android:color/system_accent1_300</color>
 
     <color name="pinkAccent">#f48fb1</color>
     <color name="orangeAccent">#FA773B</color>
     <color name="darkOrangeAccent">#C65E2F</color>
     <color name="redAccent">#d32f2f</color>
 
-    <color name="pixelAccent" tools:targetApi="s">@android:color/system_accent1_400</color>
-    <color name="pixelAccentDark" tools:targetApi="s">@android:color/system_accent1_700</color>
+    <color name="systemAccent" tools:targetApi="s">@android:color/system_accent1_400</color>
+    <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_700</color>
 
 </resources>
