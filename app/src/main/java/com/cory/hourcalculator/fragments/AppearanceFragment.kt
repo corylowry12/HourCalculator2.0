@@ -3,6 +3,7 @@ package com.cory.hourcalculator.fragments
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +15,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
@@ -27,10 +29,22 @@ class AppearanceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val darkThemeData = DarkThemeData(requireContext())
-        if (darkThemeData.loadDarkModeState()) {
-            activity?.setTheme(R.style.Theme_DarkTheme)
-        } else {
-            activity?.setTheme(R.style.Theme_MyApplication)
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
+                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                }
+            }
         }
 
         val accentColor = AccentColor(requireContext())
@@ -67,28 +81,52 @@ class AppearanceFragment : Fragment() {
 
         val lightThemeButton = activity?.findViewById<RadioButton>(R.id.lightTheme)
         val darkThemeButton = activity?.findViewById<RadioButton>(R.id.darkTheme)
+        val amoledThemeButton = activity?.findViewById<RadioButton>(R.id.amoledTheme)
+        val followSystemThemeButton = activity?.findViewById<RadioButton>(R.id.followSystemTheme)
 
-        if (darkThemeData.loadDarkModeState()) {
+        if (darkThemeData.loadDarkModeState() == 1) {
             darkThemeButton?.isChecked = true
-        } else if (!darkThemeData.loadDarkModeState()) {
+        } else if (darkThemeData.loadDarkModeState() == 0) {
             lightThemeButton?.isChecked = true
+        }
+        else if (darkThemeData.loadDarkModeState() == 2) {
+            amoledThemeButton?.isChecked = true
+        }
+        else if (darkThemeData.loadDarkModeState() == 3) {
+            followSystemThemeButton?.isChecked = true
         }
 
         lightThemeButton?.setOnClickListener {
             //vibration(vibrationData)
-            if (!darkThemeData.loadDarkModeState()) {
+            if (darkThemeData.loadDarkModeState() == 0) {
                 Toast.makeText(requireContext(), "Light theme is already enabled", Toast.LENGTH_SHORT).show()
             } else {
-                darkThemeData.setDarkModeState(false)
+                darkThemeData.setDarkModeState(0)
                 restartThemeChange()
             }
         }
         darkThemeButton?.setOnClickListener {
             //vibration(vibrationData)
-            if (darkThemeData.loadDarkModeState()) {
+            if (darkThemeData.loadDarkModeState() == 1) {
                 Toast.makeText(requireContext(), "Dark mode is already enabled", Toast.LENGTH_SHORT).show()
             } else {
-                darkThemeData.setDarkModeState(true)
+                darkThemeData.setDarkModeState(1)
+                restartThemeChange()
+            }
+        }
+        amoledThemeButton?.setOnClickListener {
+            if (darkThemeData.loadDarkModeState() == 2) {
+                Toast.makeText(requireContext(), "AMOLED mode is already enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                darkThemeData.setDarkModeState(2)
+                restartThemeChange()
+            }
+        }
+        followSystemThemeButton?.setOnClickListener {
+            if (darkThemeData.loadDarkModeState() == 3) {
+                Toast.makeText(requireContext(), "AMOLED mode is already enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                darkThemeData.setDarkModeState(3)
                 restartThemeChange()
             }
         }
