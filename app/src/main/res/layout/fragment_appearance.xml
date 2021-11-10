@@ -45,7 +45,8 @@ android:background="?attr/backgroundColor"
                 android:textColor="?attr/textColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="14sp"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/themeCardView"
@@ -74,7 +75,8 @@ android:background="?attr/backgroundColor"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Light Theme"
-                        android:textColor="?attr/textColor"
+                        android:buttonTint="@color/colorPrimary"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp" />
 
                     <RadioButton
@@ -83,7 +85,7 @@ android:background="?attr/backgroundColor"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Dark Theme"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp" />
 
                     <RadioButton
@@ -92,7 +94,16 @@ android:background="?attr/backgroundColor"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Black Theme"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/followSystemTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Follow System"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp" />
                 </RadioGroup>
 
@@ -109,7 +120,7 @@ android:background="?attr/backgroundColor"
                 android:paddingBottom="4dp"
                 android:text="Accent Color"
                 android:textColor="?attr/textColor"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/accentCardView"
@@ -138,7 +149,7 @@ android:background="?attr/backgroundColor"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="Teal"
-                            android:textColor="?attr/textColor"
+                            android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -159,7 +170,7 @@ android:background="?attr/backgroundColor"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="Pink"
-                            android:textColor="?attr/textColor"
+                            android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toBottomOf="@id/Teal" />
 
@@ -179,7 +190,7 @@ android:background="?attr/backgroundColor"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="Orange"
-                            android:textColor="?attr/textColor"
+                            android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toBottomOf="@id/Pink" />
 
@@ -199,7 +210,7 @@ android:background="?attr/backgroundColor"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="Red"
-                            android:textColor="?attr/textColor"
+                            android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toBottomOf="@id/Orange" />
 
@@ -219,7 +230,7 @@ android:background="?attr/backgroundColor"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="Follow system"
-                            android:textColor="?attr/textColor"
+                            android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toBottomOf="@id/Red" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -234,11 +245,10 @@ android:background="?attr/backgroundColor"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
-                android:text="Change theme"
+                android:text="Changing the theme here will reflect within the entire app"
                 android:textAlignment="center"
                 android:textColor="?attr/textColor"
-                android:textSize="10sp"
-                tools:ignore="SmallSp" />
+                android:textSize="12sp" />
 
         </RelativeLayout>
     </ScrollView>
