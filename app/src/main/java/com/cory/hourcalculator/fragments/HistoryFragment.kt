@@ -125,7 +125,7 @@ class HistoryFragment : Fragment() {
                 R.id.info -> {
                     // Handle edit text press
                     if (dbHandler.getCount() > 0) {
-                        val alert = MaterialAlertDialogBuilder(requireActivity())
+                        val alert = MaterialAlertDialogBuilder(requireActivity(), AccentColor(requireContext()).alertTheme(requireContext()))
                         alert.setTitle("Info")
                         alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}")
                         alert.setPositiveButton("OK", null)
