@@ -36,6 +36,7 @@
         <item name="appBarBackground">@color/pinkAccent</item>
         <item name="cardBackground">@color/cardPink</item>
         <item name="selectedTint">@color/pinkAccent</item>
+        <item name="popupMenuBackground">@color/pinkAccent</item>
     </style>
 
     <style name="teal_accent">
@@ -45,6 +46,7 @@
         <item name="appBarBackground">@color/colorPrimary</item>
         <item name="cardBackground">@color/cardTeal</item>
         <item name="selectedTint">@color/colorPrimary</item>
+        <item name="popupMenuBackground">@color/colorPrimary</item>
     </style>
 
     <style name="orange_accent">
@@ -54,6 +56,7 @@
         <item name="appBarBackground">@color/orangeAccent</item>
         <item name="cardBackground">@color/cardOrange</item>
         <item name="selectedTint">@color/orangeAccent</item>
+        <item name="popupMenuBackground">@color/orangeAccent</item>
     </style>
 
     <style name="red_accent">
@@ -63,6 +66,7 @@
         <item name="appBarBackground">@color/redAccent</item>
         <item name="cardBackground">@color/cardRed</item>
         <item name="selectedTint">@color/redAccent</item>
+        <item name="popupMenuBackground">@color/redAccent</item>
     </style>
 
     <style name="system_accent">
@@ -72,6 +76,7 @@
         <item name="appBarBackground">@color/systemAccent</item>
         <item name="cardBackground">@color/cardSystem</item>
         <item name="selectedTint">@color/systemAccent</item>
+        <item name="popupMenuBackground">@color/systemAccent</item>
     </style>
 
     <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
@@ -118,4 +123,36 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.70</item>
     </style>
+
+    <style name="PopupMenuTeal">
+        <item name="android:itemBackground">@color/colorPrimary</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+
+    </style>
+
+    <style name="PopupMenuPink">
+        <item name="android:itemBackground">@color/pinkAccent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="PopupMenuOrange">
+        <item name="android:itemBackground">@color/orangeAccent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="PopupMenuRed">
+        <item name="android:itemBackground">@color/redAccent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="PopupMenuSystem">
+        <item name="android:itemBackground">@color/systemAccent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
