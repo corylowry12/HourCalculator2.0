@@ -26,21 +26,50 @@ class AccentColor(context: Context) {
     fun alertTheme(context: Context): Int {
         val state = sharedPreferences.getInt("Accent", 0)
 
-        val darkThemeData = DarkThemeData(context)
+        when (state) {
+            0 -> {
+                return R.style.AlertDialogStyle
 
-        if (state == 0) {
-            return R.style.AlertDialogStyle
-
-        } else if (state == 1) {
-            return R.style.AlertDialogStylePink
-        } else if (state == 2) {
-            return R.style.AlertDialogStyleOrange
-        } else if (state == 3) {
-            return R.style.AlertDialogStyleRed
-        } else if (state == 4) {
-            return R.style.AlertDialogStyleSystemAccent
+            }
+            1 -> {
+                return R.style.AlertDialogStylePink
+            }
+            2 -> {
+                return R.style.AlertDialogStyleOrange
+            }
+            3 -> {
+                return R.style.AlertDialogStyleRed
+            }
+            4 -> {
+                return R.style.AlertDialogStyleSystemAccent
+            }
+            else -> return R.style.AlertDialogStyle
         }
-        Toast.makeText(context.applicationContext, darkThemeData.loadDarkModeState().toString() , Toast.LENGTH_LONG).show()
-        return R.style.AlertDialogStyle
+
+    }
+
+    fun menuTheme(context: Context): Int {
+        val state = sharedPreferences.getInt("Accent", 0)
+
+        when (state) {
+            0 -> {
+                return R.style.PopupMenuTeal
+
+            }
+            1 -> {
+                return R.style.PopupMenuPink
+            }
+            2 -> {
+                return R.style.PopupMenuOrange
+            }
+            3 -> {
+                return R.style.PopupMenuRed
+            }
+            4 -> {
+                return R.style.PopupMenuSystem
+            }
+            else -> return R.style.AlertDialogStyle
+        }
+
     }
 }
