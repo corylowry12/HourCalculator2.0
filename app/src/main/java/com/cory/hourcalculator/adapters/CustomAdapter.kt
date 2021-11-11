@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.fragments.HistoryFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.contentValuesOf
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
 
@@ -63,7 +65,8 @@ class CustomAdapter(
         val imageView = rowView.findViewById<ImageView>(R.id.imageViewOptions)
         imageView.setOnClickListener {
             //vibration(vibrationData)
-            val popup = PopupMenu(context, imageView)
+            val context12 = ContextThemeWrapper(context, AccentColor(context).menuTheme(context))
+            val popup = PopupMenu(context12, imageView)
             popup.inflate(R.menu.menu_history_options)
             popup.setOnMenuItemClickListener { item ->
                 //vibration(vibrationData)
