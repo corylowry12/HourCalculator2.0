@@ -15,9 +15,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.BreakTextBoxVisiblityClass
-import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -208,6 +206,15 @@ class HomeFragment : Fragment() {
             else {
                 savingHours(totalHours, inTimeTotal, outTimeTotal, "0")
                 infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal"
+            }
+
+            val daysWorked = DaysWorkedPerWeek(requireContext())
+            val historyAutomaticDeletion = HistoryAutomaticDeletion(requireContext())
+            val historyDeletion = HistoryDeletion(requireContext())
+            val dbHandler = DBHelper(requireContext(), null)
+
+            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked().toString().toInt()) {
+                historyDeletion.deletion()
             }
 
             val runnable = Runnable {
