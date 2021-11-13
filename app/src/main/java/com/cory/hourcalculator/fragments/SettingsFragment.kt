@@ -18,6 +18,8 @@ import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.LinkClass
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.review.ReviewManagerFactory
 
 class SettingsFragment : Fragment() {
 
@@ -40,6 +42,7 @@ class SettingsFragment : Fragment() {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
                     Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
                 }
             }
         }
@@ -104,7 +107,7 @@ class SettingsFragment : Fragment() {
             openLayoutSettingsFragment()
         }
         layoutSettingsImageView?.setOnClickListener {
-
+            openLayoutSettingsFragment()
         }
 
         val automaticDeletionHeading = activity?.findViewById<TextView>(R.id.deletionHeading)
@@ -131,7 +134,45 @@ class SettingsFragment : Fragment() {
             openPatchNotesFragment()
         }
 
-        LinkClass(requireContext()).setLink("https://github.com/")
+        val reviewHeading = activity?.findViewById<TextView>(R.id.reviewHeading)
+        val reviewSubtitle = activity?.findViewById<TextView>(R.id.reviewSubtitle)
+        val reviewCardView = activity?.findViewById<CardView>(R.id.reviewCardView)
+        val reviewImageView = activity?.findViewById<ImageView>(R.id.reviewImage)
+
+        reviewHeading?.setOnClickListener {
+            leaveAReview()
+        }
+        reviewSubtitle?.setOnClickListener {
+            leaveAReview()
+        }
+        reviewCardView?.setOnClickListener {
+           leaveAReview()
+        }
+        reviewImageView?.setOnClickListener {
+            leaveAReview()
+        }
+
+        val reportBugHeading = activity?.findViewById<TextView>(R.id.bugHeading)
+        val reportBugSubtitle = activity?.findViewById<TextView>(R.id.bugSubtitle)
+        val reportBugCardView = activity?.findViewById<CardView>(R.id.bugCardView)
+        val reportBugImageView = activity?.findViewById<ImageView>(R.id.reportABug)
+
+        reportBugHeading?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            openWebviewFragment()
+        }
+        reportBugSubtitle?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            openWebviewFragment()
+        }
+        reportBugCardView?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            openWebviewFragment()
+        }
+        reportBugImageView?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            openWebviewFragment()
+        }
 
         val githubHeading = activity?.findViewById<TextView>(R.id.textViewGithubHeading)
         val githubSubtitle = activity?.findViewById<TextView>(R.id.textViewGithubCaption)
@@ -139,15 +180,19 @@ class SettingsFragment : Fragment() {
         val githubCardView = activity?.findViewById<CardView>(R.id.cardViewGithub)
 
         githubHeading?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
             openWebviewFragment()
         }
         githubSubtitle?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
             openWebviewFragment()
         }
         githubImage?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
             openWebviewFragment()
         }
         githubCardView?.setOnClickListener {
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
             openWebviewFragment()
         }
 
@@ -202,6 +247,22 @@ class SettingsFragment : Fragment() {
         transaction?.commit()
     }
 
+    fun leaveAReview() {
+            val reviewManager = ReviewManagerFactory.create(requireContext())
+            val requestReviewFlow = reviewManager.requestReviewFlow()
+            requestReviewFlow.addOnCompleteListener { request ->
+                if (request.isSuccessful) {
+                    val reviewInfo = request.result
+                    val flow = reviewManager.launchReviewFlow(requireActivity(), reviewInfo)
+                    flow.addOnCompleteListener {
+
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "There was an error, please try again", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     fun openWebviewFragment() {
         val transaction = activity?.supportFragmentManager?.beginTransaction()
 
@@ -211,7 +272,7 @@ class SettingsFragment : Fragment() {
     }
 
     fun showDeleteDataAlert() {
-        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme(requireContext()))
+        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
         alert.setTitle("Warning")
         alert.setMessage("Would you like to delete all app data?")
         alert.setPositiveButton("Yes") { _, _ ->
