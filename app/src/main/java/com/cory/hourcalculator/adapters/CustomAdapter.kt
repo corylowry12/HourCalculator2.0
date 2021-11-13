@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.contentValuesOf
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
+import com.google.android.material.snackbar.Snackbar
 
 
 class CustomAdapter(
@@ -73,6 +74,12 @@ class CustomAdapter(
                 when (item.itemId) {
                     R.id.menu2 -> {
 
+                        var inTime = ""
+                        var outTime = ""
+                        var breakTime = ""
+                        var totalHours = ""
+                        var day = ""
+
                         dataList.clear()
                         val cursor = dbHandler.getAllRow(context)
                         if (cursor!!.count > 0) {
@@ -87,11 +94,19 @@ class CustomAdapter(
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
                                 map["out"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                map["break"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
                                 map["total"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
                                 map["day"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
                                 dataList.add(map)
+
+                                inTime = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                outTime = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                breakTime = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                totalHours = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                day = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                                 dbHandler.deleteRow(map["id"].toString())
 
@@ -102,23 +117,119 @@ class CustomAdapter(
 
                         val runnable = Runnable {
                             (context as MainActivity).update()
-                            Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show()
+
                         }
 
                         MainActivity().runOnUiThread(runnable)
+
+                        val snackbar = Snackbar.make(rowView, "5\t\t\tHour Deleted", Snackbar.LENGTH_LONG)
+                            .setDuration(5000)
+                            .setAnchorView(R.id.bottom_nav)
+                        var timer = 5
+                        snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
+                        snackbar.setAction("UNDO") {
+                            timer = 0
+                            dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
+                            MainActivity().runOnUiThread(runnable)
+                        }
+
+                        val mainHandler = Handler(Looper.getMainLooper())
+
+                        mainHandler.post(object : Runnable {
+                            override fun run() {
+                                if (timer <= 0) {
+                                    snackbar.dismiss()
+                                    mainHandler.removeCallbacks(this)
+                                    inTime = ""
+                                    outTime = ""
+                                    breakTime = ""
+                                    totalHours = ""
+                                    day = ""
+                                }
+                                else {
+                                    snackbar.setText(timer.toString() + "\t\t\tHour Deleted")
+                                    snackbar.show()
+                                }
+                                timer--
+                                mainHandler.postDelayed(this, 1000)
+                            }
+                        })
                     }
                     R.id.menu4 -> {
-                        val alertDialog = MaterialAlertDialogBuilder(context, AccentColor(context).alertTheme(context))
+
+                        val inTime = arrayOf<String>().toMutableList()
+                        val outTime = arrayOf<String>().toMutableList()
+                        val breakTime = arrayOf<String>().toMutableList()
+                        val totalHours = arrayOf<String>().toMutableList()
+                        val day = arrayOf<String>().toMutableList()
+
+                        val alertDialog = MaterialAlertDialogBuilder(context, AccentColor(context).alertTheme())
                         alertDialog.setTitle("Delete All?")
                         alertDialog.setMessage("Would you like to delete all?")
                         alertDialog.setPositiveButton("Yes") { _, _ ->
                             //vibration(vibrationData)
+
+                            val cursor = dbHandler.getAllRow(context)
+                            cursor!!.moveToFirst()
+
+                            while (!cursor.isAfterLast) {
+                                val map = HashMap<String, String>()
+                                map["id"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                                inTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN)))
+
+                                outTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT)))
+
+                                    breakTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
+                                totalHours.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
+
+                               day.add( cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
+
+
+                                cursor.moveToNext()
+                            }
+
                             dbHandler.deleteAll()
                             val runnable = Runnable {
                                 (context as MainActivity).update()
-                                Toast.makeText(context, "All Items Deleted", Toast.LENGTH_SHORT).show()
                             }
                             MainActivity().runOnUiThread(runnable)
+
+                            val snackbar = Snackbar.make(rowView, "5\t\t\tAll Hours Deleted", Snackbar.LENGTH_LONG)
+                                .setDuration(5000)
+                                .setAnchorView(R.id.bottom_nav)
+                            var timer = 5
+                            snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
+                            snackbar.setAction("UNDO") {
+                                timer = 0
+                                for (i in inTime.indices) {
+                                    dbHandler.insertRow(inTime.elementAt(i), outTime.elementAt(i), totalHours.elementAt(i), day.elementAt(i), breakTime.elementAt(i))
+                                }
+
+                                MainActivity().runOnUiThread(runnable)
+                            }
+
+                            val mainHandler = Handler(Looper.getMainLooper())
+
+                            mainHandler.post(object : Runnable {
+                                override fun run() {
+                                    if (timer <= 0) {
+                                        snackbar.dismiss()
+                                        mainHandler.removeCallbacks(this)
+                                        inTime.clear()
+                                        outTime.clear()
+                                        breakTime.clear()
+                                        totalHours.clear()
+                                        day.clear()
+                                    }
+                                    else {
+                                        snackbar.setText(timer.toString() + "\t\t\tAll Hours Deleted")
+                                        snackbar.show()
+                                    }
+                                    timer--
+                                    mainHandler.postDelayed(this, 1000)
+                                }
+                            })
                         }
                             .setNeutralButton("No") {_, _ ->
                                 //vibration(vibrationData)
@@ -140,6 +251,7 @@ class CustomAdapter(
                             map["break"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
                             map["total"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
                             map["day"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
                             dataList.add(map)
 
                             cursor.moveToNext()
