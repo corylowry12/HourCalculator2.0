@@ -11,10 +11,10 @@
         android:id="@+id/cardViewHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="28dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,10 +32,10 @@
 
             <TextView
                 android:id="@+id/row_in"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="In TIme"
-                android:textColor="?attr/textColor"
+                android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp" />
 
             <TextView
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_in"
                 android:text="Out Time"
-                android:textColor="?attr/textColor"
+                android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp" />
 
             <TextView
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_out"
                 android:text="Break"
-                android:textColor="?attr/textColor"
+                android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp" />
 
             <TextView
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_break"
                 android:text="Total"
-                android:textColor="?attr/textColor"
+                android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp" />
 
             <TextView
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_total"
                 android:text="Day"
-                android:textColor="?attr/textColor"
+                android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp" />
 
             <ImageButton

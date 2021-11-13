@@ -10,13 +10,13 @@ class DarkThemeData(context: Context) {
     //this saves the theme preference
     fun setDarkModeState(state: Int) {
         val editor = sharedPreferences.edit()
-        editor.putInt("Dark", state)
+        editor.putInt("DarkTheme", state)
         editor.apply()
     }
 
     // this will load the night mode state
     fun loadDarkModeState(): Int {
-        val state = sharedPreferences.getInt("Dark", 0)
+        val state = sharedPreferences.getInt("DarkTheme", 3)
         return (state)
     }
 }

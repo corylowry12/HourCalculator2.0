@@ -6,6 +6,6 @@
     <solid android:color="@color/pinkAccent" />
 
     <stroke
-        android:width="10dp"
-        android:color="@color/pinkAccent" />
+        android:width="1dp"
+        android:color="@android:color/black" />
 </shape>

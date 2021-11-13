@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#26a69a</color>
 
+    <color name="darkThemeBackground">#383B3C</color>
+
     <color name="colorAccent">#26A69A</color>
     <color name="lightIconTint">#000000</color>
 
@@ -18,12 +20,12 @@
     <color name="colorPrimaryPixelAppBar" tools:targetApi="s">@android:color/system_accent1_200</color>
 
     <color name="colorPrimaryLightDialog">#8FC5BF</color>
-    <color name="pinkDialog">#FFCFEA</color>
+    <color name="pinkDialog">#FFB8E0</color>
     <color name="orangeDialog">#FDB492</color>
     <color name="redDialog">#FA9890</color>
     <color name="systemAccentDialog" tools:targetApi="s">@android:color/system_accent1_100</color>
 
-    <color name="cardPink">#FFA7D7</color>
+    <color name="cardPink">#FF98D0</color>
     <color name="cardTeal">#59C5B9</color>
     <color name="cardOrange">#FA986B</color>
     <color name="cardRed">#ff6659</color>
@@ -38,5 +40,8 @@
     <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_700</color>
 
     <color name="black">#000000</color>
+
+    <color name="darkMenuBackground">#2C353A</color>
+    <color name="lightMenuBackground">#FFFFFF</color>
 
 </resources>

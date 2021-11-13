@@ -11,6 +11,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.MaterialToolbar
 
 class AutomaticDeletionFragment : Fragment() {
 
@@ -35,6 +36,7 @@ class AutomaticDeletionFragment : Fragment() {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
                     Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
                 }
             }
         }
@@ -67,6 +69,12 @@ class AutomaticDeletionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
+
+        topAppBar?.setNavigationOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
+        }
 
         val enableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
         val disableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
@@ -146,10 +154,10 @@ class AutomaticDeletionFragment : Fragment() {
         enableHistoryAutomaticDeletion?.setOnClickListener {
             //vibration(vibrationData)
             if (historyDeletion.loadHistoryDeletionState()) {
-                Toast.makeText(requireContext(), "Break Text Box Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "History Automatic Deletion Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
                 historyDeletion.setHistoryDeletionState(true)
-                Toast.makeText(requireContext(), "Break Text Box Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "History Automatic Deletion Enabled", Toast.LENGTH_SHORT).show()
 
                 one?.isEnabled = true
                 two?.isEnabled = true
@@ -171,10 +179,10 @@ class AutomaticDeletionFragment : Fragment() {
         disableHistoryAutomaticDeletion?.setOnClickListener {
             //vibration(vibrationData)
             if (!historyDeletion.loadHistoryDeletionState()) {
-                Toast.makeText(requireContext(), "Break Text Box Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "History Automatic Deletion Already Disabled", Toast.LENGTH_SHORT).show()
             } else {
                 historyDeletion.setHistoryDeletionState(false)
-                Toast.makeText(requireContext(), "Break Text Box Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "History Automatic Deletion Disabled", Toast.LENGTH_SHORT).show()
 
                 one?.isEnabled = false
                 two?.isEnabled = false

@@ -50,6 +50,7 @@ class HistoryFragment : Fragment() {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
                     Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
                 }
             }
         }
@@ -125,7 +126,7 @@ class HistoryFragment : Fragment() {
                 R.id.info -> {
                     // Handle edit text press
                     if (dbHandler.getCount() > 0) {
-                        val alert = MaterialAlertDialogBuilder(requireActivity(), AccentColor(requireContext()).alertTheme(requireContext()))
+                        val alert = MaterialAlertDialogBuilder(requireActivity(), AccentColor(requireContext()).alertTheme())
                         alert.setTitle("Info")
                         alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}")
                         alert.setPositiveButton("OK", null)
@@ -138,7 +139,6 @@ class HistoryFragment : Fragment() {
                 }
 
                 R.id.menuSortByLastEntered -> {
-                    Toast.makeText(requireContext(), "Sort by last entered clicked", Toast.LENGTH_LONG).show()
                     if (dbHandler.getCount() == 0) {
                         Toast.makeText(requireContext(), "Cant sort, history is empty", Toast.LENGTH_SHORT).show()
                     } else {
@@ -154,7 +154,6 @@ class HistoryFragment : Fragment() {
                 }
 
                 R.id.menuSortByFirstEntered -> {
-                    Toast.makeText(requireContext(), "Sort by first entered clicked", Toast.LENGTH_LONG).show()
                     if (dbHandler.getCount() == 0) {
                         Toast.makeText(requireContext(), "Cant sort, history is empty", Toast.LENGTH_SHORT).show()
                     } else {
@@ -170,7 +169,6 @@ class HistoryFragment : Fragment() {
                 }
 
                 R.id.menuSortByLeastHours -> {
-                    Toast.makeText(requireContext(), "Sort by least entered clicked", Toast.LENGTH_LONG).show()
                     if (dbHandler.getCount() == 0) {
                         Toast.makeText(requireContext(), "Cant sort, history is empty", Toast.LENGTH_SHORT).show()
                     } else {
@@ -186,7 +184,6 @@ class HistoryFragment : Fragment() {
                 }
 
                 R.id.menuSortByMostHours -> {
-                    Toast.makeText(requireContext(), "Sort by least entered clicked", Toast.LENGTH_LONG).show()
                     if (dbHandler.getCount() == 0) {
                         Toast.makeText(requireContext(), "Cant sort, history is empty", Toast.LENGTH_SHORT).show()
                     } else {
@@ -237,10 +234,12 @@ class HistoryFragment : Fragment() {
             val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
             noHoursStoredTextView?.visibility = View.GONE
         }
+        else {
+            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
+            noHoursStoredTextView?.visibility = View.VISIBLE
+        }
 
         var y = 0.0
-
-        //Toast.makeText(requireContext(), dbHandler.getCount().toString(), Toast.LENGTH_LONG).show()
 
         dataList.clear()
         val cursor = dbHandler.getAllRow(requireActivity())

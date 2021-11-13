@@ -51,7 +51,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/vibrationTextView"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="28dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -63,14 +65,16 @@
                         android:id="@+id/enableVibration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="?attr/settingsTextColor"
                         android:text="Enable Vibration" />
 
                     <RadioButton
                         android:id="@+id/disableVibration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="?attr/settingsTextColor"
                         android:text="Disable Vibration" />
 
                 </RadioGroup>
@@ -93,7 +97,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/historyTextView"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="28dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -105,14 +111,16 @@
                         android:id="@+id/enableHistory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="?attr/settingsTextColor"
                         android:text="Enable History" />
 
                     <RadioButton
                         android:id="@+id/disableHistory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="?attr/settingsTextColor"
                         android:text="Disable History" />
 
                 </RadioGroup>
@@ -135,7 +143,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/breakTextBoxTextView"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="28dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -147,14 +157,16 @@
                         android:id="@+id/showBreakTextBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="?attr/settingsTextColor"
                         android:text="Enable Break Text Box" />
 
                     <RadioButton
                         android:id="@+id/hideBreakTextBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="?attr/settingsTextColor"
                         android:text="Disable Break Text Box" />
 
                 </RadioGroup>
@@ -177,7 +189,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/wagesTextView"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="28dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -186,10 +200,14 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4sp"
+                    android:layout_marginTop="8sp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:paddingBottom="4dp"
+                    android:paddingBottom="8dp"
+                    app:boxCornerRadiusBottomStart="28dp"
+                    app:boxCornerRadiusBottomEnd="28dp"
+                    app:boxCornerRadiusTopEnd="28dp"
+                    app:boxCornerRadiusTopStart="28dp"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -217,7 +235,7 @@
                 android:padding="10dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="layout settings"
+                android:text="These settings will reflect changes throughout the app"
                 android:textColor="?attr/textColor"
                 android:textSize="12sp" />
 

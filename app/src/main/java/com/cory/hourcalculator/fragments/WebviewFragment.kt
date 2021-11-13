@@ -22,8 +22,12 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.LinkClass
 import com.google.android.material.appbar.MaterialToolbar
 import android.content.pm.ResolveInfo
+import android.os.Handler
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import kotlinx.coroutines.delay
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 class WebviewFragment : Fragment() {
@@ -40,75 +44,85 @@ class WebviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val webview = activity?.findViewById<WebView>(R.id.webView)
-        val progressBar = activity?.findViewById<ProgressBar>(R.id.progressBar)
-        val swipeRefreshLayout = activity?.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        Handler().postDelayed({
+            val webview = activity?.findViewById<WebView>(R.id.webView)
+            val progressBar = activity?.findViewById<ProgressBar>(R.id.progressBar)
+            val swipeRefreshLayout =
+                activity?.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
-        val appBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarWebView)
+            val appBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarWebView)
 
-        appBar?.setNavigationOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
-        }
-
-        val url = LinkClass(requireContext()).loadLink().toString()
-
-        appBar?.setOnMenuItemClickListener {
-            when (it.itemId) {
-               R.id.refresh -> {
-                   webview?.reload()
-                   true
-               }
-                R.id.copyMenu -> {
-                    val clipBoard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("URL", url) //intent.getStringExtra("url")
-                    clipBoard.setPrimaryClip(clip)
-                    Toast.makeText(requireContext(), "Text copied to clipboard", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.shareMenu -> {
-                    val shareIntent = Intent()
-                    shareIntent.action = Intent.ACTION_SEND
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, url)
-                    shareIntent.type = "text/plain"
-                    Intent.createChooser(shareIntent, "Share Via")
-                    startActivity(shareIntent)
-                    true
-                }
-                else -> false
-            }
-        }
-
-        webview?.onResume()
-
-        webview?.loadUrl(url)
-
-        webview?.webViewClient = object : WebViewClient() {
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                progressBar?.visibility = View.VISIBLE
-                swipeRefreshLayout?.isRefreshing = false
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
+            appBar?.setNavigationOnClickListener {
+                webview?.stopLoading()
                 progressBar?.visibility = View.GONE
+                activity?.supportFragmentManager?.popBackStack()
             }
 
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                webview?.loadUrl(url)
-                return super.shouldOverrideUrlLoading(view, request)
+            val url = LinkClass(requireContext()).loadLink().toString()
+
+            appBar?.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.refresh -> {
+                        webview?.reload()
+                        true
+                    }
+                    R.id.copyMenu -> {
+                        val clipBoard =
+                            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText("URL", url) //intent.getStringExtra("url")
+                        clipBoard.setPrimaryClip(clip)
+                        Toast.makeText(
+                            requireContext(),
+                            "Text copied to clipboard",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        true
+                    }
+                    R.id.shareMenu -> {
+                        val shareIntent = Intent()
+                        shareIntent.action = Intent.ACTION_SEND
+                        shareIntent.type = "text/plain"
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "URL")
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, url)
+                        startActivity(Intent.createChooser(shareIntent, "Share Via..."))
+                        true
+                    }
+                    else -> false
+                }
             }
-        }
 
-        webview?.settings?.javaScriptEnabled = true
-        webview?.settings?.domStorageEnabled = true
-        webview?.settings?.javaScriptCanOpenWindowsAutomatically = true
+            webview?.onResume()
 
-        swipeRefreshLayout?.setOnRefreshListener {
-            webview?.reload()
-        }
+            webview?.loadUrl(url)
+
+            webview?.webViewClient = object : WebViewClient() {
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    progressBar?.visibility = View.VISIBLE
+                    swipeRefreshLayout?.isRefreshing = false
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    progressBar?.visibility = View.GONE
+                }
+
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
+                    webview?.loadUrl(url)
+                    return super.shouldOverrideUrlLoading(view, request)
+                }
+            }
+
+            webview?.settings?.javaScriptEnabled = true
+            webview?.settings?.domStorageEnabled = true
+            webview?.settings?.javaScriptCanOpenWindowsAutomatically = true
+
+            swipeRefreshLayout?.setOnRefreshListener {
+                webview?.reload()
+            }
+        }, 800)
     }
 }

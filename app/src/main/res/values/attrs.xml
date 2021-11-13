@@ -13,4 +13,6 @@
 
     <attr name="notSelectedTint" format="color" />
     <attr name="selectedTint" format="color" />
+
+    <attr name="followSystem" format="color" />
 </resources>

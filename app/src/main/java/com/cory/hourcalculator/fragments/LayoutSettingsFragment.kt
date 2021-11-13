@@ -37,6 +37,7 @@ class LayoutSettingsFragment : Fragment() {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
                     Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
                 }
             }
         }
@@ -130,7 +131,7 @@ val historyToggleData = HistoryToggleData(requireContext())
                 Toast.makeText(requireContext(), "History is already disabled", Toast.LENGTH_SHORT).show()
             } else {
                 historyToggleData.setHistoryToggle(false)
-                val alertDialog = MaterialAlertDialogBuilder(requireContext())
+                val alertDialog = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alertDialog.setTitle("History")
                 alertDialog.setMessage("What would you like to do with history?")
                 alertDialog.setPositiveButton("Delete") { _, _ ->

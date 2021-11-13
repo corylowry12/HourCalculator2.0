@@ -1,9 +1,13 @@
 package com.cory.hourcalculator
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -15,6 +19,7 @@ import com.cory.hourcalculator.fragments.HistoryFragment
 import com.cory.hourcalculator.fragments.HomeFragment
 import com.cory.hourcalculator.fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -131,5 +136,9 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+    }
+
+    fun oneHourDeleted(view: View) {
+
     }
 }
