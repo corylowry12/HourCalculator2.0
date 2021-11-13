@@ -23,10 +23,9 @@ class AccentColor(context: Context) {
         return (state)
     }
 
-    fun alertTheme(context: Context): Int {
-        val state = sharedPreferences.getInt("Accent", 0)
+    fun alertTheme(): Int {
 
-        when (state) {
+        when (this.loadAccent()) {
             0 -> {
                 return R.style.AlertDialogStyle
 
@@ -49,27 +48,48 @@ class AccentColor(context: Context) {
     }
 
     fun menuTheme(context: Context): Int {
-        val state = sharedPreferences.getInt("Accent", 0)
 
-        when (state) {
+        when (DarkThemeData(context).loadDarkModeState()) {
             0 -> {
-                return R.style.PopupMenuTeal
+                return R.style.PopupMenuLight
 
             }
             1 -> {
-                return R.style.PopupMenuPink
+                return R.style.PopupMenuDark
             }
             2 -> {
-                return R.style.PopupMenuOrange
+                return R.style.PopupMenuDark
             }
             3 -> {
-                return R.style.PopupMenuRed
+                when (context.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> return R.style.PopupMenuLight
+                    Configuration.UI_MODE_NIGHT_YES -> return R.style.PopupMenuDark
+                }
+            }
+        }
+        return R.style.PopupMenuLight
+    }
+
+    fun snackbarActionTextColor(): Int {
+
+        when (this.loadAccent()) {
+            0 -> {
+                return R.color.colorPrimary
+
+            }
+            1 -> {
+                return R.color.pinkAccent
+            }
+            2 -> {
+                return R.color.orangeAccent
+            }
+            3 -> {
+                return R.color.redAccent
             }
             4 -> {
-                return R.style.PopupMenuSystem
+                return R.color.systemAccent
             }
-            else -> return R.style.AlertDialogStyle
         }
-
+        return R.color.colorPrimary
     }
 }
