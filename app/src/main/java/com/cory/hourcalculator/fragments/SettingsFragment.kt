@@ -111,8 +111,20 @@ class SettingsFragment : Fragment() {
         }
 
         val automaticDeletionHeading = activity?.findViewById<TextView>(R.id.deletionHeading)
+        val automaticDeletionSubtitle = activity?.findViewById<TextView>(R.id.deletionSubtitle)
+        val automaticDeletionCardView = activity?.findViewById<CardView>(R.id.deletionCardView)
+        val automaticDeletionImageView = activity?.findViewById<ImageView>(R.id.deletionImage)
 
         automaticDeletionHeading?.setOnClickListener {
+            openAutomaticDeletionFragment()
+        }
+        automaticDeletionSubtitle?.setOnClickListener {
+            openAutomaticDeletionFragment()
+        }
+        automaticDeletionCardView?.setOnClickListener {
+            openAutomaticDeletionFragment()
+        }
+        automaticDeletionImageView?.setOnClickListener {
             openAutomaticDeletionFragment()
         }
 
@@ -158,19 +170,19 @@ class SettingsFragment : Fragment() {
         val reportBugImageView = activity?.findViewById<ImageView>(R.id.reportABug)
 
         reportBugHeading?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
             openWebviewFragment()
         }
         reportBugSubtitle?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
             openWebviewFragment()
         }
         reportBugCardView?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
             openWebviewFragment()
         }
         reportBugImageView?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
+            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
             openWebviewFragment()
         }
 
