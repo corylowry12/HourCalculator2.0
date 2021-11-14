@@ -22,9 +22,13 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.LinkClass
 import com.google.android.material.appbar.MaterialToolbar
 import android.content.pm.ResolveInfo
+import android.os.Build
 import android.os.Handler
+import android.webkit.WebSettings
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getSystemService
+import com.cory.hourcalculator.classes.DarkThemeData
 import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.concurrent.schedule
@@ -45,15 +49,15 @@ class WebviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Handler().postDelayed({
-            val webview = activity?.findViewById<WebView>(R.id.webView)
-            val progressBar = activity?.findViewById<ProgressBar>(R.id.progressBar)
+            val webView = requireActivity().findViewById<WebView>(R.id.webView)
+            val progressBar = requireActivity().findViewById<ProgressBar>(R.id.progressBar)
             val swipeRefreshLayout =
-                activity?.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+                requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
             val appBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarWebView)
 
             appBar?.setNavigationOnClickListener {
-                webview?.stopLoading()
+                webView?.stopLoading()
                 progressBar?.visibility = View.GONE
                 activity?.supportFragmentManager?.popBackStack()
             }
@@ -63,7 +67,7 @@ class WebviewFragment : Fragment() {
             appBar?.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.refresh -> {
-                        webview?.reload()
+                        webView?.reload()
                         true
                     }
                     R.id.copyMenu -> {
@@ -91,38 +95,48 @@ class WebviewFragment : Fragment() {
                 }
             }
 
-            webview?.onResume()
+            webView.onResume()
 
-            webview?.loadUrl(url)
+            webView.loadUrl(url)
 
-            webview?.webViewClient = object : WebViewClient() {
+            webView.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
-                    progressBar?.visibility = View.VISIBLE
-                    swipeRefreshLayout?.isRefreshing = false
+                    progressBar.visibility = View.VISIBLE
+                    swipeRefreshLayout.isRefreshing = false
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    progressBar?.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                 }
 
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-                    webview?.loadUrl(url)
-                    return super.shouldOverrideUrlLoading(view, request)
+                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                    val newUrl = request?.url.toString()
+                    webView.loadUrl(newUrl)
+                    return true
                 }
             }
-
-            webview?.settings?.javaScriptEnabled = true
-            webview?.settings?.domStorageEnabled = true
-            webview?.settings?.javaScriptCanOpenWindowsAutomatically = true
-
-            swipeRefreshLayout?.setOnRefreshListener {
-                webview?.reload()
+            webView.settings.javaScriptEnabled = true
+            webView.settings.domStorageEnabled = true
+            webView.settings.javaScriptCanOpenWindowsAutomatically = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                webView.settings.forceDark = WebSettings.FORCE_DARK_ON
             }
+
+            swipeRefreshLayout.setOnRefreshListener {
+                webView.reload()
+            }
+            activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (webView!!.canGoBack()) {
+                        webView.goBack()
+                    }
+                    else {
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
+                }
+            })
         }, 800)
     }
 }
