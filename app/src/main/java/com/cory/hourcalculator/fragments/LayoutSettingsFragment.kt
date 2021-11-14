@@ -1,11 +1,16 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +20,7 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 
 class LayoutSettingsFragment : Fragment() {
 
@@ -184,6 +190,52 @@ val historyToggleData = HistoryToggleData(requireContext())
             } else {
                 breakTextBoxVisiblityClass.setVisiblity(1)
                 Toast.makeText(requireContext(), "Break Text Box Disabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val wagesData = WagesData(requireContext())
+        val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
+
+        val editable = Editable.Factory.getInstance().newEditable(wagesData.loadWageAmount().toString())
+        wagesEditText?.text = editable
+
+        wagesEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
+            if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
+                hideKeyboard(wagesEditText)
+                return@OnKeyListener true
+            }
+            if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
+                wagesData.setWageAmount(wagesEditText.text.toString())
+                hideKeyboard(wagesEditText)
+                return@OnKeyListener true
+            }
+            false
+        })
+
+        wagesEditText?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString() != "") {
+                    wagesData.setWageAmount(s.toString())
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                wagesData.setWageAmount(s.toString())
+            }
+        })
+    }
+
+    private fun hideKeyboard(wagesEditText: TextInputEditText) {
+        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusedView = activity?.currentFocus
+
+        if (focusedView != null) {
+            inputManager.hideSoftInputFromWindow(focusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            if (wagesEditText.hasFocus()) {
+                wagesEditText.clearFocus()
             }
         }
     }

@@ -5,6 +5,8 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.AbsListView
@@ -12,7 +14,9 @@ import androidx.fragment.app.Fragment
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
@@ -20,6 +24,7 @@ import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.SortData
+import com.cory.hourcalculator.classes.WagesData
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -84,19 +89,19 @@ class HistoryFragment : Fragment() {
         when {
 
             accentColor.loadAccent() == 0 -> {
-                floatingActionButtonHistory?.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+                floatingActionButtonHistory?.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
             }
             accentColor.loadAccent() == 1 -> {
-                floatingActionButtonHistory?.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.pinkAccent))
+                floatingActionButtonHistory?.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.pinkAccent)
             }
             accentColor.loadAccent() == 2 -> {
-                floatingActionButtonHistory?.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.orangeAccent))
+                floatingActionButtonHistory?.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.orangeAccent)
             }
             accentColor.loadAccent() == 3 -> {
-                floatingActionButtonHistory?.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.redAccent))
+                floatingActionButtonHistory?.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.redAccent)
             }
             accentColor.loadAccent() == 4 -> {
-                floatingActionButtonHistory?.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.systemAccent))
+                floatingActionButtonHistory?.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
             }
         }
 
@@ -124,11 +129,21 @@ class HistoryFragment : Fragment() {
 
             when (menuItem.itemId) {
                 R.id.info -> {
+                    val wagesData = WagesData(requireContext())
                     // Handle edit text press
                     if (dbHandler.getCount() > 0) {
                         val alert = MaterialAlertDialogBuilder(requireActivity(), AccentColor(requireContext()).alertTheme())
                         alert.setTitle("Info")
-                        alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}")
+                         if (wagesData.loadWageAmount() != "") {
+                try {
+                    val wages = output.toDouble() * wagesData.loadWageAmount().toString().toDouble()
+                    val wagesrounded = String.format("%.2f", wages)
+                    alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}\nWages: $wagesrounded")
+                } catch (e: NumberFormatException) {
+                    e.printStackTrace()
+                    alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}\nWages: There was an error")
+                }
+            }
                         alert.setPositiveButton("OK", null)
                         alert.show()
                     }
@@ -223,12 +238,18 @@ class HistoryFragment : Fragment() {
         }
 
         loadIntoList()
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                activity?.supportFragmentManager?.popBackStack()
+            }
+        })
     }
 
     @SuppressLint("Range")
     private fun loadIntoList() {
 
-        val dbHandler = DBHelper(requireContext(), null)
+        val dbHandler = DBHelper(requireActivity().applicationContext, null)
 
         if (dbHandler.getCount() > 0) {
             val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
@@ -277,7 +298,7 @@ class HistoryFragment : Fragment() {
         }
         //textViewSize.text = getString(R.string.amount_of_hours_saved, dbHandler.getCount())
         val listView = activity?.findViewById<ListView>(R.id.listView)
-        listView?.adapter = CustomAdapter(requireContext(), dataList, HistoryFragment())
+        listView?.adapter = CustomAdapter(requireContext(), dataList)
 
     }
 
@@ -287,8 +308,11 @@ class HistoryFragment : Fragment() {
         val v = listView?.getChildAt(0)
         val top = if (v == null) 0 else v.top - listView.paddingTop
 
-        loadIntoList()
+        if (HistoryFragment().isVisible) {
+            loadIntoList()
+        }
         listView?.setSelectionFromTop(index!!, top)
 
     }
+
 }

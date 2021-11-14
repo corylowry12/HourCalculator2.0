@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
@@ -85,7 +86,7 @@ class HomeFragment : Fragment() {
 
         MainActivity().runOnUiThread(runnable)
 
-        val breakTextBox = activity?.findViewById<TextInputEditText>(R.id.breakTime)
+        val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTime)
         val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
         val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
         val breakTextBoxVisiblityClass = BreakTextBoxVisiblityClass(requireContext())
@@ -116,8 +117,41 @@ class HomeFragment : Fragment() {
 
         calculateButton?.setOnClickListener {
 
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (imm.isAcceptingText) {
+                imm.hideSoftInputFromWindow(constraintLayout?.windowToken, 0)
+                breakTextBox?.clearFocus()
+            }
+
             calculate()
         }
+
+        var doubleBackToExitPressedOnce = false
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (breakTextBox.hasFocus()) {
+                    breakTextBox.clearFocus()
+                }
+                else {
+                    if(doubleBackToExitPressedOnce) {
+                        activity?.finishAffinity()
+                    }
+                    else {
+                        doubleBackToExitPressedOnce = true
+                        Toast.makeText(
+                            requireContext(),
+                            "Press BACK Again To Exit",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            doubleBackToExitPressedOnce = false
+                        }, 2000)
+                    }
+                }
+            }
+        })
     }
 
     private fun calculate() {

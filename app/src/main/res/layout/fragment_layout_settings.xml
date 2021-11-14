@@ -200,14 +200,14 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8sp"
+                    android:layout_marginTop="12sp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:paddingBottom="8dp"
-                    app:boxCornerRadiusBottomStart="28dp"
-                    app:boxCornerRadiusBottomEnd="28dp"
-                    app:boxCornerRadiusTopEnd="28dp"
-                    app:boxCornerRadiusTopStart="28dp"
+                    android:paddingBottom="12dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusTopStart="14dp"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText

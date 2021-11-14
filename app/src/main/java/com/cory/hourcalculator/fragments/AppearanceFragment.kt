@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -158,8 +159,11 @@ class AppearanceFragment : Fragment() {
         val redAccentButton = activity?.findViewById<RadioButton>(R.id.Red)
         val systemAccentButton = activity?.findViewById<RadioButton>(R.id.systemAccent)
 
+        val systemAccentImage = activity?.findViewById<ImageView>(R.id.systemAccentImageView)
+
         if (Build.VERSION.RELEASE.toInt() < 12) {
             systemAccentButton?.visibility = View.GONE
+            systemAccentImage?.visibility = View.GONE
         }
 
         when {
@@ -428,7 +432,6 @@ class AppearanceFragment : Fragment() {
 
        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
            override fun handleOnBackPressed() {
-               Toast.makeText(requireContext(), "clicked", Toast.LENGTH_LONG).show()
                activity?.supportFragmentManager?.popBackStack()
            }
        })
@@ -438,6 +441,7 @@ class AppearanceFragment : Fragment() {
 
         activity?.supportFragmentManager?.beginTransaction()?.detach(this)?.commitNow();
         activity?.supportFragmentManager?.beginTransaction()?.attach(this)?.commitNow();
+
     }
 
     private fun restartApplication() {

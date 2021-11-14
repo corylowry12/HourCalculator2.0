@@ -26,12 +26,14 @@ import androidx.core.content.contentValuesOf
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class CustomAdapter(
     private val context: Context,
-    private val dataList: ArrayList<HashMap<String, String>>,
-    private val historyFragment: HistoryFragment
+    private val dataList: ArrayList<HashMap<String, String>>
 ) : BaseAdapter() {
 
     private val inflater: LayoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -47,7 +49,7 @@ class CustomAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("ViewHolder", "Range")
+    @SuppressLint("ViewHolder", "Range", "ShowToast")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val dbHandler = DBHelper(context, null)
         val dataitem = dataList[position]
@@ -145,12 +147,12 @@ class CustomAdapter(
                                     breakTime = ""
                                     totalHours = ""
                                     day = ""
-                                }
-                                else {
+                                } else {
                                     snackbar.setText(timer.toString() + "\t\t\tHour Deleted")
                                     snackbar.show()
-                                }
-                                timer--
+
+                                    timer--
+                            }
                                 mainHandler.postDelayed(this, 1000)
                             }
                         })
@@ -166,6 +168,7 @@ class CustomAdapter(
                         val alertDialog = MaterialAlertDialogBuilder(context, AccentColor(context).alertTheme())
                         alertDialog.setTitle("Delete All?")
                         alertDialog.setMessage("Would you like to delete all?")
+                        alertDialog.setCancelable(false)
                         alertDialog.setPositiveButton("Yes") { _, _ ->
                             //vibration(vibrationData)
 
@@ -202,11 +205,13 @@ class CustomAdapter(
                             snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
                             snackbar.setAction("UNDO") {
                                 timer = 0
+                                GlobalScope.launch(Dispatchers.Main) {
                                 for (i in inTime.indices) {
                                     dbHandler.insertRow(inTime.elementAt(i), outTime.elementAt(i), totalHours.elementAt(i), day.elementAt(i), breakTime.elementAt(i))
                                 }
 
                                 MainActivity().runOnUiThread(runnable)
+                                }
                             }
 
                             val mainHandler = Handler(Looper.getMainLooper())

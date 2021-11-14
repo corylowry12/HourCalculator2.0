@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import java.math.RoundingMode
 import java.time.LocalDateTime
@@ -27,6 +30,9 @@ class EditHours : Fragment() {
     private lateinit var outTime: String
     private lateinit var breakTime: String
 
+    private var inTimeBool = false
+    private var outTimeBool = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +45,68 @@ class EditHours : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         main()
+
+        val inTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerInTimeEdit)
+        val outTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+
+        inTimePickerEdit?.setOnTimeChangedListener { timePicker, i, i2 ->
+            val inTimeMinutesNumbers: Int
+
+            val (inTimeHours, inTimeMinutes) = inTime.split(":")
+
+            var inTimeHoursInteger: Int = inTimeHours.toInt()
+
+            if (inTime.contains("pm")) {
+                inTimeMinutesNumbers = inTimeMinutes.replace("pm", "").trim().toInt()
+                inTimeHoursInteger += 12
+            } else {
+                inTimeMinutesNumbers = inTimeMinutes.replace("am", "").trim().toInt()
+                if (inTimeHours.toInt() == 12) {
+                    inTimeHoursInteger -= 12
+                }
+            }
+
+            inTimeBool = inTimeHoursInteger != i || inTimeMinutesNumbers != i2
+        }
+
+        outTimePickerEdit?.setOnTimeChangedListener { timePicker, i, i2 ->
+            val outTimeMinutesNumbers: Int
+            val (outTimeHours, outTimeMinutes) = outTime.split(":")
+            var outTimeHoursInteger: Int = outTimeHours.toInt()
+
+            if (outTime.contains("pm")) {
+                outTimeMinutesNumbers = outTimeMinutes.replace("pm", "").trim().toInt()
+                outTimeHoursInteger += 12
+            } else {
+                outTimeMinutesNumbers = outTimeMinutes.replace("am", "").trim().toInt()
+                if (outTimeHours.toInt() == 12) {
+                    outTimeHoursInteger -= 12
+                }
+            }
+            outTimeBool = outTimeHoursInteger != i || outTimeMinutesNumbers != i2
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (inTimeBool || outTimeBool) {
+                   val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setTitle("Pending Changes")
+                    alert.setMessage("You have pending changes. Would you like to save?")
+                    alert.setPositiveButton("Yes") { dialog, which ->
+                        calculate(idMap, day)
+                        Toast.makeText(requireContext(), "Hour is updated", Toast.LENGTH_SHORT).show()
+                    }
+                    alert.setNegativeButton("No") { _, _ ->
+                        activity?.finish()
+                        Toast.makeText(requireContext(), "Hour was not updated", Toast.LENGTH_SHORT).show()
+                    }
+                    alert.show()
+                }
+                else {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            }
+        })
     }
 
     fun main() {

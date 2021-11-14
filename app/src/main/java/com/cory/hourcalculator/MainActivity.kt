@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.HistoryToggleData
 import com.cory.hourcalculator.database.DBHelper
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private val settingsFragment = SettingsFragment()
 
     val dbHandler = DBHelper(this, null)
+
+    val dataList = ArrayList<HashMap<String, String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +91,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
+       /* if (historyFragment.isVisible && CustomAdapter(this, dataList).snackbar.isShownOrQueued) {
+            CustomAdapter(this, dataList).snackbar.dismiss()
+            //CustomAdapter(this, dataList).snackbar.setText("hello world")
+        }*/
         if (fragment != null) {
 
             val transaction = supportFragmentManager.beginTransaction()
@@ -138,7 +145,4 @@ class MainActivity : AppCompatActivity() {
         bottomNav.menu.findItem(R.id.ic_home).isChecked = true
     }
 
-    fun oneHourDeleted(view: View) {
-
-    }
 }
