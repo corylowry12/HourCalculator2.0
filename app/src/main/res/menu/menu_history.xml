@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 <item
     android:id="@+id/info"
-    android:title="Info"
+    android:title="@string/info"
     app:showAsAction="always"
     android:icon="@drawable/ic_baseline_info_24"
     android:iconTint="?attr/historyItemMenuTint"
@@ -13,22 +13,22 @@
     <item
         android:id="@+id/mnuSort"
         android:icon="@drawable/ic_sort_24px"
-        android:title="Sort"
+        android:title="@string/sort"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/menuSortByLastEntered"
-                android:title="Sort by last entered" />
+                android:title="@string/sort_by_last_entered" />
             <item
                 android:id="@+id/menuSortByFirstEntered"
-                android:title="Sort by first entered" />
+                android:title="@string/sort_by_first_entered" />
             <item
                 android:id="@+id/menuSortByMostHours"
-                android:title="Sort by most hours" />
+                android:title="@string/sort_by_most_entered" />
             <item
                 android:id="@+id/menuSortByLeastHours"
-                android:title="Sort by least hours" />
+                android:title="@string/sort_by_least_entered" />
         </menu>
     </item>
 </menu>
