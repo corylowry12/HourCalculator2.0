@@ -5,7 +5,17 @@
     <string name="out_time_adapter">Out Time: %1$s</string>
     <string name="total_time_adapter">Total Time: %1$s</string>
     <string name="date_adapter">Date: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="total_asc">total ASC</string>
+    <string name="sort_by_least_hours_checked">Sort By Least Hours ✔</string>
+    <string name="sort_by_most_hours_checked">Sort By Most Hours ✔</string>
+    <string name="sort_by_first_entered_checked">Sort By First Entered ✔</string>
+    <string name="sort_by_last_entered_checked">Sort By Last Entered ✔</string>
+    <string name="sort_by_first_entered">Sort By First Entered</string>
+    <string name="sort_by_least_entered">Sort By Least Hours</string>
+    <string name="sort_by_most_entered">Sort By Most Entered</string>
+    <string name="sort_by_last_entered">Sort By Last Entered</string>
+    <string name="info">Info</string>
+    <string name="sort">Sort</string>
 
 </resources>
