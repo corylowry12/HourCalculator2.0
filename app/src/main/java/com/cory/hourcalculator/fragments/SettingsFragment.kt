@@ -2,6 +2,7 @@ package com.cory.hourcalculator.fragments
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.icu.util.VersionInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.R
@@ -20,6 +22,7 @@ import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.review.ReviewManagerFactory
+import org.w3c.dom.Text
 
 class SettingsFragment : Fragment() {
 
@@ -225,6 +228,30 @@ class SettingsFragment : Fragment() {
         deleteDataCardView?.setOnClickListener {
             showDeleteDataAlert()
         }
+
+        val versionInfoHeading = activity?.findViewById<TextView>(R.id.versionHeading)
+        val versionInfoSubtitle = activity?.findViewById<TextView>(R.id.versionSubtitle)
+        val versionInfoCardView = activity?.findViewById<CardView>(R.id.versionCardView)
+        val versionInfoImageView = activity?.findViewById<ImageView>(R.id.versionImage)
+
+        versionInfoHeading?.setOnClickListener {
+            openAboutFragment()
+        }
+        versionInfoSubtitle?.setOnClickListener {
+            openAboutFragment()
+        }
+        versionInfoCardView?.setOnClickListener {
+            openAboutFragment()
+        }
+        versionInfoImageView?.setOnClickListener {
+            openAboutFragment()
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                activity?.supportFragmentManager?.popBackStack()
+            }
+        })
     }
 
     fun openAppearanceFragment() {
@@ -303,5 +330,13 @@ class SettingsFragment : Fragment() {
         }
         alert.setNegativeButton("No", null)
         alert.show()
+    }
+
+    fun openAboutFragment() {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+
+        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+        transaction?.replace(R.id.fragment_container, AboutFragment())?.addToBackStack(null)
+        transaction?.commit()
     }
 }
