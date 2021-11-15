@@ -44,4 +44,7 @@
     <color name="darkMenuBackground">#2C353A</color>
     <color name="lightMenuBackground">#FFFFFF</color>
 
+    <color name="redBadgeColor">#BF3030</color>
+    <color name="lightRedBadgeColor">#ffffff</color>
+
 </resources>
