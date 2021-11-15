@@ -111,16 +111,16 @@ class HistoryFragment : Fragment() {
 
         when {
             sortData.loadSortState() == "day DESC" -> {
-                topAppBar?.menu?.findItem(R.id.menuSortByLastEntered)?.title = "* Sort By Last Entered"
+                topAppBar?.menu?.findItem(R.id.menuSortByLastEntered)?.title = getString(R.string.sort_by_last_entered_checked)
             }
             sortData.loadSortState() == "day ASC" -> {
-                topAppBar?.menu?.findItem(R.id.menuSortByFirstEntered)?.title = "* Sort By First Entered"
+                topAppBar?.menu?.findItem(R.id.menuSortByFirstEntered)?.title = getString(R.string.sort_by_first_entered_checked)
             }
             sortData.loadSortState() == "total ASC" -> {
-                topAppBar?.menu?.findItem(R.id.menuSortByLeastHours)?.title = "* Sort By Least Hours"
+                topAppBar?.menu?.findItem(R.id.menuSortByLeastHours)?.title = getString(R.string.sort_by_least_hours_checked)
             }
             sortData.loadSortState() == "total DESC" -> {
-                topAppBar?.menu?.findItem(R.id.menuSortByLeastHours)?.title = "* Sort By Most Hours"
+                topAppBar?.menu?.findItem(R.id.menuSortByMostHours)?.title = getString(R.string.sort_by_most_hours_checked)
             }
         }
 
@@ -160,10 +160,10 @@ class HistoryFragment : Fragment() {
                         sortData.setSortState("day DESC")
                         loadIntoList()
                         Toast.makeText(requireContext(), "Changed sort mode to last entered", Toast.LENGTH_SHORT).show()
-                        topAppBar.menu?.findItem(R.id.menuSortByFirstEntered)?.title = "Sort By First Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByLeastHours)?.title = "Sort By Least Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByMostHours)?.title = "Sort By Most Entered"
-                        menuItem.title = "* Sort by last entered"
+                        topAppBar.menu?.findItem(R.id.menuSortByFirstEntered)?.title = getString(R.string.sort_by_first_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByLeastHours)?.title = getString(R.string.sort_by_least_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByMostHours)?.title = getString(R.string.sort_by_most_entered)
+                        menuItem.title = getString(R.string.sort_by_last_entered_checked)
                     }
                     true
                 }
@@ -175,10 +175,10 @@ class HistoryFragment : Fragment() {
                         sortData.setSortState("day ASC")
                         loadIntoList()
                         Toast.makeText(requireContext(), "Changed sort mode to first entered", Toast.LENGTH_SHORT).show()
-                        topAppBar.menu?.findItem(R.id.menuSortByLastEntered)?.title = "Sort By Last Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByLeastHours)?.title = "Sort By Least Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByMostHours)?.title = "Sort By Most Entered"
-                        menuItem.title = "* Sort by first entered"
+                        topAppBar.menu?.findItem(R.id.menuSortByLastEntered)?.title = getString(R.string.sort_by_last_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByLeastHours)?.title = getString(R.string.sort_by_least_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByMostHours)?.title = getString(R.string.sort_by_most_entered)
+                        menuItem.title = getString(R.string.sort_by_first_entered_checked)
                     }
                     true
                 }
@@ -187,13 +187,13 @@ class HistoryFragment : Fragment() {
                     if (dbHandler.getCount() == 0) {
                         Toast.makeText(requireContext(), "Cant sort, history is empty", Toast.LENGTH_SHORT).show()
                     } else {
-                        sortData.setSortState("total ASC")
+                        sortData.setSortState(getString(R.string.total_asc))
                         loadIntoList()
                         Toast.makeText(requireContext(), "Changed sort mode to least entered", Toast.LENGTH_SHORT).show()
-                        topAppBar.menu?.findItem(R.id.menuSortByLastEntered)?.title = "Sort By Last Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByFirstEntered)?.title = "Sort By First Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByMostHours)?.title = "Sort By Most Entered"
-                        menuItem.title = "* Sort by least entered"
+                        topAppBar.menu?.findItem(R.id.menuSortByLastEntered)?.title = getString(R.string.sort_by_last_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByFirstEntered)?.title = getString(R.string.sort_by_first_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByMostHours)?.title = getString(R.string.sort_by_most_entered)
+                        menuItem.title = getString(R.string.sort_by_least_hours_checked)
                     }
                     true
                 }
@@ -205,10 +205,10 @@ class HistoryFragment : Fragment() {
                         sortData.setSortState("total DESC")
                         loadIntoList()
                         Toast.makeText(requireContext(), "Changed sort mode to most entered", Toast.LENGTH_SHORT).show()
-                        topAppBar.menu?.findItem(R.id.menuSortByLastEntered)?.title = "Sort By Last Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByFirstEntered)?.title = "Sort By First Entered"
-                        topAppBar.menu?.findItem(R.id.menuSortByLeastHours)?.title = "Sort By Least Entered"
-                        menuItem.title = "* Sort by most entered"
+                        topAppBar.menu?.findItem(R.id.menuSortByLastEntered)?.title = getString(R.string.sort_by_last_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByFirstEntered)?.title = getString(R.string.sort_by_first_entered)
+                        topAppBar.menu?.findItem(R.id.menuSortByLeastHours)?.title = getString(R.string.sort_by_least_entered)
+                        menuItem.title = getString(R.string.sort_by_most_hours_checked)
                     }
                     true
                 }
