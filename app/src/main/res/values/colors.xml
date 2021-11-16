@@ -23,7 +23,7 @@
     <color name="pinkDialog">#FFB8E0</color>
     <color name="orangeDialog">#FDB492</color>
     <color name="redDialog">#FA9890</color>
-    <color name="systemAccentDialog" tools:targetApi="s">@android:color/system_accent1_100</color>
+    <color name="systemAccentDialog" tools:targetApi="s">@android:color/system_accent1_200</color>
 
     <color name="cardPink">#FF98D0</color>
     <color name="cardTeal">#59C5B9</color>
@@ -40,11 +40,12 @@
     <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_700</color>
 
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 
     <color name="darkMenuBackground">#2C353A</color>
     <color name="lightMenuBackground">#FFFFFF</color>
 
     <color name="redBadgeColor">#BF3030</color>
-    <color name="lightRedBadgeColor">#ffffff</color>
+    <color name="lightRedBadgeColor">#FF4030</color>
 
 </resources>
