@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -120,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                 bottom_nav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryPixelAppBar)
             }
         }
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -175,6 +177,43 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+    }
+
+    fun setBackgroundColor() {
+        val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
+        val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+
+        val darkThemeData = DarkThemeData(this)
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.darkThemeBackground))
+                badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+                badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+                        badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                        badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                        badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -126,7 +126,6 @@ class HistoryFragment : Fragment() {
 
         topAppBar?.setOnMenuItemClickListener { menuItem ->
             val dbHandler = DBHelper(requireContext(), null)
-
             when (menuItem.itemId) {
                 R.id.info -> {
                     val wagesData = WagesData(requireContext())
@@ -212,7 +211,6 @@ class HistoryFragment : Fragment() {
                     }
                     true
                 }
-
                 else -> false
             }
         }

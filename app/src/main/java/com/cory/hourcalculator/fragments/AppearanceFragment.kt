@@ -18,7 +18,9 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.BuildConfig
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
@@ -438,6 +440,11 @@ class AppearanceFragment : Fragment() {
     }
 
     private fun restartThemeChange() {
+
+        val runnable = Runnable {
+            (context as MainActivity).setBackgroundColor()
+        }
+        MainActivity().runOnUiThread(runnable)
 
         activity?.supportFragmentManager?.beginTransaction()?.detach(this)?.commitNow();
         activity?.supportFragmentManager?.beginTransaction()?.attach(this)?.commitNow();

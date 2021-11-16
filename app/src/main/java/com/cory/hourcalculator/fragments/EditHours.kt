@@ -12,6 +12,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import java.math.RoundingMode
@@ -43,6 +44,12 @@ class EditHours : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val materialToolbarEdit = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
+
+        materialToolbarEdit?.setNavigationOnClickListener {
+            exit()
+        }
 
         main()
 
@@ -88,25 +95,29 @@ class EditHours : Fragment() {
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (inTimeBool || outTimeBool) {
-                   val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                    alert.setTitle("Pending Changes")
-                    alert.setMessage("You have pending changes. Would you like to save?")
-                    alert.setPositiveButton("Yes") { dialog, which ->
-                        calculate(idMap, day)
-                        Toast.makeText(requireContext(), "Hour is updated", Toast.LENGTH_SHORT).show()
-                    }
-                    alert.setNegativeButton("No") { _, _ ->
-                        activity?.finish()
-                        Toast.makeText(requireContext(), "Hour was not updated", Toast.LENGTH_SHORT).show()
-                    }
-                    alert.show()
-                }
-                else {
-                    activity?.supportFragmentManager?.popBackStack()
-                }
+                exit()
             }
         })
+    }
+
+    fun exit() {
+        if (inTimeBool || outTimeBool) {
+            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            alert.setTitle("Pending Changes")
+            alert.setMessage("You have pending changes. Would you like to save?")
+            alert.setPositiveButton("Yes") { _, _ ->
+                calculate(idMap, day)
+                Toast.makeText(requireContext(), "Hour is updated", Toast.LENGTH_SHORT).show()
+            }
+            alert.setNegativeButton("No") { _, _ ->
+                activity?.finish()
+                Toast.makeText(requireContext(), "Hour was not updated", Toast.LENGTH_SHORT).show()
+            }
+            alert.show()
+        }
+        else {
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
 
     fun main() {
