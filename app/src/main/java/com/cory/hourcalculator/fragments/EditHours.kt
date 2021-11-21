@@ -1,10 +1,16 @@
 package com.cory.hourcalculator.fragments
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import com.cory.hourcalculator.MainActivity
@@ -33,6 +39,7 @@ class EditHours : Fragment() {
 
     private var inTimeBool = false
     private var outTimeBool = false
+    private var breakTimeBool = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,23 +58,75 @@ class EditHours : Fragment() {
             exit()
         }
 
+        materialToolbarEdit?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.delete -> {
+                    val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setTitle(getString(R.string.delete))
+                    alert.setMessage(getString(R.string.would_you_like_to_delete_history))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        val dbHandler = DBHelper(requireContext(), null)
+                        dbHandler.deleteRow(idMap)
+                        Toast.makeText(requireContext(), getString(R.string.hour_deleted), Toast.LENGTH_SHORT).show()
+                        val runnable = Runnable {
+                            (context as MainActivity).changeBadgeNumber()
+                        }
+                        MainActivity().runOnUiThread(runnable)
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
+                    alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    alert.show()
+                    true
+                }
+                else -> false
+            }
+        }
+
         main()
 
         val inTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerInTimeEdit)
         val outTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+        val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
 
-        inTimePickerEdit?.setOnTimeChangedListener { timePicker, i, i2 ->
+        breakTimeEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
+            if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
+                hideKeyboard(breakTimeEditText)
+                return@OnKeyListener true
+            }
+            if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
+                hideKeyboard(breakTimeEditText)
+                return@OnKeyListener true
+            }
+            false
+        })
+
+        breakTimeEditText?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                breakTimeBool = s.toString() != "" && s.toString() != breakTime
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                breakTimeBool = s.toString() != "" && s.toString() != breakTime
+            }
+        })
+
+        inTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
             val inTimeMinutesNumbers: Int
 
             val (inTimeHours, inTimeMinutes) = inTime.split(":")
 
             var inTimeHoursInteger: Int = inTimeHours.toInt()
 
-            if (inTime.contains("pm")) {
-                inTimeMinutesNumbers = inTimeMinutes.replace("pm", "").trim().toInt()
+            if (inTime.contains(getString(R.string.PM))) {
+                inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
                 inTimeHoursInteger += 12
             } else {
-                inTimeMinutesNumbers = inTimeMinutes.replace("am", "").trim().toInt()
+                inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
                 if (inTimeHours.toInt() == 12) {
                     inTimeHoursInteger -= 12
                 }
@@ -76,16 +135,16 @@ class EditHours : Fragment() {
             inTimeBool = inTimeHoursInteger != i || inTimeMinutesNumbers != i2
         }
 
-        outTimePickerEdit?.setOnTimeChangedListener { timePicker, i, i2 ->
+        outTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
             val outTimeMinutesNumbers: Int
             val (outTimeHours, outTimeMinutes) = outTime.split(":")
             var outTimeHoursInteger: Int = outTimeHours.toInt()
 
-            if (outTime.contains("pm")) {
-                outTimeMinutesNumbers = outTimeMinutes.replace("pm", "").trim().toInt()
+            if (outTime.contains(getString(R.string.PM))) {
+                outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
                 outTimeHoursInteger += 12
             } else {
-                outTimeMinutesNumbers = outTimeMinutes.replace("am", "").trim().toInt()
+                outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
                 if (outTimeHours.toInt() == 12) {
                     outTimeHoursInteger -= 12
                 }
@@ -101,17 +160,18 @@ class EditHours : Fragment() {
     }
 
     fun exit() {
-        if (inTimeBool || outTimeBool) {
+        hideKeyboard(requireActivity().findViewById(R.id.breakTimeEdit))
+        if (inTimeBool || outTimeBool || breakTimeBool) {
             val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-            alert.setTitle("Pending Changes")
-            alert.setMessage("You have pending changes. Would you like to save?")
-            alert.setPositiveButton("Yes") { _, _ ->
+            alert.setTitle(getString(R.string.pending_changes))
+            alert.setMessage(getString(R.string.you_have_pending_changes))
+            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 calculate(idMap, day)
-                Toast.makeText(requireContext(), "Hour is updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.hour_is_updated), Toast.LENGTH_SHORT).show()
             }
-            alert.setNegativeButton("No") { _, _ ->
-                activity?.finish()
-                Toast.makeText(requireContext(), "Hour was not updated", Toast.LENGTH_SHORT).show()
+            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                activity?.supportFragmentManager?.popBackStack()
+                Toast.makeText(requireContext(), getString(R.string.hour_was_not_updated), Toast.LENGTH_SHORT).show()
             }
             alert.show()
         }
@@ -120,7 +180,8 @@ class EditHours : Fragment() {
         }
     }
 
-    fun main() {
+    @SuppressLint("Range")
+    private fun main() {
 
         val dbHandler = DBHelper(requireContext(), null)
 
@@ -139,24 +200,24 @@ class EditHours : Fragment() {
         while (cursor.position == id.toInt()) {
 
             map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-            map["intime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-            map["out"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-            map["break"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-            map["total"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-            map["day"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
             dataList.add(map)
 
             cursor.moveToNext()
 
         }
         idMap = map["id"].toString()
-        inTime = map["intime"].toString()
-        breakTime = map["break"].toString()
-        outTime = map["out"].toString()
-        day = map["day"].toString()
+        inTime = map["inTime"].toString()
+        breakTime = map["breakTime"].toString()
+        outTime = map["outTime"].toString()
+        day = map["date"].toString()
 
-        val (inTimeHours, inTimeMinutes) = map["intime"].toString().split(":")
-        val (outTimeHours, outTimeMinutes) = map["out"].toString().split(":")
+        val (inTimeHours, inTimeMinutes) = map["inTime"].toString().split(":")
+        val (outTimeHours, outTimeMinutes) = map["outTime"].toString().split(":")
 
         var inTimeHoursInteger: Int = inTimeHours.toInt()
         var outTimeHoursInteger: Int = outTimeHours.toInt()
@@ -164,21 +225,21 @@ class EditHours : Fragment() {
         val inTimeMinutesNumbers: Int
         val outTimeMinutesNumbers: Int
 
-        if (map["intime"].toString().contains("pm")) {
-            inTimeMinutesNumbers = inTimeMinutes.replace("pm", "").trim().toInt()
+        if (map["inTime"].toString().contains(getString(R.string.PM))) {
+            inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
             inTimeHoursInteger += 12
         } else {
-            inTimeMinutesNumbers = inTimeMinutes.replace("am", "").trim().toInt()
+            inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
             if (inTimeHours.toInt() == 12) {
                 inTimeHoursInteger -= 12
             }
         }
 
-        if (map["out"].toString().contains("pm")) {
-            outTimeMinutesNumbers = outTimeMinutes.replace("pm", "").trim().toInt()
+        if (map["outTime"].toString().contains(getString(R.string.PM))) {
+            outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
             outTimeHoursInteger += 12
         } else {
-            outTimeMinutesNumbers = outTimeMinutes.replace("am", "").trim().toInt()
+            outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
             if (outTimeHours.toInt() == 12) {
                 outTimeHoursInteger -= 12
             }
@@ -227,11 +288,11 @@ class EditHours : Fragment() {
         }
         var hoursDifference = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
-            infoTextView1?.text = "In time and out time can not be the same"
+            infoTextView1?.text = getString(R.string.in_time_and_out_time_cant_be_the_same)
         } else if (timePickerInTime!!.hour >= 0 && timePickerOutTime!!.hour <= 12 && hoursDifference < 0) {
-            infoTextView1!!.text = "In Time Can Not Be greater than out time"
+            infoTextView1!!.text = getString(R.string.in_time_can_not_be_greater_than_out_time)
         } else if (timePickerInTime.hour >= 12 && timePickerOutTime!!.hour <= 24 && hoursDifference < 0) {
-            infoTextView1!!.text = "In Time Can Not Be Greater Than Out Time"
+            infoTextView1!!.text = getString(R.string.in_time_can_not_be_greater_than_out_time)
         } else {
             if (minutesDecimal < 0) {
                 hoursDifference -= 1
@@ -242,32 +303,32 @@ class EditHours : Fragment() {
             when {
                 inTimeHoursEdit.toInt() > 12 -> {
                     val inTime = inTimeHoursEdit.toInt() - 12
-                    val amOrPm = "pm"
+                    val amOrPm = getString(R.string.PM)
                     inTimeTotal = "$inTime:$inTimeMinutesEdit $amOrPm"
                 }
                 inTimeHoursEdit.toInt() == 0 -> {
                     val inTime = 12
-                    val amOrPm = "am"
+                    val amOrPm = getString(R.string.AM)
                     inTimeTotal = "$inTime:$inTimeMinutesEdit $amOrPm"
                 }
                 else -> {
-                    val amOrPm = "am"
+                    val amOrPm = getString(R.string.AM)
                     inTimeTotal = "$inTimeHoursEdit:$inTimeMinutesEdit $amOrPm"
                 }
             }
             when {
                 outTimeHoursEdit.toInt() > 12 -> {
                     val outTime = outTimeHoursEdit.toInt() - 12
-                    val amOrPm = "pm"
+                    val amOrPm = getString(R.string.PM)
                     outTimeTotal = "$outTime:$outTimeMinutesEdit $amOrPm"
                 }
                 outTimeHoursEdit.toInt() == 0 -> {
                     val outTime = 12
-                    val amOrPm = "am"
+                    val amOrPm = getString(R.string.AM)
                     outTimeTotal = "$outTime:$outTimeMinutesEdit $amOrPm"
                 }
                 else -> {
-                    val amOrPm = "am"
+                    val amOrPm = getString(R.string.AM)
                     outTimeTotal = "$outTimeHoursEdit:$outTimeMinutesEdit $amOrPm"
                 }
             }
@@ -275,13 +336,11 @@ class EditHours : Fragment() {
             var breakTimeNumber = 0.0
             val totalHours = "$hoursDifference.$minutesWithoutFirstDecimal".toDouble()
 
-            val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTime)
+            val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
 
-                Toast.makeText(requireActivity(), "break time not empty $totalHours", Toast.LENGTH_LONG).show()
                 breakTimeNumber = breakTime.text.toString().toDouble() / 60
                 val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString()
-                Toast.makeText(requireActivity(), "break time not empty $totalHoursWithBreak", Toast.LENGTH_LONG).show()
 
                 savingHours(idMap, totalHours, inTimeTotal, outTimeTotal, breakTime.text.toString(), day)
                 infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
@@ -301,5 +360,17 @@ class EditHours : Fragment() {
         dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours.toString(), dayOfWeek, breakTime)
 
         activity?.supportFragmentManager?.popBackStack()
+    }
+
+    private fun hideKeyboard(breakEditText: TextInputEditText?) {
+        val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusedView = activity?.currentFocus
+
+        if (focusedView != null) {
+            inputManager.hideSoftInputFromWindow(focusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            if (breakEditText!!.hasFocus()) {
+                breakEditText.clearFocus()
+            }
+        }
     }
 }
