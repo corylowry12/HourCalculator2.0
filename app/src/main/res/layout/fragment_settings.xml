@@ -159,7 +159,7 @@
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="Layout Settings"
+                        android:text="App Settings"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintStart_toEndOf="@id/layoutImage"
@@ -174,7 +174,7 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="Customize the layout settings of the app"
+                        android:text="Customize the fundamental settings of the app"
                         android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toStartOf="@id/layoutSettingsChevron"
@@ -683,7 +683,7 @@
 
                     <TextView
                         android:id="@+id/versionHeading"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
@@ -691,7 +691,6 @@
                         android:text="Version Info"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/versionChevron"
                         app:layout_constraintStart_toEndOf="@id/versionImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
