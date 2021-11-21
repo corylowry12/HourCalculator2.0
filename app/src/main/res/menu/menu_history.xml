@@ -15,20 +15,5 @@
         android:icon="@drawable/ic_sort_24px"
         android:title="@string/sort"
         app:showAsAction="always"
-        tools:ignore="AlwaysShowAction">
-        <menu>
-            <item
-                android:id="@+id/menuSortByLastEntered"
-                android:title="@string/sort_by_last_entered" />
-            <item
-                android:id="@+id/menuSortByFirstEntered"
-                android:title="@string/sort_by_first_entered" />
-            <item
-                android:id="@+id/menuSortByMostHours"
-                android:title="@string/sort_by_most_entered" />
-            <item
-                android:id="@+id/menuSortByLeastHours"
-                android:title="@string/sort_by_least_entered" />
-        </menu>
-    </item>
+        tools:ignore="AlwaysShowAction"/>
 </menu>
