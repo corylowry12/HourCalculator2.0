@@ -156,6 +156,7 @@ class HomeFragment : Fragment() {
 
         if (!dialogData.loadDialogState()) {
             val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            alert.setCancelable(false)
             alert.setTitle("Calculation Type")
             alert.setMessage("Choose the calculation method you would prefer")
             alert.setPositiveButton("Decimal") { _, _ ->
@@ -331,6 +332,21 @@ class HomeFragment : Fragment() {
                     "0")
                 infoTextView?.text = "Total Hours: " + diffHours.toString() + ":" + diffMinutes
             }
+
+            val daysWorked = DaysWorkedPerWeek(requireContext())
+            val historyAutomaticDeletion = HistoryAutomaticDeletion(requireContext())
+            val historyDeletion = HistoryDeletion(requireContext())
+            val dbHandler = DBHelper(requireContext(), null)
+
+            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked().toString().toInt()) {
+                historyDeletion.deletion()
+            }
+
+            val runnable = Runnable {
+                (context as MainActivity).changeBadgeNumber()
+            }
+
+            MainActivity().runOnUiThread(runnable)
         }
     }
 
