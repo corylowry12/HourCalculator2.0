@@ -16,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.CalculationType
 import com.cory.hourcalculator.classes.IdData
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
@@ -251,9 +252,127 @@ class EditHours : Fragment() {
         timePickerOutTime?.minute = outTimeMinutesNumbers
         breakTimeEditText?.setText(breakTime)
 
+        val calculationType = CalculationType(requireContext())
+
         saveButton?.setOnClickListener {
             //vibration(vibrationData)
-            calculate(idMap, day)
+
+            if (calculationType.loadCalculationState()) {
+                calculate(idMap, day)
+            }
+            else {
+                calculateTime(idMap, day)
+            }
+        }
+    }
+
+    private fun calculateTime(idMap: String, day: String) {
+
+        var inTimeTotal: String = ""
+        var outTimeTotal : String = ""
+
+        val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTimeEdit)
+        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+        val infoTextView1 = requireActivity().findViewById<TextView>(R.id.infoTextView1)
+
+        var inTimeMinutesEdit = timePickerInTime.minute.toString()
+        val inTimeHoursEdit = timePickerInTime.hour.toString()
+        var outTimeMinutesEdit = timePickerOutTime.minute.toString()
+        val outTimeHoursEdit = timePickerOutTime.hour.toString()
+
+        var diffHours = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
+        var diffMinutes = (outTimeMinutesEdit.toInt() - inTimeMinutesEdit.toInt()).toString()
+
+        if (diffMinutes.length == 1) {
+            diffMinutes = "0$diffMinutes"
+        }
+
+        if (diffMinutes.toInt() < 0) {
+            diffMinutes = (60 + diffMinutes.toInt()).toString()
+            diffHours -= 1
+        }
+
+        if (diffHours < 0) {
+            infoTextView1?.text = "In time can not be later than out time"
+        }
+        else {
+            if (diffHours == 0 && diffMinutes.toInt() == 0) {
+                infoTextView1?.text = "In time and out time can not be the same"
+            } else {
+                infoTextView1?.text = "Total Hours: " + diffHours.toString() + ":" + diffMinutes
+            }
+
+            when {
+                inTimeHoursEdit.toInt() > 12 -> {
+                    val inTime = inTimeHoursEdit.toInt() - 12
+                    val amOrPm = getString(R.string.PM)
+                    inTimeTotal = "$inTime:$inTimeMinutesEdit $amOrPm"
+                }
+                inTimeHoursEdit.toInt() == 0 -> {
+                    val inTime = 12
+                    val amOrPm = getString(R.string.AM)
+                    inTimeTotal = "$inTime:$inTimeMinutesEdit $amOrPm"
+                }
+                else -> {
+                    val amOrPm = getString(R.string.AM)
+                    inTimeTotal = "$inTimeHoursEdit:$inTimeMinutesEdit $amOrPm"
+                }
+            }
+            when {
+                outTimeHoursEdit.toInt() > 12 -> {
+                    val outTime = outTimeHoursEdit.toInt() - 12
+                    val amOrPm = getString(R.string.PM)
+                    outTimeTotal = "$outTime:$outTimeMinutesEdit $amOrPm"
+                }
+                outTimeHoursEdit.toInt() == 0 -> {
+                    val outTime = 12
+                    val amOrPm = getString(R.string.AM)
+                    outTimeTotal = "$outTime:$outTimeMinutesEdit $amOrPm"
+                }
+                else -> {
+                    val amOrPm = getString(R.string.AM)
+                    outTimeTotal = "$outTimeHoursEdit:$outTimeMinutesEdit $amOrPm"
+                }
+            }
+
+            val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
+            if (breakTime?.text != null && breakTime.text.toString() != "") {
+
+                var withBreak = (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
+                var hoursWithBreak = diffHours
+                if (withBreak.toInt() < 0) {
+                    hoursWithBreak -= 1
+                    withBreak = (withBreak.toInt() + 60).toString()
+                }
+
+                Toast.makeText(requireContext(), withBreak, Toast.LENGTH_SHORT).show()
+
+                if (diffHours < 0) {
+                    infoTextView1!!.text = "The entered break time is too big"
+                } else {
+                    if (withBreak.length == 1) {
+                        withBreak = "0$withBreak"
+                    }
+
+                    savingHours(
+                        idMap, "$hoursWithBreak:$withBreak",
+                        inTimeTotal,
+                        outTimeTotal,
+                        breakTime.text.toString(),
+                        day
+                    )
+                    infoTextView1!!.text =
+                        "Total Hours: " + "$diffHours:$diffMinutes\nTotal Hours With Break: $hoursWithBreak:$withBreak"
+                }
+            }
+            else {
+                savingHours(
+                    idMap, "$diffHours:$diffMinutes",
+                    inTimeTotal,
+                    outTimeTotal,
+                    "0", day)
+                infoTextView1?.text = "Total Hours: " + diffHours.toString() + ":" + diffMinutes
+            }
         }
     }
 
@@ -342,18 +461,18 @@ class EditHours : Fragment() {
                 breakTimeNumber = breakTime.text.toString().toDouble() / 60
                 val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString()
 
-                savingHours(idMap, totalHours, inTimeTotal, outTimeTotal, breakTime.text.toString(), day)
+                savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, breakTime.text.toString(), day)
                 infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
             }
             else {
-                savingHours(idMap, totalHours, inTimeTotal, outTimeTotal, "0", day)
+                savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, "0", day)
                 infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal"
             }
 
         }
     }
 
-    private fun savingHours(id: String, totalHours: Double, inTimeTotal: String, outTimeTotal: String, breakTime: String, dayOfWeek: String) {
+    private fun savingHours(id: String, totalHours: String, inTimeTotal: String, outTimeTotal: String, breakTime: String, dayOfWeek: String) {
 
         val dbHandler = DBHelper(requireContext(), null)
 
