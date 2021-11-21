@@ -23,9 +23,15 @@ import com.cory.hourcalculator.fragments.HistoryFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.contentValuesOf
+import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -59,11 +65,11 @@ class CustomAdapter(
         //val rowView = inflater.inflate(R.layout.list_row, parent, false)
         val rowView = inflater.inflate(R.layout.list_row, parent, false)
 
-        rowView.findViewById<TextView>(R.id.row_in).text = context.getString(R.string.in_time_adapter, dataitem["intime"])
-        rowView.findViewById<TextView>(R.id.row_out).text = context.getString(R.string.out_time_adapter, dataitem["out"])
-        rowView.findViewById<TextView>(R.id.row_break).text = context.getString(R.string.total_time_adapter, dataitem["break"])
-        rowView.findViewById<TextView>(R.id.row_total).text = context.getString(R.string.total_time_adapter, dataitem["total"])
-        rowView.findViewById<TextView>(R.id.row_day).text = context.getString(R.string.date_adapter, dataitem["day"])
+        rowView.findViewById<TextView>(R.id.row_in).text = context.getString(R.string.in_time_adapter, dataitem["inTime"])
+        rowView.findViewById<TextView>(R.id.row_out).text = context.getString(R.string.out_time_adapter, dataitem["outTime"])
+        rowView.findViewById<TextView>(R.id.row_break).text = context.getString(R.string.break_time_adapter, dataitem["breakTime"])
+        rowView.findViewById<TextView>(R.id.row_total).text = context.getString(R.string.total_time_adapter, dataitem["totalHours"])
+        rowView.findViewById<TextView>(R.id.row_day).text = context.getString(R.string.date_adapter, dataitem["date"])
 
         val imageView = rowView.findViewById<ImageView>(R.id.imageViewOptions)
         imageView.setOnClickListener {
@@ -92,15 +98,15 @@ class CustomAdapter(
 
                                 map["id"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                                map["intime"] =
+                                map["inTime"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                                map["out"] =
+                                map["outTime"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                                map["break"] =
+                                map["breakTime"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                map["total"] =
+                                map["totalHours"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                map["day"] =
+                                map["date"] =
                                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
                                 dataList.add(map)
 
@@ -124,38 +130,16 @@ class CustomAdapter(
 
                         MainActivity().runOnUiThread(runnable)
 
-                        val snackbar = Snackbar.make(rowView, "5\t\t\tHour Deleted", Snackbar.LENGTH_LONG)
+                        val snackbar = Snackbar.make(rowView, "Hour Deleted", Snackbar.LENGTH_LONG)
                             .setDuration(5000)
                             .setAnchorView(R.id.bottom_nav)
-                        var timer = 5
-                        snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
                         snackbar.setAction("UNDO") {
-                            timer = 0
                             dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
                             MainActivity().runOnUiThread(runnable)
                         }
+                        snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
+                        snackbar.show()
 
-                        val mainHandler = Handler(Looper.getMainLooper())
-
-                        mainHandler.post(object : Runnable {
-                            override fun run() {
-                                if (timer <= 0) {
-                                    snackbar.dismiss()
-                                    mainHandler.removeCallbacks(this)
-                                    inTime = ""
-                                    outTime = ""
-                                    breakTime = ""
-                                    totalHours = ""
-                                    day = ""
-                                } else {
-                                    snackbar.setText(timer.toString() + "\t\t\tHour Deleted")
-                                    snackbar.show()
-
-                                    timer--
-                            }
-                                mainHandler.postDelayed(this, 1000)
-                            }
-                        })
                     }
                     R.id.menu4 -> {
 
@@ -198,13 +182,13 @@ class CustomAdapter(
                             }
                             MainActivity().runOnUiThread(runnable)
 
-                            val snackbar = Snackbar.make(rowView, "5\t\t\tAll Hours Deleted", Snackbar.LENGTH_LONG)
+                            val snackBar = Snackbar.make(rowView, "All Hours Deleted", Snackbar.LENGTH_LONG)
                                 .setDuration(5000)
                                 .setAnchorView(R.id.bottom_nav)
-                            var timer = 5
-                            snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
-                            snackbar.setAction("UNDO") {
-                                timer = 0
+
+                            snackBar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
+                            snackBar.setAction("UNDO") {
+
                                 GlobalScope.launch(Dispatchers.Main) {
                                 for (i in inTime.indices) {
                                     dbHandler.insertRow(inTime.elementAt(i), outTime.elementAt(i), totalHours.elementAt(i), day.elementAt(i), breakTime.elementAt(i))
@@ -213,28 +197,7 @@ class CustomAdapter(
                                 MainActivity().runOnUiThread(runnable)
                                 }
                             }
-
-                            val mainHandler = Handler(Looper.getMainLooper())
-
-                            mainHandler.post(object : Runnable {
-                                override fun run() {
-                                    if (timer <= 0) {
-                                        snackbar.dismiss()
-                                        mainHandler.removeCallbacks(this)
-                                        inTime.clear()
-                                        outTime.clear()
-                                        breakTime.clear()
-                                        totalHours.clear()
-                                        day.clear()
-                                    }
-                                    else {
-                                        snackbar.setText(timer.toString() + "\t\t\tAll Hours Deleted")
-                                        snackbar.show()
-                                    }
-                                    timer--
-                                    mainHandler.postDelayed(this, 1000)
-                                }
-                            })
+                            snackBar.show()
                         }
                             .setNeutralButton("No") {_, _ ->
                                 //vibration(vibrationData)
@@ -251,25 +214,25 @@ class CustomAdapter(
                         while (cursor.position == position) {
 
                             map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                            map["intime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                            map["out"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                            map["break"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                            map["total"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                            map["day"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                             dataList.add(map)
 
                             cursor.moveToNext()
 
                         }
-                        if ((map["intime"].toString().contains("am") || map["intime"].toString().contains("pm")) &&
-                            (map["out"].toString().contains("am") || map["out"].toString().contains("pm"))
+                        if ((map["inTime"].toString().contains(context.getString(R.string.AM)) || map["inTime"].toString().contains(context.getString(R.string.PM))) &&
+                            (map["outTime"].toString().contains(context.getString(R.string.AM)) || map["outTime"].toString().contains(context.getString(R.string.PM)))
                         ) {
 
                                 val idData = IdData(context)
                             idData.setID(position)
                             val manager = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-                            manager.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                            manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             manager.replace(R.id.fragment_container, EditHours()).addToBackStack(null)
                             manager.commit()
 
@@ -286,11 +249,4 @@ class CustomAdapter(
         rowView.tag = position
         return rowView
     }
-
-   /* private fun vibration(vibrationData: VibrationData) {
-        if (vibrationData.loadVibrationState()) {
-            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(VibrationEffect.createOneShot(5, VibrationEffect.DEFAULT_AMPLITUDE))
-        }
-    }*/
 }
