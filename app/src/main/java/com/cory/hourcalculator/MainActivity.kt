@@ -1,5 +1,6 @@
 package com.cory.hourcalculator
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -18,15 +19,14 @@ import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.HistoryToggleData
+import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.DBHelper
-import com.cory.hourcalculator.fragments.AppearanceFragment
-import com.cory.hourcalculator.fragments.HistoryFragment
-import com.cory.hourcalculator.fragments.HomeFragment
-import com.cory.hourcalculator.fragments.SettingsFragment
+import com.cory.hourcalculator.fragments.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
     private val settingsFragment = SettingsFragment()
+    private val editFragment = EditHours()
 
     val dbHandler = DBHelper(this, null)
 
@@ -89,36 +90,38 @@ class MainActivity : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
-        val bottom_nav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         changeBadgeNumber()
 
         toggleHistory()
 
-        bottom_nav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.ic_home -> replaceFragment(homeFragment)
-                R.id.history -> replaceFragment(historyFragment)
-                R.id.settings -> replaceFragment(settingsFragment)
-            }
+        bottomNav.setOnItemSelectedListener {
+            Vibrate().vibration(this)
+                when (it.itemId) {
+                    R.id.ic_home -> replaceFragment(homeFragment)
+                    R.id.history -> replaceFragment(historyFragment)
+                    R.id.settings -> replaceFragment(settingsFragment)
+                }
+
             true
         }
 
         when {
             accentColor.loadAccent() == 0 -> {
-                bottom_nav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryLightAppBar)
+                bottomNav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryLightAppBar)
             }
             accentColor.loadAccent() == 1 -> {
-                bottom_nav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryPinkAppBar)
+                bottomNav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryPinkAppBar)
             }
             accentColor.loadAccent() == 2 -> {
-                bottom_nav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryOrangeAppBar)
+                bottomNav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryOrangeAppBar)
             }
             accentColor.loadAccent() == 3 -> {
-                bottom_nav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryRedAppBar)
+                bottomNav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryRedAppBar)
             }
             accentColor.loadAccent() == 4 -> {
-                bottom_nav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryPixelAppBar)
+                bottomNav.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.colorPrimaryPixelAppBar)
             }
         }
 
@@ -127,6 +130,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
 
             val transaction = supportFragmentManager.beginTransaction()
+        val bottomNav = this.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
             if (homeFragment.isVisible) {
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
@@ -137,6 +141,15 @@ class MainActivity : AppCompatActivity() {
             else if (historyFragment.isVisible && fragment == settingsFragment) {
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
             }
+            else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == settingsFragment) {
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+            }
+            else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == homeFragment) {
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+            }
+            else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == historyFragment) {
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+            }
             else if (settingsFragment.isVisible) {
                 transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
             }
@@ -144,6 +157,7 @@ class MainActivity : AppCompatActivity() {
                 transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
             }
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+
             transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
             transaction.commit()
     }
@@ -151,7 +165,6 @@ class MainActivity : AppCompatActivity() {
     fun update() {
 
        changeBadgeNumber()
-
         historyFragment.update()
     }
 
@@ -179,37 +192,45 @@ class MainActivity : AppCompatActivity() {
         bottomNav.menu.findItem(R.id.ic_home).isChecked = true
     }
 
+    @SuppressLint("CutPasteId")
     fun setBackgroundColor() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
         val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         val darkThemeData = DarkThemeData(this)
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.darkThemeBackground))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+                bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this, R.color.white)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+                        bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this, R.color.white)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                        bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this, R.color.black)
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                        bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this, R.color.black)
                     }
                 }
             }
