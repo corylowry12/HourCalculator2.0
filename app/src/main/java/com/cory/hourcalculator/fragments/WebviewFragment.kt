@@ -24,6 +24,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -48,13 +49,14 @@ class WebviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Handler().postDelayed({
-            val webView = requireActivity().findViewById<WebView>(R.id.webView)
-            val progressBar = requireActivity().findViewById<ProgressBar>(R.id.progressBar)
-            val swipeRefreshLayout =
-                requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        val webView = requireActivity().findViewById<WebView>(R.id.webView)
+        val progressBar = requireActivity().findViewById<ProgressBar>(R.id.progressBar)
+        val swipeRefreshLayout =
+            requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
-            val appBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarWebView)
+        val appBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarWebView)
+
+        Handler(Looper.getMainLooper()).postDelayed({
 
             appBar?.setNavigationOnClickListener {
                 webView?.stopLoading()
@@ -127,16 +129,17 @@ class WebviewFragment : Fragment() {
             swipeRefreshLayout.setOnRefreshListener {
                 webView.reload()
             }
-            activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (webView!!.canGoBack()) {
-                        webView.goBack()
-                    }
-                    else {
-                        activity?.supportFragmentManager?.popBackStack()
-                    }
-                }
-            })
         }, 800)
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (webView!!.canGoBack()) {
+                    webView.goBack()
+                }
+                else {
+                    webView.stopLoading()
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            }
+        })
     }
 }
