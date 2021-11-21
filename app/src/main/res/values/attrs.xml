@@ -15,4 +15,7 @@
     <attr name="selectedTint" format="color" />
 
     <attr name="followSystem" format="color" />
+
+    <attr name="bottomNavIconTint" format="color" />
+    <attr name="bottomNavTextColor" format="color" />
 </resources>
