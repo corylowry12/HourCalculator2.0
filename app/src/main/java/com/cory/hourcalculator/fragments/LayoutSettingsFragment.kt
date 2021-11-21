@@ -78,6 +78,35 @@ class LayoutSettingsFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        val calculationData = CalculationType(requireContext())
+        val enableCalculation = activity?.findViewById<RadioButton>(R.id.enableCalculation)
+        val disableCalculation = activity?.findViewById<RadioButton>(R.id.disableCalculation)
+
+        if (calculationData.loadCalculationState()) {
+            enableCalculation?.isChecked = true
+        }
+        else {
+            disableCalculation?.isChecked = true
+        }
+
+        enableCalculation?.setOnClickListener {
+            if (calculationData.loadCalculationState()) {
+                Toast.makeText(requireContext(), "Decimal Calculation Already Enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                calculationData.setCalculationState(true)
+                Toast.makeText(requireContext(), "Decimal Calculation Enabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        disableCalculation?.setOnClickListener {
+            if (!calculationData.loadCalculationState()) {
+                Toast.makeText(requireContext(), "Time Calculation Already Enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                calculationData.setCalculationState(false)
+                Toast.makeText(requireContext(), "Time Calculation Enabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         val vibrationData = VibrationData(requireContext())
         val enableVibration = activity?.findViewById<RadioButton>(R.id.enableVibration)
         val disableVibration = activity?.findViewById<RadioButton>(R.id.disableVibration)
