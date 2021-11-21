@@ -23,11 +23,11 @@ class HistoryDeletion(context: Context) {
         while (!cursor.isAfterLast) {
 
             map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-            map["intime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-            map["out"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-            map["break"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-            map["total"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-            map["day"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
             dataList.add(map)
 
             dbHandler.deleteRow(map["id"].toString())
