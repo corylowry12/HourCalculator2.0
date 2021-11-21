@@ -304,7 +304,6 @@ class HistoryFragment : Fragment() {
                 val (hours, minutes) = array.split(":")
                 val decimal = (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString().drop(2)
                 decimalTime = "$hours.$decimal".toDouble()
-                Toast.makeText(requireContext(), decimalTime.toString(), Toast.LENGTH_SHORT).show()
                 y += decimalTime
             }
             else {
