@@ -69,7 +69,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun automaticDeletion(numberToDelete: Int): Cursor? {
         val db = this.writableDatabase
 
-        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY day ASC LIMIT $numberToDelete", null)
+        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY date ASC LIMIT $numberToDelete", null)
     }
 
     fun getAllRow(context: Context): Cursor? {
