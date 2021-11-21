@@ -17,6 +17,8 @@
         <item name = "notSelectedTint">@color/colorPrimary</item>
         <item name="popupMenuBackground">@color/lightMenuBackground</item>
         <item name="followSystem">@android:color/white</item>
+
+        <item name="bottomNavTextColor">@android:color/white</item>
     </style>
 
     <style name="Theme.DarkTheme" parent="ThemeOverlay.MaterialComponents.Dark">
@@ -24,6 +26,8 @@
         <item name="textColor">@android:color/white</item>
         <item name="settingsTextColor">@android:color/black</item>
         <item name="popupMenuBackground">@color/darkMenuBackground</item>
+
+        <item name="bottomNavTextColor">@android:color/black</item>
     </style>
 
     <style name="Theme.AMOLED" parent="ThemeOverlay.MaterialComponents.Dark">
@@ -32,6 +36,20 @@
         <item name="settingsTextColor">@android:color/black</item>
         <item name="popupMenuBackground">@color/darkMenuBackground</item>
         <item name="followSystem">@android:color/black</item>
+
+        <item name="bottomNavTextColor">@android:color/black</item>
+    </style>
+
+    <style name="SplashLightTheme">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="SplashDarkTheme">
+        <item name="android:background">@color/darkThemeBackground</item>
+    </style>
+
+    <style name="SplashBlackTheme">
+        <item name="android:background">@color/black</item>
     </style>
 
     <style name="pink_accent">
@@ -41,7 +59,7 @@
         <item name="appBarBackground">@color/pinkAccent</item>
         <item name="cardBackground">@color/cardPink</item>
         <item name="selectedTint">@color/pinkAccent</item>
-
+        <item name="bottomNavIconTint">@color/pinkNavBarIconTint</item>
     </style>
 
     <style name="teal_accent">
@@ -51,6 +69,7 @@
         <item name="appBarBackground">@color/colorPrimary</item>
         <item name="cardBackground">@color/cardTeal</item>
         <item name="selectedTint">@color/colorPrimary</item>
+        <item name="bottomNavIconTint">@color/tealNavBarIconTint</item>
     </style>
 
     <style name="orange_accent">
@@ -60,6 +79,7 @@
         <item name="appBarBackground">@color/orangeAccent</item>
         <item name="cardBackground">@color/cardOrange</item>
         <item name="selectedTint">@color/orangeAccent</item>
+        <item name="bottomNavIconTint">@color/orangeNavBarIconTint</item>
     </style>
 
     <style name="red_accent">
@@ -69,6 +89,7 @@
         <item name="appBarBackground">@color/redAccent</item>
         <item name="cardBackground">@color/cardRed</item>
         <item name="selectedTint">@color/redAccent</item>
+        <item name="bottomNavIconTint">@color/redNavBarIconTint</item>
     </style>
 
     <style name="system_accent">
@@ -78,7 +99,7 @@
         <item name="appBarBackground">@color/systemAccent</item>
         <item name="cardBackground">@color/cardSystem</item>
         <item name="selectedTint">@color/systemAccent</item>
-        <item name="popupMenuBackground">@color/systemAccent</item>
+        <item name="bottomNavIconTint">@color/systemNavBarIconTint</item>
     </style>
 
     <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
