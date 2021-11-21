@@ -17,8 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/menu"
         android:background="?attr/appBarBackground"
-        app:itemIconTint="@android:color/black"
-        app:itemTextColor="@android:color/white" />
+        app:itemIconTint="?attr/bottomNavIconTint"
+        app:itemTextColor="?attr/bottomNavTextColor" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
