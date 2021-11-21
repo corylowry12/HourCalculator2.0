@@ -20,7 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="?attr/textColor"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:menu="@menu/main_menu_edit"/>
 
     <TimePicker
         android:id="@+id/timePickerInTimeEdit"
