@@ -68,12 +68,31 @@ class SettingsFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
             }
         }
+
+        main()
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        main()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        main()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        main()
+    }
+
+    fun main() {
         val appearanceHeading = activity?.findViewById<TextView>(R.id.themeHeading)
         val appearanceSubtitle = activity?.findViewById<TextView>(R.id.themeSubtitle)
         val appearanceImage = activity?.findViewById<ImageView>(R.id.appearanceImage)
@@ -161,7 +180,7 @@ class SettingsFragment : Fragment() {
             leaveAReview()
         }
         reviewCardView?.setOnClickListener {
-           leaveAReview()
+            leaveAReview()
         }
         reviewImageView?.setOnClickListener {
             leaveAReview()
