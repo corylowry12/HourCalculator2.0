@@ -24,43 +24,27 @@ class SplashScreen : AppCompatActivity() {
         val darkThemeData = DarkThemeData(this)
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                setTheme(R.style.Theme_DarkTheme)
+                setTheme(R.style.SplashDarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
-                setTheme(R.style.Theme_MyApplication)
+                setTheme(R.style.SplashLightTheme)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
-                setTheme(R.style.Theme_AMOLED)
+                setTheme(R.style.SplashBlackTheme)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> setTheme(R.style.Theme_AMOLED)
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.SplashLightTheme)
+                    Configuration.UI_MODE_NIGHT_YES -> setTheme(R.style.SplashBlackTheme)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> setTheme(R.style.SplashBlackTheme)
                 }
-            }
-        }
-        val accentColor = AccentColor(this)
-        when {
-            accentColor.loadAccent() == 0 -> {
-                theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-               theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                theme?.applyStyle(R.style.system_accent, true)
             }
         }
         window.setBackgroundDrawable(null)
         actionBar?.hide()
         setContentView(R.layout.activity_splash_screen)
+
+        val accentColor = AccentColor(this)
 
         if (Build.VERSION.RELEASE.contains(".")) {
             val version = Build.VERSION.RELEASE.split(".")
@@ -90,8 +74,6 @@ class SplashScreen : AppCompatActivity() {
         }
         else if (Build.VERSION.RELEASE.toInt() < 12) {
             load()
-
-            val accentColor = AccentColor(this)
 
             val imageView = findViewById<ImageView>(R.id.SplashScreenImage)
             when {
