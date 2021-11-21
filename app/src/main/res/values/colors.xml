@@ -25,7 +25,7 @@
     <color name="redDialog">#FA9890</color>
     <color name="systemAccentDialog" tools:targetApi="s">@android:color/system_accent1_200</color>
 
-    <color name="cardPink">#FF98D0</color>
+    <color name="cardPink">#FDAFD9</color>
     <color name="cardTeal">#59C5B9</color>
     <color name="cardOrange">#FA986B</color>
     <color name="cardRed">#ff6659</color>
@@ -47,5 +47,11 @@
 
     <color name="redBadgeColor">#BF3030</color>
     <color name="lightRedBadgeColor">#FF4030</color>
+
+    <color name="tealNavBarIconTint">#006058</color>
+    <color name="pinkNavBarIconTint">#88445D</color>
+    <color name="orangeNavBarIconTint">#702700</color>
+    <color name="redNavBarIconTint">#680004</color>
+    <color name="systemNavBarIconTint" tools:targetApi="s">@android:color/system_accent1_900</color>
 
 </resources>
