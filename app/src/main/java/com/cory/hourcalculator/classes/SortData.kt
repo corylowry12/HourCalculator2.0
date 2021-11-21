@@ -10,13 +10,13 @@ class SortData(context: Context) {
     //this saves the name preference
     fun setSortState(state: String?) {
         val editor = sharedPreferences.edit()
-        editor.putString("Sort", state!!)
+        editor.putString("SortMethod", state!!)
         editor.apply()
     }
 
     // this will load the name state
     fun loadSortState(): String? {
-        val state = sharedPreferences.getString("Sort", "day ASC")
+        val state = sharedPreferences.getString("SortMethod", "date ASC")
         return (state)
     }
 }
