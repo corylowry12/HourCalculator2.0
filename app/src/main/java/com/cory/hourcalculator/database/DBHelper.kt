@@ -26,10 +26,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    fun insertRow(intime: String, outtime: String, total: String, dayOfWeek: String, breakTime: String) {
+    fun insertRow(inTime: String, outTime: String, total: String, dayOfWeek: String, breakTime: String) {
         val values = ContentValues()
-        values.put(COLUMN_IN, intime)
-        values.put(COLUMN_OUT, outtime)
+        values.put(COLUMN_IN, inTime)
+        values.put(COLUMN_OUT, outTime)
         values.put(COLUMN_TOTAL, total)
         values.put(COLUMN_DAY, dayOfWeek)
         values.put(COLUMN_BREAK, breakTime)
@@ -39,10 +39,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun update(id: String, intime: String, outtime: String, total: String, dayOfWeek: String, breakTime: String) {
+    fun update(id: String, inTime: String, outTime: String, total: String, dayOfWeek: String, breakTime: String) {
         val values = ContentValues()
-        values.put(COLUMN_IN, intime)
-        values.put(COLUMN_OUT, outtime)
+        values.put(COLUMN_IN, inTime)
+        values.put(COLUMN_OUT, outTime)
         values.put(COLUMN_BREAK, breakTime)
         values.put(COLUMN_TOTAL, total)
         values.put(COLUMN_DAY, dayOfWeek)
@@ -75,8 +75,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getAllRow(context: Context): Cursor? {
         val db = this.writableDatabase
         val sortData = SortData(context)
-        val sorttype = sortData.loadSortState()
-        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $sorttype", null)
+        val sortType = sortData.loadSortState()
+        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $sortType", null)
     }
 
     fun deleteAll() {
@@ -87,15 +87,15 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     companion object {
-        const val DATABASE_VERSION = 2
-        const val DATABASE_NAME = "hours.db"
+        const val DATABASE_VERSION = 3
+        const val DATABASE_NAME = "storedHours.db"
         const val TABLE_NAME = "hours"
 
         const val COLUMN_ID = "id"
-        const val COLUMN_IN = "intime"
-        const val COLUMN_OUT = "out"
-        const val COLUMN_TOTAL = "total"
-        const val COLUMN_DAY = "day"
-        const val COLUMN_BREAK = "break"
+        const val COLUMN_IN = "inTime"
+        const val COLUMN_OUT = "outTime"
+        const val COLUMN_TOTAL = "totalHours"
+        const val COLUMN_DAY = "date"
+        const val COLUMN_BREAK = "breakTime"
     }
 }
