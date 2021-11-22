@@ -29,6 +29,9 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -84,11 +87,15 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this)
         val adView = AdView(this)
-        adView.adSize = AdSize.BANNER
-        adView.adUnitId = "ca-app-pub-4546055219731501/5171269817"
-        val mAdView = findViewById<AdView>(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
+
+        GlobalScope.launch(Dispatchers.Main) {
+
+            adView.adSize = AdSize.BANNER
+            adView.adUnitId = "ca-app-pub-4546055219731501/5171269817"
+            val mAdView = findViewById<AdView>(R.id.adView)
+            val adRequest = AdRequest.Builder().build()
+            mAdView.loadAd(adRequest)
+        }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
@@ -236,5 +243,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }
