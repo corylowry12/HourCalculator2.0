@@ -12,7 +12,7 @@
         android:id="@+id/materialToolBarLayoutSettings"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        app:title="Layout Settings"
+        app:title="App Settings"
         app:layout_collapseMode="pin"
         app:titleCentered="true"
         android:background="?attr/appBarBackground"
@@ -265,7 +265,7 @@
                         android:imeOptions="actionGo"
                         android:inputType="numberDecimal"
                         android:maxLength="5"
-                        android:textColor="?attr/textColor"
+                        android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp" />
 
 
