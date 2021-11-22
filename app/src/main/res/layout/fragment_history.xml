@@ -32,7 +32,8 @@
                 app:layout_constraintTop_toBottomOf="@id/materialToolBarHistory"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:paddingBottom="55dp"
-                android:clipToPadding="false"/>
+                android:clipToPadding="false"
+                android:layoutAnimation="@anim/listview_animation" />
 
     <TextView
         android:id="@+id/noHoursStoredTextView"
