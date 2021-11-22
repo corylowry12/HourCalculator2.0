@@ -82,6 +82,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+
         val runnable = Runnable {
             (activity as MainActivity).setActiveTab()
         }
@@ -166,6 +169,7 @@ class HomeFragment : Fragment() {
                 calculationType.setCalculationState(false)
             }
             alert.show()
+            dialogData.setDialogState(true)
         }
 
        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
