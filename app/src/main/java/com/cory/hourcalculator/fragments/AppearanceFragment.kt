@@ -1,8 +1,11 @@
 package com.cory.hourcalculator.fragments
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +21,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.MainActivity
@@ -26,6 +31,13 @@ import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlin.math.abs
+import android.graphics.drawable.TransitionDrawable
+
+import android.graphics.drawable.ColorDrawable
+
+
+
 
 class AppearanceFragment : Fragment() {
 
@@ -446,8 +458,10 @@ class AppearanceFragment : Fragment() {
         }
         MainActivity().runOnUiThread(runnable)
 
-        activity?.supportFragmentManager?.beginTransaction()?.detach(this)?.commitNow();
-        activity?.supportFragmentManager?.beginTransaction()?.attach(this)?.commitNow();
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.detach(this)?.commitNow()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.attach(this)?.commitNow()
 
     }
 
