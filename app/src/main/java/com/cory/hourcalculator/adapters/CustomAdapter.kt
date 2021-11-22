@@ -7,11 +7,14 @@ import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.text.BoringLayout
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.ScaleAnimation
 import android.widget.*
 import androidx.fragment.app.FragmentManager
 import com.cory.hourcalculator.MainActivity
@@ -35,6 +38,10 @@ import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import android.view.animation.TranslateAnimation
+
+
+
 
 
 class CustomAdapter(
@@ -55,7 +62,7 @@ class CustomAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("ViewHolder", "Range", "ShowToast")
+    @SuppressLint("ViewHolder", "Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val dbHandler = DBHelper(context, null)
         val dataitem = dataList[position]
@@ -139,6 +146,7 @@ class CustomAdapter(
                         }
                         snackbar.setActionTextColor(context.resources.getColor(AccentColor(context).snackbarActionTextColor()))
                         snackbar.show()
+
 
                     }
                     R.id.menu4 -> {
