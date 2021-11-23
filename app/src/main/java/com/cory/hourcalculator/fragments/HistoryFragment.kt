@@ -84,6 +84,10 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val listView = activity?.findViewById<ListView>(R.id.listView)
+        val animation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
+        listView?.layoutAnimation = animation
+
         val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
@@ -240,7 +244,6 @@ class HistoryFragment : Fragment() {
             }
         }
 
-        val listView = activity?.findViewById<ListView>(R.id.listView)
         listView?.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(
                 view: AbsListView?,
@@ -336,8 +339,6 @@ class HistoryFragment : Fragment() {
         val top = if (v == null) 0 else v.top - listView.paddingTop
 
         loadIntoList()
-
-        listView?.scheduleLayoutAnimation()
 
         listView?.setSelectionFromTop(index!!, top)
 
