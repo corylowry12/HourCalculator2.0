@@ -3,7 +3,6 @@ package com.cory.hourcalculator.fragments
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.icu.util.VersionInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,14 +14,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.LinkClass
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.review.ReviewManagerFactory
 import org.w3c.dom.Text
 
@@ -290,7 +288,7 @@ class SettingsFragment : Fragment() {
         val transaction = activity?.supportFragmentManager?.beginTransaction()
 
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, LayoutSettingsFragment())?.addToBackStack(null)
+        transaction?.replace(R.id.fragment_container, AppSettingsFragment())?.addToBackStack(null)
         transaction?.commit()
     }
 
