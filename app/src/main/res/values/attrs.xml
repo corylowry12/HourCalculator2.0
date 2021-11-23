@@ -18,4 +18,5 @@
 
     <attr name="bottomNavIconTint" format="color" />
     <attr name="bottomNavTextColor" format="color" />
+
 </resources>
