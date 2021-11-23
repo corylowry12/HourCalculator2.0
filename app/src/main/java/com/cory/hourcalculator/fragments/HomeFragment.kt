@@ -164,12 +164,13 @@ class HomeFragment : Fragment() {
             alert.setMessage("Choose the calculation method you would prefer")
             alert.setPositiveButton("Decimal") { _, _ ->
                 calculationType.setCalculationState(true)
+                dialogData.setDialogState(true)
             }
             alert.setNeutralButton("Time") { _, _ ->
                 calculationType.setCalculationState(false)
+                dialogData.setDialogState(true)
             }
             alert.show()
-            dialogData.setDialogState(true)
         }
 
        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
@@ -259,12 +260,10 @@ class HomeFragment : Fragment() {
         if (diffHours < 0) {
             infoTextView?.text = "In time can not be later than out time"
         }
+        else if (diffHours == 0 && diffMinutes == "00") {
+            infoTextView?.text = "In time and out time can not be the same"
+        }
         else {
-            if (diffHours == 0 && diffMinutes.toInt() == 0) {
-                infoTextView?.text = "In time and out time can not be the same"
-            } else {
-                infoTextView?.text = "Total Hours: " + diffHours.toString() + ":" + diffMinutes
-            }
 
             when {
                 inTimeHours.toInt() > 12 -> {

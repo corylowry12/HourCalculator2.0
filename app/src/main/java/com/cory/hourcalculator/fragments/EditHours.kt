@@ -295,12 +295,10 @@ class EditHours : Fragment() {
         if (diffHours < 0) {
             infoTextView1?.text = "In time can not be later than out time"
         }
+        else if (diffHours == 0 && diffMinutes.toInt() == 0) {
+            infoTextView1?.text = "In time and out time can not be the same"
+        }
         else {
-            if (diffHours == 0 && diffMinutes.toInt() == 0) {
-                infoTextView1?.text = "In time and out time can not be the same"
-            } else {
-                infoTextView1?.text = "Total Hours: " + diffHours.toString() + ":" + diffMinutes
-            }
 
             when {
                 inTimeHoursEdit.toInt() > 12 -> {
