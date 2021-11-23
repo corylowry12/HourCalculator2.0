@@ -28,8 +28,8 @@
     <color name="cardPink">#FDAFD9</color>
     <color name="cardTeal">#59C5B9</color>
     <color name="cardOrange">#FA986B</color>
-    <color name="cardRed">#ff6659</color>
-    <color name="cardSystem" tools:targetApi="s">@android:color/system_accent1_300</color>
+    <color name="cardRed">#FF7B70</color>
+    <color name="cardSystem" tools:targetApi="s">@android:color/system_accent1_200</color>
 
     <color name="pinkAccent">#f48fb1</color>
     <color name="orangeAccent">#FA773B</color>
@@ -37,7 +37,7 @@
     <color name="redAccent">#d32f2f</color>
 
     <color name="systemAccent" tools:targetApi="s">@android:color/system_accent1_400</color>
-    <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_700</color>
+    <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_500</color>
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
