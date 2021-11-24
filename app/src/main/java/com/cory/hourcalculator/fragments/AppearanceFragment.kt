@@ -400,8 +400,8 @@ class AppearanceFragment : Fragment() {
                 Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
             } else {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                alert.setTitle("Warning")
-                alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setTitle("Warning (Experimental)")
+                alert.setMessage("This is an experimental feature. You may not get the results you are hoping for. This is still in testing. This may result in unexpected results and/or crashing. This will restart the app. Would you like to continue?")
                 alert.setPositiveButton("Yes") { _, _ ->
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
