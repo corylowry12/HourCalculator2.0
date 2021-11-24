@@ -471,12 +471,14 @@ class HomeFragment : Fragment() {
 
     private fun savingHours(totalHours: String, inTimeTotal: String, outTimeTotal: String, breakTime: String) {
 
-        val dbHandler = DBHelper(requireContext(), null)
+        if (HistoryToggleData(requireContext()).loadHistoryState()) {
+            val dbHandler = DBHelper(requireContext(), null)
 
-        val day = LocalDateTime.now()
-        val day2 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
-        val dayOfWeek = day.format(day2)
-        dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
+            val day = LocalDateTime.now()
+            val day2 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+            val dayOfWeek = day.format(day2)
+            dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
+        }
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {
