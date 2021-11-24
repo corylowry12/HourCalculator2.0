@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:textColor="?attr/settingsTextColor"
-                        android:text="TimeFormat" />
+                        android:text="Time Format" />
 
                 </RadioGroup>
             </androidx.cardview.widget.CardView>
