@@ -16,10 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.adapters.CustomAdapter
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
-import com.cory.hourcalculator.classes.HistoryToggleData
-import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.*
 import com.google.android.gms.ads.AdRequest
@@ -28,6 +25,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -136,32 +134,60 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
 
-            val transaction = supportFragmentManager.beginTransaction()
+        val transaction = supportFragmentManager.beginTransaction()
         val bottomNav = this.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
             if (homeFragment.isVisible) {
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-            }
-            else if (historyFragment.isVisible && fragment == homeFragment) {
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-            }
-            else if (historyFragment.isVisible && fragment == settingsFragment) {
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-            }
-            else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == settingsFragment) {
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-            }
-            else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == homeFragment) {
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-            }
-            else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == historyFragment) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+            } else if (historyFragment.isVisible && fragment == homeFragment) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
+            } else if (historyFragment.isVisible && fragment == settingsFragment) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+            } else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == settingsFragment) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+            } else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == homeFragment) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
+            } else if (bottomNav.menu.findItem(R.id.history).isChecked && fragment == historyFragment) {
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-            }
-            else if (settingsFragment.isVisible) {
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-            }
-            else {
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+            } else if (settingsFragment.isVisible) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
+            } else {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
             }
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 
