@@ -15,10 +15,6 @@
         <item name="followSystem">@android:color/white</item>
 
         <item name="bottomNavTextColor">@android:color/white</item>
-
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="Theme.DarkTheme" parent="ThemeOverlay.MaterialComponents.Dark">
