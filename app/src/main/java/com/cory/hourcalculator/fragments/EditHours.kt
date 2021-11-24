@@ -23,9 +23,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import java.math.RoundingMode
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 class EditHours : Fragment() {
 
@@ -34,13 +31,13 @@ class EditHours : Fragment() {
     private lateinit var idMap: String
     private lateinit var day: String
 
-    private lateinit var inTime: String
+    public lateinit var inTime: String
     private lateinit var outTime: String
     private lateinit var breakTime: String
 
-    private var inTimeBool = false
-    private var outTimeBool = false
-    private var breakTimeBool = false
+    var inTimeBool = false
+    var outTimeBool = false
+    var breakTimeBool = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -275,9 +272,9 @@ class EditHours : Fragment() {
         val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
         val infoTextView1 = requireActivity().findViewById<TextView>(R.id.infoTextView1)
 
-        var inTimeMinutesEdit = timePickerInTime.minute.toString()
+        val inTimeMinutesEdit = timePickerInTime.minute.toString()
         val inTimeHoursEdit = timePickerInTime.hour.toString()
-        var outTimeMinutesEdit = timePickerOutTime.minute.toString()
+        val outTimeMinutesEdit = timePickerOutTime.minute.toString()
         val outTimeHoursEdit = timePickerOutTime.hour.toString()
 
         var diffHours = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
@@ -474,7 +471,7 @@ class EditHours : Fragment() {
 
         val dbHandler = DBHelper(requireContext(), null)
 
-        dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours.toString(), dayOfWeek, breakTime)
+        dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
 
         activity?.supportFragmentManager?.popBackStack()
     }
