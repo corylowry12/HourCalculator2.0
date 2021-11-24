@@ -20,10 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
-import com.cory.hourcalculator.classes.SortData
-import com.cory.hourcalculator.classes.WagesData
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -126,6 +123,7 @@ class HistoryFragment : Fragment() {
             val dbHandler = DBHelper(requireContext(), null)
             when (menuItem.itemId) {
                 R.id.info -> {
+                    Vibrate().vibration(requireContext())
                     val wagesData = WagesData(requireContext())
 
                     if (dbHandler.getCount() > 0) {
@@ -148,7 +146,9 @@ class HistoryFragment : Fragment() {
                         } else {
                             alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}\nWages: There was an error")
                         }
-                        alert.setPositiveButton(getString(R.string.ok), null)
+                        alert.setPositiveButton(getString(R.string.ok)) { _, _ ->
+                            Vibrate().vibration(requireContext())
+                        }
                         alert.show()
                     } else {
                         Toast.makeText(
@@ -160,6 +160,7 @@ class HistoryFragment : Fragment() {
                     true
                 }
                 R.id.mnuSort -> {
+                    Vibrate().vibration(requireContext())
                     if (dbHandler.getCount() == 0) {
                         Toast.makeText(
                             requireContext(),
@@ -195,7 +196,7 @@ class HistoryFragment : Fragment() {
                             listItems,
                             selectedItem
                         ) { dialog, i ->
-
+                            Vibrate().vibration(requireContext())
                             when (i) {
                                 0 -> {
                                     sortData.setSortState(getString(R.string.day_desc))
