@@ -30,6 +30,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getSystemService
 import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.classes.Vibrate
 import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.concurrent.schedule
@@ -59,6 +60,7 @@ class WebviewFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
 
             appBar?.setNavigationOnClickListener {
+                Vibrate().vibration(requireContext())
                 webView?.stopLoading()
                 progressBar?.visibility = View.GONE
                 activity?.supportFragmentManager?.popBackStack()
@@ -67,12 +69,15 @@ class WebviewFragment : Fragment() {
             val url = LinkClass(requireContext()).loadLink().toString()
 
             appBar?.setOnMenuItemClickListener {
+                Vibrate().vibration(requireContext())
                 when (it.itemId) {
                     R.id.refresh -> {
+                        Vibrate().vibration(requireContext())
                         webView?.reload()
                         true
                     }
                     R.id.copyMenu -> {
+                        Vibrate().vibration(requireContext())
                         val clipBoard =
                             activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val clip = ClipData.newPlainText("URL", url) //intent.getStringExtra("url")
@@ -85,10 +90,11 @@ class WebviewFragment : Fragment() {
                         true
                     }
                     R.id.shareMenu -> {
+                        Vibrate().vibration(requireContext())
                         val shareIntent = Intent()
                         shareIntent.action = Intent.ACTION_SEND
                         shareIntent.type = "text/plain"
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "URL")
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "")
                         shareIntent.putExtra(Intent.EXTRA_TEXT, url)
                         startActivity(Intent.createChooser(shareIntent, "Share Via..."))
                         true

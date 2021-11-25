@@ -35,8 +35,7 @@ import kotlin.math.abs
 import android.graphics.drawable.TransitionDrawable
 
 import android.graphics.drawable.ColorDrawable
-
-
+import com.cory.hourcalculator.classes.Vibrate
 
 
 class AppearanceFragment : Fragment() {
@@ -92,6 +91,7 @@ class AppearanceFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
 
         topAppBar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
 
@@ -102,20 +102,23 @@ class AppearanceFragment : Fragment() {
         val amoledThemeButton = activity?.findViewById<RadioButton>(R.id.blackTheme)
         val followSystemThemeButton = activity?.findViewById<RadioButton>(R.id.followSystem)
 
-        if (darkThemeData.loadDarkModeState() == 1) {
-            darkThemeButton?.isChecked = true
-        } else if (darkThemeData.loadDarkModeState() == 0) {
-            lightThemeButton?.isChecked = true
-        }
-        else if (darkThemeData.loadDarkModeState() == 2) {
-            amoledThemeButton?.isChecked = true
-        }
-        else if (darkThemeData.loadDarkModeState() == 3) {
-            followSystemThemeButton?.isChecked = true
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                darkThemeButton?.isChecked = true
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                lightThemeButton?.isChecked = true
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                amoledThemeButton?.isChecked = true
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                followSystemThemeButton?.isChecked = true
+            }
         }
 
         lightThemeButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 0) {
                 Toast.makeText(requireContext(), "Light theme is already enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -128,7 +131,7 @@ class AppearanceFragment : Fragment() {
             }
         }
         darkThemeButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 1) {
                 Toast.makeText(requireContext(), "Dark mode is already enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -141,6 +144,7 @@ class AppearanceFragment : Fragment() {
             }
         }
         amoledThemeButton?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 2) {
                 Toast.makeText(requireContext(), "Black theme is already enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -153,6 +157,7 @@ class AppearanceFragment : Fragment() {
             }
         }
         followSystemThemeButton?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 3) {
                 Toast.makeText(requireContext(), "System theme is already enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -199,7 +204,7 @@ class AppearanceFragment : Fragment() {
         }
 
         tealAccentButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 0) {
                 Toast.makeText(requireContext(), "Teal already chosen", Toast.LENGTH_SHORT).show()
             } else {
@@ -207,6 +212,7 @@ class AppearanceFragment : Fragment() {
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setPositiveButton("Yes") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -242,13 +248,14 @@ class AppearanceFragment : Fragment() {
                     restartApplication()
                 }
                 alert.setNegativeButton("No") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     tealAccentButton.isChecked = false
                 }
                 alert.show()
             }
         }
         pinkAccentButton?.setOnClickListener {
-           // vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 1) {
                 Toast.makeText(requireContext(), "Pink already chosen", Toast.LENGTH_SHORT).show()
             } else {
@@ -256,6 +263,7 @@ class AppearanceFragment : Fragment() {
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setPositiveButton("Yes") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -291,13 +299,14 @@ class AppearanceFragment : Fragment() {
                     restartApplication()
                 }
                 alert.setNegativeButton("No") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     pinkAccentButton.isChecked = false
                 }
                 alert.show()
             }
         }
         orangeAccentButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 2) {
                 Toast.makeText(requireContext(), "orange already chosen", Toast.LENGTH_SHORT).show()
             } else {
@@ -305,6 +314,7 @@ class AppearanceFragment : Fragment() {
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setPositiveButton("Yes") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -340,13 +350,14 @@ class AppearanceFragment : Fragment() {
                     restartApplication()
                 }
                 alert.setNegativeButton("No") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     orangeAccentButton.isChecked = false
                 }
                 alert.show()
             }
         }
         redAccentButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 3) {
                 Toast.makeText(requireContext(), "Red is already chosen", Toast.LENGTH_SHORT).show()
             } else {
@@ -354,6 +365,7 @@ class AppearanceFragment : Fragment() {
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setPositiveButton("Yes") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -389,13 +401,14 @@ class AppearanceFragment : Fragment() {
                     restartApplication()
                 }
                 alert.setNegativeButton("No") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     redAccentButton.isChecked = false
                 }
                 alert.show()
             }
         }
         systemAccentButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 4) {
                 Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
             } else {
@@ -403,6 +416,7 @@ class AppearanceFragment : Fragment() {
                 alert.setTitle("Warning (Experimental)")
                 alert.setMessage("This is an experimental feature. You may not get the results you are hoping for. This is still in testing. This may result in unexpected results and/or crashing. This will restart the app. Would you like to continue?")
                 alert.setPositiveButton("Yes") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -438,6 +452,7 @@ class AppearanceFragment : Fragment() {
                     restartApplication()
                 }
                 alert.setNegativeButton("No") { _, _ ->
+                    Vibrate().vibration(requireContext())
                     systemAccentButton.isChecked = false
                 }
                 alert.show()

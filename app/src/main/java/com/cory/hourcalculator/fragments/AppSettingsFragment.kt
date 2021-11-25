@@ -71,6 +71,7 @@ class AppSettingsFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarLayoutSettings)
 
         topAppBar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
 
@@ -86,6 +87,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         enableCalculation?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (calculationData.loadCalculationState()) {
                 Toast.makeText(requireContext(), "Decimal Calculation Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -95,6 +97,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         disableCalculation?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (!calculationData.loadCalculationState()) {
                 Toast.makeText(requireContext(), "Time Calculation Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -114,7 +117,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         enableVibration?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (vibrationData.loadVibrationState()) {
                 Toast.makeText(requireContext(), "Vibration Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -123,7 +126,7 @@ class AppSettingsFragment : Fragment() {
             }
         }
         disableVibration?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (!vibrationData.loadVibrationState()) {
                 Toast.makeText(requireContext(), "Vibration Already Disabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -143,7 +146,7 @@ val historyToggleData = HistoryToggleData(requireContext())
         }
 
         enableHistory?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (historyToggleData.loadHistoryState()) {
                 Toast.makeText(requireContext(), "History Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -157,7 +160,7 @@ val historyToggleData = HistoryToggleData(requireContext())
             MainActivity().runOnUiThread(runnable)
         }
         disableHistory?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (!historyToggleData.loadHistoryState()) {
                 Toast.makeText(requireContext(), "History is already disabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -166,7 +169,7 @@ val historyToggleData = HistoryToggleData(requireContext())
                 alertDialog.setTitle("History")
                 alertDialog.setMessage("What would you like to do with history?")
                 alertDialog.setPositiveButton("Delete") { _, _ ->
-                    //vibration(vibrationData)
+                    Vibrate().vibration(requireContext())
                     val dbHandler = DBHelper(requireContext(), null)
                     dbHandler.deleteAll()
                     Toast.makeText(requireContext(), "History Deleted", Toast.LENGTH_SHORT).show()
@@ -177,7 +180,7 @@ val historyToggleData = HistoryToggleData(requireContext())
                     MainActivity().runOnUiThread(runnable)
                 }
                 alertDialog.setNeutralButton("Nothing") {_, _ ->
-                    //vibration(vibrationData)
+                    Vibrate().vibration(requireContext())
                 }
                 alertDialog.create().show()
                 Toast.makeText(requireContext(), "History Disabled", Toast.LENGTH_SHORT).show()
@@ -200,7 +203,7 @@ val historyToggleData = HistoryToggleData(requireContext())
         }
 
         enableBreakTextBox?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
                 Toast.makeText(requireContext(), "Break Text Box Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -209,7 +212,7 @@ val historyToggleData = HistoryToggleData(requireContext())
             }
         }
         disableBreakTextBox?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
                 Toast.makeText(requireContext(), "Break Text Box Already Disabled", Toast.LENGTH_SHORT).show()
             } else {

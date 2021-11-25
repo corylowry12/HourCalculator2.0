@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
 
         val transaction = supportFragmentManager.beginTransaction()
         val bottomNav = this.findViewById<BottomNavigationView>(R.id.bottom_nav)

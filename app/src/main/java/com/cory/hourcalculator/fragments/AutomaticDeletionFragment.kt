@@ -73,6 +73,7 @@ class AutomaticDeletionFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
 
         topAppBar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
 
@@ -152,7 +153,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         enableHistoryAutomaticDeletion?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (historyDeletion.loadHistoryDeletionState()) {
                 Toast.makeText(requireContext(), "History Automatic Deletion Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -177,7 +178,7 @@ class AutomaticDeletionFragment : Fragment() {
             }
         }
         disableHistoryAutomaticDeletion?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             if (!historyDeletion.loadHistoryDeletionState()) {
                 Toast.makeText(requireContext(), "History Automatic Deletion Already Disabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -203,6 +204,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         one?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 1) {
                 Toast.makeText(requireContext(), "One Entry Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -213,6 +215,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         two?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 2) {
                 Toast.makeText(requireContext(), "Two Entries Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -223,6 +226,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         three?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 3) {
                 Toast.makeText(requireContext(), "Three Entries Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -233,6 +237,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         four?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 4) {
                 Toast.makeText(requireContext(), "Four Entries Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -243,6 +248,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         five?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 5) {
                 Toast.makeText(requireContext(), "Five Entries Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -253,6 +259,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         six?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 6) {
                 Toast.makeText(requireContext(), "Six Entries Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
@@ -263,6 +270,7 @@ class AutomaticDeletionFragment : Fragment() {
         }
 
         seven?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 7) {
                 Toast.makeText(requireContext(), "Seven Entries Already Enabled", Toast.LENGTH_SHORT).show()
             } else {

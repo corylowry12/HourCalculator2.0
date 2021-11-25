@@ -19,6 +19,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.LinkClass
+import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -69,7 +70,6 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        main()
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
@@ -91,11 +91,10 @@ class SettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         main()
     }
 
-    fun main() {
+    private fun main() {
         val appearanceHeading = activity?.findViewById<TextView>(R.id.themeHeading)
         val appearanceSubtitle = activity?.findViewById<TextView>(R.id.themeSubtitle)
         val appearanceImage = activity?.findViewById<ImageView>(R.id.appearanceImage)
@@ -251,21 +250,24 @@ class SettingsFragment : Fragment() {
             showDeleteDataAlert()
         }
 
-        val versionInfoHeading = activity?.findViewById<TextView>(R.id.versionHeading)
-        val versionInfoSubtitle = activity?.findViewById<TextView>(R.id.versionSubtitle)
-        val versionInfoCardView = activity?.findViewById<CardView>(R.id.versionCardView)
-        val versionInfoImageView = activity?.findViewById<ImageView>(R.id.versionImage)
+        val versionHeading = view?.findViewById<TextView>(R.id.versionHeading)
+        val versionSubtitle = view?.findViewById<TextView>(R.id.versionSubtitle)
+        val versionImage = view?.findViewById<ImageView>(R.id.versionImage)
+        val versionCardView = view?.findViewById<CardView>(R.id.versionCardView)
 
-        versionInfoHeading?.setOnClickListener {
+       versionHeading?.setOnClickListener {
+           openAboutFragment()
+       }
+
+        versionSubtitle!!.setOnClickListener {
             openAboutFragment()
         }
-        versionInfoSubtitle?.setOnClickListener {
+
+        versionImage!!.setOnClickListener {
             openAboutFragment()
         }
-        versionInfoCardView?.setOnClickListener {
-            openAboutFragment()
-        }
-        versionInfoImageView?.setOnClickListener {
+
+        versionCardView!!.setOnClickListener {
             openAboutFragment()
         }
 
@@ -277,38 +279,43 @@ class SettingsFragment : Fragment() {
     }
 
     fun openAppearanceFragment() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        Vibrate().vibration(requireContext())
 
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, AppearanceFragment())?.addToBackStack(null)
         transaction?.commit()
     }
 
     fun openLayoutSettingsFragment() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        Vibrate().vibration(requireContext())
 
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, AppSettingsFragment())?.addToBackStack(null)
         transaction?.commit()
     }
 
     fun openAutomaticDeletionFragment() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        Vibrate().vibration(requireContext())
 
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, AutomaticDeletionFragment())?.addToBackStack(null)
         transaction?.commit()
     }
 
     fun openPatchNotesFragment() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        Vibrate().vibration(requireContext())
 
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, PatchNotesFragment())?.addToBackStack(null)
         transaction?.commit()
     }
 
     fun leaveAReview() {
+        Vibrate().vibration(requireContext())
             val reviewManager = ReviewManagerFactory.create(requireContext())
             val requestReviewFlow = reviewManager.requestReviewFlow()
             requestReviewFlow.addOnCompleteListener { request ->
@@ -325,18 +332,22 @@ class SettingsFragment : Fragment() {
     }
 
     fun openWebviewFragment() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        Vibrate().vibration(requireContext())
 
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, WebviewFragment())?.addToBackStack(null)
         transaction?.commit()
     }
 
     fun showDeleteDataAlert() {
+        Vibrate().vibration(requireContext())
+
         val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
         alert.setTitle("Warning")
         alert.setMessage("Would you like to delete all app data?")
         alert.setPositiveButton("Yes") { _, _ ->
+            Vibrate().vibration(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
             requireContext().getSharedPreferences("file", 0).edit().clear().apply()
             requireContext().cacheDir.deleteRecursively()
@@ -350,13 +361,16 @@ class SettingsFragment : Fragment() {
                 activity?.finish()
             }, 1500)
         }
-        alert.setNegativeButton("No", null)
+        alert.setNegativeButton("No") { _, _ ->
+            Vibrate().vibration(requireContext())
+        }
         alert.show()
     }
 
     fun openAboutFragment() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        Vibrate().vibration(requireContext())
 
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
         transaction?.replace(R.id.fragment_container, AboutFragment())?.addToBackStack(null)
         transaction?.commit()

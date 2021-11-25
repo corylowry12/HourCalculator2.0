@@ -49,6 +49,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/themeCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -57,8 +58,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -100,8 +100,8 @@
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
                         android:text="Customize the theme of the app"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@id/chevronImage"
                         app:layout_constraintStart_toEndOf="@id/appearanceImage"
                         app:layout_constraintTop_toBottomOf="@id/themeHeading" />
@@ -650,18 +650,16 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/versionCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/deleteDataCardView">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -681,14 +679,16 @@
 
                     <TextView
                         android:id="@+id/versionHeading"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
                         android:text="Version Info"
+                        android:clickable="true"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/versionChevronImage"
                         app:layout_constraintStart_toEndOf="@id/versionImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -696,19 +696,20 @@
                         android:id="@+id/versionSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_below="@id/versionHeading"
+                        android:layout_alignStart="@id/versionHeading"
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
                         android:text="View information about this build of the app"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/versionChevron"
+                        app:layout_constraintEnd_toStartOf="@id/versionChevronImage"
                         app:layout_constraintStart_toEndOf="@id/versionImage"
-                        app:layout_constraintTop_toBottomOf="@+id/versionHeading" />
+                        app:layout_constraintTop_toBottomOf="@id/versionHeading" />
 
                     <ImageView
-                        android:id="@+id/versionChevron"
+                        android:id="@+id/versionChevronImage"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
