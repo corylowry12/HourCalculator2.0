@@ -68,7 +68,7 @@ class AppSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarLayoutSettings)
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
