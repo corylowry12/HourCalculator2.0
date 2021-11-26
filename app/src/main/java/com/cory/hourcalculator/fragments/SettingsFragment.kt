@@ -14,7 +14,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
@@ -23,7 +22,6 @@ import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
-import org.w3c.dom.Text
 
 class SettingsFragment : Fragment() {
 
@@ -101,37 +99,37 @@ class SettingsFragment : Fragment() {
         val appearanceCardView = activity?.findViewById<CardView>(R.id.themeCardView)
 
         appearanceHeading?.setOnClickListener {
-            openAppearanceFragment()
+            openFragment(AppearanceFragment())
         }
 
         appearanceSubtitle?.setOnClickListener {
-            openAppearanceFragment()
+            openFragment(AppearanceFragment())
         }
 
         appearanceImage?.setOnClickListener {
-            openAppearanceFragment()
+            openFragment(AppearanceFragment())
         }
 
         appearanceCardView?.setOnClickListener {
-            openAppearanceFragment()
+            openFragment(AppearanceFragment())
         }
 
-        val layoutSettingsHeading = activity?.findViewById<TextView>(R.id.layout)
-        val layoutSettingsSubtitle = activity?.findViewById<TextView>(R.id.layoutSubtitle)
-        val layoutSettingsCardView = activity?.findViewById<CardView>(R.id.layoutCardView)
-        val layoutSettingsImageView = activity?.findViewById<ImageView>(R.id.layoutImage)
+        val appSettingsHeading = activity?.findViewById<TextView>(R.id.appSettings)
+        val appSettingsSubtitle = activity?.findViewById<TextView>(R.id.appSettingsSubtitle)
+        val appSettingsCardView = activity?.findViewById<CardView>(R.id.layoutCardView)
+        val appSettingsImageView = activity?.findViewById<ImageView>(R.id.appSettingsImage)
 
-        layoutSettingsHeading?.setOnClickListener {
-            openLayoutSettingsFragment()
+        appSettingsHeading?.setOnClickListener {
+            openFragment(AppSettingsFragment())
         }
-        layoutSettingsSubtitle?.setOnClickListener {
-            openLayoutSettingsFragment()
+        appSettingsSubtitle?.setOnClickListener {
+            openFragment(AppSettingsFragment())
         }
-        layoutSettingsCardView?.setOnClickListener {
-            openLayoutSettingsFragment()
+        appSettingsCardView?.setOnClickListener {
+            openFragment(AppSettingsFragment())
         }
-        layoutSettingsImageView?.setOnClickListener {
-            openLayoutSettingsFragment()
+        appSettingsImageView?.setOnClickListener {
+            openFragment(AppSettingsFragment())
         }
 
         val automaticDeletionHeading = activity?.findViewById<TextView>(R.id.deletionHeading)
@@ -140,16 +138,16 @@ class SettingsFragment : Fragment() {
         val automaticDeletionImageView = activity?.findViewById<ImageView>(R.id.deletionImage)
 
         automaticDeletionHeading?.setOnClickListener {
-            openAutomaticDeletionFragment()
+            openFragment(AutomaticDeletionFragment())
         }
         automaticDeletionSubtitle?.setOnClickListener {
-            openAutomaticDeletionFragment()
+            openFragment(AutomaticDeletionFragment())
         }
         automaticDeletionCardView?.setOnClickListener {
-            openAutomaticDeletionFragment()
+            openFragment(AutomaticDeletionFragment())
         }
         automaticDeletionImageView?.setOnClickListener {
-            openAutomaticDeletionFragment()
+            openFragment(AutomaticDeletionFragment())
         }
 
         val patchNotesHeading = activity?.findViewById<TextView>(R.id.patchNotesHeading)
@@ -158,16 +156,16 @@ class SettingsFragment : Fragment() {
         val patchNotesCardView = activity?.findViewById<CardView>(R.id.patchNotesCardView)
 
         patchNotesHeading?.setOnClickListener {
-            openPatchNotesFragment()
+            openFragment(PatchNotesFragment())
         }
         patchNotesSubtitle?.setOnClickListener {
-            openPatchNotesFragment()
+            openFragment(PatchNotesFragment())
         }
         patchNotesImage?.setOnClickListener {
-            openPatchNotesFragment()
+            openFragment(PatchNotesFragment())
         }
         patchNotesCardView?.setOnClickListener {
-            openPatchNotesFragment()
+            openFragment(PatchNotesFragment())
         }
 
         val reviewHeading = activity?.findViewById<TextView>(R.id.reviewHeading)
@@ -195,19 +193,19 @@ class SettingsFragment : Fragment() {
 
         reportBugHeading?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
         reportBugSubtitle?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
         reportBugCardView?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
         reportBugImageView?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
 
         val githubHeading = activity?.findViewById<TextView>(R.id.textViewGithubHeading)
@@ -217,19 +215,19 @@ class SettingsFragment : Fragment() {
 
         githubHeading?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
         githubSubtitle?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
         githubImage?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
         githubCardView?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openWebviewFragment()
+            openFragment(WebviewFragment())
         }
 
         val deleteDataHeading = activity?.findViewById<TextView>(R.id.deleteDataHeading)
@@ -250,25 +248,43 @@ class SettingsFragment : Fragment() {
             showDeleteDataAlert()
         }
 
+        val faqHeading = view?.findViewById<TextView>(R.id.FAQDataHeading)
+        val faqSubtitle = view?.findViewById<TextView>(R.id.FAQDataSubtitle)
+        val faqImageView = view?.findViewById<ImageView>(R.id.FAQDataImage)
+        val faqCardView = view?.findViewById<CardView>(R.id.FAQDataCardView)
+
+        faqHeading?.setOnClickListener {
+            openFragment(FAQFragment())
+        }
+        faqSubtitle?.setOnClickListener {
+            openFragment(FAQFragment())
+        }
+        faqImageView?.setOnClickListener {
+            openFragment(FAQFragment())
+        }
+        faqCardView?.setOnClickListener {
+            openFragment(FAQFragment())
+        }
+
         val versionHeading = view?.findViewById<TextView>(R.id.versionHeading)
         val versionSubtitle = view?.findViewById<TextView>(R.id.versionSubtitle)
         val versionImage = view?.findViewById<ImageView>(R.id.versionImage)
         val versionCardView = view?.findViewById<CardView>(R.id.versionCardView)
 
        versionHeading?.setOnClickListener {
-           openAboutFragment()
+           openFragment(AboutFragment())
        }
 
         versionSubtitle!!.setOnClickListener {
-            openAboutFragment()
+            openFragment(AboutFragment())
         }
 
         versionImage!!.setOnClickListener {
-            openAboutFragment()
+            openFragment(AboutFragment())
         }
 
         versionCardView!!.setOnClickListener {
-            openAboutFragment()
+            openFragment(AboutFragment())
         }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -278,39 +294,12 @@ class SettingsFragment : Fragment() {
         })
     }
 
-    fun openAppearanceFragment() {
+    fun openFragment(fragment: Fragment) {
         Vibrate().vibration(requireContext())
 
         val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, AppearanceFragment())?.addToBackStack(null)
-        transaction?.commit()
-    }
-
-    fun openLayoutSettingsFragment() {
-        Vibrate().vibration(requireContext())
-
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, AppSettingsFragment())?.addToBackStack(null)
-        transaction?.commit()
-    }
-
-    fun openAutomaticDeletionFragment() {
-        Vibrate().vibration(requireContext())
-
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, AutomaticDeletionFragment())?.addToBackStack(null)
-        transaction?.commit()
-    }
-
-    fun openPatchNotesFragment() {
-        Vibrate().vibration(requireContext())
-
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, PatchNotesFragment())?.addToBackStack(null)
+        transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
     }
 
@@ -329,15 +318,6 @@ class SettingsFragment : Fragment() {
                     Toast.makeText(requireContext(), "There was an error, please try again", Toast.LENGTH_SHORT).show()
                 }
             }
-    }
-
-    fun openWebviewFragment() {
-        Vibrate().vibration(requireContext())
-
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, WebviewFragment())?.addToBackStack(null)
-        transaction?.commit()
     }
 
     fun showDeleteDataAlert() {
@@ -365,14 +345,5 @@ class SettingsFragment : Fragment() {
             Vibrate().vibration(requireContext())
         }
         alert.show()
-    }
-
-    fun openAboutFragment() {
-        Vibrate().vibration(requireContext())
-
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction?.replace(R.id.fragment_container, AboutFragment())?.addToBackStack(null)
-        transaction?.commit()
     }
 }
