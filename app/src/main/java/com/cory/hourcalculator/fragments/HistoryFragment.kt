@@ -1,5 +1,6 @@
 package com.cory.hourcalculator.fragments
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -9,6 +10,7 @@ import android.text.TextPaint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
@@ -31,6 +33,8 @@ class HistoryFragment : Fragment() {
 
     private var output: String = ""
     val dataList = ArrayList<HashMap<String, String>>()
+
+    private var containsColon = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -170,6 +174,7 @@ class HistoryFragment : Fragment() {
                     }
                     else {
                         var selectedItem = -1
+
                         when {
                             sortData.loadSortState() == getString(R.string.day_desc) -> {
                                 selectedItem = 0
@@ -185,7 +190,24 @@ class HistoryFragment : Fragment() {
                             }
                         }
 
-                        val listItems = arrayOf(getString(R.string.sort_by_last_entered), getString(R.string.sort_by_first_entered), getString(R.string.sort_by_most_entered), getString(R.string.sort_by_least_entered))
+                        var listItems : Array<String> = arrayOf()
+                        listItems = if (containsColon) {
+                            if ((sortData.loadSortState() == "totalHours DESC" || sortData.loadSortState() == "totalHours ASC") && containsColon) {
+                                selectedItem = 0
+                                sortData.setSortState(getString(R.string.day_desc))
+                            }
+                            arrayOf(
+                                getString(R.string.sort_by_last_entered),
+                                getString(R.string.sort_by_first_entered)
+                            )
+                        } else {
+                            arrayOf(
+                                getString(R.string.sort_by_last_entered),
+                                getString(R.string.sort_by_first_entered),
+                                getString(R.string.sort_by_most_entered),
+                                getString(R.string.sort_by_least_entered)
+                            )
+                        }
 
                         val alert = MaterialAlertDialogBuilder(
                             requireContext(),
@@ -318,6 +340,8 @@ class HistoryFragment : Fragment() {
                 val decimal = (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString().drop(2)
                 decimalTime = "$hours.$decimal".toDouble()
                 y += decimalTime
+                    containsColon = true
+
             }
             else {
                 y += array.toDouble()
@@ -342,6 +366,8 @@ class HistoryFragment : Fragment() {
         loadIntoList()
 
         listView?.setSelectionFromTop(index!!, top)
+
+        containsColon = false
 
     }
 }
