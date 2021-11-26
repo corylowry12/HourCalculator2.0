@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,28 +8,41 @@ android:background="?attr/backgroundColor"
     android:id="@+id/appearanceConstraintLayout"
     tools:context=".fragments.AppearanceFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolBarAppearance"
-        android:layout_height="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutAppSettings"
         android:layout_width="match_parent"
-        app:title="Appearance Settings"
-        app:layout_collapseMode="pin"
-        app:titleCentered="true"
-        android:background="?attr/appBarBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="?attr/textColor"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+        android:layout_height="128dp"
+        app:liftOnScroll="true"
+        android:background="?attr/backgroundColor">
 
-    <ScrollView
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginBottom="28dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            >
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolBarAppearance"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                android:elevation="0dp"
+                app:title="Appearance Settings"
+                android:background="@android:color/transparent"
+                app:titleCentered="true"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24">
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingBottom="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/materialToolBarAppearance">
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:overScrollMode="always">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -42,12 +55,12 @@ android:background="?attr/backgroundColor"
                 android:gravity="center"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="Theme Settings"
+                android:text="Background Theme"
                 android:textColor="?attr/textColor"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="14sp"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/themeCardView"
@@ -308,6 +321,6 @@ android:background="?attr/backgroundColor"
                 android:textSize="12sp" />
 
         </RelativeLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
