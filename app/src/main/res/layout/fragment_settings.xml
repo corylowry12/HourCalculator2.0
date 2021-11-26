@@ -139,7 +139,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/layoutImage"
+                        android:id="@+id/appSettingsImage"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
@@ -151,8 +151,8 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:id="@+id/layout"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/appSettings"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
@@ -160,27 +160,28 @@
                         android:text="App Settings"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@id/layoutImage"
+                        app:layout_constraintStart_toEndOf="@id/appSettingsImage"
+                        app:layout_constraintEnd_toStartOf="@id/appSettingsChevron"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/layoutSubtitle"
+                        android:id="@+id/appSettingsSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/layout"
-                        android:layout_alignStart="@id/layout"
+                        android:layout_below="@id/appSettings"
+                        android:layout_alignStart="@id/appSettings"
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
                         android:text="Customize the fundamental settings of the app"
                         android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintEnd_toStartOf="@id/layoutSettingsChevron"
-                        app:layout_constraintStart_toEndOf="@id/layoutImage"
-                        app:layout_constraintTop_toBottomOf="@id/layout" />
+                        app:layout_constraintEnd_toStartOf="@id/appSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/appSettingsImage"
+                        app:layout_constraintTop_toBottomOf="@id/appSettings" />
 
                     <ImageView
-                        android:id="@+id/layoutSettingsChevron"
+                        android:id="@+id/appSettingsChevron"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
@@ -635,6 +636,82 @@
 
                     <ImageView
                         android:id="@+id/deleteDataChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/FAQDataCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="28dp"
+                android:layout_marginBottom="5dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                style="?attr/materialCardViewElevatedStyle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/FAQDataImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/ic_baseline_question_answer_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/FAQDataHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="5dp"
+                        android:text="Frequently Asked Questions"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/FAQDataChevron"
+                        app:layout_constraintStart_toEndOf="@id/FAQDataImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/FAQDataSubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="4dp"
+                        android:text="View Frequently Asked Questions about the app"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/FAQDataChevron"
+                        app:layout_constraintStart_toEndOf="@id/FAQDataImage"
+                        app:layout_constraintTop_toBottomOf="@+id/FAQDataHeading" />
+
+                    <ImageView
+                        android:id="@+id/FAQDataChevron"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
