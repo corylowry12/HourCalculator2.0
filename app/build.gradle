@@ -54,8 +54,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:18.2.4'
 
     //GoogleAds
-    implementation 'com.google.android.gms:play-services-ads:20.4.0'
+    implementation 'com.google.android.gms:play-services-ads:20.5.0'
 
-    implementation 'androidx.work:work-runtime-ktx:2.7.0'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
 }
