@@ -12,9 +12,7 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.ScaleAnimation
+import android.view.animation.*
 import android.widget.*
 import androidx.fragment.app.FragmentManager
 import com.cory.hourcalculator.MainActivity
@@ -38,9 +36,9 @@ import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import android.view.animation.TranslateAnimation
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import com.cory.hourcalculator.classes.Vibrate
 
 
 class CustomAdapter(
@@ -48,7 +46,6 @@ class CustomAdapter(
     private val dataList: ArrayList<HashMap<String, String>>
 ) : BaseAdapter() {
 
-    private val inflater: LayoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getCount(): Int {
         return dataList.size
     }
@@ -66,9 +63,6 @@ class CustomAdapter(
         val dbHandler = DBHelper(context, null)
         val dataitem = dataList[position]
 
-        //val vibrationData = VibrationData(context)
-
-        //val rowView = inflater.inflate(R.layout.list_row, parent, false)
         var rowView = convertView
         if (rowView == null) {
             val vi = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -90,14 +84,14 @@ class CustomAdapter(
 
             val imageView = rowView.findViewById<ImageView>(R.id.imageViewOptions)
             imageView.setOnClickListener {
-                //vibration(vibrationData)
+                Vibrate().vibration(context)
                 val context12 =
                     ContextThemeWrapper(context, AccentColor(context).menuTheme(context))
                 val popup = PopupMenu(context12, imageView)
                     popup.inflate(R.menu.menu_history_options)
 
                 popup.setOnMenuItemClickListener { item ->
-                    //vibration(vibrationData)
+                    Vibrate().vibration(context)
                     when (item.itemId) {
                         R.id.menu2 -> {
 
