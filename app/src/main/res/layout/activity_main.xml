@@ -18,7 +18,8 @@
         app:menu="@menu/menu"
         android:background="?attr/appBarBackground"
         app:itemIconTint="?attr/bottomNavIconTint"
-        app:itemTextColor="?attr/bottomNavTextColor" />
+        app:itemTextColor="?attr/bottomNavTextColor"
+        app:itemRippleColor="?attr/colorPrimaryDark"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"
