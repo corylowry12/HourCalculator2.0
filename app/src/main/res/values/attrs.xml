@@ -19,4 +19,6 @@
     <attr name="bottomNavIconTint" format="color" />
     <attr name="bottomNavTextColor" format="color" />
 
+    <attr name="patchNotesCardBackground" format="color" />
+
 </resources>

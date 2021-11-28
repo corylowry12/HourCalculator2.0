@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
@@ -20,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.*
@@ -33,6 +35,8 @@ class HistoryFragment : Fragment() {
 
     private var output: String = ""
     val dataList = ArrayList<HashMap<String, String>>()
+
+    private lateinit var adapter: CustomAdapter
 
     private var containsColon = false
 
@@ -351,9 +355,9 @@ class HistoryFragment : Fragment() {
             cursor.moveToNext()
 
         }
-
+        adapter = CustomAdapter(requireContext(), dataList)
         val listView = activity?.findViewById<ListView>(R.id.listView)
-        listView?.adapter = CustomAdapter(requireContext(), dataList)
+        listView?.adapter = adapter
 
     }
 
@@ -363,11 +367,40 @@ class HistoryFragment : Fragment() {
         val v = listView?.getChildAt(0)
         val top = if (v == null) 0 else v.top - listView.paddingTop
 
-        loadIntoList()
-
         listView?.setSelectionFromTop(index!!, top)
 
         containsColon = false
+
+        //adapter.notifyDataSetChanged()
+        //listView?.invalidate()
+
+        loadIntoList()
+
+        //listView?.animate()
+        //adapter.notifyDataSetChanged()
+        /*val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.item_animation_fall_down)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                dataList.removeAt(0)
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) {
+
+            }
+
+        })
+
+        listView?.startAnimation(animation)8*/
+
+       // view?.animate()?.setDuration(500)?.x(-view?.width!!.toFloat())?.alpha(0f)
+        //adapter.notifyDataSetChanged()
+
+        loadIntoList()
 
     }
 }

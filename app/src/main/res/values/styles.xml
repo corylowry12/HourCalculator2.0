@@ -59,6 +59,7 @@
         <item name="cardBackground">@color/cardPink</item>
         <item name="selectedTint">@color/pinkAccent</item>
         <item name="bottomNavIconTint">@color/pinkNavBarIconTint</item>
+        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_pink</item>
     </style>
 
     <style name="teal_accent">
@@ -69,6 +70,7 @@
         <item name="cardBackground">@color/cardTeal</item>
         <item name="selectedTint">@color/colorPrimary</item>
         <item name="bottomNavIconTint">@color/tealNavBarIconTint</item>
+        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_teal</item>
     </style>
 
     <style name="orange_accent">
@@ -79,6 +81,7 @@
         <item name="cardBackground">@color/cardOrange</item>
         <item name="selectedTint">@color/orangeAccent</item>
         <item name="bottomNavIconTint">@color/orangeNavBarIconTint</item>
+        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_orange</item>
     </style>
 
     <style name="red_accent">
@@ -89,6 +92,7 @@
         <item name="cardBackground">@color/cardRed</item>
         <item name="selectedTint">@color/redAccent</item>
         <item name="bottomNavIconTint">@color/redNavBarIconTint</item>
+        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_red</item>
     </style>
 
     <style name="system_accent">
@@ -99,6 +103,7 @@
         <item name="cardBackground">@color/cardSystem</item>
         <item name="selectedTint">@color/systemAccent</item>
         <item name="bottomNavIconTint">@color/systemNavBarIconTint</item>
+        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_system</item>
     </style>
 
     <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
