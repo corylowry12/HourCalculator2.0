@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         changeBadgeNumber()
+        changeSettingsBadge()
 
         toggleHistory()
 
@@ -210,6 +211,22 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             badge.backgroundColor = ContextCompat.getColor(this, R.color.lightRedBadgeColor)
+        }
+    }
+
+    fun changeSettingsBadge() {
+        val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+        if (Version(this).loadVersion() != "9.0.0") {
+            badge.isVisible = true
+
+            if (AccentColor(this).loadAccent() != 3) {
+                badge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
+            } else {
+                badge.backgroundColor = ContextCompat.getColor(this, R.color.lightRedBadgeColor)
+            }
+        }
+        else {
+            badge.isVisible = false
         }
     }
 
