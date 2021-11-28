@@ -13,14 +13,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.CalculationType
 import com.cory.hourcalculator.classes.IdData
+import com.cory.hourcalculator.classes.UndoHoursData
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import java.math.RoundingMode
 
@@ -30,6 +33,8 @@ class EditHours : Fragment() {
 
     private lateinit var idMap: String
     private lateinit var day: String
+
+    private lateinit var UndoHoursData : UndoHoursData
 
     public lateinit var inTime: String
     private lateinit var outTime: String
@@ -49,7 +54,7 @@ class EditHours : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        UndoHoursData = UndoHoursData(requireContext())
         val materialToolbarEdit = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
 
         materialToolbarEdit?.setNavigationOnClickListener {
@@ -65,12 +70,14 @@ class EditHours : Fragment() {
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                         val dbHandler = DBHelper(requireContext(), null)
                         dbHandler.deleteRow(idMap)
-                        Toast.makeText(requireContext(), getString(R.string.hour_deleted), Toast.LENGTH_SHORT).show()
+
                         val runnable = Runnable {
-                            (context as MainActivity).changeBadgeNumber()
+                            (context as MainActivity).update()
                         }
                         MainActivity().runOnUiThread(runnable)
                         activity?.supportFragmentManager?.popBackStack()
+
+                        com.cory.hourcalculator.classes.Snackbar().snackbar(requireContext(), requireView())
                     }
                     alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                         dialog.dismiss()
@@ -213,6 +220,10 @@ class EditHours : Fragment() {
         breakTime = map["breakTime"].toString()
         outTime = map["outTime"].toString()
         day = map["date"].toString()
+        UndoHoursData.setDate(day)
+        UndoHoursData.setInTime(inTime)
+        UndoHoursData.setOutTime(outTime)
+        UndoHoursData.setTotalHours(map["totalHours"].toString())
 
         val (inTimeHours, inTimeMinutes) = map["inTime"].toString().split(":")
         val (outTimeHours, outTimeMinutes) = map["outTime"].toString().split(":")
