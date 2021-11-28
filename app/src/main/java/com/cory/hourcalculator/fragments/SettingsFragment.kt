@@ -14,11 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
-import com.cory.hourcalculator.classes.LinkClass
-import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -154,6 +152,17 @@ class SettingsFragment : Fragment() {
         val patchNotesSubtitle = activity?.findViewById<TextView>(R.id.patchNotesSubtitle)
         val patchNotesImage = activity?.findViewById<ImageView>(R.id.patchNotesImage)
         val patchNotesCardView = activity?.findViewById<CardView>(R.id.patchNotesCardView)
+        val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
+
+        if (Version(requireContext()).loadVersion() != "9.0.0") {
+            patchNotesChevron?.setImageResource(R.drawable.redcircle)
+            patchNotesChevron?.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.redAccent
+                )
+            )
+        }
 
         patchNotesHeading?.setOnClickListener {
             openFragment(PatchNotesFragment())
