@@ -35,10 +35,30 @@ import kotlin.math.abs
 import android.graphics.drawable.TransitionDrawable
 
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.media.Image
 import com.cory.hourcalculator.classes.Vibrate
 
 
 class AppearanceFragment : Fragment() {
+
+    private lateinit var followSystemImageViewDrawable: Drawable
+
+    private fun setDrawable() : Drawable {
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.whitecircleimageview)!!
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+            }
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+            }
+        }
+
+        return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,19 +67,31 @@ class AppearanceFragment : Fragment() {
         val darkThemeData = DarkThemeData(requireContext())
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
+                followSystemImageViewDrawable = setDrawable()
                 activity?.setTheme(R.style.Theme_DarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
+                followSystemImageViewDrawable = setDrawable()
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
+                followSystemImageViewDrawable = setDrawable()
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                        followSystemImageViewDrawable = setDrawable()
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        followSystemImageViewDrawable = setDrawable()
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        followSystemImageViewDrawable = setDrawable()
+                    }
                 }
             }
         }
@@ -94,6 +126,9 @@ class AppearanceFragment : Fragment() {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
+
+        val followSystemImageView = activity?.findViewById<ImageView>(R.id.followSystemImageView)
+        followSystemImageView?.setImageDrawable(followSystemImageViewDrawable)
 
         val darkThemeData = DarkThemeData(requireContext())
 
