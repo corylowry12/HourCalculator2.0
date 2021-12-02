@@ -10,13 +10,13 @@ class HistoryAutomaticDeletion(context: Context) {
     //this saves the theme preference
     fun setHistoryDeletionState(state: Boolean) {
         val editor = sharedPreferences.edit()
-        editor.putBoolean("History_Deletion", state)
+        editor.putBoolean("History_Deletion_State", state)
         editor.apply()
     }
 
     // this will load the night mode state
     fun loadHistoryDeletionState(): Boolean {
-        val state = sharedPreferences.getBoolean("History_Deletion", false)
+        val state = sharedPreferences.getBoolean("History_Deletion_State", false)
         return (state)
     }
 }

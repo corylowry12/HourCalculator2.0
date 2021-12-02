@@ -10,13 +10,13 @@ class DaysWorkedPerWeek(context: Context) {
     //this saves the wage amount
     fun setDaysWorked(state: Int) {
         val editor = sharedPreferences.edit()
-        editor.putInt("Days", state)
+        editor.putInt("Days_Worked", state)
         editor.apply()
     }
 
     // this will load wage amount
     fun loadDaysWorked(): Int {
-        val state = sharedPreferences.getInt("Days", 7)
+        val state = sharedPreferences.getInt("Days_Worked", 7)
         return (state)
     }
 }
