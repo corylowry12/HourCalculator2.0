@@ -33,7 +33,8 @@ android:background="?attr/backgroundColor"
                 app:title="Appearance Settings"
                 android:background="@android:color/transparent"
                 app:titleCentered="true"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24">
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:navigationIconTint="?attr/textColor">
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -155,6 +156,7 @@ android:background="?attr/backgroundColor"
                                 app:layout_constraintTop_toBottomOf="@id/blackTheme" />
 
                             <ImageView
+                                android:id="@+id/followSystemImageView"
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
                                 android:layout_marginEnd="16dp"
