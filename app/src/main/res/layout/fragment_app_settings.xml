@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="128dp"
         app:liftOnScroll="true"
-        android:background="?attr/backgroundColor">
+        android:background="?attr/backgroundColor"
+        android:foreground="?attr/selectableItemBackground">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"

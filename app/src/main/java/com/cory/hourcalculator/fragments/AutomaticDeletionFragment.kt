@@ -9,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class AutomaticDeletionFragment : Fragment() {
 
@@ -45,23 +49,28 @@ class AutomaticDeletionFragment : Fragment() {
         when {
             accentColor.loadAccent() == 0 -> {
                 activity?.theme?.applyStyle(R.style.teal_accent, true)
-                color = resources.getColor(R.color.colorPrimary)
+                //color = resources.getColor(R.color.colorPrimary)
+                color = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             }
             accentColor.loadAccent() == 1 -> {
                 activity?.theme?.applyStyle(R.style.pink_accent, true)
-                color = resources.getColor(R.color.pinkAccent)
+                //color = resources.getColor(R.color.pinkAccent)
+                color = ContextCompat.getColor(requireContext(), R.color.pinkAccent)
             }
             accentColor.loadAccent() == 2 -> {
                 activity?.theme?.applyStyle(R.style.orange_accent, true)
-                color = resources.getColor(R.color.orangeAccent)
+                //color = resources.getColor(R.color.orangeAccent)
+                color = ContextCompat.getColor(requireContext(), R.color.orangeAccent)
             }
             accentColor.loadAccent() == 3 -> {
                 activity?.theme?.applyStyle(R.style.red_accent, true)
-                color = resources.getColor(R.color.redAccent)
+                //color = resources.getColor(R.color.redAccent)
+                color = ContextCompat.getColor(requireContext(), R.color.redAccent)
             }
             accentColor.loadAccent() == 4 -> {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
-                color = resources.getColor(R.color.systemAccent)
+                //color = resources.getColor(R.color.systemAccent)
+                color = ContextCompat.getColor(requireContext(), R.color.systemAccent)
             }
         }
         return inflater.inflate(R.layout.fragment_automatic_deletion, container, false)
@@ -69,6 +78,7 @@ class AutomaticDeletionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
 
@@ -101,7 +111,7 @@ class AutomaticDeletionFragment : Fragment() {
             six?.isEnabled = true
             seven?.isEnabled = true
 
-            one?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
+            one?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
             two?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
             three?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
             four?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
@@ -176,6 +186,8 @@ class AutomaticDeletionFragment : Fragment() {
                 six?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
                 seven?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
             }
+
+            greaterThan()
         }
         disableHistoryAutomaticDeletion?.setOnClickListener {
             Vibrate().vibration(requireContext())
@@ -211,6 +223,7 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(1)
                 Toast.makeText(requireContext(), "One Entry Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
 
@@ -222,6 +235,7 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(2)
                 Toast.makeText(requireContext(), "Two Entries Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
 
@@ -233,6 +247,7 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(3)
                 Toast.makeText(requireContext(), "Three Entries Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
 
@@ -244,6 +259,7 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(4)
                 Toast.makeText(requireContext(), "Four Entries Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
 
@@ -255,6 +271,7 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(5)
                 Toast.makeText(requireContext(), "Five Entries Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
 
@@ -266,6 +283,7 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(6)
                 Toast.makeText(requireContext(), "Six Entries Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
 
@@ -277,8 +295,62 @@ class AutomaticDeletionFragment : Fragment() {
                 daysWorked.setDaysWorked(7)
                 Toast.makeText(requireContext(), "Seven Entries Enabled", Toast.LENGTH_SHORT)
                     .show()
+                greaterThan()
             }
         }
     }
+    fun greaterThan() {
+        val enableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
+        val disableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
 
+        val one = activity?.findViewById<RadioButton>(R.id.one)
+        val two = activity?.findViewById<RadioButton>(R.id.two)
+        val three = activity?.findViewById<RadioButton>(R.id.three)
+        val four = activity?.findViewById<RadioButton>(R.id.four)
+        val five = activity?.findViewById<RadioButton>(R.id.five)
+        val six = activity?.findViewById<RadioButton>(R.id.six)
+        val seven = activity?.findViewById<RadioButton>(R.id.seven)
+
+        val dbHandler = DBHelper(requireContext(), null)
+
+        val historyDeletion = HistoryAutomaticDeletion(requireContext())
+
+        if (dbHandler.getCount() > DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
+            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            alert.setTitle("Stuff")
+            alert.setMessage("Greater than hours stored. Delete?")
+            alert.setPositiveButton("Yes") {_, _ ->
+                HistoryDeletion(requireContext()).deletion()
+
+                val runnable = Runnable {
+                    (context as MainActivity).changeBadgeNumber()
+                }
+                MainActivity().runOnUiThread(runnable)
+            }
+            alert.setNegativeButton("No") { _, _ ->
+                historyDeletion.setHistoryDeletionState(false)
+                Toast.makeText(requireContext(), "History Automatic Deletion Disabled", Toast.LENGTH_SHORT).show()
+
+                enableHistoryAutomaticDeletion?.isChecked = false
+                disableHistoryAutomaticDeletion?.isChecked = true
+
+                one?.isEnabled = false
+                two?.isEnabled = false
+                three?.isEnabled = false
+                four?.isEnabled = false
+                five?.isEnabled = false
+                six?.isEnabled = false
+                seven?.isEnabled = false
+
+                one?.setTextColor(color)
+                two?.setTextColor(color)
+                three?.setTextColor(color)
+                four?.setTextColor(color)
+                five?.setTextColor(color)
+                six?.setTextColor(color)
+                seven?.setTextColor(color)
+            }
+            alert.show()
+        }
+    }
 }

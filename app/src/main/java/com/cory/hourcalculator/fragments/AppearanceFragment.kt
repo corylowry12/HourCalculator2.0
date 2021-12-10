@@ -27,8 +27,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.abs
@@ -37,7 +35,10 @@ import android.graphics.drawable.TransitionDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.media.Image
-import com.cory.hourcalculator.classes.Vibrate
+import androidx.core.widget.NestedScrollView
+import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.database.DBHelper
+import com.jakewharton.processphoenix.ProcessPhoenix
 
 
 class AppearanceFragment : Fragment() {
@@ -125,6 +126,24 @@ class AppearanceFragment : Fragment() {
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBar?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.reset -> {
+                    Vibrate().vibration(requireContext())
+                    reset()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        val nestedScrollViewAppearance = view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
+
+        nestedScrollViewAppearance.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            AppearanceScrollPosition(requireContext()).setScroll(scrollY.toFloat())
+            //Toast.makeText(requireContext(), scrollY.toString(), Toast.LENGTH_SHORT).show()
         }
 
         val followSystemImageView = activity?.findViewById<ImageView>(R.id.followSystemImageView)
@@ -494,6 +513,77 @@ class AppearanceFragment : Fragment() {
             }
         }
 
+        val enableColoredNavBar = view.findViewById<RadioButton>(R.id.enableColoredNavBar)
+        val disableColoredNavBar = view.findViewById<RadioButton>(R.id.disableColoredNavBar)
+        val coloredNavBarData = ColoredNavBarData(requireContext())
+
+        if (!coloredNavBarData.loadNavBar()) {
+            disableColoredNavBar.isChecked = true
+        }
+        else {
+            enableColoredNavBar.isChecked = true
+        }
+
+        enableColoredNavBar.setOnClickListener {
+
+            Vibrate().vibration(requireContext())
+            if (coloredNavBarData.loadNavBar()) {
+                Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
+            } else {
+                disableColoredNavBar.isChecked = false
+                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                alert.setTitle("Warning")
+                alert.setMessage("This may or may not work as expected on your device. Would you like to continue?")
+                alert.setPositiveButton("Yes") { _, _ ->
+                    Vibrate().vibration(requireContext())
+
+                    coloredNavBarData.setNavBar(true)
+
+                    when {
+                        accentColor.loadAccent() == 0 -> {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+                        }
+                        accentColor.loadAccent() == 1 -> {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.pinkAccent)
+                        }
+                        accentColor.loadAccent() == 2 -> {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.orangeAccent)
+                        }
+                        accentColor.loadAccent() == 3 -> {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.redAccent)
+                        }
+                        accentColor.loadAccent() == 4 -> {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                        }
+                    }
+                }
+                alert.setNegativeButton("No") { _, _ ->
+                    Vibrate().vibration(requireContext())
+                    enableColoredNavBar.isChecked = false
+                    disableColoredNavBar.isChecked = true
+                }
+                alert.show()
+            }
+        }
+
+        disableColoredNavBar.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            if (!coloredNavBarData.loadNavBar()) {
+                Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                enableColoredNavBar.isChecked = false
+                activity?.window?.navigationBarColor =
+                    ContextCompat.getColor(requireContext(), R.color.black)
+                coloredNavBarData.setNavBar(false)
+            }
+        }
+
        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
            override fun handleOnBackPressed() {
                activity?.supportFragmentManager?.popBackStack()
@@ -513,6 +603,79 @@ class AppearanceFragment : Fragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.attach(this)?.commitNow()
 
+        view?.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll().toInt())
+
+    }
+
+    private fun reset() {
+        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+        alert.setTitle("Warning")
+        alert.setMessage("Would you like to reset Appearance Settings?")
+        alert.setPositiveButton("Yes") { _, _ ->
+            Vibrate().vibration(requireContext())
+            when {
+                AccentColor(requireContext()).loadAccent() != 0 -> {
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.SplashOrange"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.SplashRed"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.SplashPink"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.SplashScreenNoIcon"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+                    )
+                    AccentColor(requireContext()).setAccentState(0)
+                    DarkThemeData(requireContext()).setDarkModeState(3)
+                    restartApplication()
+                }
+                DarkThemeData(requireContext()).loadDarkModeState() != 3 -> {
+                    view?.findViewById<RadioButton>(R.id.lightTheme)?.isChecked = false
+                    view?.findViewById<RadioButton>(R.id.darkTheme)?.isChecked = false
+                    view?.findViewById<RadioButton>(R.id.blackTheme)?.isChecked = false
+                    view?.findViewById<RadioButton>(R.id.followSystem)?.isChecked = true
+                    AccentColor(requireContext()).setAccentState(0)
+                    DarkThemeData(requireContext()).setDarkModeState(3)
+                    restartThemeChange()
+                }
+                else -> {
+                    AccentColor(requireContext()).setAccentState(0)
+                    DarkThemeData(requireContext()).setDarkModeState(3)
+                }
+            }
+            ColoredNavBarData(requireContext()).setNavBar(false)
+            view?.findViewById<RadioButton>(R.id.disableColoredNavBar)?.isChecked = true
+            view?.findViewById<RadioButton>(R.id.enableColoredNavBar)?.isChecked = false
+            activity?.window?.navigationBarColor =
+                ContextCompat.getColor(requireContext(), R.color.black)
+            Toast.makeText(requireContext(), "App Data Cleared", Toast.LENGTH_LONG).show()
+
+        }
+        alert.setNegativeButton("No") { _, _ ->
+            Vibrate().vibration(requireContext())
+        }
+        alert.show()
     }
 
     private fun restartApplication() {

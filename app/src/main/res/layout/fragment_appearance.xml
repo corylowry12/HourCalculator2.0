@@ -13,7 +13,8 @@ android:background="?attr/backgroundColor"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         app:liftOnScroll="true"
-        android:background="?attr/backgroundColor">
+        android:background="?attr/backgroundColor"
+        android:foreground="?attr/selectableItemBackground">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -34,12 +35,14 @@ android:background="?attr/backgroundColor"
                 android:background="@android:color/transparent"
                 app:titleCentered="true"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor">
+                app:navigationIconTint="?attr/textColor"
+                app:menu="@menu/main_menu_reset">
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollViewAppearance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -310,10 +313,67 @@ android:background="?attr/backgroundColor"
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/warning"
+                android:id="@+id/navBarSettingsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/accentCardView"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Colored Navigation Bar"
+                android:textColor="?attr/textColor"
+                android:textSize="14sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/navbarCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/navBarSettingsTextView"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <RadioGroup
+                    android:id="@+id/radioGroupNavBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/enableColoredNavBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Enable Colored Navigation Bar"
+                            android:textColor="?attr/settingsTextColor"
+                            android:textSize="12sp"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <RadioButton
+                            android:id="@+id/disableColoredNavBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Disable Colored Navigation Bar"
+                            android:textColor="?attr/settingsTextColor"
+                            android:textSize="12sp"
+                            app:layout_constraintTop_toBottomOf="@id/enableColoredNavBar" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </RadioGroup>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/navbarCardView"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"

@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -92,68 +93,32 @@ class SettingsFragment : Fragment() {
     }
 
     private fun main() {
-        val appearanceHeading = activity?.findViewById<TextView>(R.id.themeHeading)
-        val appearanceSubtitle = activity?.findViewById<TextView>(R.id.themeSubtitle)
-        val appearanceImage = activity?.findViewById<ImageView>(R.id.appearanceImage)
-        val appearanceCardView = activity?.findViewById<CardView>(R.id.themeCardView)
 
-        appearanceHeading?.setOnClickListener {
+        val appearanceConstraintLayout = view?.findViewById<ConstraintLayout>(R.id.constraintAppearance)
+
+        appearanceConstraintLayout?.setOnClickListener {
             openFragment(AppearanceFragment())
         }
 
-        appearanceSubtitle?.setOnClickListener {
-            openFragment(AppearanceFragment())
-        }
+        val appSettingsConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintAppSettings)
 
-        appearanceImage?.setOnClickListener {
-            openFragment(AppearanceFragment())
-        }
-
-        appearanceCardView?.setOnClickListener {
-            openFragment(AppearanceFragment())
-        }
-
-        val appSettingsHeading = activity?.findViewById<TextView>(R.id.appSettings)
-        val appSettingsSubtitle = activity?.findViewById<TextView>(R.id.appSettingsSubtitle)
-        val appSettingsCardView = activity?.findViewById<CardView>(R.id.layoutCardView)
-        val appSettingsImageView = activity?.findViewById<ImageView>(R.id.appSettingsImage)
-
-        appSettingsHeading?.setOnClickListener {
-            openFragment(AppSettingsFragment())
-        }
-        appSettingsSubtitle?.setOnClickListener {
-            openFragment(AppSettingsFragment())
-        }
-        appSettingsCardView?.setOnClickListener {
-            openFragment(AppSettingsFragment())
-        }
-        appSettingsImageView?.setOnClickListener {
+        appSettingsConstraint?.setOnClickListener {
             openFragment(AppSettingsFragment())
         }
 
-        val automaticDeletionHeading = activity?.findViewById<TextView>(R.id.deletionHeading)
-        val automaticDeletionSubtitle = activity?.findViewById<TextView>(R.id.deletionSubtitle)
-        val automaticDeletionCardView = activity?.findViewById<CardView>(R.id.deletionCardView)
-        val automaticDeletionImageView = activity?.findViewById<ImageView>(R.id.deletionImage)
+        val automaticDeletionConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintAutomaticDeletion)
 
-        automaticDeletionHeading?.setOnClickListener {
-            openFragment(AutomaticDeletionFragment())
-        }
-        automaticDeletionSubtitle?.setOnClickListener {
-            openFragment(AutomaticDeletionFragment())
-        }
-        automaticDeletionCardView?.setOnClickListener {
-            openFragment(AutomaticDeletionFragment())
-        }
-        automaticDeletionImageView?.setOnClickListener {
+        automaticDeletionConstraint?.setOnClickListener {
             openFragment(AutomaticDeletionFragment())
         }
 
-        val patchNotesHeading = activity?.findViewById<TextView>(R.id.patchNotesHeading)
-        val patchNotesSubtitle = activity?.findViewById<TextView>(R.id.patchNotesSubtitle)
-        val patchNotesImage = activity?.findViewById<ImageView>(R.id.patchNotesImage)
-        val patchNotesCardView = activity?.findViewById<CardView>(R.id.patchNotesCardView)
         val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
+
+        val patchNotesConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintPatchNotes)
+
+        patchNotesConstraint?.setOnClickListener {
+            openFragment(PatchNotesFragment())
+        }
 
         if (Version(requireContext()).loadVersion() != "9.0.0") {
             patchNotesChevron?.setImageResource(R.drawable.redcircle)
@@ -165,135 +130,41 @@ class SettingsFragment : Fragment() {
             )
         }
 
-        patchNotesHeading?.setOnClickListener {
-            openFragment(PatchNotesFragment())
-        }
-        patchNotesSubtitle?.setOnClickListener {
-            openFragment(PatchNotesFragment())
-        }
-        patchNotesImage?.setOnClickListener {
-            openFragment(PatchNotesFragment())
-        }
-        patchNotesCardView?.setOnClickListener {
-            openFragment(PatchNotesFragment())
-        }
+        val leaveAReviewConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintLeaveAReview)
 
-        val reviewHeading = activity?.findViewById<TextView>(R.id.reviewHeading)
-        val reviewSubtitle = activity?.findViewById<TextView>(R.id.reviewSubtitle)
-        val reviewCardView = activity?.findViewById<CardView>(R.id.reviewCardView)
-        val reviewImageView = activity?.findViewById<ImageView>(R.id.reviewImage)
-
-        reviewHeading?.setOnClickListener {
-            leaveAReview()
-        }
-        reviewSubtitle?.setOnClickListener {
-            leaveAReview()
-        }
-        reviewCardView?.setOnClickListener {
-            leaveAReview()
-        }
-        reviewImageView?.setOnClickListener {
+        leaveAReviewConstraint?.setOnClickListener {
             leaveAReview()
         }
 
-        val reportBugHeading = activity?.findViewById<TextView>(R.id.bugHeading)
-        val reportBugSubtitle = activity?.findViewById<TextView>(R.id.bugSubtitle)
-        val reportBugCardView = activity?.findViewById<CardView>(R.id.bugCardView)
-        val reportBugImageView = activity?.findViewById<ImageView>(R.id.reportABug)
+        val reportABugConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintReportABug)
 
-        reportBugHeading?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openFragment(WebviewFragment())
-        }
-        reportBugSubtitle?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openFragment(WebviewFragment())
-        }
-        reportBugCardView?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openFragment(WebviewFragment())
-        }
-        reportBugImageView?.setOnClickListener {
+        reportABugConstraint?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
             openFragment(WebviewFragment())
         }
 
-        val githubHeading = activity?.findViewById<TextView>(R.id.textViewGithubHeading)
-        val githubSubtitle = activity?.findViewById<TextView>(R.id.textViewGithubCaption)
-        val githubImage = activity?.findViewById<ImageView>(R.id.githubImage)
-        val githubCardView = activity?.findViewById<CardView>(R.id.cardViewGithub)
+        val viewGithubConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintViewGithub)
 
-        githubHeading?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openFragment(WebviewFragment())
-        }
-        githubSubtitle?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openFragment(WebviewFragment())
-        }
-        githubImage?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openFragment(WebviewFragment())
-        }
-        githubCardView?.setOnClickListener {
+        viewGithubConstraint?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
             openFragment(WebviewFragment())
         }
 
-        val deleteDataHeading = activity?.findViewById<TextView>(R.id.deleteDataHeading)
-        val deleteDataSubtitle = activity?.findViewById<TextView>(R.id.deleteDataSubtitle)
-        val deleteDataImage = activity?.findViewById<ImageView>(R.id.deleteDataImage)
-        val deleteDataCardView = activity?.findViewById<CardView>(R.id.deleteDataCardView)
+        val deleteAppDataConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintDeleteAppData)
 
-        deleteDataHeading?.setOnClickListener {
-            showDeleteDataAlert()
-        }
-        deleteDataSubtitle?.setOnClickListener {
-            showDeleteDataAlert()
-        }
-        deleteDataImage?.setOnClickListener {
-            showDeleteDataAlert()
-        }
-        deleteDataCardView?.setOnClickListener {
+        deleteAppDataConstraint?.setOnClickListener {
             showDeleteDataAlert()
         }
 
-        val faqHeading = view?.findViewById<TextView>(R.id.FAQDataHeading)
-        val faqSubtitle = view?.findViewById<TextView>(R.id.FAQDataSubtitle)
-        val faqImageView = view?.findViewById<ImageView>(R.id.FAQDataImage)
-        val faqCardView = view?.findViewById<CardView>(R.id.FAQDataCardView)
+        val faqConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintFAQ)
 
-        faqHeading?.setOnClickListener {
-            openFragment(FAQFragment())
-        }
-        faqSubtitle?.setOnClickListener {
-            openFragment(FAQFragment())
-        }
-        faqImageView?.setOnClickListener {
-            openFragment(FAQFragment())
-        }
-        faqCardView?.setOnClickListener {
+        faqConstraint?.setOnClickListener {
             openFragment(FAQFragment())
         }
 
-        val versionHeading = view?.findViewById<TextView>(R.id.versionHeading)
-        val versionSubtitle = view?.findViewById<TextView>(R.id.versionSubtitle)
-        val versionImage = view?.findViewById<ImageView>(R.id.versionImage)
-        val versionCardView = view?.findViewById<CardView>(R.id.versionCardView)
+        val versionInfoConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintVersionInfo)
 
-       versionHeading?.setOnClickListener {
-           openFragment(AboutFragment())
-       }
-
-        versionSubtitle!!.setOnClickListener {
-            openFragment(AboutFragment())
-        }
-
-        versionImage!!.setOnClickListener {
-            openFragment(AboutFragment())
-        }
-
-        versionCardView!!.setOnClickListener {
+        versionInfoConstraint?.setOnClickListener {
             openFragment(AboutFragment())
         }
 

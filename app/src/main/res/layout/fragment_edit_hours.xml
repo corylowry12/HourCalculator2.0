@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
-    tools:context=".fragments.EditHours">
+    tools:context=".fragments.EditHours"
+    android:animateLayoutChanges="true">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolBarEditFragment"
@@ -88,6 +89,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.chip.Chip
+        android:id="@+id/dateChip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/outlinedTextField"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Click on me to change date"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:chipCornerRadius="28dp"
+        android:textColor="@color/white"
+        app:chipStrokeWidth="@null"
+        app:chipBackgroundColor="?attr/colorPrimary"
+        android:textAlignment="center"/>
+
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
@@ -101,7 +118,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField" />
+        app:layout_constraintTop_toBottomOf="@id/dateChip" />
 
     <TextView
         android:id="@+id/infoTextView1"

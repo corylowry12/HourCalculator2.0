@@ -14,6 +14,7 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -81,6 +82,34 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val coloredNavBarData = ColoredNavBarData(requireContext())
+
+        if (coloredNavBarData.loadNavBar()) {
+            val accentColor = AccentColor(requireContext())
+            when {
+                accentColor.loadAccent() == 0 -> {
+                    activity?.window?.navigationBarColor =
+                        ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+                }
+                accentColor.loadAccent() == 1 -> {
+                    activity?.window?.navigationBarColor =
+                        ContextCompat.getColor(requireContext(), R.color.pinkAccent)
+                }
+                accentColor.loadAccent() == 2 -> {
+                    activity?.window?.navigationBarColor =
+                        ContextCompat.getColor(requireContext(), R.color.orangeAccent)
+                }
+                accentColor.loadAccent() == 3 -> {
+                    activity?.window?.navigationBarColor =
+                        ContextCompat.getColor(requireContext(), R.color.redAccent)
+                }
+                accentColor.loadAccent() == 4 -> {
+                    activity?.window?.navigationBarColor =
+                        ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                }
+            }
+        }
 
         val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
@@ -235,15 +264,26 @@ class HomeFragment : Fragment() {
 
     private fun calculateTime() {
 
-        var inTimeTotal: String = ""
-        var outTimeTotal : String = ""
+        var inTimeTotal = ""
+        var outTimeTotal = ""
 
         val infoTextView = activity?.findViewById<TextView>(R.id.infoTextView1)
 
-        val inTimeHours = activity?.findViewById<TimePicker>(R.id.timePickerInTime)?.hour
-        val inTimeMinutes = activity?.findViewById<TimePicker>(R.id.timePickerInTime)?.minute.toString()
-        val outTimeHours = activity?.findViewById<TimePicker>(R.id.timePickerOutTime)?.hour
-        val outTimeMinutes = activity?.findViewById<TimePicker>(R.id.timePickerOutTime)?.minute.toString()
+        val inTimePicker = view?.findViewById<TimePicker>(R.id.timePickerInTime)
+        val outTimePicker = view?.findViewById<TimePicker>(R.id.timePickerOutTime)
+
+        val inTimeHours = inTimePicker?.hour
+        var inTimeMinutes = inTimePicker?.minute.toString()
+        val outTimeHours = outTimePicker?.hour
+        var outTimeMinutes = outTimePicker?.minute.toString()
+
+        if (inTimeMinutes.length == 1) {
+            inTimeMinutes = "0$inTimeMinutes"
+        }
+
+        if (outTimeMinutes.length == 1) {
+            outTimeMinutes = "0$outTimeMinutes"
+        }
 
         var diffHours = outTimeHours!!.toInt() - inTimeHours!!.toInt()
         var diffMinutes = (outTimeMinutes.toInt() - inTimeMinutes.toInt()).toString()

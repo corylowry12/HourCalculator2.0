@@ -6,10 +6,9 @@ import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.database.DBHelper
-import com.cory.hourcalculator.fragments.HistoryFragment
 import com.google.android.material.snackbar.Snackbar
 
-class Snackbar() {
+class Snackbar {
 
     fun snackbar(context: Context, view: View) {
 
