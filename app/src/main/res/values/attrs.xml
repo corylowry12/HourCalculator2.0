@@ -21,4 +21,6 @@
 
     <attr name="patchNotesCardBackground" format="color" />
 
+    <attr name="backgroundColorDialog" format="color" />
+
 </resources>
