@@ -70,6 +70,29 @@ class AccentColor(context: Context) {
         return R.style.PopupMenuLight
     }
 
+    fun dateDialogTheme(context: Context): Int {
+
+        when (DarkThemeData(context).loadDarkModeState()) {
+            0 -> {
+                return R.style.datePickerLight
+
+            }
+            1 -> {
+                return R.style.datePickerDark
+            }
+            2 -> {
+                return R.style.datePickerDark
+            }
+            3 -> {
+                when (context.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> return R.style.datePickerLight
+                    Configuration.UI_MODE_NIGHT_YES -> return R.style.datePickerDark
+                }
+            }
+        }
+        return R.style.datePickerLight
+    }
+
     fun snackbarActionTextColor(): Int {
 
         when (this.loadAccent()) {
