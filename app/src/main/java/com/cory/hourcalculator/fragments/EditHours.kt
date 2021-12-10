@@ -117,7 +117,7 @@ class EditHours : Fragment() {
 
         dateChip?.setOnClickListener {
 
-            val datePicker = DatePickerDialog(requireContext())
+            val datePicker = DatePickerDialog(requireContext(), AccentColor(requireContext()).dateDialogTheme(requireContext()))
             datePicker.datePicker.maxDate = System.currentTimeMillis()
             datePicker.setOnDateSetListener { datePickerDate, year, month, day2 ->
                 val time = LocalTime.now()
@@ -270,6 +270,7 @@ class EditHours : Fragment() {
         UndoHoursData.setDate(map["date"].toString())
         UndoHoursData.setInTime(inTime)
         UndoHoursData.setOutTime(outTime)
+        UndoHoursData.setBreakTime(breakTime)
         UndoHoursData.setTotalHours(map["totalHours"].toString())
 
         val (inTimeHours, inTimeMinutes) = map["inTime"].toString().split(":")
@@ -410,8 +411,6 @@ class EditHours : Fragment() {
                     hoursWithBreak -= 1
                     withBreak = (withBreak.toInt() + 60).toString()
                 }
-
-                Toast.makeText(requireContext(), withBreak, Toast.LENGTH_SHORT).show()
 
                 if (diffHours < 0) {
                     infoTextView1!!.text = "The entered break time is too big"
