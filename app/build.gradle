@@ -40,7 +40,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.5.0-beta01'
+    implementation 'com.google.android.material:material:1.6.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
@@ -49,13 +49,15 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-perf-ktx:20.0.3'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.4'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.1'
+    implementation 'com.google.firebase:firebase-perf-ktx:20.0.4'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.5'
 
     //GoogleAds
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
 
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
 
 }
