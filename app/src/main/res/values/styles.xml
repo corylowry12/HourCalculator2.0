@@ -170,10 +170,28 @@
         <item name="android:src">@drawable/ic_baseline_more_vert_24</item>
     </style>
 
-    <style name="datePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <style name="datePickerLight" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
 
-        <item name="dialogCornerRadius">28dp</item>
-        <item name="android:background">@color/darkThemeBackground</item>
+        <!--buttons color-->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="backgroundColorDialog">@color/white</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/date_picker</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+
+    </style>
+
+    <style name="datePickerDark" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+
+        <!--buttons color-->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="backgroundColorDialog">@color/darkThemeBackground</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/date_picker</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+
     </style>
 
 </resources>
