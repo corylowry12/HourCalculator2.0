@@ -20,11 +20,13 @@ import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.EditHours
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
+@DelicateCoroutinesApi
 class CustomAdapter(
     private val context: Context,
     private val dataList: ArrayList<HashMap<String, String>>
