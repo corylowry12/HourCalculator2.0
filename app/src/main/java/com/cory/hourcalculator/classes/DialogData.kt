@@ -19,4 +19,17 @@ class DialogData(context: Context) {
         val state = sharedPreferences.getBoolean("Dialog", false)
         return (state)
     }
+
+    //this saves the theme preference
+    fun setDateDialogState(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("DateDialog", state)
+        editor.apply()
+    }
+
+    // this will load the night mode state
+    fun loadDateDialogState(): Boolean {
+        val state = sharedPreferences.getBoolean("DateDialog", false)
+        return (state)
+    }
 }
