@@ -3,12 +3,12 @@ package com.cory.hourcalculator.classes
 import android.content.Context
 import android.content.SharedPreferences
 
-class BreakTextBoxVisiblityClass(context: Context) {
+class BreakTextBoxVisibilityClass(context: Context) {
 
     private var sharedPreferences: SharedPreferences = context.getSharedPreferences("file", Context.MODE_PRIVATE)
 
     //this saves the theme preference
-    fun setVisiblity(state: Int) {
+    fun setVisibility(state: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt("visibility", state)
         editor.apply()
