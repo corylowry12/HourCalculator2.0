@@ -8,10 +8,10 @@
     <string name="date_adapter">Date: %1$s</string>
 
     <string name="total_asc">totalHours ASC</string>
-    <string name="sort_by_first_entered">First Entered</string>
-    <string name="sort_by_least_entered">Least Hours</string>
-    <string name="sort_by_most_entered">Most Hours</string>
-    <string name="sort_by_last_entered">Last Entered</string>
+    <string name="sort_by_first_entered">Date Ascending</string>
+    <string name="sort_by_least_entered">Total Ascending</string>
+    <string name="sort_by_most_entered">Total Descending</string>
+    <string name="sort_by_last_entered">Date Descending</string>
     <string name="info">Info</string>
     <string name="sort">Sort</string>
     <string name="total_desc">totalHours DESC</string>

@@ -129,13 +129,13 @@ class AppearanceFragment : Fragment() {
         }
 
         topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-                    Vibrate().vibration(requireContext())
                     reset()
                     true
                 }
-                else -> false
+                else -> true
             }
         }
 
@@ -143,7 +143,6 @@ class AppearanceFragment : Fragment() {
 
         nestedScrollViewAppearance.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             AppearanceScrollPosition(requireContext()).setScroll(scrollY.toFloat())
-            //Toast.makeText(requireContext(), scrollY.toString(), Toast.LENGTH_SHORT).show()
         }
 
         val followSystemImageView = activity?.findViewById<ImageView>(R.id.followSystemImageView)
@@ -265,6 +264,7 @@ class AppearanceFragment : Fragment() {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setCancelable(false)
                 alert.setPositiveButton("Yes") { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -316,6 +316,7 @@ class AppearanceFragment : Fragment() {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setCancelable(false)
                 alert.setPositiveButton("Yes") { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -367,6 +368,7 @@ class AppearanceFragment : Fragment() {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setCancelable(false)
                 alert.setPositiveButton("Yes") { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -418,6 +420,7 @@ class AppearanceFragment : Fragment() {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setCancelable(false)
                 alert.setPositiveButton("Yes") { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -469,6 +472,7 @@ class AppearanceFragment : Fragment() {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alert.setTitle("Warning (Experimental)")
                 alert.setMessage("This is an experimental feature. You may not get the results you are hoping for. This is still in testing. This may result in unexpected results and/or crashing. This will restart the app. Would you like to continue?")
+                alert.setCancelable(false)
                 alert.setPositiveButton("Yes") { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -534,6 +538,7 @@ class AppearanceFragment : Fragment() {
                 val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
                 alert.setTitle("Warning")
                 alert.setMessage("This may or may not work as expected on your device. Would you like to continue?")
+                alert.setCancelable(false)
                 alert.setPositiveButton("Yes") { _, _ ->
                     Vibrate().vibration(requireContext())
 

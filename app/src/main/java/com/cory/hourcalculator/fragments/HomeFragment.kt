@@ -20,16 +20,11 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.time.Duration
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -123,7 +118,7 @@ class HomeFragment : Fragment() {
         val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTime)
         val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
         val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
-        val breakTextBoxVisiblityClass = BreakTextBoxVisiblityClass(requireContext())
+        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
             breakTextBox?.visibility = View.GONE
@@ -515,7 +510,7 @@ class HomeFragment : Fragment() {
             val dbHandler = DBHelper(requireContext(), null)
 
             val day = LocalDateTime.now()
-            val day2 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+            val day2 = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")
             val dayOfWeek = day.format(day2)
             dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
         }

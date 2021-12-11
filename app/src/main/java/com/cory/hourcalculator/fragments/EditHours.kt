@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,10 +25,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.CalculationType
-import com.cory.hourcalculator.classes.IdData
-import com.cory.hourcalculator.classes.UndoHoursData
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
@@ -39,7 +37,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import java.math.RoundingMode
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -80,16 +80,20 @@ class EditHours : Fragment() {
         val materialToolbarEdit = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
 
         materialToolbarEdit?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
             exit()
         }
 
         materialToolbarEdit?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.delete -> {
+                    Vibrate().vibration(requireContext())
                     val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setCancelable(false)
                     alert.setTitle(getString(R.string.delete))
                     alert.setMessage(getString(R.string.would_you_like_to_delete_history))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         val dbHandler = DBHelper(requireContext(), null)
                         dbHandler.deleteRow(idMap)
 
@@ -102,6 +106,7 @@ class EditHours : Fragment() {
                         com.cory.hourcalculator.classes.Snackbar().snackbar(requireContext(), requireView())
                     }
                     alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                        Vibrate().vibration(requireContext())
                         dialog.dismiss()
                     }
                     alert.show()
@@ -116,25 +121,58 @@ class EditHours : Fragment() {
         val dateChip = activity?.findViewById<Chip>(R.id.dateChip)
 
         dateChip?.setOnClickListener {
-
+            Vibrate().vibration(requireContext())
             val datePicker = DatePickerDialog(requireContext(), AccentColor(requireContext()).dateDialogTheme(requireContext()))
+            datePicker.setCancelable(false)
+
+            val (month, day2, year) = day.toString().split("/")
+            val year2 = year.dropLast(9)
+
+            val dateFormatter = SimpleDateFormat("mm")
+            val month2 = month.format(dateFormatter)
+
+            datePicker.updateDate(year2.toInt(), month2.toInt() - 1, day2.toInt())
+
+            Toast.makeText(requireContext(), year2.toString(), Toast.LENGTH_SHORT).show()
+
             datePicker.datePicker.maxDate = System.currentTimeMillis()
-            datePicker.setOnDateSetListener { datePickerDate, year, month, day2 ->
+
+            datePicker.datePicker.setOnDateChangedListener { _, _, _, _ ->
+                Vibrate().vibration(requireContext())
+            }
+
+            datePicker.show()
+
+            val positiveButton = datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
+            val neutralButton = datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
+            positiveButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
                 val time = LocalTime.now()
                 val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)
                 val dayOfWeek = time.format(timeFormatter)
 
+                val year = datePicker.datePicker.year
+                val month = datePicker.datePicker.month
+                val day2 = datePicker.datePicker.dayOfMonth
+
                 val calendar = Calendar.getInstance()
                 calendar.set(year, month, day2)
-                val simpleDateFormat = SimpleDateFormat("MMM/dd/yyyy")
-                val date = simpleDateFormat.format(calendar.time)
-                val dateAndTime = date.toString() + ", " + dayOfWeek
+                val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a")
+                val day3 = calendar.time
+                val date2 = simpleDateFormat.format(day3)
+                day = date2
+               // val date = day.format(simpleDateFormat)
+               // val dateAndTime = date.toString()
 
-                dateChip.setText(dateAndTime)
-                day = dateAndTime
+                dateChip.text = date2
+
+                datePicker.dismiss()
             }
 
-            datePicker.show()
+            neutralButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                datePicker.dismiss()
+            }
         }
 
         val inTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerInTimeEdit)
@@ -167,6 +205,7 @@ class EditHours : Fragment() {
         })
 
         inTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
+            Vibrate().vibration(requireContext())
             val inTimeMinutesNumbers: Int
 
             val (inTimeHours, inTimeMinutes) = inTime.split(":")
@@ -187,6 +226,7 @@ class EditHours : Fragment() {
         }
 
         outTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
+            Vibrate().vibration(requireContext())
             val outTimeMinutesNumbers: Int
             val (outTimeHours, outTimeMinutes) = outTime.split(":")
             var outTimeHoursInteger: Int = outTimeHours.toInt()
@@ -307,16 +347,22 @@ class EditHours : Fragment() {
         timePickerOutTime?.hour = outTimeHoursInteger
         timePickerOutTime?.minute = outTimeMinutesNumbers
         breakTimeEditText?.setText(breakTime)
-        Handler(Looper.getMainLooper()).postDelayed({
+        if (!DialogData(requireContext()).loadDateDialogState()) {
+            Handler(Looper.getMainLooper()).postDelayed({
 
+                dateChip?.setText(day)
+
+            }, 5000)
+            DialogData(requireContext()).setDateDialogState(true)
+        }
+        else {
             dateChip?.setText(day)
-
-        }, 1000)
+        }
 
         val calculationType = CalculationType(requireContext())
 
         saveButton?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
 
             if (calculationType.loadCalculationState()) {
                 calculate(idMap, day)
@@ -539,6 +585,11 @@ class EditHours : Fragment() {
         val dbHandler = DBHelper(requireContext(), null)
 
         dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
+
+        val runnable = Runnable {
+            (context as MainActivity).update()
+        }
+        MainActivity().runOnUiThread(runnable)
 
         activity?.supportFragmentManager?.popBackStack()
     }

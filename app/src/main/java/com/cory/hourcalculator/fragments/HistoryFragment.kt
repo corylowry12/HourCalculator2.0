@@ -278,12 +278,10 @@ class HistoryFragment : Fragment() {
                 visibleItemCount: Int,
                 totalItemCount: Int
             ) {
-
                 if (firstVisibleItem > 0) {
                     floatingActionButtonHistory?.show()
 
                 } else {
-
                     floatingActionButtonHistory?.hide()
                 }
             }

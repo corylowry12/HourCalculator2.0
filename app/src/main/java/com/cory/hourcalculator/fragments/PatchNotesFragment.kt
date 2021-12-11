@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.Version
+import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
 
 class PatchNotesFragment : Fragment() {
@@ -35,7 +36,24 @@ class PatchNotesFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
         topAppBar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.closeAll -> {
+                    newFeaturesBool = true
+                    enhancementsBool = true
+                    bugFixesBool = true
+                    showBugFixes()
+                    showEnhancements()
+                    showNewFeatures()
+                    true
+                }
+                else -> true
+            }
         }
 
         Version(requireContext()).setVersion("9.0.0")
@@ -48,18 +66,21 @@ class PatchNotesFragment : Fragment() {
         val constraintBugFixes = view.findViewById<ConstraintLayout>(R.id.bugFixesConstraint)
 
         constraintBugFixes.setOnClickListener {
+            Vibrate().vibration(requireContext())
             showBugFixes()
         }
 
         val newFeaturesConstraint = view.findViewById<ConstraintLayout>(R.id.newFeaturesConstraint)
 
         newFeaturesConstraint.setOnClickListener {
+            Vibrate().vibration(requireContext())
             showNewFeatures()
         }
 
         val enhancementsConstraintLayout = view.findViewById<ConstraintLayout>(R.id.enhancementsConstraint)
 
         enhancementsConstraintLayout.setOnClickListener {
+            Vibrate().vibration(requireContext())
             showEnhancements()
         }
     }

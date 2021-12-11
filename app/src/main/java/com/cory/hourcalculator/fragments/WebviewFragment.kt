@@ -72,12 +72,10 @@ class WebviewFragment : Fragment() {
                 Vibrate().vibration(requireContext())
                 when (it.itemId) {
                     R.id.refresh -> {
-                        Vibrate().vibration(requireContext())
                         webView?.reload()
                         true
                     }
                     R.id.copyMenu -> {
-                        Vibrate().vibration(requireContext())
                         val clipBoard =
                             activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val clip = ClipData.newPlainText("URL", url) //intent.getStringExtra("url")
@@ -90,7 +88,6 @@ class WebviewFragment : Fragment() {
                         true
                     }
                     R.id.shareMenu -> {
-                        Vibrate().vibration(requireContext())
                         val shareIntent = Intent()
                         shareIntent.action = Intent.ACTION_SEND
                         shareIntent.type = "text/plain"

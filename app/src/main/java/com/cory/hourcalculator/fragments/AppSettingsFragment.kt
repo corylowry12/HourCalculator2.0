@@ -75,6 +75,17 @@ class AppSettingsFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    reset()
+                    true
+                }
+                else -> true
+            }
+        }
+
         val calculationData = CalculationType(requireContext())
         val enableCalculation = activity?.findViewById<RadioButton>(R.id.enableCalculation)
         val disableCalculation = activity?.findViewById<RadioButton>(R.id.disableCalculation)
@@ -166,6 +177,7 @@ val historyToggleData = HistoryToggleData(requireContext())
             } else {
                 historyToggleData.setHistoryToggle(false)
                 val alertDialog = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                alertDialog.setCancelable(false)
                 alertDialog.setTitle("History")
                 alertDialog.setMessage("What would you like to do with history?")
                 alertDialog.setPositiveButton("Delete") { _, _ ->
@@ -192,7 +204,7 @@ val historyToggleData = HistoryToggleData(requireContext())
             MainActivity().runOnUiThread(runnable)
         }
 
-        val breakTextBoxVisiblityClass = BreakTextBoxVisiblityClass(requireContext())
+        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
         val enableBreakTextBox = activity?.findViewById<RadioButton>(R.id.showBreakTextBox)
         val disableBreakTextBox = activity?.findViewById<RadioButton>(R.id.hideBreakTextBox)
 
@@ -207,7 +219,7 @@ val historyToggleData = HistoryToggleData(requireContext())
             if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
                 Toast.makeText(requireContext(), "Break Text Box Already Enabled", Toast.LENGTH_SHORT).show()
             } else {
-                breakTextBoxVisiblityClass.setVisiblity(0)
+                breakTextBoxVisiblityClass.setVisibility(0)
                 Toast.makeText(requireContext(), "Break Text Box Enabled", Toast.LENGTH_SHORT).show()
             }
         }
@@ -216,7 +228,7 @@ val historyToggleData = HistoryToggleData(requireContext())
             if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
                 Toast.makeText(requireContext(), "Break Text Box Already Disabled", Toast.LENGTH_SHORT).show()
             } else {
-                breakTextBoxVisiblityClass.setVisiblity(1)
+                breakTextBoxVisiblityClass.setVisibility(1)
                 Toast.makeText(requireContext(), "Break Text Box Disabled", Toast.LENGTH_SHORT).show()
             }
         }
@@ -254,6 +266,40 @@ val historyToggleData = HistoryToggleData(requireContext())
                 wagesData.setWageAmount(s.toString())
             }
         })
+    }
+
+    private fun reset() {
+        val decimalFormat = view?.findViewById<RadioButton>(R.id.enableCalculation)
+        val timeFormat = view?.findViewById<RadioButton>(R.id.disableCalculation)
+        val enableVibration = view?.findViewById<RadioButton>(R.id.enableVibration)
+        val disableVibration = view?.findViewById<RadioButton>(R.id.disableVibration)
+        val enableHistory = view?.findViewById<RadioButton>(R.id.enableHistory)
+        val disableHistory = view?.findViewById<RadioButton>(R.id.disableHistory)
+        val enableBreakTextBox = view?.findViewById<RadioButton>(R.id.showBreakTextBox)
+        val disableBreakTextBox = view?.findViewById<RadioButton>(R.id.hideBreakTextBox)
+        val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
+
+        CalculationType(requireContext()).setCalculationState(true)
+        VibrationData(requireContext()).setVibrationState(true)
+        HistoryToggleData(requireContext()).setHistoryToggle(true)
+        BreakTextBoxVisibilityClass(requireContext()).setVisibility(0)
+        WagesData(requireContext()).setWageAmount("7.25")
+
+        decimalFormat?.isChecked = true
+        timeFormat?.isChecked = false
+        enableVibration?.isChecked = true
+        disableVibration?.isChecked = false
+        enableHistory?.isChecked = true
+        disableHistory?.isChecked = false
+        enableBreakTextBox?.isChecked = true
+        disableBreakTextBox?.isChecked = false
+        wagesEditText?.setText("7.25")
+
+        val runnable = Runnable {
+            (context as MainActivity).toggleHistory()
+        }
+
+        MainActivity().runOnUiThread(runnable)
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {

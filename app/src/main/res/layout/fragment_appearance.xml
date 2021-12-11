@@ -46,7 +46,9 @@ android:background="?attr/backgroundColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:overScrollMode="always">
+        android:overScrollMode="always"
+        android:paddingBottom="25dp"
+        android:clipToPadding="false" >
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -87,6 +87,17 @@ class AutomaticDeletionFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    reset()
+                    true
+                }
+                else -> true
+            }
+        }
+
         val enableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
         val disableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
 
@@ -315,11 +326,19 @@ class AutomaticDeletionFragment : Fragment() {
 
         val historyDeletion = HistoryAutomaticDeletion(requireContext())
 
+        val greaterThan = dbHandler.getCount() - DaysWorkedPerWeek(requireContext()).loadDaysWorked()
         if (dbHandler.getCount() > DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
             val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-            alert.setTitle("Stuff")
-            alert.setMessage("Greater than hours stored. Delete?")
+            alert.setCancelable(false)
+            alert.setTitle("Warning")
+            if (greaterThan > 1) {
+                alert.setMessage("The number of hours stored is greater than the number that is allowed to be stored. Would you like to delete $greaterThan entries?")
+            }
+            else {
+                alert.setMessage("The number of hours stored is greater than the number that is allowed to be stored. Would you like to delete $greaterThan entry?")
+            }
             alert.setPositiveButton("Yes") {_, _ ->
+                Vibrate().vibration(requireContext())
                 HistoryDeletion(requireContext()).deletion()
 
                 val runnable = Runnable {
@@ -328,6 +347,7 @@ class AutomaticDeletionFragment : Fragment() {
                 MainActivity().runOnUiThread(runnable)
             }
             alert.setNegativeButton("No") { _, _ ->
+                Vibrate().vibration(requireContext())
                 historyDeletion.setHistoryDeletionState(false)
                 Toast.makeText(requireContext(), "History Automatic Deletion Disabled", Toast.LENGTH_SHORT).show()
 
@@ -352,5 +372,42 @@ class AutomaticDeletionFragment : Fragment() {
             }
             alert.show()
         }
+    }
+
+    private fun reset() {
+
+        val enableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
+        val disableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
+
+        val one = activity?.findViewById<RadioButton>(R.id.one)
+        val two = activity?.findViewById<RadioButton>(R.id.two)
+        val three = activity?.findViewById<RadioButton>(R.id.three)
+        val four = activity?.findViewById<RadioButton>(R.id.four)
+        val five = activity?.findViewById<RadioButton>(R.id.five)
+        val six = activity?.findViewById<RadioButton>(R.id.six)
+        val seven = activity?.findViewById<RadioButton>(R.id.seven)
+
+        val historyDeletion = HistoryAutomaticDeletion(requireContext())
+
+        historyDeletion.setHistoryDeletionState(false)
+
+        enableHistoryAutomaticDeletion?.isChecked = false
+        disableHistoryAutomaticDeletion?.isChecked = true
+
+        one?.isEnabled = false
+        two?.isEnabled = false
+        three?.isEnabled = false
+        four?.isEnabled = false
+        five?.isEnabled = false
+        six?.isEnabled = false
+        seven?.isEnabled = false
+
+        one?.setTextColor(color)
+        two?.setTextColor(color)
+        three?.setTextColor(color)
+        four?.setTextColor(color)
+        five?.setTextColor(color)
+        six?.setTextColor(color)
+        seven?.setTextColor(color)
     }
 }

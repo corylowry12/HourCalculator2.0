@@ -33,7 +33,8 @@
                 android:background="@android:color/transparent"
                 app:titleCentered="true"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor">
+                app:navigationIconTint="?attr/textColor"
+                app:menu="@menu/main_menu_close_all">
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -42,7 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:overScrollMode="always">
+        android:overScrollMode="always"
+        android:paddingBottom="25dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
