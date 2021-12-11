@@ -139,6 +139,7 @@ class CustomAdapter(
                                     .setDuration(5000)
                                     .setAnchorView(R.id.bottom_nav)
                             snackbar.setAction("UNDO") {
+                                Vibrate().vibration(context)
                                 dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
                                 MainActivity().runOnUiThread(runnable)
                             }
@@ -205,7 +206,7 @@ class CustomAdapter(
                                     ContextCompat.getColorStateList(context, AccentColor(context).snackbarActionTextColor())
                                 )
                                 snackBar.setAction("UNDO") {
-
+                                    Vibrate().vibration(context)
                                     GlobalScope.launch(Dispatchers.Main) {
                                         for (i in inTime.indices) {
                                             dbHandler.insertRow(
