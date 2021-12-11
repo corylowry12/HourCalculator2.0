@@ -21,6 +21,7 @@ class Snackbar {
                 .setDuration(5000)
                 .setAnchorView(R.id.bottom_nav)
         snackbar.setAction("UNDO") {
+            Vibrate().vibration(context)
             dbHandler.insertRow(
                 undoHoursData.loadInTime(),
                 undoHoursData.loadOutTime(),
