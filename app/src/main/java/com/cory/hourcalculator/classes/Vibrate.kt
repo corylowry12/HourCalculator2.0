@@ -6,7 +6,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 
-class Vibrate() {
+class Vibrate {
 
     fun vibration(context: Context) {
         val vibrationData = VibrationData(context)

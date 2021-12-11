@@ -34,7 +34,7 @@ import java.math.RoundingMode
 class HistoryFragment : Fragment() {
 
     private var output: String = ""
-    val dataList = ArrayList<HashMap<String, String>>()
+    private val dataList = ArrayList<HashMap<String, String>>()
 
     private lateinit var adapter: CustomAdapter
 
@@ -88,6 +88,8 @@ class HistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.window?.setBackgroundDrawable(null)
 
         val listView = activity?.findViewById<ListView>(R.id.listView)
         val animation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)

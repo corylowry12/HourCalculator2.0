@@ -310,7 +310,7 @@ class AutomaticDeletionFragment : Fragment() {
             }
         }
     }
-    fun greaterThan() {
+    private fun greaterThan() {
         val enableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
         val disableHistoryAutomaticDeletion = activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
 

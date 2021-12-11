@@ -27,6 +27,12 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
     private val settingsFragment = SettingsFragment()
-    private val editFragment = EditHours()
 
     val dbHandler = DBHelper(this, null)
 
@@ -133,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment) {
 
         val transaction = supportFragmentManager.beginTransaction()
         val bottomNav = this.findViewById<BottomNavigationView>(R.id.bottom_nav)

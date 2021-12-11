@@ -55,14 +55,14 @@ class EditHours : Fragment() {
     private lateinit var idMap: String
     private lateinit var day: String
 
-    private lateinit var UndoHoursData : UndoHoursData
+    private lateinit var undoHoursData : UndoHoursData
 
-    lateinit var inTime: String
+    private lateinit var inTime: String
     private lateinit var outTime: String
     private lateinit var breakTime: String
 
-    var inTimeBool = false
-    var outTimeBool = false
+    private var inTimeBool = false
+    private var outTimeBool = false
     var breakTimeBool = false
 
     override fun onCreateView(
@@ -76,7 +76,7 @@ class EditHours : Fragment() {
     @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        UndoHoursData = UndoHoursData(requireContext())
+        undoHoursData = UndoHoursData(requireContext())
         val materialToolbarEdit = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
 
         materialToolbarEdit?.setNavigationOnClickListener {
@@ -103,7 +103,7 @@ class EditHours : Fragment() {
                         MainActivity().runOnUiThread(runnable)
                         activity?.supportFragmentManager?.popBackStack()
 
-                        com.cory.hourcalculator.classes.Snackbar().snackbar(requireContext(), requireView())
+                        Snackbar().snackbar(requireContext(), requireView())
                     }
                     alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                         Vibrate().vibration(requireContext())
@@ -125,7 +125,7 @@ class EditHours : Fragment() {
             val datePicker = DatePickerDialog(requireContext(), AccentColor(requireContext()).dateDialogTheme(requireContext()))
             datePicker.setCancelable(false)
 
-            val (month, day2, year) = day.toString().split("/")
+            val (month, day2, year) = day.split("/")
             val year2 = year.dropLast(9)
 
             val dateFormatter = SimpleDateFormat("mm")
@@ -133,7 +133,7 @@ class EditHours : Fragment() {
 
             datePicker.updateDate(year2.toInt(), month2.toInt() - 1, day2.toInt())
 
-            Toast.makeText(requireContext(), year2.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), year2, Toast.LENGTH_SHORT).show()
 
             datePicker.datePicker.maxDate = System.currentTimeMillis()
 
@@ -286,10 +286,10 @@ class EditHours : Fragment() {
 
         dataList.clear()
         val cursor = dbHandler.getAllRow(requireContext())
-        cursor!!.moveToPosition(id.toInt())
+        cursor!!.moveToPosition(id)
 
         val map = HashMap<String, String>()
-        while (cursor.position == id.toInt()) {
+        while (cursor.position == id) {
 
             map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
             map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
@@ -307,11 +307,11 @@ class EditHours : Fragment() {
         breakTime = map["breakTime"].toString()
         outTime = map["outTime"].toString()
         day = map["date"].toString()
-        UndoHoursData.setDate(map["date"].toString())
-        UndoHoursData.setInTime(inTime)
-        UndoHoursData.setOutTime(outTime)
-        UndoHoursData.setBreakTime(breakTime)
-        UndoHoursData.setTotalHours(map["totalHours"].toString())
+        undoHoursData.setDate(map["date"].toString())
+        undoHoursData.setInTime(inTime)
+        undoHoursData.setOutTime(outTime)
+        undoHoursData.setBreakTime(breakTime)
+        undoHoursData.setTotalHours(map["totalHours"].toString())
 
         val (inTimeHours, inTimeMinutes) = map["inTime"].toString().split(":")
         val (outTimeHours, outTimeMinutes) = map["outTime"].toString().split(":")
@@ -350,13 +350,13 @@ class EditHours : Fragment() {
         if (!DialogData(requireContext()).loadDateDialogState()) {
             Handler(Looper.getMainLooper()).postDelayed({
 
-                dateChip?.setText(day)
+                dateChip?.text = day
 
             }, 5000)
             DialogData(requireContext()).setDateDialogState(true)
         }
         else {
-            dateChip?.setText(day)
+            dateChip?.text = day
         }
 
         val calculationType = CalculationType(requireContext())

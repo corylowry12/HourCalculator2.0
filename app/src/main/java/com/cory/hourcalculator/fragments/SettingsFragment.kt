@@ -74,6 +74,8 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.window?.setBackgroundDrawable(null)
+
         val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
@@ -175,7 +177,7 @@ class SettingsFragment : Fragment() {
         })
     }
 
-    fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) {
         Vibrate().vibration(requireContext())
 
         val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -184,7 +186,7 @@ class SettingsFragment : Fragment() {
         transaction?.commit()
     }
 
-    fun leaveAReview() {
+    private fun leaveAReview() {
         Vibrate().vibration(requireContext())
             val reviewManager = ReviewManagerFactory.create(requireContext())
             val requestReviewFlow = reviewManager.requestReviewFlow()
@@ -201,7 +203,7 @@ class SettingsFragment : Fragment() {
             }
     }
 
-    fun showDeleteDataAlert() {
+    private fun showDeleteDataAlert() {
         Vibrate().vibration(requireContext())
 
         val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())

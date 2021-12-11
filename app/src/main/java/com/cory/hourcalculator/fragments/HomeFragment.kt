@@ -78,6 +78,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.window?.setBackgroundDrawable(null)
+
         val coloredNavBarData = ColoredNavBarData(requireContext())
 
         if (coloredNavBarData.loadNavBar()) {
@@ -343,7 +345,7 @@ class HomeFragment : Fragment() {
                     withBreak = (withBreak.toInt() + 60).toString()
                 }
 
-                Toast.makeText(requireContext(), withBreak.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), withBreak, Toast.LENGTH_SHORT).show()
 
                 if (diffHours < 0) {
                     infoTextView!!.text = "The entered break time is too big"
@@ -359,7 +361,7 @@ class HomeFragment : Fragment() {
                         breakTime.text.toString()
                     )
                     infoTextView!!.text =
-                        "Total Hours: " + "$diffHours:$diffMinutes\nTotal Hours With Break: $hoursWithBreak:$withBreak"
+                        "Total Hours: $diffHours:$diffMinutes\nTotal Hours With Break: $hoursWithBreak:$withBreak"
                 }
             }
             else {
@@ -368,7 +370,7 @@ class HomeFragment : Fragment() {
                     inTimeTotal,
                     outTimeTotal,
                     "0")
-                infoTextView?.text = "Total Hours: " + diffHours.toString() + ":" + diffMinutes
+                infoTextView?.text = "Total Hours: $diffHours:$diffMinutes"
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())
@@ -479,12 +481,12 @@ class HomeFragment : Fragment() {
                 else {
                     savingHours(totalHoursWithBreak.toString(), inTimeTotal, outTimeTotal, breakTime.text.toString())
                     infoTextView1!!.text =
-                        "Total Hours: " + "$hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
+                        "Total Hours: $hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
                 }
             }
             else {
                 savingHours(totalHours.toString(), inTimeTotal, outTimeTotal, "0")
-                infoTextView1!!.text =  "Total Hours: " +"$hoursDifference.$minutesWithoutFirstDecimal"
+                infoTextView1!!.text = "Total Hours: $hoursDifference.$minutesWithoutFirstDecimal"
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())
