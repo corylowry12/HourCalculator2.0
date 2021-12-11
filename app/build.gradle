@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('D:\\GooglePlayKeyStore.jks')
+            storePassword 'corypreston2000'
+            keyAlias 'key0'
+            keyPassword 'corypreston2000'
+        }
+    }
     compileSdk 31
 
     defaultConfig {
