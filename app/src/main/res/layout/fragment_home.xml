@@ -35,8 +35,8 @@
         android:id="@+id/timePickerOutTime"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:timePickerMode="spinner"
         android:descendantFocusability="blocksDescendants"
+        android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView2" />
