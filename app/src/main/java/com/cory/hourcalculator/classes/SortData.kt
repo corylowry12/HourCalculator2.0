@@ -16,7 +16,7 @@ class SortData(context: Context) {
 
     // this will load the name state
     fun loadSortState(): String? {
-        val state = sharedPreferences.getString("SortMethod", "date ASC")
+        val state = sharedPreferences.getString("SortMethod", "date DESC")
         return (state)
     }
 }
