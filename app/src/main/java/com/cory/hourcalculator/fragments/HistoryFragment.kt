@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextPaint
 import android.view.LayoutInflater
 import android.view.View
@@ -29,14 +31,14 @@ import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
 
+@DelicateCoroutinesApi
 class HistoryFragment : Fragment() {
 
     private var output: String = ""
     private val dataList = ArrayList<HashMap<String, String>>()
-
-    private lateinit var adapter: CustomAdapter
 
     private var containsColon = false
 
@@ -228,6 +230,7 @@ class HistoryFragment : Fragment() {
                             when (i) {
                                 0 -> {
                                     sortData.setSortState(getString(R.string.day_desc))
+                                    listView?.scheduleLayoutAnimation()
                                     loadIntoList()
                                     Toast.makeText(
                                         requireContext(),
@@ -237,6 +240,7 @@ class HistoryFragment : Fragment() {
                                 }
                                 1 -> {
                                     sortData.setSortState(getString(R.string.day_asc))
+                                    listView?.scheduleLayoutAnimation()
                                     loadIntoList()
                                     Toast.makeText(
                                         requireContext(),
@@ -246,6 +250,7 @@ class HistoryFragment : Fragment() {
                                 }
                                 2 -> {
                                     sortData.setSortState(getString(R.string.total_desc))
+                                    listView?.scheduleLayoutAnimation()
                                     loadIntoList()
                                     Toast.makeText(
                                         requireContext(),
@@ -255,6 +260,7 @@ class HistoryFragment : Fragment() {
                                 }
                                 3 -> {
                                     sortData.setSortState(getString(R.string.total_asc))
+                                    listView?.scheduleLayoutAnimation()
                                     loadIntoList()
                                     Toast.makeText(
                                         requireContext(),
@@ -292,7 +298,7 @@ class HistoryFragment : Fragment() {
         })
 
         floatingActionButtonHistory?.setOnClickListener {
-            //vibration(vibrationData)
+            Vibrate().vibration(requireContext())
             listView?.smoothScrollToPosition(0)
         }
 
@@ -355,9 +361,9 @@ class HistoryFragment : Fragment() {
             cursor.moveToNext()
 
         }
-        adapter = CustomAdapter(requireContext(), dataList)
+
         val listView = activity?.findViewById<ListView>(R.id.listView)
-        listView?.adapter = adapter
+        listView?.adapter = CustomAdapter(requireContext(), dataList)
 
     }
 
@@ -371,36 +377,30 @@ class HistoryFragment : Fragment() {
 
         containsColon = false
 
-        //adapter.notifyDataSetChanged()
-        //listView?.invalidate()
-
         loadIntoList()
 
-        //listView?.animate()
-        //adapter.notifyDataSetChanged()
-        /*val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.item_animation_fall_down)
-        animation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(p0: Animation?) {
+    }
 
-            }
+    fun deleteAll() {
+        val animation = AlphaAnimation(1f, 0f)
+        animation.duration = 500
+        val listView = view?.findViewById<ListView>(R.id.listView)
 
-            override fun onAnimationEnd(p0: Animation?) {
-                dataList.removeAt(0)
-                adapter.notifyDataSetChanged()
-            }
+        listView?.startAnimation(animation)
 
-            override fun onAnimationRepeat(p0: Animation?) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            loadIntoList()
+        }, 500)
+    }
 
-            }
+    fun undoDeleteAll() {
+        val animation = AlphaAnimation(0f, 1f)
+        animation.duration = 500
+        val listView = view?.findViewById<ListView>(R.id.listView)
 
-        })
-
-        listView?.startAnimation(animation)8*/
-
-       // view?.animate()?.setDuration(500)?.x(-view?.width!!.toFloat())?.alpha(0f)
-        //adapter.notifyDataSetChanged()
-
+        listView?.alpha = 0f
         loadIntoList()
-
+        listView?.startAnimation(animation)
+        listView?.alpha = 1f
     }
 }
