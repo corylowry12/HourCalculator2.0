@@ -402,6 +402,14 @@ class AutomaticDeletionFragment : Fragment() {
         six?.isEnabled = false
         seven?.isEnabled = false
 
+        one?.isChecked = false
+        two?.isChecked = false
+        three?.isChecked = false
+        four?.isChecked = false
+        five?.isChecked = false
+        six?.isChecked = false
+        seven?.isChecked = true
+
         one?.setTextColor(color)
         two?.setTextColor(color)
         three?.setTextColor(color)
