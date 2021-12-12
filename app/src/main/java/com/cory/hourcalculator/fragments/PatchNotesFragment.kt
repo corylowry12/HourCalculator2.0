@@ -122,7 +122,7 @@ class PatchNotesFragment : Fragment() {
     private fun showEnhancements() {
         enhancementsBool = !enhancementsBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.enhancementsChevronImage)
-        val enhancementsArray = arrayOf(R.id.enhancementsCardView1, R.id.enhancementsCardView2, R.id.enhancementsCardView3, R.id.enhancementsCardView4, R.id.enhancementsCardView5, R.id.enhancementsCardView6, R.id.enhancementsCardView7, R.id.enhancementsCardView8, R.id.enhancementsCardView9, R.id.enhancementsCardView10, R.id.enhancementsCardView11, R.id.enhancementsCardView12, R.id.enhancementsCardView13)
+        val enhancementsArray = arrayOf(R.id.enhancementsCardView1, R.id.enhancementsCardView2, R.id.enhancementsCardView3, R.id.enhancementsCardView4, R.id.enhancementsCardView5, R.id.enhancementsCardView6, R.id.enhancementsCardView7, R.id.enhancementsCardView8, R.id.enhancementsCardView9, R.id.enhancementsCardView10, R.id.enhancementsCardView11, R.id.enhancementsCardView12, R.id.enhancementsCardView13, R.id.enhancementsCardView14)
         if (enhancementsBool) {
             for (i in 0 until enhancementsArray.count()) {
                 view?.findViewById<CardView>(enhancementsArray.elementAt(i))?.visibility = View.VISIBLE
