@@ -207,6 +207,18 @@ class MainActivity : AppCompatActivity() {
         historyFragment.update()
     }
 
+    fun deleteAll() {
+
+        changeBadgeNumber()
+        historyFragment.deleteAll()
+    }
+
+    fun undoDeleteAll() {
+
+        changeBadgeNumber()
+        historyFragment.undoDeleteAll()
+    }
+
     fun changeBadgeNumber() {
         val badge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
         badge.isVisible = true
