@@ -9,6 +9,7 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.cory.hourcalculator.classes.SortData
+import java.util.*
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -17,7 +18,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         db.execSQL(
             "CREATE TABLE $TABLE_NAME " +
-                    "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_IN TEXT, $COLUMN_OUT TEXT, $COLUMN_TOTAL TEXT, $COLUMN_DAY TEXT, $COLUMN_BREAK TEXT)"
+                    "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_IN TEXT, $COLUMN_OUT TEXT, $COLUMN_TOTAL TEXT, $COLUMN_DAY NUMERIC, $COLUMN_BREAK TEXT)"
         )
     }
 
@@ -26,7 +27,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    fun insertRow(inTime: String, outTime: String, total: String, dayOfWeek: String, breakTime: String) {
+    fun insertRow(inTime: String, outTime: String, total: String, dayOfWeek: Long, breakTime: String) {
         val values = ContentValues()
         values.put(COLUMN_IN, inTime)
         values.put(COLUMN_OUT, outTime)
@@ -39,7 +40,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun update(id: String, inTime: String, outTime: String, total: String, dayOfWeek: String, breakTime: String) {
+    fun update(id: String, inTime: String, outTime: String, total: String, dayOfWeek: Long, breakTime: String) {
         val values = ContentValues()
         values.put(COLUMN_IN, inTime)
         values.put(COLUMN_OUT, outTime)
@@ -76,6 +77,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val db = this.writableDatabase
         val sortData = SortData(context)
         val sortType = sortData.loadSortState()
+
         return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $sortType", null)
     }
 
