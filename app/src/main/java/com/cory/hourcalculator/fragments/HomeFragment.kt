@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -164,7 +165,7 @@ class HomeFragment : Fragment() {
             dateData.setHours1(hourOfDay.toString())
         }
 
-        timePickerOutTime.setOnTimeChangedListener { _, hourOfDay, minute ->
+        timePickerOutTime?.setOnTimeChangedListener { _, hourOfDay, minute ->
             Vibrate().vibration(requireContext())
             dateData.setMinutes2(minute.toString())
             dateData.setHours2(hourOfDay.toString())
@@ -189,10 +190,12 @@ class HomeFragment : Fragment() {
             alert.setTitle("Calculation Type")
             alert.setMessage("Choose the calculation method you would prefer")
             alert.setPositiveButton("Decimal") { _, _ ->
+                Vibrate().vibration(requireContext())
                 calculationType.setCalculationState(true)
                 dialogData.setDialogState(true)
             }
             alert.setNeutralButton("Time") { _, _ ->
+                Vibrate().vibration(requireContext())
                 calculationType.setCalculationState(false)
                 dialogData.setDialogState(true)
             }
@@ -511,10 +514,15 @@ class HomeFragment : Fragment() {
         if (HistoryToggleData(requireContext()).loadHistoryState()) {
             val dbHandler = DBHelper(requireContext(), null)
 
-            val day = LocalDateTime.now()
-            val day2 = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")
-            val dayOfWeek = day.format(day2)
-            dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
+            //val day = LocalDateTime.now()
+            //Toast.makeText(requireContext(), day.toString().toLong().toString(), Toast.LENGTH_LONG).show()
+            //val day2 = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            //val dayOfWeek = day.format(day2)
+            //dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
+
+            val date = System.currentTimeMillis()
+            Toast.makeText(requireContext(), date.toString(), Toast.LENGTH_LONG).show()
+            dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, date, breakTime)
         }
     }
 
