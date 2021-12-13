@@ -674,7 +674,7 @@ class AppearanceFragment : Fragment() {
             view?.findViewById<RadioButton>(R.id.enableColoredNavBar)?.isChecked = false
             activity?.window?.navigationBarColor =
                 ContextCompat.getColor(requireContext(), R.color.black)
-            Toast.makeText(requireContext(), "App Data Cleared", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Appearance Settings reset", Toast.LENGTH_LONG).show()
 
         }
         alert.setNegativeButton("No") { _, _ ->

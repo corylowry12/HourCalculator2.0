@@ -79,7 +79,17 @@ class AppSettingsFragment : Fragment() {
             Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-                    reset()
+                    val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setCancelable(false)
+                    alert.setTitle("Warning")
+                    alert.setMessage("You are about to reset all App Settings to default, would you like to continue?")
+                    alert.setPositiveButton("Yes") { _, _ ->
+                        reset()
+                    }
+                    alert.setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    alert.show()
                     true
                 }
                 else -> true
@@ -300,6 +310,8 @@ val historyToggleData = HistoryToggleData(requireContext())
         }
 
         MainActivity().runOnUiThread(runnable)
+
+        Toast.makeText(requireContext(), "App Settings set back to defaults", Toast.LENGTH_LONG).show()
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {

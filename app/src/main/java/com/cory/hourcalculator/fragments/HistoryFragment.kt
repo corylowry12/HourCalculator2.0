@@ -287,10 +287,10 @@ class HistoryFragment : Fragment() {
                 totalItemCount: Int
             ) {
                 if (firstVisibleItem > 0) {
-                    floatingActionButtonHistory?.show()
+                    floatingActionButtonHistory?.visibility = View.VISIBLE
 
                 } else {
-                    floatingActionButtonHistory?.hide()
+                    floatingActionButtonHistory?.visibility = View.INVISIBLE
                 }
             }
 

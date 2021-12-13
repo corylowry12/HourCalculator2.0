@@ -157,11 +157,13 @@ class EditHours : Fragment() {
                 val calendar = Calendar.getInstance()
                 calendar.set(year, month, day3)
                 val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a")
-                val day4 = calendar.time
+                val day4 = calendar.timeInMillis
+                calendar.timeInMillis
+
                 val date2 = simpleDateFormat.format(day4)
                 day = date2
 
-                dateChip.text = day
+                dateChip.text = date2
 
                 datePicker.dismiss()
             }
