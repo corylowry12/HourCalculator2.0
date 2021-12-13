@@ -24,6 +24,11 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 @DelicateCoroutinesApi
@@ -49,13 +54,17 @@ class CustomAdapter(
         val dbHandler = DBHelper(context, null)
         val dataitem = dataList[position]
 
-        var rowView = convertView
+        var rowView: View? = null
+
         if (rowView == null) {
             val vi = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
             rowView = vi.inflate(R.layout.list_row, parent, false)
 
             //rowView = inflater.inflate(R.layout.list_row, parent, false)
+
+            val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
+            val dateString = formatter.format(dataitem["date"]!!.toLong())
 
             rowView.findViewById<TextView>(R.id.row_in).text =
                 context.getString(R.string.in_time_adapter, dataitem["inTime"])
@@ -66,7 +75,7 @@ class CustomAdapter(
             rowView.findViewById<TextView>(R.id.row_total).text =
                 context.getString(R.string.total_time_adapter, dataitem["totalHours"])
             rowView.findViewById<TextView>(R.id.row_day).text =
-                context.getString(R.string.date_adapter, dataitem["date"])
+                context.getString(R.string.date_adapter,  dateString.toString())
 
             val imageView = rowView.findViewById<ImageView>(R.id.imageViewOptions)
             imageView.setOnClickListener {
@@ -85,7 +94,7 @@ class CustomAdapter(
                             var outTime = ""
                             var breakTime = ""
                             var totalHours = ""
-                            var day = ""
+                            var day = 0L
 
                             dataList.clear()
                             val cursor = dbHandler.getAllRow(context)
@@ -118,7 +127,7 @@ class CustomAdapter(
                                     totalHours =
                                         cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
                                     day =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                                        cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                                     dbHandler.deleteRow(map["id"].toString())
 
@@ -156,7 +165,7 @@ class CustomAdapter(
                             val outTime = arrayOf<String>().toMutableList()
                             val breakTime = arrayOf<String>().toMutableList()
                             val totalHours = arrayOf<String>().toMutableList()
-                            val day = arrayOf<String>().toMutableList()
+                            val day = arrayOf<Long>().toMutableList()
 
                             val alertDialog = MaterialAlertDialogBuilder(
                                 context,
@@ -182,7 +191,7 @@ class CustomAdapter(
                                     breakTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
                                     totalHours.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
 
-                                    day.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
+                                    day.add(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
 
 
                                     cursor.moveToNext()
@@ -190,7 +199,7 @@ class CustomAdapter(
 
                                 dbHandler.deleteAll()
                                 val runnable = Runnable {
-                                    (context as MainActivity).update()
+                                    (context as MainActivity).deleteAll()
                                 }
                                 MainActivity().runOnUiThread(runnable)
 
@@ -218,7 +227,10 @@ class CustomAdapter(
                                             )
                                         }
 
-                                        MainActivity().runOnUiThread(runnable)
+                                        val runnable2 = Runnable {
+                                            (context as MainActivity).undoDeleteAll()
+                                        }
+                                        MainActivity().runOnUiThread(runnable2)
                                     }
                                 }
                                 snackBar.show()
