@@ -52,16 +52,16 @@ class UndoHoursData(context: Context) {
     }
 
     //this saves the vibration preference
-    fun setDate(state: String) {
+    fun setDate(state: Long) {
         val editor = sharedPreferences.edit()
-        editor.putString("date", state)
+        editor.putLong("date", state)
         editor.apply()
     }
 
     // this will load the vibration mode state
-    fun loadDate(): String {
-        val state = sharedPreferences.getString("date", "")
-        return (state.toString())
+    fun loadDate(): Long {
+        val state = sharedPreferences.getLong("date", 0L)
+        return (state)
     }
 
     //this saves the vibration preference
