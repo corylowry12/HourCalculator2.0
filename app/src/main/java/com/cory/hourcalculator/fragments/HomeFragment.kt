@@ -348,8 +348,6 @@ class HomeFragment : Fragment() {
                     withBreak = (withBreak.toInt() + 60).toString()
                 }
 
-                Toast.makeText(requireContext(), withBreak, Toast.LENGTH_SHORT).show()
-
                 if (diffHours < 0) {
                     infoTextView!!.text = "The entered break time is too big"
                 } else {
@@ -514,14 +512,7 @@ class HomeFragment : Fragment() {
         if (HistoryToggleData(requireContext()).loadHistoryState()) {
             val dbHandler = DBHelper(requireContext(), null)
 
-            //val day = LocalDateTime.now()
-            //Toast.makeText(requireContext(), day.toString().toLong().toString(), Toast.LENGTH_LONG).show()
-            //val day2 = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            //val dayOfWeek = day.format(day2)
-            //dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
-
             val date = System.currentTimeMillis()
-            Toast.makeText(requireContext(), date.toString(), Toast.LENGTH_LONG).show()
             dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, date, breakTime)
         }
     }
