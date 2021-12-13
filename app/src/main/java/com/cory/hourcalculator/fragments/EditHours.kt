@@ -54,6 +54,7 @@ class EditHours : Fragment() {
 
     private lateinit var idMap: String
     private lateinit var day: String
+    private var dayInLong : Long = 0L
 
     private lateinit var undoHoursData : UndoHoursData
 
@@ -125,15 +126,13 @@ class EditHours : Fragment() {
             val datePicker = DatePickerDialog(requireContext(), AccentColor(requireContext()).dateDialogTheme(requireContext()))
             datePicker.setCancelable(false)
 
-            val (month, day2, year) = day.split("/")
-            val year2 = year.dropLast(9)
+            val (month1, day2, year1) = day.split("/")
+            val year2 = year1.dropLast(12)
 
             val dateFormatter = SimpleDateFormat("mm")
-            val month2 = month.format(dateFormatter)
+            val month2 = month1.format(dateFormatter)
 
             datePicker.updateDate(year2.toInt(), month2.toInt() - 1, day2.toInt())
-
-            Toast.makeText(requireContext(), year2, Toast.LENGTH_SHORT).show()
 
             datePicker.datePicker.maxDate = System.currentTimeMillis()
 
@@ -153,18 +152,16 @@ class EditHours : Fragment() {
 
                 val year = datePicker.datePicker.year
                 val month = datePicker.datePicker.month
-                val day2 = datePicker.datePicker.dayOfMonth
+                val day3 = datePicker.datePicker.dayOfMonth
 
                 val calendar = Calendar.getInstance()
-                calendar.set(year, month, day2)
-                val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a")
-                val day3 = calendar.time
-                val date2 = simpleDateFormat.format(day3)
+                calendar.set(year, month, day3)
+                val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a")
+                val day4 = calendar.time
+                val date2 = simpleDateFormat.format(day4)
                 day = date2
-               // val date = day.format(simpleDateFormat)
-               // val dateAndTime = date.toString()
 
-                dateChip.text = date2
+                dateChip.text = day
 
                 datePicker.dismiss()
             }
@@ -254,13 +251,16 @@ class EditHours : Fragment() {
         hideKeyboard(requireActivity().findViewById(R.id.breakTimeEdit))
         if (inTimeBool || outTimeBool || breakTimeBool) {
             val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            alert.setCancelable(false)
             alert.setTitle(getString(R.string.pending_changes))
             alert.setMessage(getString(R.string.you_have_pending_changes))
             alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                Vibrate().vibration(requireContext())
                 calculate(idMap, day)
                 Toast.makeText(requireContext(), getString(R.string.hour_is_updated), Toast.LENGTH_SHORT).show()
             }
             alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                Vibrate().vibration(requireContext())
                 activity?.supportFragmentManager?.popBackStack()
                 Toast.makeText(requireContext(), getString(R.string.hour_was_not_updated), Toast.LENGTH_SHORT).show()
             }
@@ -306,8 +306,10 @@ class EditHours : Fragment() {
         inTime = map["inTime"].toString()
         breakTime = map["breakTime"].toString()
         outTime = map["outTime"].toString()
-        day = map["date"].toString()
-        undoHoursData.setDate(map["date"].toString())
+        val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
+        val dateString = formatter.format(map["date"]!!.toLong())
+        day = dateString
+        undoHoursData.setDate(map["date"]!!.toLong())
         undoHoursData.setInTime(inTime)
         undoHoursData.setOutTime(outTime)
         undoHoursData.setBreakTime(breakTime)
@@ -571,7 +573,7 @@ class EditHours : Fragment() {
                 breakTimeNumber = breakTime.text.toString().toDouble() / 60
                 val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString()
 
-                savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, breakTime.text.toString(), day)
+                savingHours(idMap, totalHoursWithBreak, inTimeTotal, outTimeTotal, breakTime.text.toString(), day)
             }
             else {
                 savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, "0", day)
@@ -584,7 +586,13 @@ class EditHours : Fragment() {
 
         val dbHandler = DBHelper(requireContext(), null)
 
-        dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, dayOfWeek, breakTime)
+        val calendar = Calendar.getInstance()
+        val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
+        val date = formatter.parse(dayOfWeek)
+        calendar.time = date!!
+       val timeInMillis = calendar.timeInMillis
+
+        dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, timeInMillis, breakTime)
 
         val runnable = Runnable {
             (context as MainActivity).update()
