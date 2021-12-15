@@ -13,6 +13,19 @@ class UndoHoursData(context: Context) {
     private var sharedPreferences: SharedPreferences = context.getSharedPreferences("file", Context.MODE_PRIVATE)
 
     //this saves the vibration preference
+    fun setID(state: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putInt("id", state)
+        editor.apply()
+    }
+
+    // this will load the vibration mode state
+    fun loadID(): Int {
+        val state = sharedPreferences.getInt("id", 0)
+        return (state)
+    }
+
+    //this saves the vibration preference
     fun setInTime(state: String) {
         val editor = sharedPreferences.edit()
         editor.putString("inTime", state)

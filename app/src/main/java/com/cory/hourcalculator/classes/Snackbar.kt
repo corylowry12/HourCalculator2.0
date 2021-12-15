@@ -7,7 +7,9 @@ import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class Snackbar {
 
     fun snackbar(context: Context, view: View) {
@@ -22,15 +24,9 @@ class Snackbar {
                 .setAnchorView(R.id.bottom_nav)
         snackbar.setAction("UNDO") {
             Vibrate().vibration(context)
-            dbHandler.insertRow(
-                undoHoursData.loadInTime(),
-                undoHoursData.loadOutTime(),
-                undoHoursData.loadTotalHours(),
-                undoHoursData.loadDate(),
-                undoHoursData.loadBreakTime()
-            )
+
             val runnable = Runnable {
-                (context as MainActivity).update()
+                (context as MainActivity).undo()
             }
             MainActivity().runOnUiThread(runnable)
         }

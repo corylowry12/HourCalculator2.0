@@ -36,6 +36,7 @@ import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -48,6 +49,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+@DelicateCoroutinesApi
 class EditHours : Fragment() {
 
     private val dataList = ArrayList<HashMap<String, String>>()
@@ -311,6 +313,7 @@ class EditHours : Fragment() {
         val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
         val dateString = formatter.format(map["date"]!!.toLong())
         day = dateString
+        undoHoursData.setID(map["id"]!!.toInt())
         undoHoursData.setDate(map["date"]!!.toLong())
         undoHoursData.setInTime(inTime)
         undoHoursData.setOutTime(outTime)
@@ -596,10 +599,10 @@ class EditHours : Fragment() {
 
         dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, timeInMillis, breakTime)
 
-        val runnable = Runnable {
+        /*val runnable = Runnable {
             (context as MainActivity).update()
         }
-        MainActivity().runOnUiThread(runnable)
+        MainActivity().runOnUiThread(runnable)*/
 
         activity?.supportFragmentManager?.popBackStack()
     }

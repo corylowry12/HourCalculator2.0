@@ -171,6 +171,7 @@ class HomeFragment : Fragment() {
             dateData.setHours2(hourOfDay.toString())
         }
 
+
         val constraintLayout = activity?.findViewById<ConstraintLayout>(R.id.homeConstraintLayout)
 
         constraintLayout?.setOnClickListener {
@@ -421,6 +422,7 @@ class HomeFragment : Fragment() {
             minutesWithoutFirstDecimal = minutesWithoutFirstDecimal.substring(2)
         }
         var hoursDifference = outTimeHours.toInt() - inTimeHours.toInt()
+
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
             infoTextView1?.text = "In time and out time can not be the same"
         } else if (timePickerInTime!!.hour >= 0 && timePickerOutTime!!.hour <= 12 && hoursDifference < 0) {
@@ -440,6 +442,11 @@ class HomeFragment : Fragment() {
                     val amOrPm = getString(R.string.PM)
                     inTimeTotal = "$inTime:$inTimeMinutes $amOrPm"
                 }
+                inTimeHours.toInt() == 12 -> {
+                    val inTime = 12
+                    val amOrPm = getString(R.string.PM)
+                    inTimeTotal = "$inTime:$inTimeMinutes $amOrPm"
+                }
                 inTimeHours.toInt() == 0 -> {
                     val inTime = 12
                     val amOrPm = getString(R.string.AM)
@@ -453,6 +460,11 @@ class HomeFragment : Fragment() {
             when {
                 outTimeHours.toInt() > 12 -> {
                     val outTime = outTimeHours.toInt() - 12
+                    val amOrPm = getString(R.string.PM)
+                    outTimeTotal = "$outTime:$outTimeMinutes $amOrPm"
+                }
+                outTimeHours.toInt() == 12 -> {
+                    val outTime = 12
                     val amOrPm = getString(R.string.PM)
                     outTimeTotal = "$outTime:$outTimeMinutes $amOrPm"
                 }

@@ -19,7 +19,7 @@ class Vibrate {
                 vibrator = vibratorManager.defaultVibrator
                 vibrator.vibrate(
                     VibrationEffect.createOneShot(
-                        1,
+                        2,
                         VibrationEffect.DEFAULT_AMPLITUDE
                     )
                 )

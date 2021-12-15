@@ -86,7 +86,7 @@ class PatchNotesFragment : Fragment() {
     private fun showBugFixes() {
         bugFixesBool = !bugFixesBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.bugFixesChevronImage)
-        val enhancementsArray = arrayOf(R.id.bugFixesCardView1, R.id.bugFixesCardView2, R.id.bugFixesCardView3, R.id.bugFixesCardView4, R.id.bugFixesCardView5)
+        val enhancementsArray = arrayOf(R.id.bugFixesCardView1, R.id.bugFixesCardView2, R.id.bugFixesCardView3, R.id.bugFixesCardView4, R.id.bugFixesCardView5, R.id.bugFixesCardView6)
         if (bugFixesBool) {
             for (i in 0 until enhancementsArray.count()) {
                 view?.findViewById<CardView>(enhancementsArray.elementAt(i))?.visibility = View.VISIBLE

@@ -33,10 +33,12 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private val homeFragment = HomeFragment()
@@ -88,11 +90,10 @@ class MainActivity : AppCompatActivity() {
 
         replaceFragment(homeFragment)
 
-        MobileAds.initialize(this)
-        val adView = AdView(this)
-
+        val context = this
         GlobalScope.launch(Dispatchers.Main) {
-
+            MobileAds.initialize(context)
+            val adView = AdView(context)
             adView.adSize = AdSize.BANNER
             adView.adUnitId = "ca-app-pub-4546055219731501/5171269817"
             val mAdView = findViewById<AdView>(R.id.adView)
@@ -202,9 +203,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun update() {
+        changeBadgeNumber()
+    }
+
+    fun undo() {
+        historyFragment.undo()
+        changeBadgeNumber()
+    }
+
+    fun saveState() {
 
        changeBadgeNumber()
-        historyFragment.update()
+        historyFragment.saveState()
+    }
+
+    fun restoreState() {
+        changeBadgeNumber()
+        historyFragment.restoreState()
     }
 
     fun deleteAll() {
