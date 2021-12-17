@@ -22,6 +22,7 @@ import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.IdData
+import com.cory.hourcalculator.classes.ItemPosition
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.EditHours
@@ -313,6 +314,8 @@ import kotlin.collections.HashMap
 
 class CustomAdapter(private val context: Context, private val dataList: ArrayList<HashMap<String, String>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var lastPosition = -1
+
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var inTime: TextView = itemView.findViewById(R.id.row_in)
@@ -344,6 +347,7 @@ class CustomAdapter(private val context: Context, private val dataList: ArrayLis
 
     @SuppressLint("Range")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        setAnimation(holder.itemView, position)
         val dbHandler = DBHelper(context, null)
 
         val imageView = holder.itemView.findViewById<ImageView>(R.id.imageViewOptions)
@@ -562,8 +566,8 @@ class CustomAdapter(private val context: Context, private val dataList: ArrayLis
                                 .contains(context.getString(R.string.PM)))
                         ) {
 
-                            val idData = IdData(context)
-                            idData.setID(position)
+                            val itemPositionData = ItemPosition(context)
+                            itemPositionData.setPosition(position)
                             val manager =
                                 (context as AppCompatActivity).supportFragmentManager.beginTransaction()
                             manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -585,5 +589,14 @@ class CustomAdapter(private val context: Context, private val dataList: ArrayLis
 
     override fun getItemCount(): Int {
         return dataList.size
+    }
+
+    private fun setAnimation(viewToAnimate: View, position: Int) {
+
+        if (position > lastPosition) {
+            val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in_recycler_view)
+            viewToAnimate.startAnimation(animation)
+            lastPosition = position
+        }
     }
 }
