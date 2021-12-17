@@ -14,10 +14,6 @@ class Snackbar {
 
     fun snackbar(context: Context, view: View) {
 
-        val dbHandler = DBHelper(context, null)
-
-        val undoHoursData = UndoHoursData(context)
-
         val snackbar =
             Snackbar.make(view, "Hour Deleted", Snackbar.LENGTH_LONG)
                 .setDuration(5000)
