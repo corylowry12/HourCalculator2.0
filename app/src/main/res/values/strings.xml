@@ -15,12 +15,12 @@
     <string name="info">Info</string>
     <string name="sort">Sort</string>
     <string name="total_desc">totalHours DESC</string>
-    <string name="changed_sort_mode_most_entered">Changed sort mode to most entered</string>
-    <string name="changed_sort_mode_first_entered">Changed sort mode to first entered</string>
+    <string name="changed_sort_mode_most_entered">Changed sorting method to show entries with most hours first</string>
+    <string name="changed_sort_mode_first_entered">Changed sorting method to show the first entered first</string>
     <string name="cant_sort_history_is_empty">Can\'t sort, history is empty</string>
-    <string name="changed_sort_mode_least_entered">Changed sort mode to least entered</string>
+    <string name="changed_sort_mode_least_entered">Changed sorting method to show entries with least hours first</string>
     <string name="day_asc">date ASC</string>
-    <string name="changed_sort_mode_last_entered">Changed sort mode to last entered</string>
+    <string name="changed_sort_mode_last_entered">Changed sorting method to show most recent entries first</string>
     <string name="day_desc">date DESC</string>
     <string name="cant_show_info_history_empty">Can\'t show info, there aren\'t any hours stored</string>
     <string name="ok">OK</string>
