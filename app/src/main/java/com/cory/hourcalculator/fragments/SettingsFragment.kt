@@ -6,20 +6,19 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
 
@@ -76,7 +75,8 @@ class SettingsFragment : Fragment() {
 
         activity?.window?.setBackgroundDrawable(null)
 
-        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         main()
@@ -96,7 +96,8 @@ class SettingsFragment : Fragment() {
 
     private fun main() {
 
-        val appearanceConstraintLayout = view?.findViewById<ConstraintLayout>(R.id.constraintAppearance)
+        val appearanceConstraintLayout =
+            view?.findViewById<ConstraintLayout>(R.id.constraintAppearance)
 
         appearanceConstraintLayout?.setOnClickListener {
             openFragment(AppearanceFragment())
@@ -108,7 +109,8 @@ class SettingsFragment : Fragment() {
             openFragment(AppSettingsFragment())
         }
 
-        val automaticDeletionConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintAutomaticDeletion)
+        val automaticDeletionConstraint =
+            view?.findViewById<ConstraintLayout>(R.id.constraintAutomaticDeletion)
 
         automaticDeletionConstraint?.setOnClickListener {
             openFragment(AutomaticDeletionFragment())
@@ -132,7 +134,8 @@ class SettingsFragment : Fragment() {
             )
         }
 
-        val leaveAReviewConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintLeaveAReview)
+        val leaveAReviewConstraint =
+            view?.findViewById<ConstraintLayout>(R.id.constraintLeaveAReview)
 
         leaveAReviewConstraint?.setOnClickListener {
             leaveAReview()
@@ -152,7 +155,8 @@ class SettingsFragment : Fragment() {
             openFragment(WebviewFragment())
         }
 
-        val deleteAppDataConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintDeleteAppData)
+        val deleteAppDataConstraint =
+            view?.findViewById<ConstraintLayout>(R.id.constraintDeleteAppData)
 
         deleteAppDataConstraint?.setOnClickListener {
             showDeleteDataAlert()
@@ -170,43 +174,55 @@ class SettingsFragment : Fragment() {
             openFragment(AboutFragment())
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                activity?.supportFragmentManager?.popBackStack()
-            }
-        })
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            })
     }
 
     private fun openFragment(fragment: Fragment) {
         Vibrate().vibration(requireContext())
 
         val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+        transaction?.setCustomAnimations(
+            R.anim.enter_from_right,
+            R.anim.exit_to_left,
+            R.anim.enter_from_left,
+            R.anim.exit_to_right
+        )
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
     }
 
     private fun leaveAReview() {
         Vibrate().vibration(requireContext())
-            val reviewManager = ReviewManagerFactory.create(requireContext())
-            val requestReviewFlow = reviewManager.requestReviewFlow()
-            requestReviewFlow.addOnCompleteListener { request ->
-                if (request.isSuccessful) {
-                    val reviewInfo = request.result
-                    val flow = reviewManager.launchReviewFlow(requireActivity(), reviewInfo)
-                    flow.addOnCompleteListener {
+        val reviewManager = ReviewManagerFactory.create(requireContext())
+        val requestReviewFlow = reviewManager.requestReviewFlow()
+        requestReviewFlow.addOnCompleteListener { request ->
+            if (request.isSuccessful) {
+                val reviewInfo = request.result
+                val flow = reviewManager.launchReviewFlow(requireActivity(), reviewInfo)
+                flow.addOnCompleteListener {
 
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "There was an error, please try again", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "There was an error, please try again",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
     }
 
     private fun showDeleteDataAlert() {
         Vibrate().vibration(requireContext())
 
-        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+        val alert =
+            MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
         alert.setTitle("Warning")
         alert.setMessage("Would you like to delete all app data?")
         alert.setPositiveButton("Yes") { _, _ ->
@@ -217,7 +233,8 @@ class SettingsFragment : Fragment() {
             dbHandler.deleteAll()
             Toast.makeText(requireContext(), "App Data Cleared", Toast.LENGTH_LONG).show()
             Handler(Looper.getMainLooper()).postDelayed({
-                val intent = requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
+                val intent =
+                    requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
                 intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)

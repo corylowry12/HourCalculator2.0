@@ -27,7 +27,7 @@ class Vibrate {
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator.vibrate(
                     VibrationEffect.createOneShot(
-                        1,
+                        2,
                         VibrationEffect.DEFAULT_AMPLITUDE
                     )
                 )

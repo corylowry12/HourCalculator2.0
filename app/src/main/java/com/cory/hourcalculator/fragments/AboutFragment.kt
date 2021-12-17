@@ -2,11 +2,11 @@ package com.cory.hourcalculator.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
@@ -64,17 +64,20 @@ class AboutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val topAppBarVersionInfo = activity?.findViewById<MaterialToolbar>(R.id.topAppBarVersionInfo)
+        val topAppBarVersionInfo =
+            activity?.findViewById<MaterialToolbar>(R.id.topAppBarVersionInfo)
 
         topAppBarVersionInfo?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                activity?.supportFragmentManager?.popBackStack()
-            }
-        })
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            })
     }
 }

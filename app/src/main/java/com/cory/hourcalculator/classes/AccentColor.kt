@@ -3,21 +3,19 @@ package com.cory.hourcalculator.classes
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.widget.Toast
 import com.cory.hourcalculator.R
 
 class AccentColor(context: Context) {
 
-    private var sharedPreferences: SharedPreferences = context.getSharedPreferences("file", Context.MODE_PRIVATE)
+    private var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("file", Context.MODE_PRIVATE)
 
-    //this saves the theme preference
     fun setAccentState(state: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt("Accent", state)
         editor.apply()
     }
 
-    // this will load the night mode state
     fun loadAccent(): Int {
         val state = sharedPreferences.getInt("Accent", 0)
         return (state)
