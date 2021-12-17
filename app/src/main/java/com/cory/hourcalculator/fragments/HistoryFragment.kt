@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import android.widget.ListView
@@ -32,6 +33,7 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
@@ -108,7 +110,7 @@ class HistoryFragment : Fragment() {
 
         val accentColor = AccentColor(requireContext())
         val floatingActionButtonHistory =
-            activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
+            activity?.findViewById<ExtendedFloatingActionButton>(R.id.floatingActionButtonHistory)
         when {
 
             accentColor.loadAccent() == 0 -> {
@@ -204,8 +206,7 @@ class HistoryFragment : Fragment() {
                             }
                         }
 
-                        var listItems : Array<String> = arrayOf()
-                        listItems = if (containsColon) {
+                        val listItems : Array<String> = if (containsColon) {
                             if ((sortData.loadSortState() == "totalHours DESC" || sortData.loadSortState() == "totalHours ASC") && containsColon) {
                                 selectedItem = 0
                                 sortData.setSortState(getString(R.string.day_desc))
@@ -236,7 +237,6 @@ class HistoryFragment : Fragment() {
                             when (i) {
                                 0 -> {
                                     sortData.setSortState(getString(R.string.day_desc))
-                                    //listView?.scheduleLayoutAnimation()
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(0, dataList.size)
                                     Toast.makeText(
@@ -247,7 +247,6 @@ class HistoryFragment : Fragment() {
                                 }
                                 1 -> {
                                     sortData.setSortState(getString(R.string.day_asc))
-                                    //listView?.scheduleLayoutAnimation()
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(0, dataList.size)
                                     Toast.makeText(
@@ -258,7 +257,6 @@ class HistoryFragment : Fragment() {
                                 }
                                 2 -> {
                                     sortData.setSortState(getString(R.string.total_desc))
-                                    listView?.scheduleLayoutAnimation()
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(0, dataList.size)
                                     Toast.makeText(
@@ -269,7 +267,6 @@ class HistoryFragment : Fragment() {
                                 }
                                 3 -> {
                                     sortData.setSortState(getString(R.string.total_asc))
-                                    listView?.scheduleLayoutAnimation()
                                    changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(0, dataList.size)
                                     Toast.makeText(
@@ -289,17 +286,25 @@ class HistoryFragment : Fragment() {
             }
         }
 
+        loadIntoList()
+        floatingActionButtonHistory?.isExtended = false
         listView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                     val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+                if (pastVisibleItems >= 2) {
+                    floatingActionButtonHistory?.extend()
+                    floatingActionButtonHistory?.text = pastVisibleItems.toString()
+                }
+                else {
+                    floatingActionButtonHistory?.shrink()
+                }
 
                     if (pastVisibleItems > 0) {
                         floatingActionButtonHistory?.visibility = View.VISIBLE
-                    }
-                    else {
+                    } else {
                         floatingActionButtonHistory?.visibility = View.INVISIBLE
                     }
             }
@@ -327,8 +332,6 @@ class HistoryFragment : Fragment() {
             Vibrate().vibration(requireContext())
             listView?.smoothScrollToPosition(0)
         }
-
-        loadIntoList()
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -443,7 +446,7 @@ class HistoryFragment : Fragment() {
             undoHoursData.loadBreakTime()
         )
 
-        listView?.adapter?.notifyItemInserted(IdData(requireContext()).loadID())
+        listView?.adapter?.notifyItemInserted(ItemPosition(requireContext()).loadPosition())
 
         //loadIntoList()
     }
@@ -465,23 +468,44 @@ class HistoryFragment : Fragment() {
 
         recyclerViewState = recyclerView?.layoutManager?.onSaveInstanceState()!!
 
+        textViewVisibility()
+
+    }
+
+    fun textViewVisibility() {
+        val dbHandler = DBHelper(requireActivity().applicationContext, null)
+
+        if (dbHandler.getCount() > 0) {
+            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
+            noHoursStoredTextView?.visibility = View.GONE
+        } else {
+            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
+            noHoursStoredTextView?.visibility = View.VISIBLE
+        }
     }
 
     fun restoreState() {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.listView)
         recyclerView?.layoutManager?.onRestoreInstanceState(recyclerViewState)
+
+        textViewVisibility()
     }
 
     fun deleteAll() {
         val animation = AlphaAnimation(1f, 0f)
         animation.duration = 500
         val listView = view?.findViewById<RecyclerView>(R.id.listView)
+        val floatingActionButtonHistory = view?.findViewById<ExtendedFloatingActionButton>(R.id.floatingActionButtonHistory)
+
+        floatingActionButtonHistory?.visibility = View.INVISIBLE
 
         listView?.startAnimation(animation)
 
         Handler(Looper.getMainLooper()).postDelayed({
             loadIntoList()
         }, 500)
+
+        saveState()
 
     }
 
@@ -494,5 +518,7 @@ class HistoryFragment : Fragment() {
         loadIntoList()
         listView?.startAnimation(animation)
         listView?.alpha = 1f
+
+        restoreState()
     }
 }
