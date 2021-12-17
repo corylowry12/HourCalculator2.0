@@ -1,17 +1,14 @@
 package com.cory.hourcalculator.fragments
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,42 +16,40 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlin.math.abs
-import android.graphics.drawable.TransitionDrawable
-
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.media.Image
-import androidx.core.widget.NestedScrollView
-import com.cory.hourcalculator.classes.*
-import com.cory.hourcalculator.database.DBHelper
-import com.jakewharton.processphoenix.ProcessPhoenix
 
 
 class AppearanceFragment : Fragment() {
 
     private lateinit var followSystemImageViewDrawable: Drawable
 
-    private fun setDrawable() : Drawable {
+    private fun setDrawable(): Drawable {
         when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
             Configuration.UI_MODE_NIGHT_NO -> {
-                return ContextCompat.getDrawable(requireContext(), R.drawable.whitecircleimageview)!!
+                return ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.whitecircleimageview
+                )!!
             }
             Configuration.UI_MODE_NIGHT_YES -> {
-                return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+                return ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.blackcircleimageview
+                )!!
             }
             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+                return ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.blackcircleimageview
+                )!!
             }
         }
 
@@ -139,7 +134,8 @@ class AppearanceFragment : Fragment() {
             }
         }
 
-        val nestedScrollViewAppearance = view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
+        val nestedScrollViewAppearance =
+            view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
 
         nestedScrollViewAppearance.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             AppearanceScrollPosition(requireContext()).setScroll(scrollY.toFloat())
@@ -173,7 +169,11 @@ class AppearanceFragment : Fragment() {
         lightThemeButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 0) {
-                Toast.makeText(requireContext(), "Light theme is already enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Light theme is already enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 darkThemeData.setDarkModeState(0)
                 darkThemeButton?.isChecked = false
@@ -186,7 +186,8 @@ class AppearanceFragment : Fragment() {
         darkThemeButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 1) {
-                Toast.makeText(requireContext(), "Dark mode is already enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Dark mode is already enabled", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 darkThemeData.setDarkModeState(1)
                 lightThemeButton?.isChecked = false
@@ -199,7 +200,11 @@ class AppearanceFragment : Fragment() {
         amoledThemeButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 2) {
-                Toast.makeText(requireContext(), "Black theme is already enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Black theme is already enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 darkThemeData.setDarkModeState(2)
                 lightThemeButton?.isChecked = false
@@ -212,7 +217,11 @@ class AppearanceFragment : Fragment() {
         followSystemThemeButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 3) {
-                Toast.makeText(requireContext(), "System theme is already enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "System theme is already enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 darkThemeData.setDarkModeState(3)
                 lightThemeButton?.isChecked = false
@@ -261,7 +270,10 @@ class AppearanceFragment : Fragment() {
             if (accentColor.loadAccent() == 0) {
                 Toast.makeText(requireContext(), "Teal already chosen", Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alert = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setCancelable(false)
@@ -313,7 +325,10 @@ class AppearanceFragment : Fragment() {
             if (accentColor.loadAccent() == 1) {
                 Toast.makeText(requireContext(), "Pink already chosen", Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alert = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setCancelable(false)
@@ -365,7 +380,10 @@ class AppearanceFragment : Fragment() {
             if (accentColor.loadAccent() == 2) {
                 Toast.makeText(requireContext(), "orange already chosen", Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alert = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setCancelable(false)
@@ -417,7 +435,10 @@ class AppearanceFragment : Fragment() {
             if (accentColor.loadAccent() == 3) {
                 Toast.makeText(requireContext(), "Red is already chosen", Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alert = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alert.setTitle("Warning")
                 alert.setMessage("This will restart the app, do you want to continue?")
                 alert.setCancelable(false)
@@ -469,7 +490,10 @@ class AppearanceFragment : Fragment() {
             if (accentColor.loadAccent() == 4) {
                 Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alert = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alert.setTitle("Warning (Experimental)")
                 alert.setMessage("This is an experimental feature. You may not get the results you are hoping for. This is still in testing. This may result in unexpected results and/or crashing. This will restart the app. Would you like to continue?")
                 alert.setCancelable(false)
@@ -523,8 +547,7 @@ class AppearanceFragment : Fragment() {
 
         if (!coloredNavBarData.loadNavBar()) {
             disableColoredNavBar.isChecked = true
-        }
-        else {
+        } else {
             enableColoredNavBar.isChecked = true
         }
 
@@ -535,7 +558,10 @@ class AppearanceFragment : Fragment() {
                 Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
             } else {
                 disableColoredNavBar.isChecked = false
-                val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alert = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alert.setTitle("Warning")
                 alert.setMessage("This may or may not work as expected on your device. Would you like to continue?")
                 alert.setCancelable(false)
@@ -580,8 +606,7 @@ class AppearanceFragment : Fragment() {
             Vibrate().vibration(requireContext())
             if (!coloredNavBarData.loadNavBar()) {
                 Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 enableColoredNavBar.isChecked = false
                 activity?.window?.navigationBarColor =
                     ContextCompat.getColor(requireContext(), R.color.black)
@@ -589,11 +614,13 @@ class AppearanceFragment : Fragment() {
             }
         }
 
-       activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-           override fun handleOnBackPressed() {
-               activity?.supportFragmentManager?.popBackStack()
-           }
-       })
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            })
     }
 
     private fun restartThemeChange() {
@@ -608,12 +635,14 @@ class AppearanceFragment : Fragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.attach(this)?.commitNow()
 
-        view?.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll().toInt())
+        view?.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
+            ?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll().toInt())
 
     }
 
     private fun reset() {
-        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+        val alert =
+            MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
         alert.setTitle("Warning")
         alert.setMessage("Would you like to reset Appearance Settings?")
         alert.setPositiveButton("Yes") { _, _ ->
@@ -685,7 +714,8 @@ class AppearanceFragment : Fragment() {
 
     private fun restartApplication() {
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
+            val intent =
+                requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
             intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)

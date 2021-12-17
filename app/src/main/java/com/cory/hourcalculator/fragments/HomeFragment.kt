@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
@@ -15,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -23,9 +23,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -109,7 +106,8 @@ class HomeFragment : Fragment() {
             }
         }
 
-        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         val runnable = Runnable {
@@ -127,8 +125,7 @@ class HomeFragment : Fragment() {
             breakTextBox?.visibility = View.GONE
             breakTextView?.visibility = View.GONE
             breakTextViewInput?.visibility = View.GONE
-        }
-        else {
+        } else {
             breakTextBox?.visibility = View.VISIBLE
             breakTextView?.visibility = View.VISIBLE
             breakTextViewInput?.visibility = View.VISIBLE
@@ -186,7 +183,10 @@ class HomeFragment : Fragment() {
         val calculationType = CalculationType(requireContext())
 
         if (!dialogData.loadDialogState()) {
-            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            val alert = MaterialAlertDialogBuilder(
+                requireContext(),
+                AccentColor(requireContext()).alertTheme()
+            )
             alert.setCancelable(false)
             alert.setTitle("Calculation Type")
             alert.setMessage("Choose the calculation method you would prefer")
@@ -203,7 +203,7 @@ class HomeFragment : Fragment() {
             alert.show()
         }
 
-       val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
+        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
 
         calculateButton?.setOnClickListener {
 
@@ -217,8 +217,7 @@ class HomeFragment : Fragment() {
 
             if (calculationType.loadCalculationState()) {
                 calculate()
-            }
-            else {
+            } else {
                 calculateTime()
             }
         }
@@ -237,30 +236,30 @@ class HomeFragment : Fragment() {
 
         var doubleBackToExitPressedOnce = false
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (breakTextBox.hasFocus()) {
-                    breakTextBox.clearFocus()
-                }
-                else {
-                    if(doubleBackToExitPressedOnce) {
-                        activity?.finishAffinity()
-                    }
-                    else {
-                        doubleBackToExitPressedOnce = true
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.press_back_again_to_exit),
-                            Toast.LENGTH_SHORT
-                        ).show()
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (breakTextBox.hasFocus()) {
+                        breakTextBox.clearFocus()
+                    } else {
+                        if (doubleBackToExitPressedOnce) {
+                            activity?.finishAffinity()
+                        } else {
+                            doubleBackToExitPressedOnce = true
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.press_back_again_to_exit),
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            doubleBackToExitPressedOnce = false
-                        }, 2000)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                doubleBackToExitPressedOnce = false
+                            }, 2000)
+                        }
                     }
                 }
-            }
-        })
+            })
     }
 
     private fun calculateTime() {
@@ -300,11 +299,9 @@ class HomeFragment : Fragment() {
 
         if (diffHours < 0) {
             infoTextView?.text = "In time can not be later than out time"
-        }
-        else if (diffHours == 0 && diffMinutes == "00") {
+        } else if (diffHours == 0 && diffMinutes == "00") {
             infoTextView?.text = "In time and out time can not be the same"
-        }
-        else {
+        } else {
 
             when {
                 inTimeHours.toInt() > 12 -> {
@@ -365,13 +362,13 @@ class HomeFragment : Fragment() {
                     infoTextView!!.text =
                         "Total Hours: $diffHours:$diffMinutes\nTotal Hours With Break: $hoursWithBreak:$withBreak"
                 }
-            }
-            else {
+            } else {
                 savingHours(
                     "$diffHours:$diffMinutes",
                     inTimeTotal,
                     outTimeTotal,
-                    "0")
+                    "0"
+                )
                 infoTextView?.text = "Total Hours: $diffHours:$diffMinutes"
             }
 
@@ -380,7 +377,9 @@ class HomeFragment : Fragment() {
             val historyDeletion = HistoryDeletion(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
 
-            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked().toString().toInt()) {
+            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
+                    .toString().toInt()
+            ) {
                 historyDeletion.deletion()
             }
 
@@ -414,11 +413,14 @@ class HomeFragment : Fragment() {
         val outTimeTotal: String
 
         var minutesDecimal: Double = (outTimeMinutes.toInt() - inTimeMinutes.toInt()) / 60.0
-        minutesDecimal = minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+        minutesDecimal =
+            minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
         var minutesWithoutFirstDecimal = minutesDecimal.toString().substring(2)
         if (minutesDecimal < 0) {
             minutesWithoutFirstDecimal = (1.0 - minutesWithoutFirstDecimal.toDouble()).toString()
-            minutesWithoutFirstDecimal = minutesWithoutFirstDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString()
+            minutesWithoutFirstDecimal =
+                minutesWithoutFirstDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                    .toString()
             minutesWithoutFirstDecimal = minutesWithoutFirstDecimal.substring(2)
         }
         var hoursDifference = outTimeHours.toInt() - inTimeHours.toInt()
@@ -486,18 +488,22 @@ class HomeFragment : Fragment() {
             if (breakTime?.text != null && breakTime.text.toString() != "") {
 
                 breakTimeNumber = breakTime.text.toString().toDouble() / 60
-                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_EVEN)
 
                 if (totalHoursWithBreak.toDouble() < 0.0) {
                     infoTextView1!!.text = "The entered break time is too big"
-                }
-                else {
-                    savingHours(totalHoursWithBreak.toString(), inTimeTotal, outTimeTotal, breakTime.text.toString())
+                } else {
+                    savingHours(
+                        totalHoursWithBreak.toString(),
+                        inTimeTotal,
+                        outTimeTotal,
+                        breakTime.text.toString()
+                    )
                     infoTextView1!!.text =
                         "Total Hours: $hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
                 }
-            }
-            else {
+            } else {
                 savingHours(totalHours.toString(), inTimeTotal, outTimeTotal, "0")
                 infoTextView1!!.text = "Total Hours: $hoursDifference.$minutesWithoutFirstDecimal"
             }
@@ -507,7 +513,9 @@ class HomeFragment : Fragment() {
             val historyDeletion = HistoryDeletion(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
 
-            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked().toString().toInt()) {
+            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
+                    .toString().toInt()
+            ) {
                 historyDeletion.deletion()
             }
 
@@ -519,7 +527,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun savingHours(totalHours: String, inTimeTotal: String, outTimeTotal: String, breakTime: String) {
+    private fun savingHours(
+        totalHours: String,
+        inTimeTotal: String,
+        outTimeTotal: String,
+        breakTime: String
+    ) {
 
         if (HistoryToggleData(requireContext()).loadHistoryState()) {
             val dbHandler = DBHelper(requireContext(), null)
@@ -530,11 +543,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {
-        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val focusedView = activity?.currentFocus
 
         if (focusedView != null) {
-            inputManager.hideSoftInputFromWindow(focusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            inputManager.hideSoftInputFromWindow(
+                focusedView.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
             if (wagesEditText.hasFocus()) {
                 wagesEditText.clearFocus()
             }

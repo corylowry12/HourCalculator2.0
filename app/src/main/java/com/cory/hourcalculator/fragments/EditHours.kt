@@ -1,47 +1,32 @@
 package com.cory.hourcalculator.fragments
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointBackward
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -56,9 +41,9 @@ class EditHours : Fragment() {
 
     private lateinit var idMap: String
     private lateinit var day: String
-    private var dayInLong : Long = 0L
+    private var dayInLong: Long = 0L
 
-    private lateinit var undoHoursData : UndoHoursData
+    private lateinit var undoHoursData: UndoHoursData
 
     private lateinit var inTime: String
     private lateinit var outTime: String
@@ -80,7 +65,8 @@ class EditHours : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         undoHoursData = UndoHoursData(requireContext())
-        val materialToolbarEdit = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
+        val materialToolbarEdit =
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
 
         materialToolbarEdit?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -91,7 +77,10 @@ class EditHours : Fragment() {
             when (it.itemId) {
                 R.id.delete -> {
                     Vibrate().vibration(requireContext())
-                    val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    val alert = MaterialAlertDialogBuilder(
+                        requireContext(),
+                        AccentColor(requireContext()).alertTheme()
+                    )
                     alert.setCancelable(false)
                     alert.setTitle(getString(R.string.delete))
                     alert.setMessage(getString(R.string.would_you_like_to_delete_history))
@@ -125,7 +114,10 @@ class EditHours : Fragment() {
 
         dateChip?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val datePicker = DatePickerDialog(requireContext(), AccentColor(requireContext()).dateDialogTheme(requireContext()))
+            val datePicker = DatePickerDialog(
+                requireContext(),
+                AccentColor(requireContext()).dateDialogTheme(requireContext())
+            )
             datePicker.setCancelable(false)
 
             val (month1, day2, year1) = day.split("/")
@@ -214,10 +206,12 @@ class EditHours : Fragment() {
             var inTimeHoursInteger: Int = inTimeHours.toInt()
 
             if (inTime.contains(getString(R.string.PM))) {
-                inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
+                inTimeMinutesNumbers =
+                    inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
                 inTimeHoursInteger += 12
             } else {
-                inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
+                inTimeMinutesNumbers =
+                    inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
                 if (inTimeHours.toInt() == 12) {
                     inTimeHoursInteger -= 12
                 }
@@ -233,10 +227,12 @@ class EditHours : Fragment() {
             var outTimeHoursInteger: Int = outTimeHours.toInt()
 
             if (outTime.contains(getString(R.string.PM))) {
-                outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
+                outTimeMinutesNumbers =
+                    outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
                 outTimeHoursInteger += 12
             } else {
-                outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
+                outTimeMinutesNumbers =
+                    outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
                 if (outTimeHours.toInt() == 12) {
                     outTimeHoursInteger -= 12
                 }
@@ -244,33 +240,45 @@ class EditHours : Fragment() {
             outTimeBool = outTimeHoursInteger != i || outTimeMinutesNumbers != i2
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                exit()
-            }
-        })
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    exit()
+                }
+            })
     }
 
     fun exit() {
         hideKeyboard(requireActivity().findViewById(R.id.breakTimeEdit))
         if (inTimeBool || outTimeBool || breakTimeBool) {
-            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            val alert = MaterialAlertDialogBuilder(
+                requireContext(),
+                AccentColor(requireContext()).alertTheme()
+            )
             alert.setCancelable(false)
             alert.setTitle(getString(R.string.pending_changes))
             alert.setMessage(getString(R.string.you_have_pending_changes))
             alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 calculate(idMap, day)
-                Toast.makeText(requireContext(), getString(R.string.hour_is_updated), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.hour_is_updated),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 activity?.supportFragmentManager?.popBackStack()
-                Toast.makeText(requireContext(), getString(R.string.hour_was_not_updated), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.hour_was_not_updated),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             alert.show()
-        }
-        else {
+        } else {
             activity?.supportFragmentManager?.popBackStack()
         }
     }
@@ -340,10 +348,12 @@ class EditHours : Fragment() {
         }
 
         if (map["outTime"].toString().contains(getString(R.string.PM))) {
-            outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
+            outTimeMinutesNumbers =
+                outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
             outTimeHoursInteger += 12
         } else {
-            outTimeMinutesNumbers = outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
+            outTimeMinutesNumbers =
+                outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
             if (outTimeHours.toInt() == 12) {
                 outTimeHoursInteger -= 12
             }
@@ -361,8 +371,7 @@ class EditHours : Fragment() {
 
             }, 5000)
             DialogData(requireContext()).setDateDialogState(true)
-        }
-        else {
+        } else {
             dateChip?.text = day
         }
 
@@ -373,8 +382,7 @@ class EditHours : Fragment() {
 
             if (calculationType.loadCalculationState()) {
                 calculate(idMap, day)
-            }
-            else {
+            } else {
                 calculateTime(idMap, day)
             }
         }
@@ -386,7 +394,8 @@ class EditHours : Fragment() {
         var outTimeTotal = ""
 
         val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTimeEdit)
-        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+        val timePickerOutTime =
+            requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
         val infoTextView1 = requireActivity().findViewById<TextView>(R.id.infoTextView1)
 
         var inTimeMinutesEdit = timePickerInTime.minute.toString()
@@ -416,11 +425,9 @@ class EditHours : Fragment() {
 
         if (diffHours < 0) {
             infoTextView1?.text = "In time can not be later than out time"
-        }
-        else if (diffHours == 0 && diffMinutes.toInt() == 0) {
+        } else if (diffHours == 0 && diffMinutes.toInt() == 0) {
             infoTextView1?.text = "In time and out time can not be the same"
-        }
-        else {
+        } else {
 
             when {
                 inTimeHoursEdit.toInt() > 12 -> {
@@ -481,13 +488,13 @@ class EditHours : Fragment() {
                     )
 
                 }
-            }
-            else {
+            } else {
                 savingHours(
                     idMap, "$diffHours:$diffMinutes",
                     inTimeTotal,
                     outTimeTotal,
-                    "0", day)
+                    "0", day
+                )
 
             }
         }
@@ -496,7 +503,8 @@ class EditHours : Fragment() {
     private fun calculate(idMap: String, day: String) {
 
         val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTimeEdit)
-        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+        val timePickerOutTime =
+            requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
         val infoTextView1 = requireActivity().findViewById<TextView>(R.id.infoTextView1)
 
         var inTimeMinutesEdit = timePickerInTime.minute.toString()
@@ -515,11 +523,14 @@ class EditHours : Fragment() {
         val outTimeTotal: String
 
         var minutesDecimal: Double = (outTimeMinutesEdit.toInt() - inTimeMinutesEdit.toInt()) / 60.0
-        minutesDecimal = minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+        minutesDecimal =
+            minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
         var minutesWithoutFirstDecimal = minutesDecimal.toString().substring(2)
         if (minutesDecimal < 0) {
             minutesWithoutFirstDecimal = (1.0 - minutesWithoutFirstDecimal.toDouble()).toString()
-            minutesWithoutFirstDecimal = minutesWithoutFirstDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString()
+            minutesWithoutFirstDecimal =
+                minutesWithoutFirstDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                    .toString()
             minutesWithoutFirstDecimal = minutesWithoutFirstDecimal.substring(2)
         }
         var hoursDifference = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
@@ -576,18 +587,32 @@ class EditHours : Fragment() {
             if (breakTime?.text != null && breakTime.text.toString() != "") {
 
                 breakTimeNumber = breakTime.text.toString().toDouble() / 60
-                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toString()
+                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_EVEN).toString()
 
-                savingHours(idMap, totalHoursWithBreak, inTimeTotal, outTimeTotal, breakTime.text.toString(), day)
-            }
-            else {
+                savingHours(
+                    idMap,
+                    totalHoursWithBreak,
+                    inTimeTotal,
+                    outTimeTotal,
+                    breakTime.text.toString(),
+                    day
+                )
+            } else {
                 savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, "0", day)
             }
 
         }
     }
 
-    private fun savingHours(id: String, totalHours: String, inTimeTotal: String, outTimeTotal: String, breakTime: String, dayOfWeek: String) {
+    private fun savingHours(
+        id: String,
+        totalHours: String,
+        inTimeTotal: String,
+        outTimeTotal: String,
+        breakTime: String,
+        dayOfWeek: String
+    ) {
 
         val dbHandler = DBHelper(requireContext(), null)
 
@@ -595,7 +620,7 @@ class EditHours : Fragment() {
         val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
         val date = formatter.parse(dayOfWeek)
         calendar.time = date!!
-       val timeInMillis = calendar.timeInMillis
+        val timeInMillis = calendar.timeInMillis
 
         dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, timeInMillis, breakTime)
 
@@ -608,11 +633,15 @@ class EditHours : Fragment() {
     }
 
     private fun hideKeyboard(breakEditText: TextInputEditText?) {
-        val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val focusedView = activity?.currentFocus
 
         if (focusedView != null) {
-            inputManager.hideSoftInputFromWindow(focusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            inputManager.hideSoftInputFromWindow(
+                focusedView.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
             if (breakEditText!!.hasFocus()) {
                 breakEditText.clearFocus()
             }

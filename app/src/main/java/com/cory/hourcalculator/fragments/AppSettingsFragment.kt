@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -79,7 +79,10 @@ class AppSettingsFragment : Fragment() {
             Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-                    val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    val alert = MaterialAlertDialogBuilder(
+                        requireContext(),
+                        AccentColor(requireContext()).alertTheme()
+                    )
                     alert.setCancelable(false)
                     alert.setTitle("Warning")
                     alert.setMessage("You are about to reset all App Settings to default, would you like to continue?")
@@ -102,28 +105,37 @@ class AppSettingsFragment : Fragment() {
 
         if (calculationData.loadCalculationState()) {
             enableCalculation?.isChecked = true
-        }
-        else {
+        } else {
             disableCalculation?.isChecked = true
         }
 
         enableCalculation?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (calculationData.loadCalculationState()) {
-                Toast.makeText(requireContext(), "Decimal Calculation Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Decimal Calculation Already Enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 calculationData.setCalculationState(true)
-                Toast.makeText(requireContext(), "Decimal Calculation Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Decimal Calculation Enabled", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
         disableCalculation?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!calculationData.loadCalculationState()) {
-                Toast.makeText(requireContext(), "Time Calculation Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Time Calculation Already Enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 calculationData.setCalculationState(false)
-                Toast.makeText(requireContext(), "Time Calculation Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Time Calculation Enabled", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -140,7 +152,8 @@ class AppSettingsFragment : Fragment() {
         enableVibration?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (vibrationData.loadVibrationState()) {
-                Toast.makeText(requireContext(), "Vibration Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Vibration Already Enabled", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 vibrationData.setVibrationState(true)
                 Toast.makeText(requireContext(), "Vibration Enabled", Toast.LENGTH_SHORT).show()
@@ -149,14 +162,15 @@ class AppSettingsFragment : Fragment() {
         disableVibration?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!vibrationData.loadVibrationState()) {
-                Toast.makeText(requireContext(), "Vibration Already Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Vibration Already Disabled", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 vibrationData.setVibrationState(false)
                 Toast.makeText(requireContext(), "Vibration Disabled", Toast.LENGTH_SHORT).show()
             }
         }
 
-val historyToggleData = HistoryToggleData(requireContext())
+        val historyToggleData = HistoryToggleData(requireContext())
         val enableHistory = activity?.findViewById<RadioButton>(R.id.enableHistory)
         val disableHistory = activity?.findViewById<RadioButton>(R.id.disableHistory)
 
@@ -169,7 +183,8 @@ val historyToggleData = HistoryToggleData(requireContext())
         enableHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (historyToggleData.loadHistoryState()) {
-                Toast.makeText(requireContext(), "History Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "History Already Enabled", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 historyToggleData.setHistoryToggle(true)
                 Toast.makeText(requireContext(), "History Is Enabled", Toast.LENGTH_SHORT).show()
@@ -183,10 +198,14 @@ val historyToggleData = HistoryToggleData(requireContext())
         disableHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!historyToggleData.loadHistoryState()) {
-                Toast.makeText(requireContext(), "History is already disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "History is already disabled", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 historyToggleData.setHistoryToggle(false)
-                val alertDialog = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                val alertDialog = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
                 alertDialog.setCancelable(false)
                 alertDialog.setTitle("History")
                 alertDialog.setMessage("What would you like to do with history?")
@@ -201,7 +220,7 @@ val historyToggleData = HistoryToggleData(requireContext())
 
                     MainActivity().runOnUiThread(runnable)
                 }
-                alertDialog.setNeutralButton("Nothing") {_, _ ->
+                alertDialog.setNeutralButton("Nothing") { _, _ ->
                     Vibrate().vibration(requireContext())
                 }
                 alertDialog.create().show()
@@ -227,26 +246,37 @@ val historyToggleData = HistoryToggleData(requireContext())
         enableBreakTextBox?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
-                Toast.makeText(requireContext(), "Break Text Box Already Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Break Text Box Already Enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 breakTextBoxVisiblityClass.setVisibility(0)
-                Toast.makeText(requireContext(), "Break Text Box Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Break Text Box Enabled", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
         disableBreakTextBox?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
-                Toast.makeText(requireContext(), "Break Text Box Already Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Break Text Box Already Disabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 breakTextBoxVisiblityClass.setVisibility(1)
-                Toast.makeText(requireContext(), "Break Text Box Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Break Text Box Disabled", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
         val wagesData = WagesData(requireContext())
         val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
 
-        val editable = Editable.Factory.getInstance().newEditable(wagesData.loadWageAmount().toString())
+        val editable =
+            Editable.Factory.getInstance().newEditable(wagesData.loadWageAmount().toString())
         wagesEditText?.text = editable
 
         wagesEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
@@ -311,15 +341,20 @@ val historyToggleData = HistoryToggleData(requireContext())
 
         MainActivity().runOnUiThread(runnable)
 
-        Toast.makeText(requireContext(), "App Settings set back to defaults", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "App Settings set back to defaults", Toast.LENGTH_LONG)
+            .show()
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {
-        val inputManager: InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val focusedView = activity?.currentFocus
 
         if (focusedView != null) {
-            inputManager.hideSoftInputFromWindow(focusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            inputManager.hideSoftInputFromWindow(
+                focusedView.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
             if (wagesEditText.hasFocus()) {
                 wagesEditText.clearFocus()
             }

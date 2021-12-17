@@ -5,35 +5,27 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.LinkClass
-import com.google.android.material.appbar.MaterialToolbar
-import android.content.pm.ResolveInfo
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.webkit.WebSettings
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat.getSystemService
-import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.Vibrate
-import kotlinx.coroutines.delay
-import java.util.*
-import kotlin.concurrent.schedule
+import com.google.android.material.appbar.MaterialToolbar
 
 
 class WebviewFragment : Fragment() {
@@ -116,7 +108,10 @@ class WebviewFragment : Fragment() {
                     progressBar.visibility = View.GONE
                 }
 
-                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
                     val newUrl = request?.url.toString()
                     webView.loadUrl(newUrl)
                     return true
@@ -133,16 +128,17 @@ class WebviewFragment : Fragment() {
                 webView.reload()
             }
         }, 800)
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (webView!!.canGoBack()) {
-                    webView.goBack()
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (webView!!.canGoBack()) {
+                        webView.goBack()
+                    } else {
+                        webView.stopLoading()
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
                 }
-                else {
-                    webView.stopLoading()
-                    activity?.supportFragmentManager?.popBackStack()
-                }
-            }
-        })
+            })
     }
 }

@@ -9,7 +9,6 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.cory.hourcalculator.classes.SortData
-import java.util.*
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -27,7 +26,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    fun insertRow(inTime: String, outTime: String, total: String, dayOfWeek: Long, breakTime: String) {
+    fun insertRow(
+        inTime: String,
+        outTime: String,
+        total: String,
+        dayOfWeek: Long,
+        breakTime: String
+    ) {
         val values = ContentValues()
         values.put(COLUMN_IN, inTime)
         values.put(COLUMN_OUT, outTime)
@@ -40,7 +45,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun update(id: String, inTime: String, outTime: String, total: String, dayOfWeek: Long, breakTime: String) {
+    fun update(
+        id: String,
+        inTime: String,
+        outTime: String,
+        total: String,
+        dayOfWeek: Long,
+        breakTime: String
+    ) {
         val values = ContentValues()
         values.put(COLUMN_IN, inTime)
         values.put(COLUMN_OUT, outTime)
@@ -70,7 +82,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun automaticDeletion(numberToDelete: Int): Cursor? {
         val db = this.writableDatabase
 
-        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY date ASC LIMIT $numberToDelete", null)
+        return db.rawQuery(
+            "SELECT * FROM $TABLE_NAME ORDER BY date ASC LIMIT $numberToDelete",
+            null
+        )
     }
 
     fun getAllRow(context: Context): Cursor? {
