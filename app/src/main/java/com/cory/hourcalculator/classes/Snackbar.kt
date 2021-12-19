@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
