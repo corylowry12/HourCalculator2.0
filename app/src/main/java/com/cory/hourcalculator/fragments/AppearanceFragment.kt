@@ -25,8 +25,12 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.DelicateCoroutinesApi
+import java.text.SimpleDateFormat
+import java.util.*
 
 
+@DelicateCoroutinesApi
 class AppearanceFragment : Fragment() {
 
     private lateinit var followSystemImageViewDrawable: Drawable
@@ -137,7 +141,7 @@ class AppearanceFragment : Fragment() {
         val nestedScrollViewAppearance =
             view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
 
-        nestedScrollViewAppearance.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+        nestedScrollViewAppearance.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             AppearanceScrollPosition(requireContext()).setScroll(scrollY.toFloat())
         }
 
