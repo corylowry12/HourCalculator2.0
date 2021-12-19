@@ -2,18 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<item
-    android:id="@+id/info"
-    android:title="@string/info"
-    app:showAsAction="always"
-    android:icon="@drawable/ic_baseline_info_24"
-    android:iconTint="?attr/historyItemMenuTint"
-    />
+    <item
+        android:id="@+id/info"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:iconTint="?attr/historyItemMenuTint"
+        android:title="@string/info"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/mnuSort"
         android:icon="@drawable/ic_sort_24px"
         android:title="@string/sort"
         app:showAsAction="always"
-        tools:ignore="AlwaysShowAction"/>
+        tools:ignore="AlwaysShowAction" />
 </menu>
