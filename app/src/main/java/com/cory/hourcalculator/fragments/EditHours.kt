@@ -41,7 +41,6 @@ class EditHours : Fragment() {
 
     private lateinit var idMap: String
     private lateinit var day: String
-    private var dayInLong: Long = 0L
 
     private lateinit var undoHoursData: UndoHoursData
 
@@ -297,23 +296,18 @@ class EditHours : Fragment() {
         val id = IdData(requireContext()).loadID()
 
         dataList.clear()
-        val cursor = dbHandler.getAllRow(requireContext())
-        cursor!!.moveToPosition(id)
-
+        val cursor = dbHandler.getRow(id.toString())
+        cursor.moveToFirst()
         val map = HashMap<String, String>()
-        while (cursor.position == id) {
 
-            map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
-            dataList.add(map)
+        map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+        map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+        map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+        map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+        map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+        map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+        dataList.add(map)
 
-            cursor.moveToNext()
-
-        }
         idMap = map["id"].toString()
         inTime = map["inTime"].toString()
         breakTime = map["breakTime"].toString()
@@ -423,12 +417,12 @@ class EditHours : Fragment() {
             diffHours -= 1
         }
 
-        if (diffHours < 0) {
-            infoTextView1?.text = "In time can not be later than out time"
-        } else if (diffHours == 0 && diffMinutes.toInt() == 0) {
+        if (diffHours == 0 && diffMinutes.toInt() == 0) {
             infoTextView1?.text = "In time and out time can not be the same"
         } else {
-
+            if (diffHours < 0) {
+                diffHours += 24
+            }
             when {
                 inTimeHoursEdit.toInt() > 12 -> {
                     val inTime = inTimeHoursEdit.toInt() - 12
@@ -536,11 +530,8 @@ class EditHours : Fragment() {
         var hoursDifference = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
             infoTextView1?.text = getString(R.string.in_time_and_out_time_cant_be_the_same)
-        } else if (timePickerInTime!!.hour >= 0 && timePickerOutTime!!.hour <= 12 && hoursDifference < 0) {
-            infoTextView1!!.text = getString(R.string.in_time_can_not_be_greater_than_out_time)
-        } else if (timePickerInTime.hour >= 12 && timePickerOutTime!!.hour <= 24 && hoursDifference < 0) {
-            infoTextView1!!.text = getString(R.string.in_time_can_not_be_greater_than_out_time)
-        } else {
+        }
+        else {
             if (minutesDecimal < 0) {
                 hoursDifference -= 1
             }
