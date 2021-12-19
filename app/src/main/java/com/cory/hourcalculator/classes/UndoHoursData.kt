@@ -2,11 +2,6 @@ package com.cory.hourcalculator.classes
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.widget.TextView
-import android.widget.TimePicker
-import android.widget.Toast
-import com.cory.hourcalculator.R
-import com.google.android.material.textfield.TextInputEditText
 
 class UndoHoursData(context: Context) {
 
