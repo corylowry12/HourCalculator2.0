@@ -11,47 +11,45 @@
         android:id="@+id/appBarLayoutAppSettings"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        app:liftOnScroll="true"
-        android:background="?attr/backgroundColor">
+        android:background="?attr/backgroundColor"
+        app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolBarPatchNotes"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                android:elevation="0dp"
-                app:title="Patch Notes"
                 android:background="@android:color/transparent"
-                app:titleCentered="true"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:menu="@menu/main_menu_close_all"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
-                app:menu="@menu/main_menu_close_all">
-            </com.google.android.material.appbar.MaterialToolbar>
+                app:title="Patch Notes"
+                app:titleCentered="true" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
         android:overScrollMode="always"
         android:paddingBottom="25dp"
-        android:clipToPadding="false">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true">
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/bugFixesCardView"
@@ -66,11 +64,11 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bugFixesConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/bugFixesConstraint"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:foreground="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/bugFixesTextView"
@@ -84,11 +82,11 @@
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp"
                         android:visibility="visible"
-                        tools:ignore="HardcodedText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/bugFixesChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/bugFixesChevronImage"/>
+                        tools:ignore="HardcodedText" />
 
                     <ImageView
                         android:id="@+id/bugFixesChevronImage"
@@ -97,11 +95,11 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="10dp"
                         android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -113,11 +111,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -146,11 +144,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -179,11 +177,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -212,11 +210,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -245,11 +243,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -278,11 +276,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -305,24 +303,57 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bugFixesCardView7"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/patchNotesCardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="- Fixed issue with app saying you couldn't store time depending on the time inputted"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/newFeaturesCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/newFeaturesConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/newFeaturesConstraint"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:foreground="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/newFeaturesTextView"
@@ -336,11 +367,11 @@
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp"
                         android:visibility="visible"
-                        tools:ignore="HardcodedText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/newFeaturesChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/newFeaturesChevronImage"/>
+                        tools:ignore="HardcodedText" />
 
                     <ImageView
                         android:id="@+id/newFeaturesChevronImage"
@@ -349,11 +380,11 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="10dp"
                         android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -365,11 +396,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -398,11 +429,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -432,11 +463,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -466,11 +497,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -500,11 +531,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -534,11 +565,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -568,11 +599,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -602,11 +633,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -636,11 +667,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -670,11 +701,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -704,11 +735,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -738,11 +769,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -772,11 +803,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -806,11 +837,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:visibility="gone">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -839,19 +870,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/enhancementsConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/enhancementsConstraint"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:foreground="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/enhancementsTextView"
@@ -865,11 +896,11 @@
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp"
                         android:visibility="visible"
-                        tools:ignore="HardcodedText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/enhancementsChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/enhancementsChevronImage"/>
+                        tools:ignore="HardcodedText" />
 
                     <ImageView
                         android:id="@+id/enhancementsChevronImage"
@@ -878,23 +909,23 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="10dp"
                         android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView1"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -923,12 +954,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView2"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -957,12 +988,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView3"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -991,12 +1022,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView4"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1025,12 +1056,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView5"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1059,12 +1090,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView6"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1093,12 +1124,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView7"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1127,12 +1158,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView8"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1161,12 +1192,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView9"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1195,12 +1226,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView10"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1229,12 +1260,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView11"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1263,12 +1294,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView12"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1297,12 +1328,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView13"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1331,12 +1362,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView14"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1365,12 +1396,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView15"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1399,12 +1430,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView16"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1433,12 +1464,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView17"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1467,12 +1498,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enhancementsCardView18"
-                android:visibility="gone"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?attr/patchNotesCardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
@@ -1491,6 +1522,40 @@
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
                         android:text="- Added fade in animation when scrolling for each item in history"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/enhancementsCardView19"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/patchNotesCardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="- Performance improvements when editing hours"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         android:visibility="visible"

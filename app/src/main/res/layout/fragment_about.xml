@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/backgroundColor"
     tools:context=".fragments.AboutFragment">
 
@@ -11,30 +11,28 @@
         android:id="@+id/materialToolBarVersionInfo"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        app:liftOnScroll="true"
-        android:background="?attr/backgroundColor">
+        android:background="?attr/backgroundColor"
+        app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBarVersionInfo"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                android:elevation="0dp"
-                app:title="Version Info"
                 android:background="@android:color/transparent"
-                app:titleCentered="true"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor">
-            </com.google.android.material.appbar.MaterialToolbar>
+                app:navigationIconTint="?attr/textColor"
+                app:title="Version Info"
+                app:titleCentered="true"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -53,6 +51,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/versionCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -61,8 +60,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -72,16 +70,16 @@
                         android:id="@+id/versionHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Version Number:"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/versionSubtitle"
@@ -89,15 +87,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/versionHeading"
                         android:layout_alignStart="@id/versionHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="9.0.0"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/versionHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -105,6 +103,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/buildNumberCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -113,8 +112,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -124,16 +122,16 @@
                         android:id="@+id/buildHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Build Number:"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/buildSubtitle"
@@ -141,15 +139,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/buildHeading"
                         android:layout_alignStart="@id/buildHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="100"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/buildHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,6 +155,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -165,8 +164,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -176,16 +174,16 @@
                         android:id="@+id/materialHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Material 3"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/materialSubtitle"
@@ -193,15 +191,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/materialHeading"
                         android:layout_alignStart="@id/materialHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="https://m3.material.io/"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/materialHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -209,6 +207,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/adsCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -217,8 +216,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -228,16 +226,16 @@
                         android:id="@+id/adsHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Google Ads"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/adsSubtitle"
@@ -245,15 +243,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/adsHeading"
                         android:layout_alignStart="@id/adsHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="https://m3.material.io/"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/adsHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -261,6 +259,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/analyticsCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -269,8 +268,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -280,16 +278,16 @@
                         android:id="@+id/analyticsHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Firebase Analytics"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/analyticsSubtitle"
@@ -297,15 +295,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/analyticsHeading"
                         android:layout_alignStart="@id/analyticsHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="https://m3.material.io/"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/analyticsHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -313,6 +311,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/crashlyticsCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -321,8 +320,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -332,16 +330,16 @@
                         android:id="@+id/crashlyticsHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Firebase Crashlytics"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/crashlyticsSubtitle"
@@ -349,15 +347,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/crashlyticsHeading"
                         android:layout_alignStart="@id/crashlyticsHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="https://m3.material.io/"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/crashlyticsHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -365,6 +363,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/performanceCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -373,8 +372,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -384,16 +382,16 @@
                         android:id="@+id/performanceHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="Firebase Performance Monitoring"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/performanceSubtitle"
@@ -401,15 +399,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/performanceHeading"
                         android:layout_alignStart="@id/performanceHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="https://m3.material.io/"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/performanceHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -417,6 +415,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/inAppReviewCardView"
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -425,8 +424,7 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                style="?attr/materialCardViewElevatedStyle">
+                app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -436,16 +434,16 @@
                         android:id="@+id/inAppReviewHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="5dp"
                         android:text="In App Review"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/inAppReviewSubtitle"
@@ -453,15 +451,15 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/inAppReviewHeading"
                         android:layout_alignStart="@id/inAppReviewHeading"
+                        android:layout_marginStart="10dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
                         android:text="https://m3.material.io/"
-                        android:textSize="12sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/inAppReviewHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,65 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.HistoryFragment"
-    android:tag="history"
+    android:animateLayoutChanges="true"
     android:background="?attr/backgroundColor"
-    android:animateLayoutChanges="true">
+    android:tag="history"
+    tools:context=".fragments.HistoryFragment">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolBarHistory"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                app:title="History"
-                app:titleCentered="true"
-                android:background="?attr/appBarBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:menu="@menu/menu_history"/>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolBarHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/appBarBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_history"
+        app:title="History"
+        app:titleCentered="true" />
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:divider="@null"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/materialToolBarHistory"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:paddingBottom="65dp"
-                android:clipToPadding="false" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:paddingBottom="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/materialToolBarHistory" />
 
     <TextView
         android:id="@+id/noHoursStoredTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:text="There are currently no hours stored"
         android:textAlignment="center"
-        android:textColor="?attr/textColor"/>
+        android:textColor="?attr/textColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floatingActionButtonHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="scroll to top"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="15dp"
-        app:iconTint="@color/black"
+        android:contentDescription="scroll to top"
         android:text="0"
         android:textColor="?attr/settingsTextColor"
-        app:icon="@drawable/ic_arrow_upward_24px" />
+        android:visibility="invisible"
+        app:icon="@drawable/ic_arrow_upward_24px"
+        app:iconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

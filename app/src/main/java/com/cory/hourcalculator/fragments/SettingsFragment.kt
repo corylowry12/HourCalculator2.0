@@ -21,7 +21,11 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.DelicateCoroutinesApi
+import java.text.SimpleDateFormat
+import java.util.*
 
+@DelicateCoroutinesApi
 class SettingsFragment : Fragment() {
 
     override fun onCreateView(
@@ -49,23 +53,23 @@ class SettingsFragment : Fragment() {
         }
 
         val accentColor = AccentColor(requireContext())
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                activity?.theme?.applyStyle(R.style.system_accent, true)
-            }
-        }
+                    when {
+                        accentColor.loadAccent() == 0 -> {
+                            activity?.theme?.applyStyle(R.style.teal_accent, true)
+                        }
+                        accentColor.loadAccent() == 1 -> {
+                            activity?.theme?.applyStyle(R.style.pink_accent, true)
+                        }
+                        accentColor.loadAccent() == 2 -> {
+                            activity?.theme?.applyStyle(R.style.orange_accent, true)
+                        }
+                        accentColor.loadAccent() == 3 -> {
+                            activity?.theme?.applyStyle(R.style.red_accent, true)
+                        }
+                        accentColor.loadAccent() == 4 -> {
+                            activity?.theme?.applyStyle(R.style.system_accent, true)
+                        }
+                    }
 
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }

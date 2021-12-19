@@ -22,6 +22,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 @DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private val historyFragment = HistoryFragment()
     private val settingsFragment = SettingsFragment()
 
-    val dbHandler = DBHelper(this, null)
+    private val dbHandler = DBHelper(this, null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,23 +56,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
         val accentColor = AccentColor(this)
+
         when {
             accentColor.loadAccent() == 0 -> {
-                theme.applyStyle(R.style.teal_accent, true)
+                theme?.applyStyle(R.style.teal_accent, true)
             }
             accentColor.loadAccent() == 1 -> {
-                theme.applyStyle(R.style.pink_accent, true)
+                theme?.applyStyle(R.style.pink_accent, true)
             }
             accentColor.loadAccent() == 2 -> {
-                theme.applyStyle(R.style.orange_accent, true)
+                theme?.applyStyle(R.style.orange_accent, true)
             }
             accentColor.loadAccent() == 3 -> {
-                theme.applyStyle(R.style.red_accent, true)
+                theme?.applyStyle(R.style.red_accent, true)
             }
             accentColor.loadAccent() == 4 -> {
-                theme.applyStyle(R.style.system_accent, true)
+                theme?.applyStyle(R.style.system_accent, true)
             }
         }
+
         setContentView(R.layout.activity_main)
 
         replaceFragment(homeFragment)

@@ -125,7 +125,7 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 
-    fun load() {
+    private fun load() {
         val cardView: CardView = findViewById(R.id.cardView)
         val slideAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         cardView.startAnimation(slideAnimation)

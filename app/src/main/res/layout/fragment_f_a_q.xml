@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/backgroundColor"
     tools:context=".fragments.FAQFragment">
 
@@ -11,46 +11,44 @@
         android:id="@+id/appBarLayoutFAQ"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        app:liftOnScroll="true"
-        android:background="?attr/backgroundColor">
+        android:background="?attr/backgroundColor"
+        app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            android:fitsSystemWindows="true"
-            >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBarFAQ"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                android:elevation="0dp"
-                app:title="Frequently Asked Questions"
                 android:background="@android:color/transparent"
-                app:titleCentered="true"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor">
-            </com.google.android.material.appbar.MaterialToolbar>
+                app:navigationIconTint="?attr/textColor"
+                app:title="Frequently Asked Questions"
+                app:titleCentered="true" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:overScrollMode="always">
+        android:overScrollMode="always"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true">
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/sortMethodsCardView"
@@ -77,8 +75,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
                         android:text="Q: Why are all sorting methods in History not showing up?"
                         android:textColor="?attr/settingsTextColor"
@@ -96,10 +94,10 @@
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
                         android:paddingBottom="10dp"
-                        android:visibility="gone"
                         android:text="A: If all sorting methods arent showing up, it is because you have some hours stored in the time format. The SQLite database in which hours are stored can not sort the entries if they are not in decimal format."
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toStartOf="@id/sortMethodChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/sortMethodsHeading" />
@@ -145,8 +143,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
                         android:text="Q: Why is the system theming option not showing up in the Appearance Settings?"
                         android:textColor="?attr/settingsTextColor"
@@ -164,10 +162,10 @@
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
                         android:paddingBottom="10dp"
-                        android:visibility="gone"
                         android:text="A: If you are not on Android 12 or later, the system theming option will not show up. Because prior versions didn't have the System Theming API."
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toStartOf="@id/systemThemeChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/systemThemeHeading" />
@@ -213,8 +211,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
                         android:text="Q: How do I report a bug?"
                         android:textColor="?attr/settingsTextColor"
@@ -232,10 +230,10 @@
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
                         android:paddingBottom="10dp"
-                        android:visibility="gone"
                         android:text="A: Go to the settings tab via the navigation bar at the bottom, then click on report a bug and create a new issue in the Github repository."
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toStartOf="@id/bugReportingChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/bugReportingHeading" />

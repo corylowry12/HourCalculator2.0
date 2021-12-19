@@ -2,31 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment"
-    android:id="@+id/homeConstraintLayout"
-    android:background="?attr/backgroundColor">
+    android:background="?attr/backgroundColor"
+    tools:context=".fragments.HomeFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolBar"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                app:title="Hour Calculator"
-                app:layout_collapseMode="pin"
-                app:titleCentered="true"
-                android:background="?attr/appBarBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="?attr/textColor"/>
+        android:id="@+id/materialToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/appBarBackground"
+        app:layout_collapseMode="pin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Hour Calculator"
+        app:titleCentered="true"
+        app:titleTextColor="?attr/textColor" />
 
     <TimePicker
         android:id="@+id/timePickerInTime"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:timePickerMode="spinner"
         android:descendantFocusability="blocksDescendants"
+        android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView" />
@@ -58,20 +58,19 @@
         android:id="@+id/outlinedTextField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textViewBreak"
-        android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"
-        app:endIconMode="clear_text">
+        android:layout_marginEnd="50dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintTop_toBottomOf="@id/textViewBreak">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/breakTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="2"
             android:digits="1234567890"
             android:hint="15"
-            />
+            android:inputType="number"
+            android:maxLength="2" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,14 +110,14 @@
         android:layout_marginEnd="10dp"
         android:gravity="center_horizontal"
         android:textAlignment="center"
+        android:textColor="?attr/textColor"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calculateButton1"
         tools:hint="Total Hours: 6.42"
-        tools:visibility="visible"
-        android:textColor="?attr/textColor"/>
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textView"
