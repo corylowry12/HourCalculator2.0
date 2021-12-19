@@ -95,7 +95,8 @@ class PatchNotesFragment : Fragment() {
             R.id.bugFixesCardView3,
             R.id.bugFixesCardView4,
             R.id.bugFixesCardView5,
-            R.id.bugFixesCardView6
+            R.id.bugFixesCardView6,
+            R.id.bugFixesCardView7
         )
         if (bugFixesBool) {
             for (i in 0 until enhancementsArray.count()) {
@@ -164,7 +165,8 @@ class PatchNotesFragment : Fragment() {
             R.id.enhancementsCardView15,
             R.id.enhancementsCardView16,
             R.id.enhancementsCardView17,
-            R.id.enhancementsCardView18
+            R.id.enhancementsCardView18,
+            R.id.enhancementsCardView19
         )
         if (enhancementsBool) {
             for (i in 0 until enhancementsArray.count()) {
