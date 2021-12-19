@@ -15,7 +15,7 @@ class IdData(context: Context) {
     }
 
     fun loadID(): Int {
-        val state = sharedPreferences.getInt("id", -1)
+        val state = sharedPreferences.getInt("id", 0)
         return (state)
     }
 }
