@@ -22,9 +22,12 @@ import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
 import java.util.*
 
+@DelicateCoroutinesApi
 class HomeFragment : Fragment() {
 
     override fun onCreateView(
@@ -52,23 +55,24 @@ class HomeFragment : Fragment() {
         }
 
         val accentColor = AccentColor(requireContext())
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                activity?.theme?.applyStyle(R.style.system_accent, true)
-            }
-        }
+
+                    when {
+                        accentColor.loadAccent() == 0 -> {
+                            activity?.theme?.applyStyle(R.style.teal_accent, true)
+                        }
+                        accentColor.loadAccent() == 1 -> {
+                            activity?.theme?.applyStyle(R.style.pink_accent, true)
+                        }
+                        accentColor.loadAccent() == 2 -> {
+                            activity?.theme?.applyStyle(R.style.orange_accent, true)
+                        }
+                        accentColor.loadAccent() == 3 -> {
+                            activity?.theme?.applyStyle(R.style.red_accent, true)
+                        }
+                        accentColor.loadAccent() == 4 -> {
+                            activity?.theme?.applyStyle(R.style.system_accent, true)
+                        }
+                    }
 
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -297,12 +301,12 @@ class HomeFragment : Fragment() {
             diffHours -= 1
         }
 
-        if (diffHours < 0) {
-            infoTextView?.text = "In time can not be later than out time"
-        } else if (diffHours == 0 && diffMinutes == "00") {
+       if (diffHours == 0 && diffMinutes == "00") {
             infoTextView?.text = "In time and out time can not be the same"
         } else {
-
+            if (diffHours < 0) {
+                diffHours += 24
+            }
             when {
                 inTimeHours.toInt() > 12 -> {
                     val inTime = inTimeHours.toInt() - 12
@@ -427,11 +431,8 @@ class HomeFragment : Fragment() {
 
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
             infoTextView1?.text = "In time and out time can not be the same"
-        } else if (timePickerInTime!!.hour >= 0 && timePickerOutTime!!.hour <= 12 && hoursDifference < 0) {
-            infoTextView1!!.text = "In Time Can Not Be greater than out time"
-        } else if (timePickerInTime.hour >= 12 && timePickerOutTime!!.hour <= 24 && hoursDifference < 0) {
-            infoTextView1!!.text = "In Time Can Not Be Greater Than Out Time"
-        } else {
+        }
+        else {
             if (minutesDecimal < 0) {
                 hoursDifference -= 1
             }
