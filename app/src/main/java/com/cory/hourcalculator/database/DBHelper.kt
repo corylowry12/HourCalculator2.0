@@ -88,6 +88,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         )
     }
 
+    fun getRow(row_id: String): Cursor {
+
+        val db = this.writableDatabase
+
+        return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID=$row_id", null)
+
+    }
+
     fun getAllRow(context: Context): Cursor? {
         val db = this.writableDatabase
         val sortData = SortData(context)
