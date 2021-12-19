@@ -29,6 +29,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @DelicateCoroutinesApi
 class HistoryFragment : Fragment() {
@@ -65,23 +69,23 @@ class HistoryFragment : Fragment() {
         }
 
         val accentColor = AccentColor(requireContext())
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                activity?.theme?.applyStyle(R.style.system_accent, true)
-            }
-        }
+                    when {
+                        accentColor.loadAccent() == 0 -> {
+                            activity?.theme?.applyStyle(R.style.teal_accent, true)
+                        }
+                        accentColor.loadAccent() == 1 -> {
+                            activity?.theme?.applyStyle(R.style.pink_accent, true)
+                        }
+                        accentColor.loadAccent() == 2 -> {
+                            activity?.theme?.applyStyle(R.style.orange_accent, true)
+                        }
+                        accentColor.loadAccent() == 3 -> {
+                            activity?.theme?.applyStyle(R.style.red_accent, true)
+                        }
+                        accentColor.loadAccent() == 4 -> {
+                            activity?.theme?.applyStyle(R.style.system_accent, true)
+                        }
+                    }
 
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
@@ -460,7 +464,7 @@ class HistoryFragment : Fragment() {
 
     }
 
-    fun textViewVisibility() {
+    private fun textViewVisibility() {
         val dbHandler = DBHelper(requireActivity().applicationContext, null)
 
         if (dbHandler.getCount() > 0) {
