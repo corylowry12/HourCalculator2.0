@@ -24,7 +24,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
 import java.util.*
 
 @DelicateCoroutinesApi
@@ -56,23 +55,23 @@ class HomeFragment : Fragment() {
 
         val accentColor = AccentColor(requireContext())
 
-                    when {
-                        accentColor.loadAccent() == 0 -> {
-                            activity?.theme?.applyStyle(R.style.teal_accent, true)
-                        }
-                        accentColor.loadAccent() == 1 -> {
-                            activity?.theme?.applyStyle(R.style.pink_accent, true)
-                        }
-                        accentColor.loadAccent() == 2 -> {
-                            activity?.theme?.applyStyle(R.style.orange_accent, true)
-                        }
-                        accentColor.loadAccent() == 3 -> {
-                            activity?.theme?.applyStyle(R.style.red_accent, true)
-                        }
-                        accentColor.loadAccent() == 4 -> {
-                            activity?.theme?.applyStyle(R.style.system_accent, true)
-                        }
-                    }
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                activity?.theme?.applyStyle(R.style.system_accent, true)
+            }
+        }
 
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -192,14 +191,14 @@ class HomeFragment : Fragment() {
                 AccentColor(requireContext()).alertTheme()
             )
             alert.setCancelable(false)
-            alert.setTitle("Calculation Type")
-            alert.setMessage("Choose the calculation method you would prefer")
-            alert.setPositiveButton("Decimal") { _, _ ->
+            alert.setTitle(getString(R.string.calculation_type))
+            alert.setMessage(getString(R.string.choose_the_calculation_method_you_would_prefer))
+            alert.setPositiveButton(getString(R.string.decimal)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 calculationType.setCalculationState(true)
                 dialogData.setDialogState(true)
             }
-            alert.setNeutralButton("Time") { _, _ ->
+            alert.setNeutralButton(getString(R.string.time)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 calculationType.setCalculationState(false)
                 dialogData.setDialogState(true)
@@ -268,8 +267,8 @@ class HomeFragment : Fragment() {
 
     private fun calculateTime() {
 
-        var inTimeTotal = ""
-        var outTimeTotal = ""
+        val inTimeTotal: String
+        val outTimeTotal: String
 
         val infoTextView = activity?.findViewById<TextView>(R.id.infoTextView1)
 
@@ -301,8 +300,8 @@ class HomeFragment : Fragment() {
             diffHours -= 1
         }
 
-       if (diffHours == 0 && diffMinutes == "00") {
-            infoTextView?.text = "In time and out time can not be the same"
+        if (diffHours == 0 && diffMinutes == "00") {
+            infoTextView?.text = getString(R.string.in_time_and_out_time_can_not_be_the_same)
         } else {
             if (diffHours < 0) {
                 diffHours += 24
@@ -350,8 +349,8 @@ class HomeFragment : Fragment() {
                     withBreak = (withBreak.toInt() + 60).toString()
                 }
 
-                if (diffHours < 0) {
-                    infoTextView!!.text = "The entered break time is too big"
+                if (hoursWithBreak < 0) {
+                    infoTextView!!.text = getString(R.string.the_entered_break_time_is_too_big)
                 } else {
                     if (withBreak.length == 1) {
                         withBreak = "0$withBreak"
@@ -363,8 +362,8 @@ class HomeFragment : Fragment() {
                         outTimeTotal,
                         breakTime.text.toString()
                     )
-                    infoTextView!!.text =
-                        "Total Hours: $diffHours:$diffMinutes\nTotal Hours With Break: $hoursWithBreak:$withBreak"
+
+                    infoTextView!!.text = getString(R.string.total_hours_with_break_time_format, diffHours, diffMinutes, hoursWithBreak, withBreak)
                 }
             } else {
                 savingHours(
@@ -373,7 +372,7 @@ class HomeFragment : Fragment() {
                     outTimeTotal,
                     "0"
                 )
-                infoTextView?.text = "Total Hours: $diffHours:$diffMinutes"
+                infoTextView?.text = getString(R.string.total_hours_time_format, diffHours, diffMinutes)
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())
@@ -430,9 +429,8 @@ class HomeFragment : Fragment() {
         var hoursDifference = outTimeHours.toInt() - inTimeHours.toInt()
 
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
-            infoTextView1?.text = "In time and out time can not be the same"
-        }
-        else {
+            infoTextView1?.text = getString(R.string.in_time_and_out_time_can_not_be_the_same)
+        } else {
             if (minutesDecimal < 0) {
                 hoursDifference -= 1
             }
@@ -482,7 +480,7 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            var breakTimeNumber = 0.0
+            val breakTimeNumber: Double
             val totalHours = "$hoursDifference.$minutesWithoutFirstDecimal".toDouble()
 
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTime)
@@ -493,7 +491,7 @@ class HomeFragment : Fragment() {
                     .setScale(2, RoundingMode.HALF_EVEN)
 
                 if (totalHoursWithBreak.toDouble() < 0.0) {
-                    infoTextView1!!.text = "The entered break time is too big"
+                    infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
                 } else {
                     savingHours(
                         totalHoursWithBreak.toString(),
@@ -501,12 +499,12 @@ class HomeFragment : Fragment() {
                         outTimeTotal,
                         breakTime.text.toString()
                     )
-                    infoTextView1!!.text =
-                        "Total Hours: $hoursDifference.$minutesWithoutFirstDecimal\nTotal Hours With Break: $totalHoursWithBreak"
+
+                    infoTextView1?.text = getString(R.string.total_hours_with_break_decimal_format, hoursDifference, minutesWithoutFirstDecimal, totalHoursWithBreak)
                 }
             } else {
                 savingHours(totalHours.toString(), inTimeTotal, outTimeTotal, "0")
-                infoTextView1!!.text = "Total Hours: $hoursDifference.$minutesWithoutFirstDecimal"
+                infoTextView1?.text = getString(R.string.total_hours_decimal_format, hoursDifference, minutesWithoutFirstDecimal)
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())

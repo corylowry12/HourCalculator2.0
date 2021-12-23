@@ -5,19 +5,19 @@
     <item
         android:id="@+id/copyMenu"
         android:icon="@drawable/ic_content_copy_black_24dp"
-        android:title="Copy To Clipboard"
+        android:title="@string/copy_to_clipboard"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/shareMenu"
         android:icon="@drawable/ic_share_black_24dp"
-        android:title="Share"
+        android:title="@string/share"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/refresh"
         android:icon="@drawable/ic_refresh_black_24dp"
-        android:title="Refresh"
+        android:title="@string/refresh"
         app:showAsAction="never" />
 
 </menu>

@@ -86,12 +86,14 @@ class AppSettingsFragment : Fragment() {
                         AccentColor(requireContext()).alertTheme()
                     )
                     alert.setCancelable(false)
-                    alert.setTitle("Warning")
-                    alert.setMessage("You are about to reset all App Settings to default, would you like to continue?")
-                    alert.setPositiveButton("Yes") { _, _ ->
+                    alert.setTitle(getString(R.string.yes))
+                    alert.setMessage(getString(R.string.reset_app_settings_warning))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         reset()
                     }
-                    alert.setNegativeButton("No") { dialog, _ ->
+                    alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                        Vibrate().vibration(requireContext())
                         dialog.dismiss()
                     }
                     alert.show()
@@ -116,12 +118,12 @@ class AppSettingsFragment : Fragment() {
             if (calculationData.loadCalculationState()) {
                 Toast.makeText(
                     requireContext(),
-                    "Decimal Calculation Already Enabled",
+                    getString(R.string.decimal_calculation_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 calculationData.setCalculationState(true)
-                Toast.makeText(requireContext(), "Decimal Calculation Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.decimal_calculation_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -131,12 +133,12 @@ class AppSettingsFragment : Fragment() {
             if (!calculationData.loadCalculationState()) {
                 Toast.makeText(
                     requireContext(),
-                    "Time Calculation Already Enabled",
+                    getString(R.string.time_calculation_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 calculationData.setCalculationState(false)
-                Toast.makeText(requireContext(), "Time Calculation Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.time_calculation_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -154,21 +156,21 @@ class AppSettingsFragment : Fragment() {
         enableVibration?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (vibrationData.loadVibrationState()) {
-                Toast.makeText(requireContext(), "Vibration Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.vibration_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 vibrationData.setVibrationState(true)
-                Toast.makeText(requireContext(), "Vibration Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.vibration_enabled), Toast.LENGTH_SHORT).show()
             }
         }
         disableVibration?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!vibrationData.loadVibrationState()) {
-                Toast.makeText(requireContext(), "Vibration Already Disabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.vibration_already_disabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 vibrationData.setVibrationState(false)
-                Toast.makeText(requireContext(), "Vibration Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.vibration_disabled), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -185,11 +187,11 @@ class AppSettingsFragment : Fragment() {
         enableHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (historyToggleData.loadHistoryState()) {
-                Toast.makeText(requireContext(), "History Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.history_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 historyToggleData.setHistoryToggle(true)
-                Toast.makeText(requireContext(), "History Is Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.history_is_enabled), Toast.LENGTH_SHORT).show()
             }
             val runnable = Runnable {
                 (context as MainActivity).toggleHistory()
@@ -200,7 +202,7 @@ class AppSettingsFragment : Fragment() {
         disableHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!historyToggleData.loadHistoryState()) {
-                Toast.makeText(requireContext(), "History is already disabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.history_is_already_disabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 historyToggleData.setHistoryToggle(false)
@@ -209,24 +211,24 @@ class AppSettingsFragment : Fragment() {
                     AccentColor(requireContext()).alertTheme()
                 )
                 alertDialog.setCancelable(false)
-                alertDialog.setTitle("History")
-                alertDialog.setMessage("What would you like to do with history?")
-                alertDialog.setPositiveButton("Delete") { _, _ ->
+                alertDialog.setTitle(getString(R.string.history))
+                alertDialog.setMessage(getString(R.string.what_would_you_like_to_do_with_history))
+                alertDialog.setPositiveButton(getString(R.string.delete)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     val dbHandler = DBHelper(requireContext(), null)
                     dbHandler.deleteAll()
-                    Toast.makeText(requireContext(), "History Deleted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.history_deleted), Toast.LENGTH_SHORT).show()
                     val runnable = Runnable {
                         (context as MainActivity).changeBadgeNumber()
                     }
 
                     MainActivity().runOnUiThread(runnable)
                 }
-                alertDialog.setNeutralButton("Nothing") { _, _ ->
+                alertDialog.setNeutralButton(getString(R.string.nothing)) { _, _ ->
                     Vibrate().vibration(requireContext())
                 }
                 alertDialog.create().show()
-                Toast.makeText(requireContext(), "History Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.history_disabled), Toast.LENGTH_SHORT).show()
             }
             val runnable = Runnable {
                 (context as MainActivity).toggleHistory()
@@ -250,12 +252,12 @@ class AppSettingsFragment : Fragment() {
             if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
                 Toast.makeText(
                     requireContext(),
-                    "Break Text Box Already Enabled",
+                    getString(R.string.break_text_box_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 breakTextBoxVisiblityClass.setVisibility(0)
-                Toast.makeText(requireContext(), "Break Text Box Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.break_text_box_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -264,12 +266,12 @@ class AppSettingsFragment : Fragment() {
             if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
                 Toast.makeText(
                     requireContext(),
-                    "Break Text Box Already Disabled",
+                    getString(R.string.break_text_box_already_disabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 breakTextBoxVisiblityClass.setVisibility(1)
-                Toast.makeText(requireContext(), "Break Text Box Disabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.break_text_box_disabled), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -325,7 +327,7 @@ class AppSettingsFragment : Fragment() {
         VibrationData(requireContext()).setVibrationState(true)
         HistoryToggleData(requireContext()).setHistoryToggle(true)
         BreakTextBoxVisibilityClass(requireContext()).setVisibility(0)
-        WagesData(requireContext()).setWageAmount("7.25")
+        WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
 
         decimalFormat?.isChecked = true
         timeFormat?.isChecked = false
@@ -335,7 +337,7 @@ class AppSettingsFragment : Fragment() {
         disableHistory?.isChecked = false
         enableBreakTextBox?.isChecked = true
         disableBreakTextBox?.isChecked = false
-        wagesEditText?.setText("7.25")
+        wagesEditText?.setText(getString(R.string.wages_default))
 
         val runnable = Runnable {
             (context as MainActivity).toggleHistory()
@@ -343,7 +345,7 @@ class AppSettingsFragment : Fragment() {
 
         MainActivity().runOnUiThread(runnable)
 
-        Toast.makeText(requireContext(), "App Settings set back to defaults", Toast.LENGTH_LONG)
+        Toast.makeText(requireContext(), getString(R.string.app_settings_reset_to_default), Toast.LENGTH_LONG)
             .show()
     }
 

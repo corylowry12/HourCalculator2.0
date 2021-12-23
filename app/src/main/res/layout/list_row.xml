@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
@@ -36,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:text="In TIme"
                 android:textColor="?attr/settingsTextColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_out"
@@ -45,7 +45,8 @@
                 android:layout_below="@id/row_in"
                 android:text="Out Time"
                 android:textColor="?attr/settingsTextColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_break"
@@ -54,7 +55,8 @@
                 android:layout_below="@id/row_out"
                 android:text="Break"
                 android:textColor="?attr/settingsTextColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_total"
@@ -63,7 +65,8 @@
                 android:layout_below="@id/row_break"
                 android:text="Total"
                 android:textColor="?attr/settingsTextColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_day"
@@ -72,7 +75,8 @@
                 android:layout_below="@id/row_total"
                 android:text="Day"
                 android:textColor="?attr/settingsTextColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <ImageButton
                 android:id="@+id/imageViewOptions"
@@ -84,7 +88,8 @@
                 android:contentDescription="more items button"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_more_vert_24px"
-                app:tint="?attr/historyItemMenuTint" />
+                app:tint="?attr/historyItemMenuTint"
+                tools:ignore="HardcodedText" />
 
         </RelativeLayout>
 

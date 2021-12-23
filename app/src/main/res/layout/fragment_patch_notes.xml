@@ -8,7 +8,6 @@
     tools:context=".fragments.PatchNotesFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayoutAppSettings"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
@@ -52,7 +51,6 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -71,7 +69,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/bugFixesTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
@@ -336,7 +333,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/newFeaturesCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -356,7 +352,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/newFeaturesTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
@@ -865,7 +860,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/enhancementsCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -885,7 +879,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/enhancementsTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
@@ -900,7 +893,7 @@
                         app:layout_constraintEnd_toStartOf="@id/enhancementsChevronImage"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,TooManyViews" />
 
                     <ImageView
                         android:id="@+id/enhancementsChevronImage"

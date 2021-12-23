@@ -26,8 +26,6 @@ import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 @DelicateCoroutinesApi
@@ -175,7 +173,7 @@ class AppearanceFragment : Fragment() {
             if (darkThemeData.loadDarkModeState() == 0) {
                 Toast.makeText(
                     requireContext(),
-                    "Light theme is already enabled",
+                    getString(R.string.light_theme_is_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -190,7 +188,7 @@ class AppearanceFragment : Fragment() {
         darkThemeButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (darkThemeData.loadDarkModeState() == 1) {
-                Toast.makeText(requireContext(), "Dark mode is already enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.dark_theme_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 darkThemeData.setDarkModeState(1)
@@ -206,7 +204,7 @@ class AppearanceFragment : Fragment() {
             if (darkThemeData.loadDarkModeState() == 2) {
                 Toast.makeText(
                     requireContext(),
-                    "Black theme is already enabled",
+                    getString(R.string.black_theme_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -223,7 +221,7 @@ class AppearanceFragment : Fragment() {
             if (darkThemeData.loadDarkModeState() == 3) {
                 Toast.makeText(
                     requireContext(),
-                    "System theme is already enabled",
+                    getString(R.string.system_theme_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -272,16 +270,16 @@ class AppearanceFragment : Fragment() {
         tealAccentButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 0) {
-                Toast.makeText(requireContext(), "Teal already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.teal_is_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
                 val alert = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
                 )
-                alert.setTitle("Warning")
-                alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setTitle(getString(R.string.warning))
+                alert.setMessage(getString(R.string.restart_warning))
                 alert.setCancelable(false)
-                alert.setPositiveButton("Yes") { _, _ ->
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
@@ -317,7 +315,7 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(0)
                     restartApplication()
                 }
-                alert.setNegativeButton("No") { _, _ ->
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     tealAccentButton.isChecked = false
                 }
@@ -327,16 +325,16 @@ class AppearanceFragment : Fragment() {
         pinkAccentButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 1) {
-                Toast.makeText(requireContext(), "Pink already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.pink_is_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
                 val alert = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
                 )
-                alert.setTitle("Warning")
-                alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setTitle(getString(R.string.warning))
+                alert.setMessage(getString(R.string.restart_warning))
                 alert.setCancelable(false)
-                alert.setPositiveButton("Yes") { _, _ ->
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
@@ -372,7 +370,7 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(1)
                     restartApplication()
                 }
-                alert.setNegativeButton("No") { _, _ ->
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     pinkAccentButton.isChecked = false
                 }
@@ -382,16 +380,16 @@ class AppearanceFragment : Fragment() {
         orangeAccentButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 2) {
-                Toast.makeText(requireContext(), "orange already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.orange_is_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
                 val alert = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
                 )
-                alert.setTitle("Warning")
-                alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setTitle(getString(R.string.warning))
+                alert.setMessage(getString(R.string.restart_warning))
                 alert.setCancelable(false)
-                alert.setPositiveButton("Yes") { _, _ ->
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
@@ -427,7 +425,7 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(2)
                     restartApplication()
                 }
-                alert.setNegativeButton("No") { _, _ ->
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     orangeAccentButton.isChecked = false
                 }
@@ -437,16 +435,16 @@ class AppearanceFragment : Fragment() {
         redAccentButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 3) {
-                Toast.makeText(requireContext(), "Red is already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.red_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
                 val alert = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
                 )
-                alert.setTitle("Warning")
-                alert.setMessage("This will restart the app, do you want to continue?")
+                alert.setTitle(getString(R.string.warning))
+                alert.setMessage(getString(R.string.restart_warning))
                 alert.setCancelable(false)
-                alert.setPositiveButton("Yes") { _, _ ->
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
@@ -482,7 +480,7 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(3)
                     restartApplication()
                 }
-                alert.setNegativeButton("No") { _, _ ->
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     redAccentButton.isChecked = false
                 }
@@ -492,16 +490,16 @@ class AppearanceFragment : Fragment() {
         systemAccentButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 4) {
-                Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.system_accent_color_is_already_enabled), Toast.LENGTH_SHORT).show()
             } else {
                 val alert = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
                 )
-                alert.setTitle("Warning (Experimental)")
-                alert.setMessage("This is an experimental feature. You may not get the results you are hoping for. This is still in testing. This may result in unexpected results and/or crashing. This will restart the app. Would you like to continue?")
+                alert.setTitle(getString(R.string.warning_experimental))
+                alert.setMessage(getString(R.string.system_accent_warning))
                 alert.setCancelable(false)
-                alert.setPositiveButton("Yes") { _, _ ->
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
@@ -537,7 +535,7 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(4)
                     restartApplication()
                 }
-                alert.setNegativeButton("No") { _, _ ->
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     systemAccentButton.isChecked = false
                 }
@@ -559,17 +557,17 @@ class AppearanceFragment : Fragment() {
 
             Vibrate().vibration(requireContext())
             if (coloredNavBarData.loadNavBar()) {
-                Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_is_already_enabled), Toast.LENGTH_SHORT).show()
             } else {
                 disableColoredNavBar.isChecked = false
                 val alert = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
                 )
-                alert.setTitle("Warning")
-                alert.setMessage("This may or may not work as expected on your device. Would you like to continue?")
+                alert.setTitle(getString(R.string.warning))
+                alert.setMessage(getString(R.string.may_or_may_not_work_warning))
                 alert.setCancelable(false)
-                alert.setPositiveButton("Yes") { _, _ ->
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
 
                     coloredNavBarData.setNavBar(true)
@@ -597,7 +595,7 @@ class AppearanceFragment : Fragment() {
                         }
                     }
                 }
-                alert.setNegativeButton("No") { _, _ ->
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     enableColoredNavBar.isChecked = false
                     disableColoredNavBar.isChecked = true
@@ -609,7 +607,7 @@ class AppearanceFragment : Fragment() {
         disableColoredNavBar.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!coloredNavBarData.loadNavBar()) {
-                Toast.makeText(requireContext(), "Already chosen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.colored_navigation_bar_is_already_disabled), Toast.LENGTH_SHORT).show()
             } else {
                 enableColoredNavBar.isChecked = false
                 activity?.window?.navigationBarColor =
@@ -647,9 +645,9 @@ class AppearanceFragment : Fragment() {
     private fun reset() {
         val alert =
             MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-        alert.setTitle("Warning")
-        alert.setMessage("Would you like to reset Appearance Settings?")
-        alert.setPositiveButton("Yes") { _, _ ->
+        alert.setTitle(getString(R.string.warning))
+        alert.setMessage(getString(R.string.would_you_like_to_reset_appearance_settings))
+        alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
             Vibrate().vibration(requireContext())
             when {
                 AccentColor(requireContext()).loadAccent() != 0 -> {
@@ -707,10 +705,10 @@ class AppearanceFragment : Fragment() {
             view?.findViewById<RadioButton>(R.id.enableColoredNavBar)?.isChecked = false
             activity?.window?.navigationBarColor =
                 ContextCompat.getColor(requireContext(), R.color.black)
-            Toast.makeText(requireContext(), "Appearance Settings reset", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), getString(R.string.appearance_settings_reset), Toast.LENGTH_LONG).show()
 
         }
-        alert.setNegativeButton("No") { _, _ ->
+        alert.setNegativeButton(getString(R.string.no)) { _, _ ->
             Vibrate().vibration(requireContext())
         }
         alert.show()

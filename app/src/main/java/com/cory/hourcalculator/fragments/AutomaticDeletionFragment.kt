@@ -16,7 +16,9 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class AutomaticDeletionFragment : Fragment() {
 
     private var color: Int = 0
@@ -49,27 +51,22 @@ class AutomaticDeletionFragment : Fragment() {
         when {
             accentColor.loadAccent() == 0 -> {
                 activity?.theme?.applyStyle(R.style.teal_accent, true)
-                //color = resources.getColor(R.color.colorPrimary)
                 color = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             }
             accentColor.loadAccent() == 1 -> {
                 activity?.theme?.applyStyle(R.style.pink_accent, true)
-                //color = resources.getColor(R.color.pinkAccent)
                 color = ContextCompat.getColor(requireContext(), R.color.pinkAccent)
             }
             accentColor.loadAccent() == 2 -> {
                 activity?.theme?.applyStyle(R.style.orange_accent, true)
-                //color = resources.getColor(R.color.orangeAccent)
                 color = ContextCompat.getColor(requireContext(), R.color.orangeAccent)
             }
             accentColor.loadAccent() == 3 -> {
                 activity?.theme?.applyStyle(R.style.red_accent, true)
-                //color = resources.getColor(R.color.redAccent)
                 color = ContextCompat.getColor(requireContext(), R.color.redAccent)
             }
             accentColor.loadAccent() == 4 -> {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
-                //color = resources.getColor(R.color.systemAccent)
                 color = ContextCompat.getColor(requireContext(), R.color.systemAccent)
             }
         }
@@ -133,12 +130,12 @@ class AutomaticDeletionFragment : Fragment() {
                     )
                 )
             )
-            two?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-            three?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-            four?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-            five?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-            six?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-            seven?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
+            two?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+            three?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+            four?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+            five?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+            six?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+            seven?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
         } else {
             disableHistoryAutomaticDeletion?.isChecked = true
             one?.isEnabled = false
@@ -187,14 +184,14 @@ class AutomaticDeletionFragment : Fragment() {
             if (historyDeletion.loadHistoryDeletionState()) {
                 Toast.makeText(
                     requireContext(),
-                    "History Automatic Deletion Already Enabled",
+                    getString(R.string.history_automatic_deletion_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 historyDeletion.setHistoryDeletionState(true)
                 Toast.makeText(
                     requireContext(),
-                    "History Automatic Deletion Enabled",
+                    getString(R.string.history_automatic_deletion_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
 
@@ -206,13 +203,13 @@ class AutomaticDeletionFragment : Fragment() {
                 six?.isEnabled = true
                 seven?.isEnabled = true
 
-                one?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-                two?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-                three?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-                four?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-                five?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-                six?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
-                seven?.setTextColor(ColorStateList.valueOf(resources.getColor(R.color.black)))
+                one?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+                two?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+                three?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+                four?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+                five?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+                six?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
+                seven?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
             }
 
             greaterThan()
@@ -222,14 +219,14 @@ class AutomaticDeletionFragment : Fragment() {
             if (!historyDeletion.loadHistoryDeletionState()) {
                 Toast.makeText(
                     requireContext(),
-                    "History Automatic Deletion Already Disabled",
+                    getString(R.string.history_automatic_deletion_already_disabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 historyDeletion.setHistoryDeletionState(false)
                 Toast.makeText(
                     requireContext(),
-                    "History Automatic Deletion Disabled",
+                    getString(R.string.history_automatic_deletion_disabled),
                     Toast.LENGTH_SHORT
                 ).show()
 
@@ -254,11 +251,11 @@ class AutomaticDeletionFragment : Fragment() {
         one?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 1) {
-                Toast.makeText(requireContext(), "One Entry Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.one_entry_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 daysWorked.setDaysWorked(1)
-                Toast.makeText(requireContext(), "One Entry Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.one_entry_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -267,11 +264,11 @@ class AutomaticDeletionFragment : Fragment() {
         two?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 2) {
-                Toast.makeText(requireContext(), "Two Entries Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.two_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 daysWorked.setDaysWorked(2)
-                Toast.makeText(requireContext(), "Two Entries Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.two_entries_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -282,12 +279,12 @@ class AutomaticDeletionFragment : Fragment() {
             if (daysWorked.loadDaysWorked() == 3) {
                 Toast.makeText(
                     requireContext(),
-                    "Three Entries Already Enabled",
+                    getString(R.string.three_entries_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 daysWorked.setDaysWorked(3)
-                Toast.makeText(requireContext(), "Three Entries Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.three_entries_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -296,11 +293,11 @@ class AutomaticDeletionFragment : Fragment() {
         four?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 4) {
-                Toast.makeText(requireContext(), "Four Entries Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.four_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 daysWorked.setDaysWorked(4)
-                Toast.makeText(requireContext(), "Four Entries Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.four_entries_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -309,11 +306,11 @@ class AutomaticDeletionFragment : Fragment() {
         five?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 5) {
-                Toast.makeText(requireContext(), "Five Entries Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.five_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 daysWorked.setDaysWorked(5)
-                Toast.makeText(requireContext(), "Five Entries Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.five_entries_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -322,11 +319,11 @@ class AutomaticDeletionFragment : Fragment() {
         six?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 6) {
-                Toast.makeText(requireContext(), "Six Entries Already Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.six_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 daysWorked.setDaysWorked(6)
-                Toast.makeText(requireContext(), "Six Entries Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.six_entries_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -337,12 +334,12 @@ class AutomaticDeletionFragment : Fragment() {
             if (daysWorked.loadDaysWorked() == 7) {
                 Toast.makeText(
                     requireContext(),
-                    "Seven Entries Already Enabled",
+                    getString(R.string.seven_entries_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 daysWorked.setDaysWorked(7)
-                Toast.makeText(requireContext(), "Seven Entries Enabled", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.seven_entries_enabled), Toast.LENGTH_SHORT)
                     .show()
                 greaterThan()
             }
@@ -375,13 +372,13 @@ class AutomaticDeletionFragment : Fragment() {
                 AccentColor(requireContext()).alertTheme()
             )
             alert.setCancelable(false)
-            alert.setTitle("Warning")
+            alert.setTitle(getString(R.string.warning))
             if (greaterThan > 1) {
-                alert.setMessage("The number of hours stored is greater than the number that is allowed to be stored. Would you like to delete $greaterThan entries?")
+                alert.setMessage(getString(R.string.history_deletion_multiple, greaterThan))
             } else {
-                alert.setMessage("The number of hours stored is greater than the number that is allowed to be stored. Would you like to delete $greaterThan entry?")
+                alert.setMessage(getString(R.string.history_deletion_single, greaterThan))
             }
-            alert.setPositiveButton("Yes") { _, _ ->
+            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 HistoryDeletion(requireContext()).deletion()
 
@@ -390,12 +387,12 @@ class AutomaticDeletionFragment : Fragment() {
                 }
                 MainActivity().runOnUiThread(runnable)
             }
-            alert.setNegativeButton("No") { _, _ ->
+            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 historyDeletion.setHistoryDeletionState(false)
                 Toast.makeText(
                     requireContext(),
-                    "History Automatic Deletion Disabled",
+                    getString(R.string.history_automatic_deletion_disabled),
                     Toast.LENGTH_SHORT
                 ).show()
 
@@ -424,48 +421,58 @@ class AutomaticDeletionFragment : Fragment() {
 
     private fun reset() {
 
-        val enableHistoryAutomaticDeletion =
-            activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
-        val disableHistoryAutomaticDeletion =
-            activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
+        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+        alert.setTitle(getString(R.string.warning))
+        alert.setMessage(getString(R.string.reset_automatic_deletion_settings_warning))
+        alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            Vibrate().vibration(requireContext())
+            val enableHistoryAutomaticDeletion =
+                activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
+            val disableHistoryAutomaticDeletion =
+                activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
 
-        val one = activity?.findViewById<RadioButton>(R.id.one)
-        val two = activity?.findViewById<RadioButton>(R.id.two)
-        val three = activity?.findViewById<RadioButton>(R.id.three)
-        val four = activity?.findViewById<RadioButton>(R.id.four)
-        val five = activity?.findViewById<RadioButton>(R.id.five)
-        val six = activity?.findViewById<RadioButton>(R.id.six)
-        val seven = activity?.findViewById<RadioButton>(R.id.seven)
+            val one = activity?.findViewById<RadioButton>(R.id.one)
+            val two = activity?.findViewById<RadioButton>(R.id.two)
+            val three = activity?.findViewById<RadioButton>(R.id.three)
+            val four = activity?.findViewById<RadioButton>(R.id.four)
+            val five = activity?.findViewById<RadioButton>(R.id.five)
+            val six = activity?.findViewById<RadioButton>(R.id.six)
+            val seven = activity?.findViewById<RadioButton>(R.id.seven)
 
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
+            val historyDeletion = HistoryAutomaticDeletion(requireContext())
 
-        historyDeletion.setHistoryDeletionState(false)
+            historyDeletion.setHistoryDeletionState(false)
 
-        enableHistoryAutomaticDeletion?.isChecked = false
-        disableHistoryAutomaticDeletion?.isChecked = true
+            enableHistoryAutomaticDeletion?.isChecked = false
+            disableHistoryAutomaticDeletion?.isChecked = true
 
-        one?.isEnabled = false
-        two?.isEnabled = false
-        three?.isEnabled = false
-        four?.isEnabled = false
-        five?.isEnabled = false
-        six?.isEnabled = false
-        seven?.isEnabled = false
+            one?.isEnabled = false
+            two?.isEnabled = false
+            three?.isEnabled = false
+            four?.isEnabled = false
+            five?.isEnabled = false
+            six?.isEnabled = false
+            seven?.isEnabled = false
 
-        one?.isChecked = false
-        two?.isChecked = false
-        three?.isChecked = false
-        four?.isChecked = false
-        five?.isChecked = false
-        six?.isChecked = false
-        seven?.isChecked = true
+            one?.isChecked = false
+            two?.isChecked = false
+            three?.isChecked = false
+            four?.isChecked = false
+            five?.isChecked = false
+            six?.isChecked = false
+            seven?.isChecked = true
 
-        one?.setTextColor(color)
-        two?.setTextColor(color)
-        three?.setTextColor(color)
-        four?.setTextColor(color)
-        five?.setTextColor(color)
-        six?.setTextColor(color)
-        seven?.setTextColor(color)
+            one?.setTextColor(color)
+            two?.setTextColor(color)
+            three?.setTextColor(color)
+            four?.setTextColor(color)
+            five?.setTextColor(color)
+            six?.setTextColor(color)
+            seven?.setTextColor(color)
+        }
+        alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+            Vibrate().vibration(requireContext())
+        }
+        alert.show()
     }
 }

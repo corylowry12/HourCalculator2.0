@@ -8,7 +8,6 @@
     tools:context=".fragments.FAQFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayoutFAQ"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
@@ -51,7 +50,6 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/sortMethodsCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +76,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="Q: Why are all sorting methods in History not showing up?"
+                        android:text="@string/q_why_are_all_sorting_methods_in_history_not_showing_up"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toStartOf="@id/sortMethodChevronImage"
@@ -94,7 +92,7 @@
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
                         android:paddingBottom="10dp"
-                        android:text="A: If all sorting methods arent showing up, it is because you have some hours stored in the time format. The SQLite database in which hours are stored can not sort the entries if they are not in decimal format."
+                        android:text="@string/a_if_all_sorting_methods_arent_showing_up_it_is_because_you_have_some_hours_stored_in_the_time_format_the_sqlite_database_in_which_hours_are_stored_can_not_sort_the_entries_if_they_are_not_in_decimal_format"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         android:visibility="gone"
@@ -119,7 +117,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/systemThemeCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -146,7 +143,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="Q: Why is the system theming option not showing up in the Appearance Settings?"
+                        android:text="@string/q_why_is_the_system_theming_option_not_showing_up_in_the_appearance_settings"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toStartOf="@id/systemThemeChevronImage"
@@ -162,7 +159,7 @@
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
                         android:paddingBottom="10dp"
-                        android:text="A: If you are not on Android 12 or later, the system theming option will not show up. Because prior versions didn't have the System Theming API."
+                        android:text="@string/a_if_you_are_not_on_android_12_or_later_the_system_theming_option_will_not_show_up_because_prior_versions_didn_t_have_the_system_theming_api"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         android:visibility="gone"
@@ -187,7 +184,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugReportingCardView"
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,7 +210,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="Q: How do I report a bug?"
+                        android:text="@string/q_how_do_i_report_a_bug"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toStartOf="@id/bugReportingChevronImage"
@@ -230,7 +226,7 @@
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
                         android:paddingBottom="10dp"
-                        android:text="A: Go to the settings tab via the navigation bar at the bottom, then click on report a bug and create a new issue in the Github repository."
+                        android:text="@string/a_go_to_the_settings_tab_via_the_navigation_bar_at_the_bottom_then_click_on_report_a_bug_and_create_a_new_issue_in_the_github_repository"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         android:visibility="gone"

@@ -14,10 +14,10 @@ class Snackbar {
     fun snackbar(context: Context, view: View) {
 
         val snackbar =
-            Snackbar.make(view, "Hour Deleted", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, context.getString(R.string.entry_deleted), Snackbar.LENGTH_LONG)
                 .setDuration(5000)
                 .setAnchorView(R.id.bottom_nav)
-        snackbar.setAction("UNDO") {
+        snackbar.setAction(context.getString(R.string.undo)) {
             Vibrate().vibration(context)
 
             val runnable = Runnable {

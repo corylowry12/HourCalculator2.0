@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -23,6 +24,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.LinkClass
 import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
@@ -34,7 +37,44 @@ class WebviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
+                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
+                }
+            }
+        }
+
+        val accentColor = AccentColor(requireContext())
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                activity?.theme?.applyStyle(R.style.system_accent, true)
+            }
+        }
         return inflater.inflate(R.layout.fragment_webview, container, false)
     }
 
@@ -70,11 +110,11 @@ class WebviewFragment : Fragment() {
                     R.id.copyMenu -> {
                         val clipBoard =
                             activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val clip = ClipData.newPlainText("URL", url) //intent.getStringExtra("url")
+                        val clip = ClipData.newPlainText("URL", url)
                         clipBoard.setPrimaryClip(clip)
                         Toast.makeText(
                             requireContext(),
-                            "Text copied to clipboard",
+                            getString(R.string.text_copied_to_clipboard),
                             Toast.LENGTH_SHORT
                         ).show()
                         true
@@ -85,7 +125,7 @@ class WebviewFragment : Fragment() {
                         shareIntent.type = "text/plain"
                         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "")
                         shareIntent.putExtra(Intent.EXTRA_TEXT, url)
-                        startActivity(Intent.createChooser(shareIntent, "Share Via..."))
+                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
                         true
                     }
                     else -> false

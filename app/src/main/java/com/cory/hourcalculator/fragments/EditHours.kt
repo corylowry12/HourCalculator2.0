@@ -3,6 +3,7 @@ package com.cory.hourcalculator.fragments
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
@@ -56,7 +58,44 @@ class EditHours : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
+                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
+                }
+            }
+        }
+
+        val accentColor = AccentColor(requireContext())
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                activity?.theme?.applyStyle(R.style.system_accent, true)
+            }
+        }
         return inflater.inflate(R.layout.fragment_edit_hours, container, false)
     }
 
@@ -139,9 +178,6 @@ class EditHours : Fragment() {
             val neutralButton = datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
             positiveButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
-                val time = LocalTime.now()
-                val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)
-                val dayOfWeek = time.format(timeFormatter)
 
                 val year = datePicker.datePicker.year
                 val month = datePicker.datePicker.month
@@ -384,8 +420,8 @@ class EditHours : Fragment() {
 
     private fun calculateTime(idMap: String, day: String) {
 
-        var inTimeTotal = ""
-        var outTimeTotal = ""
+        val inTimeTotal: String
+        val outTimeTotal: String
 
         val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTimeEdit)
         val timePickerOutTime =
@@ -418,7 +454,7 @@ class EditHours : Fragment() {
         }
 
         if (diffHours == 0 && diffMinutes.toInt() == 0) {
-            infoTextView1?.text = "In time and out time can not be the same"
+            infoTextView1?.text = getString(R.string.in_time_and_out_time_can_not_be_the_same)
         } else {
             if (diffHours < 0) {
                 diffHours += 24
@@ -467,7 +503,7 @@ class EditHours : Fragment() {
                 }
 
                 if (diffHours < 0) {
-                    infoTextView1!!.text = "The entered break time is too big"
+                    infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
                 } else {
                     if (withBreak.length == 1) {
                         withBreak = "0$withBreak"
@@ -529,7 +565,7 @@ class EditHours : Fragment() {
         }
         var hoursDifference = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
-            infoTextView1?.text = getString(R.string.in_time_and_out_time_cant_be_the_same)
+            infoTextView1?.text = getString(R.string.in_time_and_out_time_can_not_be_the_same)
         }
         else {
             if (minutesDecimal < 0) {
@@ -571,7 +607,7 @@ class EditHours : Fragment() {
                 }
             }
 
-            var breakTimeNumber = 0.0
+            val breakTimeNumber: Double
             val totalHours = "$hoursDifference.$minutesWithoutFirstDecimal".toDouble()
 
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
@@ -614,11 +650,6 @@ class EditHours : Fragment() {
         val timeInMillis = calendar.timeInMillis
 
         dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, timeInMillis, breakTime)
-
-        /*val runnable = Runnable {
-            (context as MainActivity).update()
-        }
-        MainActivity().runOnUiThread(runnable)*/
 
         activity?.supportFragmentManager?.popBackStack()
     }

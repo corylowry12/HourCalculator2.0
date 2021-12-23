@@ -27,10 +27,9 @@ import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -108,7 +107,7 @@ class HistoryFragment : Fragment() {
 
         val accentColor = AccentColor(requireContext())
         val floatingActionButtonHistory =
-            activity?.findViewById<ExtendedFloatingActionButton>(R.id.floatingActionButtonHistory)
+            activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
         when {
 
             accentColor.loadAccent() == 0 -> {
@@ -156,13 +155,13 @@ class HistoryFragment : Fragment() {
                                     output.toDouble() * wagesData.loadWageAmount().toString()
                                         .toDouble()
                                 val wagesRounded = String.format("%.2f", wages)
-                                alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}\nWages: $$wagesRounded")
+                                alert.setMessage(getString(R.string.history_info_dialog, output, dbHandler.getCount(), wagesRounded))
                             } catch (e: NumberFormatException) {
                                 e.printStackTrace()
-                                alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}\nWages: There was an error")
+                                alert.setMessage(getString(R.string.history_info_dialog_error, output, dbHandler.getCount()))
                             }
                         } else {
-                            alert.setMessage("Total Hours: $output\nNumber of Entries: ${dbHandler.getCount()}\nWages: There was an error")
+                            alert.setMessage(getString(R.string.history_info_dialog_error, output, dbHandler.getCount()))
                         }
                         alert.setPositiveButton(getString(R.string.ok)) { _, _ ->
                             Vibrate().vibration(requireContext())
@@ -204,7 +203,7 @@ class HistoryFragment : Fragment() {
                         }
 
                         val listItems: Array<String> = if (containsColon) {
-                            if ((sortData.loadSortState() == "totalHours DESC" || sortData.loadSortState() == "totalHours ASC") && containsColon) {
+                            if ((sortData.loadSortState() == getString(R.string.total_desc) || sortData.loadSortState() == getString(R.string.total_asc)) && containsColon) {
                                 selectedItem = 0
                                 sortData.setSortState(getString(R.string.day_desc))
                             }
@@ -225,7 +224,7 @@ class HistoryFragment : Fragment() {
                             requireContext(),
                             AccentColor(requireContext()).alertTheme()
                         )
-                        alert.setTitle("Sorting Method")
+                        alert.setTitle(getString(R.string.sorting_method))
                         alert.setSingleChoiceItems(
                             listItems,
                             selectedItem
@@ -296,19 +295,13 @@ class HistoryFragment : Fragment() {
         }
 
         loadIntoList()
-        floatingActionButtonHistory?.isExtended = false
+
         listView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
-                if (pastVisibleItems >= 2) {
-                    floatingActionButtonHistory?.extend()
-                    floatingActionButtonHistory?.text = pastVisibleItems.toString()
-                } else {
-                    floatingActionButtonHistory?.shrink()
-                }
 
                 if (pastVisibleItems > 0) {
                     floatingActionButtonHistory?.visibility = View.VISIBLE
@@ -363,7 +356,7 @@ class HistoryFragment : Fragment() {
 
             val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
 
-            var decimalTime = 0.0
+            var decimalTime: Double
             if (array.contains(":")) {
                 val (hours, minutes) = array.split(":")
                 val decimal =
@@ -438,23 +431,11 @@ class HistoryFragment : Fragment() {
         )
 
         listView?.adapter?.notifyItemInserted(ItemPosition(requireContext()).loadPosition())
-
-        //loadIntoList()
     }
 
     private lateinit var recyclerViewState: Parcelable
 
     fun saveState() {
-        /*val listView = activity?.findViewById<RecyclerView>(R.id.listView)
-        val index = listView?.firstVisiblePosition
-        val v = listView?.getChildAt(0)
-        val top = if (v == null) 0 else v.top - listView.paddingTop
-
-        listView?.setSelectionFromTop(index!!, top)
-
-        containsColon = false
-
-        loadIntoList()*/
 
         val recyclerView = view?.findViewById<RecyclerView>(R.id.listView)
 
@@ -488,7 +469,7 @@ class HistoryFragment : Fragment() {
         animation.duration = 500
         val listView = view?.findViewById<RecyclerView>(R.id.listView)
         val floatingActionButtonHistory =
-            view?.findViewById<ExtendedFloatingActionButton>(R.id.floatingActionButtonHistory)
+            view?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
 
         floatingActionButtonHistory?.visibility = View.INVISIBLE
 

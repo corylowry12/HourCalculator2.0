@@ -146,10 +146,10 @@ class CustomAdapter(
                         notifyItemRemoved(position)
 
                         val snackbar =
-                            Snackbar.make(holder.itemView, "Hour Deleted", Snackbar.LENGTH_LONG)
+                            Snackbar.make(holder.itemView, context.getString(R.string.entry_deleted), Snackbar.LENGTH_LONG)
                                 .setDuration(5000)
                                 .setAnchorView(R.id.bottom_nav)
-                        snackbar.setAction("UNDO") {
+                        snackbar.setAction(context.getString(R.string.undo)) {
                             Vibrate().vibration(context)
                             dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
                             dataList.add(map)
@@ -185,10 +185,10 @@ class CustomAdapter(
                             context,
                             AccentColor(context).alertTheme()
                         )
-                        alertDialog.setTitle("Delete All?")
-                        alertDialog.setMessage("Would you like to delete all?")
+                        alertDialog.setTitle(context.getString(R.string.warning))
+                        alertDialog.setMessage(context.getString(R.string.would_you_like_to_delete_all))
                         alertDialog.setCancelable(false)
-                        alertDialog.setPositiveButton("Yes") { _, _ ->
+                        alertDialog.setPositiveButton(context.getString(R.string.yes)) { _, _ ->
                             Vibrate().vibration(context)
 
                             val cursor = dbHandler.getAllRow(context)
@@ -219,7 +219,7 @@ class CustomAdapter(
 
                             val snackBar = Snackbar.make(
                                 holder.itemView,
-                                "All Hours Deleted",
+                                context.getString(R.string.all_entries_deleted),
                                 Snackbar.LENGTH_LONG
                             )
                                 .setDuration(5000)
@@ -231,7 +231,7 @@ class CustomAdapter(
                                     AccentColor(context).snackbarActionTextColor()
                                 )
                             )
-                            snackBar.setAction("UNDO") {
+                            snackBar.setAction(context.getString(R.string.undo)) {
                                 Vibrate().vibration(context)
                                 GlobalScope.launch(Dispatchers.Main) {
                                     for (i in inTime.indices) {
@@ -252,7 +252,7 @@ class CustomAdapter(
                             }
                             snackBar.show()
                         }
-                            .setNeutralButton("No") { _, _ ->
+                            .setNeutralButton(context.getString(R.string.no)) { _, _ ->
                                 Vibrate().vibration(context)
                             }
                         val alert = alertDialog.create()
@@ -303,7 +303,7 @@ class CustomAdapter(
                             manager.commit()
 
                         } else {
-                            Toast.makeText(context, "Cant edit", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.cant_edit_entry), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

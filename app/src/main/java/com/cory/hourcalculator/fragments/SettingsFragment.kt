@@ -22,8 +22,6 @@ import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.text.SimpleDateFormat
-import java.util.*
 
 @DelicateCoroutinesApi
 class SettingsFragment : Fragment() {
@@ -128,7 +126,7 @@ class SettingsFragment : Fragment() {
             openFragment(PatchNotesFragment())
         }
 
-        if (Version(requireContext()).loadVersion() != "9.0.0") {
+        if (Version(requireContext()).loadVersion() != getString(R.string.version_number)) {
             patchNotesChevron?.setImageResource(R.drawable.redcircle)
             patchNotesChevron?.setColorFilter(
                 ContextCompat.getColor(
@@ -215,7 +213,7 @@ class SettingsFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "There was an error, please try again",
+                    getString(R.string.there_was_an_error_please_try_again),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -227,15 +225,15 @@ class SettingsFragment : Fragment() {
 
         val alert =
             MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-        alert.setTitle("Warning")
-        alert.setMessage("Would you like to delete all app data?")
-        alert.setPositiveButton("Yes") { _, _ ->
+        alert.setTitle(getString(R.string.warning))
+        alert.setMessage(getString(R.string.would_you_like_to_delete_all_app_data))
+        alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
             Vibrate().vibration(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
             requireContext().getSharedPreferences("file", 0).edit().clear().apply()
             requireContext().cacheDir.deleteRecursively()
             dbHandler.deleteAll()
-            Toast.makeText(requireContext(), "App Data Cleared", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), getString(R.string.app_data_cleared), Toast.LENGTH_LONG).show()
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent =
                     requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
@@ -245,7 +243,7 @@ class SettingsFragment : Fragment() {
                 activity?.finish()
             }, 1500)
         }
-        alert.setNegativeButton("No") { _, _ ->
+        alert.setNegativeButton(getString(R.string.no)) { _, _ ->
             Vibrate().vibration(requireContext())
         }
         alert.show()
