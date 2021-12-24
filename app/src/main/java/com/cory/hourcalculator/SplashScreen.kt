@@ -10,6 +10,7 @@ import android.os.Looper
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -47,51 +48,7 @@ class SplashScreen : AppCompatActivity() {
 
         val accentColor = AccentColor(this)
 
-        if (Build.VERSION.RELEASE.contains(".")) {
-            val version = Build.VERSION.RELEASE.split(".")
-            if (version.toString().toInt() < 12) {
-                load()
-
-                val imageView = findViewById<ImageView>(R.id.SplashScreenImage)
-                when {
-                    accentColor.loadAccent() == 0 || accentColor.loadAccent() == 4 -> {
-                        imageView.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                this,
-                                R.drawable.hourcalculatorlogo
-                            )
-                        )
-                    }
-                    accentColor.loadAccent() == 1 -> {
-                        imageView.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                this,
-                                R.drawable.pinklogo
-                            )
-                        )
-                    }
-                    accentColor.loadAccent() == 2 -> {
-                        imageView.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                this,
-                                R.drawable.orange_logo
-                            )
-                        )
-                    }
-                    accentColor.loadAccent() == 3 -> {
-                        imageView.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                this,
-                                R.drawable.red_logo
-                            )
-                        )
-                    }
-                }
-            } else {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
-        } else if (Build.VERSION.RELEASE.toInt() < 12) {
+        if (Build.VERSION.SDK_INT < 31) {
             load()
 
             val imageView = findViewById<ImageView>(R.id.SplashScreenImage)
@@ -141,15 +98,8 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (Build.VERSION.RELEASE.contains(".")) {
-            val version = Build.VERSION.RELEASE.split(".")
-            if (version.toString().toInt() < 12) {
-                load()
-            } else {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
-        } else if (Build.VERSION.RELEASE.toInt() < 12) {
+
+        if (Build.VERSION.SDK_INT < 31) {
             load()
         } else {
             val intent = Intent(this, MainActivity::class.java)
