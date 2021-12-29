@@ -134,9 +134,6 @@ class PatchNotesFragment : Fragment() {
             R.id.bugFixesCardView2,
             R.id.bugFixesCardView3,
             R.id.bugFixesCardView4,
-            R.id.bugFixesCardView5,
-            R.id.bugFixesCardView6,
-            R.id.bugFixesCardView7
         )
         if (bugFixesBool) {
             for (i in 0 until enhancementsArray.count()) {
@@ -156,20 +153,7 @@ class PatchNotesFragment : Fragment() {
         newFeaturesBool = !newFeaturesBool
         val newFeaturesChevronImage = view?.findViewById<ImageView>(R.id.newFeaturesChevronImage)
         val bugFixesArray = arrayOf(
-            R.id.newFeaturesCardView1,
-            R.id.newFeaturesCardView2,
-            R.id.newFeaturesCardView3,
-            R.id.newFeaturesCardView4,
-            R.id.newFeaturesCardView5,
-            R.id.newFeaturesCardView6,
-            R.id.newFeaturesCardView7,
-            R.id.newFeaturesCardView8,
-            R.id.newFeaturesCardView9,
-            R.id.newFeaturesCardView10,
-            R.id.newFeaturesCardView11,
-            R.id.newFeaturesCardView12,
-            R.id.newFeaturesCardView13,
-            R.id.newFeaturesCardView14
+            R.id.newFeaturesCardView1
         )
         if (newFeaturesBool) {
             for (i in 0 until bugFixesArray.count()) {
@@ -188,25 +172,7 @@ class PatchNotesFragment : Fragment() {
         enhancementsBool = !enhancementsBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.enhancementsChevronImage)
         val enhancementsArray = arrayOf(
-            R.id.enhancementsCardView1,
-            R.id.enhancementsCardView2,
-            R.id.enhancementsCardView3,
-            R.id.enhancementsCardView4,
-            R.id.enhancementsCardView5,
-            R.id.enhancementsCardView6,
-            R.id.enhancementsCardView7,
-            R.id.enhancementsCardView8,
-            R.id.enhancementsCardView9,
-            R.id.enhancementsCardView10,
-            R.id.enhancementsCardView11,
-            R.id.enhancementsCardView12,
-            R.id.enhancementsCardView13,
-            R.id.enhancementsCardView14,
-            R.id.enhancementsCardView15,
-            R.id.enhancementsCardView16,
-            R.id.enhancementsCardView17,
-            R.id.enhancementsCardView18,
-            R.id.enhancementsCardView19
+            R.id.enhancementsCardView1
         )
         if (enhancementsBool) {
             for (i in 0 until enhancementsArray.count()) {

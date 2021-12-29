@@ -27,6 +27,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.lang.NumberFormatException
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.time.LocalTime
@@ -494,29 +495,33 @@ class EditHours : Fragment() {
 
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
-
-                var withBreak = (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
-                var hoursWithBreak = diffHours
-                if (withBreak.toInt() < 0) {
-                    hoursWithBreak -= 1
-                    withBreak = (withBreak.toInt() + 60).toString()
+                if (!breakTimeNumeric(breakTime)) {
+                    infoTextView1!!.text = getString(R.string.error_with_break_time_must_be_numbers_only)
                 }
-
-                if (diffHours < 0) {
-                    infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
-                } else {
-                    if (withBreak.length == 1) {
-                        withBreak = "0$withBreak"
+                else {
+                    var withBreak =
+                        (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
+                    var hoursWithBreak = diffHours
+                    if (withBreak.toInt() < 0) {
+                        hoursWithBreak -= 1
+                        withBreak = (withBreak.toInt() + 60).toString()
                     }
 
-                    savingHours(
-                        idMap, "$hoursWithBreak:$withBreak",
-                        inTimeTotal,
-                        outTimeTotal,
-                        breakTime.text.toString(),
-                        day
-                    )
+                    if (diffHours < 0) {
+                        infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
+                    } else {
+                        if (withBreak.length == 1) {
+                            withBreak = "0$withBreak"
+                        }
 
+                        savingHours(
+                            idMap, "$hoursWithBreak:$withBreak",
+                            inTimeTotal,
+                            outTimeTotal,
+                            breakTime.text.toString(),
+                            day
+                        )
+                    }
                 }
             } else {
                 savingHours(
@@ -612,19 +617,23 @@ class EditHours : Fragment() {
 
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
+                if (!breakTimeNumeric(breakTime)) {
+                    infoTextView1!!.text = getString(R.string.error_with_break_time_must_be_numbers_only)
+                }
+                else {
+                    breakTimeNumber = breakTime.text.toString().toDouble() / 60
+                    val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
+                        .setScale(2, RoundingMode.HALF_EVEN).toString()
 
-                breakTimeNumber = breakTime.text.toString().toDouble() / 60
-                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
-                    .setScale(2, RoundingMode.HALF_EVEN).toString()
-
-                savingHours(
-                    idMap,
-                    totalHoursWithBreak,
-                    inTimeTotal,
-                    outTimeTotal,
-                    breakTime.text.toString(),
-                    day
-                )
+                    savingHours(
+                        idMap,
+                        totalHoursWithBreak,
+                        inTimeTotal,
+                        outTimeTotal,
+                        breakTime.text.toString(),
+                        day
+                    )
+                }
             } else {
                 savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, "0", day)
             }
@@ -652,6 +661,15 @@ class EditHours : Fragment() {
         dbHandler.update(id, inTimeTotal, outTimeTotal, totalHours, timeInMillis, breakTime)
 
         activity?.supportFragmentManager?.popBackStack()
+    }
+
+    private fun breakTimeNumeric(breakTime: TextInputEditText) : Boolean {
+        return try {
+            breakTime.text.toString().toInt()
+            true
+        } catch (e: NumberFormatException) {
+            false
+        }
     }
 
     private fun hideKeyboard(breakEditText: TextInputEditText?) {

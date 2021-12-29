@@ -5,6 +5,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.InputType
+import android.text.method.DigitsKeyListener
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -14,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
@@ -23,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.lang.NumberFormatException
 import java.math.RoundingMode
 import java.util.*
 
@@ -79,6 +83,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val breakTextBox = view.findViewById<TextInputEditText>(R.id.breakTime)
+
         activity?.window?.setBackgroundDrawable(null)
 
         val coloredNavBarData = ColoredNavBarData(requireContext())
@@ -122,7 +128,6 @@ class HomeFragment : Fragment() {
 
         MainActivity().runOnUiThread(runnable)
 
-        val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTime)
         val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
         val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
@@ -344,35 +349,40 @@ class HomeFragment : Fragment() {
 
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTime)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
-
-                var withBreak = (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
-                var hoursWithBreak = diffHours
-                if (withBreak.toInt() < 0) {
-                    hoursWithBreak -= 1
-                    withBreak = (withBreak.toInt() + 60).toString()
+                if (!breakTimeNumeric(breakTime)) {
+                    infoTextView!!.text = getString(R.string.error_with_break_time_must_be_numbers_only)
                 }
-
-                if (hoursWithBreak < 0) {
-                    infoTextView!!.text = getString(R.string.the_entered_break_time_is_too_big)
-                } else {
-                    if (withBreak.length == 1) {
-                        withBreak = "0$withBreak"
+                else {
+                    var withBreak =
+                        (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
+                    var hoursWithBreak = diffHours
+                    if (withBreak.toInt() < 0) {
+                        hoursWithBreak -= 1
+                        withBreak = (withBreak.toInt() + 60).toString()
                     }
 
-                    savingHours(
-                        "$hoursWithBreak:$withBreak",
-                        inTimeTotal,
-                        outTimeTotal,
-                        breakTime.text.toString()
-                    )
+                    if (hoursWithBreak < 0) {
+                        infoTextView!!.text = getString(R.string.the_entered_break_time_is_too_big)
+                    } else {
+                        if (withBreak.length == 1) {
+                            withBreak = "0$withBreak"
+                        }
 
-                    infoTextView!!.text = getString(
-                        R.string.total_hours_with_break_time_format,
-                        diffHours,
-                        diffMinutes,
-                        hoursWithBreak,
-                        withBreak
-                    )
+                        savingHours(
+                            "$hoursWithBreak:$withBreak",
+                            inTimeTotal,
+                            outTimeTotal,
+                            breakTime.text.toString()
+                        )
+
+                        infoTextView!!.text = getString(
+                            R.string.total_hours_with_break_time_format,
+                            diffHours,
+                            diffMinutes,
+                            hoursWithBreak,
+                            withBreak
+                        )
+                    }
                 }
             } else {
                 savingHours(
@@ -426,7 +436,8 @@ class HomeFragment : Fragment() {
         val outTimeTotal: String
 
         var minutesDecimal: Double = (outTimeMinutes.toInt() - inTimeMinutes.toInt()) / 60.0
-        minutesDecimal = minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+        minutesDecimal =
+            minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
         var minutesWithoutFirstDecimal = minutesDecimal.toString().substring(2)
         if (minutesDecimal < 0) {
             minutesWithoutFirstDecimal = (1.0 - minutesWithoutFirstDecimal.toDouble()).toString()
@@ -494,21 +505,31 @@ class HomeFragment : Fragment() {
 
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTime)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
+                if (!breakTimeNumeric(breakTime)) {
+                    infoTextView1!!.text = getString(R.string.error_with_break_time_must_be_numbers_only)
+                }
+                else {
+                    breakTimeNumber = breakTime.text.toString().toDouble() / 60
+                    val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
+                        .setScale(2, RoundingMode.HALF_EVEN)
 
-                breakTimeNumber = breakTime.text.toString().toDouble() / 60
-                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                    if (totalHoursWithBreak.toDouble() < 0.0) {
+                        infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
+                    } else {
+                        savingHours(
+                            totalHoursWithBreak.toString(),
+                            inTimeTotal,
+                            outTimeTotal,
+                            breakTime.text.toString()
+                        )
 
-                if (totalHoursWithBreak.toDouble() < 0.0) {
-                    infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
-                } else {
-                    savingHours(totalHoursWithBreak.toString(), inTimeTotal, outTimeTotal, breakTime.text.toString())
-
-                    infoTextView1?.text = getString(
-                        R.string.total_hours_with_break_decimal_format,
-                        hoursDifference,
-                        minutesWithoutFirstDecimal,
-                        totalHoursWithBreak
-                    )
+                        infoTextView1?.text = getString(
+                            R.string.total_hours_with_break_decimal_format,
+                            hoursDifference,
+                            minutesWithoutFirstDecimal,
+                            totalHoursWithBreak.toString()
+                        )
+                    }
                 }
             } else {
                 savingHours(totalHours.toString(), inTimeTotal, outTimeTotal, "0")
@@ -524,7 +545,9 @@ class HomeFragment : Fragment() {
             val historyDeletion = HistoryDeletion(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
 
-            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked().toString().toInt()) {
+            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
+                    .toString().toInt()
+            ) {
                 historyDeletion.deletion()
             }
 
@@ -548,6 +571,15 @@ class HomeFragment : Fragment() {
 
             val date = System.currentTimeMillis()
             dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, date, breakTime)
+        }
+    }
+
+    private fun breakTimeNumeric(breakTime: TextInputEditText) : Boolean {
+        return try {
+            breakTime.text.toString().toInt()
+            true
+        } catch (e: NumberFormatException) {
+            false
         }
     }
 
