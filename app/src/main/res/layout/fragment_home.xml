@@ -67,9 +67,9 @@
             android:id="@+id/breakTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:digits="1234567890"
+            android:digits="0123456789"
             android:hint="@string/fifteen"
-            android:inputType="number"
+            android:inputType="numberPassword"
             android:maxLength="2" />
 
     </com.google.android.material.textfield.TextInputLayout>

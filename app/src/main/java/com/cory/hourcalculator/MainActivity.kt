@@ -243,7 +243,7 @@ class MainActivity : AppCompatActivity() {
     fun changeSettingsBadge() {
         val badge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
-        if (Version(this).loadVersion() != "9.0.0") {
+        if (Version(this).loadVersion() != getString(R.string.version_number)) {
             badge.isVisible = true
 
             if (AccentColor(this).loadAccent() != 3) {

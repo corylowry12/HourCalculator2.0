@@ -107,6 +107,9 @@ class HomeFragment : Fragment() {
                         ContextCompat.getColor(requireContext(), R.color.systemAccent)
                 }
             }
+        } else {
+            activity?.window?.navigationBarColor =
+                ContextCompat.getColor(requireContext(), R.color.black)
         }
 
         val inputManager: InputMethodManager =
@@ -363,7 +366,13 @@ class HomeFragment : Fragment() {
                         breakTime.text.toString()
                     )
 
-                    infoTextView!!.text = getString(R.string.total_hours_with_break_time_format, diffHours, diffMinutes, hoursWithBreak, withBreak)
+                    infoTextView!!.text = getString(
+                        R.string.total_hours_with_break_time_format,
+                        diffHours,
+                        diffMinutes,
+                        hoursWithBreak,
+                        withBreak
+                    )
                 }
             } else {
                 savingHours(
@@ -372,7 +381,8 @@ class HomeFragment : Fragment() {
                     outTimeTotal,
                     "0"
                 )
-                infoTextView?.text = getString(R.string.total_hours_time_format, diffHours, diffMinutes)
+                infoTextView?.text =
+                    getString(R.string.total_hours_time_format, diffHours, diffMinutes)
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())
@@ -416,8 +426,7 @@ class HomeFragment : Fragment() {
         val outTimeTotal: String
 
         var minutesDecimal: Double = (outTimeMinutes.toInt() - inTimeMinutes.toInt()) / 60.0
-        minutesDecimal =
-            minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+        minutesDecimal = minutesDecimal.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
         var minutesWithoutFirstDecimal = minutesDecimal.toString().substring(2)
         if (minutesDecimal < 0) {
             minutesWithoutFirstDecimal = (1.0 - minutesWithoutFirstDecimal.toDouble()).toString()
@@ -487,24 +496,27 @@ class HomeFragment : Fragment() {
             if (breakTime?.text != null && breakTime.text.toString() != "") {
 
                 breakTimeNumber = breakTime.text.toString().toDouble() / 60
-                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
-                    .setScale(2, RoundingMode.HALF_EVEN)
+                val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
 
                 if (totalHoursWithBreak.toDouble() < 0.0) {
                     infoTextView1!!.text = getString(R.string.the_entered_break_time_is_too_big)
                 } else {
-                    savingHours(
-                        totalHoursWithBreak.toString(),
-                        inTimeTotal,
-                        outTimeTotal,
-                        breakTime.text.toString()
-                    )
+                    savingHours(totalHoursWithBreak.toString(), inTimeTotal, outTimeTotal, breakTime.text.toString())
 
-                    infoTextView1?.text = getString(R.string.total_hours_with_break_decimal_format, hoursDifference, minutesWithoutFirstDecimal, totalHoursWithBreak)
+                    infoTextView1?.text = getString(
+                        R.string.total_hours_with_break_decimal_format,
+                        hoursDifference,
+                        minutesWithoutFirstDecimal,
+                        totalHoursWithBreak
+                    )
                 }
             } else {
                 savingHours(totalHours.toString(), inTimeTotal, outTimeTotal, "0")
-                infoTextView1?.text = getString(R.string.total_hours_decimal_format, hoursDifference, minutesWithoutFirstDecimal)
+                infoTextView1?.text = getString(
+                    R.string.total_hours_decimal_format,
+                    hoursDifference,
+                    minutesWithoutFirstDecimal
+                )
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())
@@ -512,9 +524,7 @@ class HomeFragment : Fragment() {
             val historyDeletion = HistoryDeletion(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
 
-            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
-                    .toString().toInt()
-            ) {
+            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked().toString().toInt()) {
                 historyDeletion.deletion()
             }
 
