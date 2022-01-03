@@ -37,7 +37,7 @@ class SplashScreen : AppCompatActivity() {
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.SplashLightTheme)
-                    Configuration.UI_MODE_NIGHT_YES -> setTheme(R.style.SplashBlackTheme)
+                    Configuration.UI_MODE_NIGHT_YES -> setTheme(AccentColor(this).followSystemThemeSplashScreen(this))
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> setTheme(R.style.SplashBlackTheme)
                 }
             }

@@ -90,7 +90,7 @@
     <string name="total_hours_decimal_format">Total Hours: %1$d.%2$s</string>
     <string name="time">Time</string>
     <string name="decimal">Decimal</string>
-    <string name="version_number">9.0.5</string>
+    <string name="version_number">9.0.6</string>
     <string name="there_was_an_error_please_try_again">There was an error, please try again</string>
     <string name="would_you_like_to_delete_all_app_data">Would you like to delete all app data?</string>
     <string name="app_data_cleared">App Data Cleared</string>
@@ -101,7 +101,7 @@
     <string name="splash_screen_image">Splash Screen Image</string>
     <string name="version_number_text">Version Number:</string>
     <string name="build_number">Build Number:</string>
-    <string name="build_number_number">116</string>
+    <string name="build_number_number">117</string>
     <string name="material_3">Material 3</string>
     <string name="material_3_link">https://m3.material.io/</string>
     <string name="google_ads">Google Ads</string>
@@ -227,4 +227,9 @@
     <string name="reset_app_settings_warning">You are about to reset all App Settings to default, would you like to continue?</string>
     <string name="reset_automatic_deletion_settings_warning">Would you like to reset automatic deletion settings back to defaults?</string>
     <string name="error_with_break_time_must_be_numbers_only">Error with break time, must be numbers only</string>
+    <string name="follow_system_already_set_to_dark_theme">Follow system theme already set to dark theme</string>
+    <string name="follow_system_already_set_to_black_theme">Follow system theme already set to black theme</string>
+    <string name="follow_system_theme_background_color">Follow System Theme Background Color</string>
+    <string name="colored_nav_bar_enabled">Colored nav bar enabled</string>
+    <string name="colored_nav_bar_disabled">Colored nav bar disabled</string>
 </resources>

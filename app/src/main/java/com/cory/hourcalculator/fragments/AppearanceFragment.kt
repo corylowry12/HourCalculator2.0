@@ -42,20 +42,51 @@ class AppearanceFragment : Fragment() {
                 )!!
             }
             Configuration.UI_MODE_NIGHT_YES -> {
-                return ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.blackcircleimageview
-                )!!
+                return if (FollowSystemThemeChoice(requireContext()).loadFollowSystemThemePreference() == 0) {
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.blackcircleimageview
+                    )!!
+                } else {
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.graycircleimageview
+                    )!!
+                }
             }
             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                return ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.blackcircleimageview
-                )!!
+                return if (FollowSystemThemeChoice(requireContext()).loadFollowSystemThemePreference() == 0) {
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.blackcircleimageview
+                    )!!
+                } else {
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.graycircleimageview
+                    )!!
+                }
             }
         }
 
         return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+    }
+
+    private fun getCurrentNightTheme(): Boolean {
+
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                return false
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                return true
+            }
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                return true
+            }
+        }
+
+        return true
     }
 
     override fun onCreateView(
@@ -83,11 +114,11 @@ class AppearanceFragment : Fragment() {
                         followSystemImageViewDrawable = setDrawable()
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(R.style.Theme_AMOLED)
+                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
                         followSystemImageViewDrawable = setDrawable()
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                        activity?.setTheme(R.style.Theme_AMOLED)
+                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
                         followSystemImageViewDrawable = setDrawable()
                     }
                 }
@@ -232,6 +263,54 @@ class AppearanceFragment : Fragment() {
                 restartThemeChange()
 
             }
+        }
+
+        val followSystemThemeChoice = FollowSystemThemeChoice(requireContext())
+
+        val blackTheme = activity?.findViewById<RadioButton>(R.id.amoledSystemTheme)
+        val darkTheme = activity?.findViewById<RadioButton>(R.id.darkThemeSystem)
+
+        if (followSystemThemeChoice.loadFollowSystemThemePreference() == 0) {
+            blackTheme?.isChecked = true
+        }
+        else {
+            darkTheme?.isChecked = true
+        }
+
+        blackTheme?.setOnClickListener {
+            if (followSystemThemeChoice.loadFollowSystemThemePreference() == 0) {
+                Toast.makeText(requireContext(), getString(R.string.follow_system_already_set_to_black_theme), Toast.LENGTH_SHORT).show()
+            }
+            else {
+                followSystemThemeChoice.setFollowSystemThemePreference(0)
+                darkTheme?.isChecked = false
+
+                if (darkThemeData.loadDarkModeState() == 3) {
+                    if (getCurrentNightTheme()) {
+                        restartThemeChange()
+                    }
+                }
+            }
+
+            followSystemImageView?.setImageDrawable(setDrawable())
+        }
+
+        darkTheme?.setOnClickListener {
+            if (followSystemThemeChoice.loadFollowSystemThemePreference() == 1) {
+                Toast.makeText(requireContext(), getString(R.string.follow_system_already_set_to_dark_theme), Toast.LENGTH_SHORT).show()
+            }
+            else {
+                followSystemThemeChoice.setFollowSystemThemePreference(1)
+                blackTheme?.isChecked = false
+
+                if (darkThemeData.loadDarkModeState() == 3) {
+                    if (getCurrentNightTheme()) {
+                        restartThemeChange()
+                    }
+                }
+            }
+
+            followSystemImageView?.setImageDrawable(setDrawable())
         }
 
         val accentColor = AccentColor(requireContext())
@@ -594,6 +673,8 @@ class AppearanceFragment : Fragment() {
                                 ContextCompat.getColor(requireContext(), R.color.systemAccent)
                         }
                     }
+
+                    Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_enabled), Toast.LENGTH_SHORT).show()
                 }
                 alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
@@ -613,6 +694,8 @@ class AppearanceFragment : Fragment() {
                 activity?.window?.navigationBarColor =
                     ContextCompat.getColor(requireContext(), R.color.black)
                 coloredNavBarData.setNavBar(false)
+
+                Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_disabled), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -705,6 +788,13 @@ class AppearanceFragment : Fragment() {
             view?.findViewById<RadioButton>(R.id.enableColoredNavBar)?.isChecked = false
             activity?.window?.navigationBarColor =
                 ContextCompat.getColor(requireContext(), R.color.black)
+
+            if (FollowSystemThemeChoice(requireContext()).loadFollowSystemThemePreference() != 0) {
+                FollowSystemThemeChoice(requireContext()).setFollowSystemThemePreference(0)
+                view?.findViewById<RadioButton>(R.id.darkThemeSystem)?.isChecked = false
+                view?.findViewById<RadioButton>(R.id.amoledSystemTheme)?.isChecked = true
+                restartThemeChange()
+            }
             Toast.makeText(requireContext(), getString(R.string.appearance_settings_reset), Toast.LENGTH_LONG).show()
 
         }

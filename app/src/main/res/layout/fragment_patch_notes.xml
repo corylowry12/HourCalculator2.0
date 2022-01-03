@@ -126,106 +126,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Fixed issue with dot in nav bar on the settings icon not disappearing after you view patch notes"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView2"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with build number having the wrong number in the version info view"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView3"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with nav bar being white not matter the theme selected, will now show up as black all the time unless colored nav bar is enabled"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView4"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with crashing if you entered anything other than numbers in the break text box"
+                        android:text="- No new bug fixes"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -310,7 +211,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Will add new features in future updates"
+                        android:text="- Added ability to set the theme when follow system theme is chosen, to black or gray, whichever you choose"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -395,7 +296,41 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Tweaked background color of dialogs while using the system accent color"
+                        android:text="- Added dialog to notify you when app update is available"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/enhancementsCardView2"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/patchNotesCardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="- App will now display a message when colored nav bar is enabled or disabled"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         android:visibility="visible"

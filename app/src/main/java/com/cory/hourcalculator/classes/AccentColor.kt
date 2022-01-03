@@ -45,6 +45,24 @@ class AccentColor(context: Context) {
 
     }
 
+    fun followSystemTheme(context: Context): Int {
+
+        when (FollowSystemThemeChoice(context).loadFollowSystemThemePreference()) {
+            0 -> return R.style.Theme_AMOLED
+            1 -> return R.style.Theme_DarkTheme
+        }
+        return R.style.Theme_AMOLED
+    }
+
+    fun followSystemThemeSplashScreen(context: Context): Int {
+
+        when (FollowSystemThemeChoice(context).loadFollowSystemThemePreference()) {
+            0 -> return R.style.SplashBlackTheme
+            1 -> return R.style.SplashDarkTheme
+        }
+        return R.style.SplashBlackTheme
+    }
+
     fun menuTheme(context: Context): Int {
 
         when (DarkThemeData(context).loadDarkModeState()) {

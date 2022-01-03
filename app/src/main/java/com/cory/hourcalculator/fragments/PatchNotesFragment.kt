@@ -43,7 +43,7 @@ class PatchNotesFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
                 }
             }
@@ -130,10 +130,7 @@ class PatchNotesFragment : Fragment() {
         bugFixesBool = !bugFixesBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.bugFixesChevronImage)
         val enhancementsArray = arrayOf(
-            R.id.bugFixesCardView1,
-            R.id.bugFixesCardView2,
-            R.id.bugFixesCardView3,
-            R.id.bugFixesCardView4,
+            R.id.bugFixesCardView1
         )
         if (bugFixesBool) {
             for (i in 0 until enhancementsArray.count()) {
@@ -172,7 +169,8 @@ class PatchNotesFragment : Fragment() {
         enhancementsBool = !enhancementsBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.enhancementsChevronImage)
         val enhancementsArray = arrayOf(
-            R.id.enhancementsCardView1
+            R.id.enhancementsCardView1,
+            R.id.enhancementsCardView2
         )
         if (enhancementsBool) {
             for (i in 0 until enhancementsArray.count()) {

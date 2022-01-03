@@ -13,6 +13,8 @@ import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.HistoryFragment
 import com.cory.hourcalculator.fragments.HomeFragment
 import com.cory.hourcalculator.fragments.SettingsFragment
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -22,6 +24,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_YES -> setTheme(AccentColor(this).followSystemTheme(this))
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> setTheme(R.style.Theme_AMOLED)
                 }
             }
@@ -78,6 +82,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         replaceFragment(homeFragment)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val response =
+                URL("https://raw.githubusercontent.com/corylowry12/json/main/mandatoryUpdate.json").readText()
+
+            val stringBuilder = StringBuilder(response)
+
+            val updater = AppUpdater(this@MainActivity)
+            updater.setUpdateFrom(UpdateFrom.JSON)
+            updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
+            updater.setCancelable(false)
+            updater.setButtonUpdate("Update")
+            if (stringBuilder.toString().contains("yes")) {
+                updater.setButtonDismiss("")
+                updater.setButtonDoNotShowAgain("")
+            }
+            else {
+                updater.setButtonDismiss("Next Time")
+                updater.setButtonDoNotShowAgain("")
+            }
+            updater.start()
+        }
 
         val context = this
         GlobalScope.launch(Dispatchers.Main) {
@@ -315,15 +341,28 @@ class MainActivity : AppCompatActivity() {
                             ContextCompat.getColorStateList(this, R.color.white)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        mainConstraint.setBackgroundColor(
-                            ContextCompat.getColor(
-                                this,
-                                R.color.black
+                        if (FollowSystemThemeChoice(this).loadFollowSystemThemePreference() == 0) {
+                            mainConstraint.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.black
+                                )
                             )
-                        )
-                        badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                        bottomNavigation.itemTextColor =
-                            ContextCompat.getColorStateList(this, R.color.black)
+                            badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                            bottomNavigation.itemTextColor =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                        }
+                        else {
+                            mainConstraint.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.darkThemeBackground
+                                )
+                            )
+                            badge.badgeTextColor = ContextCompat.getColor(this, R.color.darkThemeBackground)
+                            bottomNavigation.itemTextColor =
+                                ContextCompat.getColorStateList(this, R.color.darkThemeBackground)
+                        }
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         mainConstraint.setBackgroundColor(
