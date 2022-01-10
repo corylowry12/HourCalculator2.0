@@ -4,7 +4,7 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K64AQVM)
 
 # Status
-[![GitHub issues](https://img.shields.io/bitbucket/issues-raw/corylowry12/HourCalculator2.0)](https://github.com/corylowry12/HourCalculator2.0/issues)
+[![GitHub issues](https://img.shields.io/bitbucket/issues-raw/corylowry12/HourCalculator2.0?style=for-the-badge)](https://github.com/corylowry12/HourCalculator2.0/issues)
 
 Use this app to take input time, out time time and/or break time, to display your time in a decimal format, rounded to the second decimal place.
 
