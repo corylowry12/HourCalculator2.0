@@ -6,6 +6,8 @@
 # Status
 [![GitHub issues](https://img.shields.io/github/issues/corylowry12/HourCalculator2.0)](https://github.com/corylowry12/HourCalculator2.0/issues)
 
+<img src="resources/img/google-play-badge.png" height="50">(https://play.google.com/store/apps/details?id=org.jitsi.meet)
+
 Use this app to take input time, out time time and/or break time, to display your time in a decimal format, rounded to the second decimal place.
 
 This app will also store the hours in a SQLite database, as well as let you view it and calculate total pay, and how many hours are stored, and the total hours of all the hours combined.
