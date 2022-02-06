@@ -105,7 +105,7 @@ class AboutFragment : Fragment() {
         val firebaseAnalyticsSubtitle = view.findViewById<TextView>(R.id.firebaseAnalyticsSubtitle)
 
         firebaseAnalyticsConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
+            LinkClass(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
             openFragment(WebviewFragment())
         }
 

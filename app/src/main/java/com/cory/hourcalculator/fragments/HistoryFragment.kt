@@ -356,7 +356,7 @@ class HistoryFragment : Fragment() {
 
             val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
 
-            var decimalTime = 0.0
+            var decimalTime: Double
             if (array.contains(":")) {
                 val (hours, minutes) = array.split(":")
                 val decimal =
