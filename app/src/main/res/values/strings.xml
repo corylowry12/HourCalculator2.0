@@ -90,7 +90,7 @@
     <string name="total_hours_decimal_format">Total Hours: %1$d.%2$s</string>
     <string name="time">Time</string>
     <string name="decimal">Decimal</string>
-    <string name="version_number">9.0.7</string>
+    <string name="version_number">9.0.8</string>
     <string name="there_was_an_error_please_try_again">There was an error, please try again</string>
     <string name="would_you_like_to_delete_all_app_data">Would you like to delete all app data?</string>
     <string name="app_data_cleared">App Data Cleared</string>
@@ -101,7 +101,7 @@
     <string name="splash_screen_image">Splash Screen Image</string>
     <string name="version_number_text">Version Number:</string>
     <string name="build_number">Build Number:</string>
-    <string name="build_number_number">118</string>
+    <string name="build_number_number">119</string>
     <string name="material_3">Material 3</string>
     <string name="material_3_link">https://m3.material.io/</string>
     <string name="google_ads">Google Ads</string>
@@ -133,7 +133,6 @@
     <string name="break_time">Break Time (In Minutes)</string>
     <string name="fifteen">15</string>
     <string name="click_on_me">Click on me to change date</string>
-    <string name="update">Update</string>
     <string name="in_time">In</string>
     <string name="google_ads_link">https://developers.google.com/google-ads/api/docs/start</string>
     <string name="firebase_analytics_link">https://firebase.google.com/docs/analytics/</string>
@@ -236,4 +235,9 @@
     <string name="there_was_an_error">There was an error</string>
     <string name="app_updater">App Updater</string>
     <string name="app_updater_link">https://github.com/javiersantos/AppUpdater</string>
+    <string name="there_was_an_error_deleting_this_entry">There was an error deleting this entry</string>
+    <string name="update">Update</string>
+    <string name="yes_app_update_dialog">yes</string>
+    <string name="error_checking_for_updates">There was an error checking for updates. Check your internet connection.</string>
+    <string name="next_time">Next Time</string>
 </resources>
