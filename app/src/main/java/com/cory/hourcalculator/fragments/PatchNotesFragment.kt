@@ -130,7 +130,9 @@ class PatchNotesFragment : Fragment() {
         bugFixesBool = !bugFixesBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.bugFixesChevronImage)
         val enhancementsArray = arrayOf(
-            R.id.bugFixesCardView1
+            R.id.bugFixesCardView1,
+            R.id.bugFixesCardView2,
+            R.id.bugFixesCardView3
         )
         if (bugFixesBool) {
             for (i in 0 until enhancementsArray.count()) {
@@ -169,8 +171,7 @@ class PatchNotesFragment : Fragment() {
         enhancementsBool = !enhancementsBool
         val enhancementsChevronImage = view?.findViewById<ImageView>(R.id.enhancementsChevronImage)
         val enhancementsArray = arrayOf(
-            R.id.enhancementsCardView1,
-            R.id.enhancementsCardView2
+            R.id.enhancementsCardView1
         )
         if (enhancementsBool) {
             for (i in 0 until enhancementsArray.count()) {
