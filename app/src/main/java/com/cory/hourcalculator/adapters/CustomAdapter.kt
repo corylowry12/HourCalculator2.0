@@ -2,6 +2,8 @@ package com.cory.hourcalculator.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -90,6 +93,7 @@ class CustomAdapter(
                 Vibrate().vibration(context)
                 when (item.itemId) {
                     R.id.menu2 -> {
+
                         try {
                             var inTime = ""
                             var outTime = ""
@@ -100,9 +104,9 @@ class CustomAdapter(
                             val map = HashMap<String, String>()
                             val cursor = dbHandler.getAllRow(context)
                             if (cursor!!.count > 0) {
-                                cursor.moveToPosition(position)
+                                cursor.moveToPosition(holder.adapterPosition)
 
-                                while (cursor.position == position) {
+                                while (cursor.position == holder.adapterPosition) {
 
                                     map["id"] =
                                         cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
@@ -129,10 +133,7 @@ class CustomAdapter(
                                         cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                                     dbHandler.deleteRow(map["id"].toString())
-
                                     cursor.moveToNext()
-
-
                                 }
                             }
 
@@ -143,8 +144,8 @@ class CustomAdapter(
 
                             MainActivity().runOnUiThread(saveState)
 
-                            dataList.removeAt(position)
-                            notifyItemRemoved(position)
+                            dataList.removeAt(holder.adapterPosition)
+                            notifyItemRemoved(holder.adapterPosition)
 
                             val snackbar =
                                 Snackbar.make(
@@ -157,15 +158,33 @@ class CustomAdapter(
                             snackbar.setAction(context.getString(R.string.undo)) {
                                 Vibrate().vibration(context)
                                 dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
-                                dataList.add(map)
+
+                                dataList.clear()
+                                val cursor2 = dbHandler.getAllRow(context)
+                                cursor2!!.moveToFirst()
+
+                                while (!cursor2.isAfterLast) {
+                                    val map2 = HashMap<String, String>()
+                                    map2["id"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                                    map2["inTime"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                    map2["outTime"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                    map2["breakTime"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                    map2["totalHours"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                    map2["date"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                                    dataList.add(map)
+
+                                    cursor2.moveToNext()
+
+                                }
+
                                 notifyItemInserted(position)
+
                                 val restoreState = Runnable {
                                     (context as MainActivity).restoreState()
 
                                 }
 
                                 MainActivity().runOnUiThread(restoreState)
-
 
                             }
                             snackbar.setActionTextColor(
@@ -178,7 +197,7 @@ class CustomAdapter(
 
                         }
                         catch (e: Exception) {
-                            Toast.makeText(context, "There was an error deleting this entry", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.there_was_an_error_deleting_this_entry), Toast.LENGTH_SHORT).show()
                         }
                     }
                     R.id.menu4 -> {
