@@ -29,6 +29,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -89,89 +90,96 @@ class CustomAdapter(
                 Vibrate().vibration(context)
                 when (item.itemId) {
                     R.id.menu2 -> {
+                        try {
+                            var inTime = ""
+                            var outTime = ""
+                            var breakTime = ""
+                            var totalHours = ""
+                            var day = 0L
 
-                        var inTime = ""
-                        var outTime = ""
-                        var breakTime = ""
-                        var totalHours = ""
-                        var day = 0L
+                            val map = HashMap<String, String>()
+                            val cursor = dbHandler.getAllRow(context)
+                            if (cursor!!.count > 0) {
+                                cursor.moveToPosition(position)
 
-                        val map = HashMap<String, String>()
-                        val cursor = dbHandler.getAllRow(context)
-                        if (cursor!!.count > 0) {
-                            cursor.moveToPosition(position)
+                                while (cursor.position == position) {
 
-                            while (cursor.position == position) {
+                                    map["id"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                                    map["inTime"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                    map["outTime"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                    map["breakTime"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                    map["totalHours"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                    map["date"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
-                                map["id"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                                map["inTime"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                                map["outTime"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                                map["breakTime"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                map["totalHours"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                map["date"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                                    inTime =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                    outTime =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                    breakTime =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                    totalHours =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                    day =
+                                        cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
-                                inTime =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                                outTime =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                                breakTime =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                totalHours =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                day =
-                                    cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                                    dbHandler.deleteRow(map["id"].toString())
 
-                                dbHandler.deleteRow(map["id"].toString())
-
-                                cursor.moveToNext()
+                                    cursor.moveToNext()
 
 
+                                }
                             }
-                        }
 
-                        val saveState = Runnable {
-                            (context as MainActivity).saveState()
-
-                        }
-
-                        MainActivity().runOnUiThread(saveState)
-
-                        dataList.removeAt(position)
-                        notifyItemRemoved(position)
-
-                        val snackbar =
-                            Snackbar.make(holder.itemView, context.getString(R.string.entry_deleted), Snackbar.LENGTH_LONG)
-                                .setDuration(5000)
-                                .setAnchorView(R.id.bottom_nav)
-                        snackbar.setAction(context.getString(R.string.undo)) {
-                            Vibrate().vibration(context)
-                            dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
-                            dataList.add(map)
-                            notifyItemInserted(position)
-                            val restoreState = Runnable {
-                                (context as MainActivity).restoreState()
+                            val saveState = Runnable {
+                                (context as MainActivity).saveState()
 
                             }
 
-                            MainActivity().runOnUiThread(restoreState)
+                            MainActivity().runOnUiThread(saveState)
+
+                            dataList.removeAt(position)
+                            notifyItemRemoved(position)
+
+                            val snackbar =
+                                Snackbar.make(
+                                    holder.itemView,
+                                    context.getString(R.string.entry_deleted),
+                                    Snackbar.LENGTH_LONG
+                                )
+                                    .setDuration(5000)
+                                    .setAnchorView(R.id.bottom_nav)
+                            snackbar.setAction(context.getString(R.string.undo)) {
+                                Vibrate().vibration(context)
+                                dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
+                                dataList.add(map)
+                                notifyItemInserted(position)
+                                val restoreState = Runnable {
+                                    (context as MainActivity).restoreState()
+
+                                }
+
+                                MainActivity().runOnUiThread(restoreState)
 
 
-                        }
-                        snackbar.setActionTextColor(
-                            ContextCompat.getColorStateList(
-                                context,
-                                AccentColor(context).snackbarActionTextColor()
+                            }
+                            snackbar.setActionTextColor(
+                                ContextCompat.getColorStateList(
+                                    context,
+                                    AccentColor(context).snackbarActionTextColor()
+                                )
                             )
-                        )
-                        snackbar.show()
+                            snackbar.show()
 
-
+                        }
+                        catch (e: Exception) {
+                            Toast.makeText(context, "There was an error deleting this entry", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     R.id.menu4 -> {
 
