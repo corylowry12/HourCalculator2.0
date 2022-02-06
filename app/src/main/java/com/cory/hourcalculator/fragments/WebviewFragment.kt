@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -29,8 +31,10 @@ import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.LinkClass
 import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 
+@DelicateCoroutinesApi
 class WebviewFragment : Fragment() {
 
     override fun onCreateView(
@@ -89,85 +93,105 @@ class WebviewFragment : Fragment() {
 
         val appBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarWebView)
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        val connectivityManager = (context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+            getNetworkCapabilities(activeNetwork)?.run {
+                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                        hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                        hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+            } ?: false
+        }
 
-            appBar?.setNavigationOnClickListener {
-                Vibrate().vibration(requireContext())
-                webView?.stopLoading()
-                progressBar?.visibility = View.GONE
-                activity?.supportFragmentManager?.popBackStack()
-            }
+        if (connectivityManager) {
+            Handler(Looper.getMainLooper()).postDelayed({
 
-            val url = LinkClass(requireContext()).loadLink().toString()
+                appBar?.setNavigationOnClickListener {
+                    Vibrate().vibration(requireContext())
+                    webView?.stopLoading()
+                    progressBar?.visibility = View.GONE
+                    activity?.supportFragmentManager?.popBackStack()
+                }
 
-            appBar?.setOnMenuItemClickListener {
-                Vibrate().vibration(requireContext())
-                when (it.itemId) {
-                    R.id.refresh -> {
-                        webView?.reload()
-                        true
+                val url = LinkClass(requireContext()).loadLink().toString()
+
+                appBar?.setOnMenuItemClickListener {
+                    Vibrate().vibration(requireContext())
+                    when (it.itemId) {
+                        R.id.refresh -> {
+                            webView?.reload()
+                            true
+                        }
+                        R.id.copyMenu -> {
+                            val clipBoard =
+                                activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("URL", url)
+                            clipBoard.setPrimaryClip(clip)
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.text_copied_to_clipboard),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            true
+                        }
+                        R.id.shareMenu -> {
+                            val shareIntent = Intent()
+                            shareIntent.action = Intent.ACTION_SEND
+                            shareIntent.type = "text/plain"
+                            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "")
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, url)
+                            startActivity(
+                                Intent.createChooser(
+                                    shareIntent,
+                                    getString(R.string.share_via)
+                                )
+                            )
+                            true
+                        }
+                        else -> false
                     }
-                    R.id.copyMenu -> {
-                        val clipBoard =
-                            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val clip = ClipData.newPlainText("URL", url)
-                        clipBoard.setPrimaryClip(clip)
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.text_copied_to_clipboard),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        true
+                }
+
+                webView.onResume()
+
+                webView.loadUrl(url)
+
+                webView.webViewClient = object : WebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        progressBar.visibility = View.VISIBLE
+                        swipeRefreshLayout.isRefreshing = false
                     }
-                    R.id.shareMenu -> {
-                        val shareIntent = Intent()
-                        shareIntent.action = Intent.ACTION_SEND
-                        shareIntent.type = "text/plain"
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "")
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, url)
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
-                        true
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        progressBar.visibility = View.GONE
                     }
-                    else -> false
+
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView?,
+                        request: WebResourceRequest?
+                    ): Boolean {
+                        val newUrl = request?.url.toString()
+                        webView.loadUrl(newUrl)
+                        return true
+                    }
                 }
-            }
-
-            webView.onResume()
-
-            webView.loadUrl(url)
-
-            webView.webViewClient = object : WebViewClient() {
-                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    super.onPageStarted(view, url, favicon)
-                    progressBar.visibility = View.VISIBLE
-                    swipeRefreshLayout.isRefreshing = false
-                }
-
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    progressBar.visibility = View.GONE
+                webView.settings.javaScriptEnabled = true
+                webView.settings.domStorageEnabled = true
+                webView.settings.javaScriptCanOpenWindowsAutomatically = true
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    webView.settings.forceDark = WebSettings.FORCE_DARK_ON
                 }
 
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-                    val newUrl = request?.url.toString()
-                    webView.loadUrl(newUrl)
-                    return true
+                swipeRefreshLayout.setOnRefreshListener {
+                    webView.reload()
                 }
-            }
-            webView.settings.javaScriptEnabled = true
-            webView.settings.domStorageEnabled = true
-            webView.settings.javaScriptCanOpenWindowsAutomatically = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                webView.settings.forceDark = WebSettings.FORCE_DARK_ON
-            }
-
-            swipeRefreshLayout.setOnRefreshListener {
-                webView.reload()
-            }
-        }, 800)
+            }, 800)
+        }
+        else {
+            webView.stopLoading()
+            activity?.supportFragmentManager?.popBackStack()
+            Toast.makeText(requireContext(), getString(R.string.check_your_internet_connection), Toast.LENGTH_SHORT).show()
+        }
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
