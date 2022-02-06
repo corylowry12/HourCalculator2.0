@@ -5,14 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.classes.LinkClass
 import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class AboutFragment : Fragment() {
 
     override fun onCreateView(
@@ -79,5 +84,75 @@ class AboutFragment : Fragment() {
                     activity?.supportFragmentManager?.popBackStack()
                 }
             })
+
+        val materialConstraint = view.findViewById<ConstraintLayout>(R.id.materialConstraintLayout)
+        val materialSubtitle = view.findViewById<TextView>(R.id.materialSubtitle)
+
+        materialConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(materialSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+
+        val googleAdsConstraint = view.findViewById<ConstraintLayout>(R.id.googleAdsConstraint)
+        val googleAdsSubtitle = view.findViewById<TextView>(R.id.googleAdsSubtitle)
+
+        googleAdsConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+
+        val firebaseAnalyticsConstraint = view.findViewById<ConstraintLayout>(R.id.firebaseAnalyticsConstraint)
+        val firebaseAnalyticsSubtitle = view.findViewById<TextView>(R.id.firebaseAnalyticsSubtitle)
+
+        firebaseAnalyticsConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+
+        val firebaseCrashlyticsConstraint = view.findViewById<ConstraintLayout>(R.id.firebaseCrashlyticsConstraint)
+        val firebaseCrashlyticsSubtitle = view.findViewById<TextView>(R.id.firebaseCrashlyticsSubtitle)
+
+        firebaseCrashlyticsConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+
+        val firebasePerfConstraint = view.findViewById<ConstraintLayout>(R.id.firebasePerfConstraint)
+        val firebasePerfSubtitle = view.findViewById<TextView>(R.id.firebasePerfSubtitle)
+
+        firebasePerfConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(firebasePerfSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+
+        val inAppReviewConstraint = view.findViewById<ConstraintLayout>(R.id.inAppReviewConstraint)
+        val inAppReviewSubtitle = view.findViewById<TextView>(R.id.inAppReviewSubtitle)
+
+        inAppReviewConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(inAppReviewSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+
+        val appUpdaterConstraint = view.findViewById<ConstraintLayout>(R.id.appUpdaterConstraint)
+        val appUpdaterSubtitle = view.findViewById<TextView>(R.id.appUpdaterSubtitle)
+
+        appUpdaterConstraint.setOnClickListener {
+            LinkClass(requireContext()).setLink(appUpdaterSubtitle.text.toString())
+            openFragment(WebviewFragment())
+        }
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        Vibrate().vibration(requireContext())
+
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.setCustomAnimations(
+            R.anim.enter_from_right,
+            R.anim.exit_to_left,
+            R.anim.enter_from_left,
+            R.anim.exit_to_right
+        )
+        transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
+        transaction?.commit()
     }
 }
