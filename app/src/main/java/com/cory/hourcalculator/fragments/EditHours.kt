@@ -27,6 +27,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.lang.Exception
 import java.lang.NumberFormatException
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -147,133 +148,145 @@ class EditHours : Fragment() {
             }
         }
 
-        main()
+        try {
+            main()
 
-        val dateChip = activity?.findViewById<Chip>(R.id.dateChip)
+            val dateChip = activity?.findViewById<Chip>(R.id.dateChip)
 
-        dateChip?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            val datePicker = DatePickerDialog(
-                requireContext(),
-                AccentColor(requireContext()).dateDialogTheme(requireContext())
-            )
-            datePicker.setCancelable(false)
-
-            val (month1, day2, year1) = day.split("/")
-            val year2 = year1.dropLast(12)
-
-            val dateFormatter = SimpleDateFormat("mm")
-            val month2 = month1.format(dateFormatter)
-
-            datePicker.updateDate(year2.toInt(), month2.toInt() - 1, day2.toInt())
-
-            datePicker.datePicker.maxDate = System.currentTimeMillis()
-
-            datePicker.datePicker.setOnDateChangedListener { _, _, _, _ ->
+            dateChip?.setOnClickListener {
                 Vibrate().vibration(requireContext())
-            }
+                val datePicker = DatePickerDialog(
+                    requireContext(),
+                    AccentColor(requireContext()).dateDialogTheme(requireContext())
+                )
+                datePicker.setCancelable(false)
 
-            datePicker.show()
+                val (month1, day2, year1) = day.split("/")
+                val year2 = year1.dropLast(12)
 
-            val positiveButton = datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
-            val neutralButton = datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
-            positiveButton.setOnClickListener {
-                Vibrate().vibration(requireContext())
+                val dateFormatter = SimpleDateFormat("mm")
+                val month2 = month1.format(dateFormatter)
 
-                val year = datePicker.datePicker.year
-                val month = datePicker.datePicker.month
-                val day3 = datePicker.datePicker.dayOfMonth
+                datePicker.updateDate(year2.toInt(), month2.toInt() - 1, day2.toInt())
 
-                val calendar = Calendar.getInstance()
-                calendar.set(year, month, day3)
-                val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a")
-                val day4 = calendar.timeInMillis
-                calendar.timeInMillis
+                datePicker.datePicker.maxDate = System.currentTimeMillis()
 
-                val date2 = simpleDateFormat.format(day4)
-                day = date2
+                datePicker.datePicker.setOnDateChangedListener { _, _, _, _ ->
+                    Vibrate().vibration(requireContext())
+                }
 
-                dateChip.text = date2
+                datePicker.show()
 
-                datePicker.dismiss()
-            }
+                val positiveButton = datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
+                val neutralButton = datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
+                positiveButton.setOnClickListener {
+                    Vibrate().vibration(requireContext())
 
-            neutralButton.setOnClickListener {
-                Vibrate().vibration(requireContext())
-                datePicker.dismiss()
-            }
-        }
+                    val year = datePicker.datePicker.year
+                    val month = datePicker.datePicker.month
+                    val day3 = datePicker.datePicker.dayOfMonth
 
-        val inTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerInTimeEdit)
-        val outTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
-        val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
+                    val calendar = Calendar.getInstance()
+                    calendar.set(year, month, day3)
+                    val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a")
+                    val day4 = calendar.timeInMillis
+                    calendar.timeInMillis
 
-        breakTimeEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
-            if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
-                hideKeyboard(breakTimeEditText)
-                return@OnKeyListener true
-            }
-            if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                hideKeyboard(breakTimeEditText)
-                return@OnKeyListener true
-            }
-            false
-        })
+                    val date2 = simpleDateFormat.format(day4)
+                    day = date2
 
-        breakTimeEditText?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                breakTimeBool = s.toString() != "" && s.toString() != breakTime
-            }
+                    dateChip.text = date2
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+                    datePicker.dismiss()
+                }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                breakTimeBool = s.toString() != "" && s.toString() != breakTime
-            }
-        })
-
-        inTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
-            Vibrate().vibration(requireContext())
-            val inTimeMinutesNumbers: Int
-
-            val (inTimeHours, inTimeMinutes) = inTime.split(":")
-
-            var inTimeHoursInteger: Int = inTimeHours.toInt()
-
-            if (inTime.contains(getString(R.string.PM))) {
-                inTimeMinutesNumbers =
-                    inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
-                inTimeHoursInteger += 12
-            } else {
-                inTimeMinutesNumbers =
-                    inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
-                if (inTimeHours.toInt() == 12) {
-                    inTimeHoursInteger -= 12
+                neutralButton.setOnClickListener {
+                    Vibrate().vibration(requireContext())
+                    datePicker.dismiss()
                 }
             }
 
-            inTimeBool = inTimeHoursInteger != i || inTimeMinutesNumbers != i2
-        }
+            val inTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerInTimeEdit)
+            val outTimePickerEdit = activity?.findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+            val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
 
-        outTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
-            Vibrate().vibration(requireContext())
-            val outTimeMinutesNumbers: Int
-            val (outTimeHours, outTimeMinutes) = outTime.split(":")
-            var outTimeHoursInteger: Int = outTimeHours.toInt()
-
-            if (outTime.contains(getString(R.string.PM))) {
-                outTimeMinutesNumbers =
-                    outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
-                outTimeHoursInteger += 12
-            } else {
-                outTimeMinutesNumbers =
-                    outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
-                if (outTimeHours.toInt() == 12) {
-                    outTimeHoursInteger -= 12
+            breakTimeEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
+                if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
+                    hideKeyboard(breakTimeEditText)
+                    return@OnKeyListener true
                 }
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
+                    hideKeyboard(breakTimeEditText)
+                    return@OnKeyListener true
+                }
+                false
+            })
+
+            breakTimeEditText?.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    breakTimeBool = s.toString() != "" && s.toString() != breakTime
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    breakTimeBool = s.toString() != "" && s.toString() != breakTime
+                }
+            })
+
+            inTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
+                Vibrate().vibration(requireContext())
+                val inTimeMinutesNumbers: Int
+
+                val (inTimeHours, inTimeMinutes) = inTime.split(":")
+
+                var inTimeHoursInteger: Int = inTimeHours.toInt()
+
+                if (inTime.contains(getString(R.string.PM))) {
+                    inTimeMinutesNumbers =
+                        inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
+                    inTimeHoursInteger += 12
+                } else {
+                    inTimeMinutesNumbers =
+                        inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
+                    if (inTimeHours.toInt() == 12) {
+                        inTimeHoursInteger -= 12
+                    }
+                }
+
+                inTimeBool = inTimeHoursInteger != i || inTimeMinutesNumbers != i2
             }
-            outTimeBool = outTimeHoursInteger != i || outTimeMinutesNumbers != i2
+
+            outTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
+                Vibrate().vibration(requireContext())
+                val outTimeMinutesNumbers: Int
+                val (outTimeHours, outTimeMinutes) = outTime.split(":")
+                var outTimeHoursInteger: Int = outTimeHours.toInt()
+
+                if (outTime.contains(getString(R.string.PM))) {
+                    outTimeMinutesNumbers =
+                        outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
+                    outTimeHoursInteger += 12
+                } else {
+                    outTimeMinutesNumbers =
+                        outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
+                    if (outTimeHours.toInt() == 12) {
+                        outTimeHoursInteger -= 12
+                    }
+                }
+                outTimeBool = outTimeHoursInteger != i || outTimeMinutesNumbers != i2
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            activity?.supportFragmentManager?.popBackStack()
+            Toast.makeText(requireContext(), getString(R.string.there_was_an_error), Toast.LENGTH_SHORT).show()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

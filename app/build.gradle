@@ -18,8 +18,8 @@ android {
         applicationId "com.cory.hourcalculator"
         minSdk 26
         targetSdk 31
-        versionCode 117
-        versionName "9.0.6"
+        versionCode 118
+        versionName "9.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
