@@ -95,19 +95,19 @@ class MainActivity : AppCompatActivity() {
                 updater.setUpdateFrom(UpdateFrom.JSON)
                 updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
                 updater.setCancelable(false)
-                updater.setButtonUpdate("Update")
-                if (stringBuilder.toString().contains("yes")) {
+                updater.setButtonUpdate(getString(R.string.update))
+                if (stringBuilder.toString().contains(getString(R.string.yes_app_update_dialog))) {
                     updater.setButtonDismiss("")
                     updater.setButtonDoNotShowAgain("")
                 } else {
-                    updater.setButtonDismiss("Next Time")
+                    updater.setButtonDismiss(getString(R.string.next_time))
                     updater.setButtonDoNotShowAgain("")
                 }
                 updater.start()
             }
             catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@MainActivity, "There was an error checking for updates. Check your internet connection.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, getString(R.string.error_checking_for_updates), Toast.LENGTH_SHORT).show()
             }
         }
 
