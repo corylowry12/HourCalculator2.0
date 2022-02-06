@@ -161,8 +161,10 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/materialConstraintLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/materialHeading"
@@ -180,6 +182,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/materialSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/materialHeading"
@@ -211,8 +214,10 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/googleAdsConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/adsHeading"
@@ -230,6 +235,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/googleAdsSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/adsHeading"
@@ -262,8 +268,10 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/firebaseAnalyticsConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/analyticsHeading"
@@ -281,6 +289,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/firebaseAnalyticsSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/analyticsHeading"
@@ -312,8 +321,10 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/firebaseCrashlyticsConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/crashlyticsHeading"
@@ -331,6 +342,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/firebaseCrashlyticsSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/crashlyticsHeading"
@@ -363,8 +375,10 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/firebasePerfConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/performanceHeading"
@@ -382,6 +396,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/firebasePerfSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/performanceHeading"
@@ -414,8 +429,10 @@
                 app:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/inAppReviewConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/inAppReviewHeading"
@@ -433,6 +450,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/inAppReviewSubtitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/inAppReviewHeading"
@@ -448,6 +466,60 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/inAppReviewHeading" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/appUpdaterConstraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:id="@+id/appUpdaterHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/app_updater"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/appUpdaterSubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/appUpdaterHeading"
+                        android:layout_alignStart="@id/appUpdaterHeading"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/app_updater_link"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/appUpdaterHeading" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
