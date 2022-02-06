@@ -3,6 +3,7 @@ package com.cory.hourcalculator
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -24,8 +25,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.URL
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -89,20 +92,25 @@ class MainActivity : AppCompatActivity() {
 
             val stringBuilder = StringBuilder(response)
 
-            val updater = AppUpdater(this@MainActivity)
-            updater.setUpdateFrom(UpdateFrom.JSON)
-            updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
-            updater.setCancelable(false)
-            updater.setButtonUpdate("Update")
-            if (stringBuilder.toString().contains("yes")) {
-                updater.setButtonDismiss("")
-                updater.setButtonDoNotShowAgain("")
+            try {
+                val updater = AppUpdater(this@MainActivity)
+                updater.setUpdateFrom(UpdateFrom.JSON)
+                updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
+                updater.setCancelable(false)
+                updater.setButtonUpdate("Update")
+                if (stringBuilder.toString().contains("yes")) {
+                    updater.setButtonDismiss("")
+                    updater.setButtonDoNotShowAgain("")
+                } else {
+                    updater.setButtonDismiss("Next Time")
+                    updater.setButtonDoNotShowAgain("")
+                }
+                updater.start()
             }
-            else {
-                updater.setButtonDismiss("Next Time")
-                updater.setButtonDoNotShowAgain("")
+            catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@MainActivity, "There was an error checking for updates. Check your internet connection.", Toast.LENGTH_SHORT).show()
             }
-            updater.start()
         }
 
         val context = this
