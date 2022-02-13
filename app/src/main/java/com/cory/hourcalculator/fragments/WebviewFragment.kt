@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -116,6 +117,11 @@ class WebviewFragment : Fragment() {
                 appBar?.setOnMenuItemClickListener {
                     Vibrate().vibration(requireContext())
                     when (it.itemId) {
+                        R.id.openBrowser -> {
+                            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            startActivity(browserIntent)
+                            true
+                        }
                         R.id.refresh -> {
                             webView?.reload()
                             true

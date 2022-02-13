@@ -84,13 +84,12 @@ class MainActivity : AppCompatActivity() {
 
         replaceFragment(homeFragment)
 
-        GlobalScope.launch(Dispatchers.IO) {
+            try {
             val response =
                 URL("https://raw.githubusercontent.com/corylowry12/json/main/mandatoryUpdate.json").readText()
 
             val stringBuilder = StringBuilder(response)
 
-            try {
                 val updater = AppUpdater(this@MainActivity)
                 updater.setUpdateFrom(UpdateFrom.JSON)
                 updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
@@ -107,9 +106,8 @@ class MainActivity : AppCompatActivity() {
             }
             catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@MainActivity, getString(R.string.error_checking_for_updates), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_checking_for_updates), Toast.LENGTH_LONG).show()
             }
-        }
 
         val context = this
         GlobalScope.launch(Dispatchers.Main) {

@@ -88,7 +88,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/enable_history_automatic_deletion"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/disableHistoryDeletion"
@@ -97,7 +97,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/disable_history_automatic_deletion"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </RadioGroup>
             </androidx.cardview.widget.CardView>
 
@@ -140,7 +140,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/one_entry"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/two"
@@ -149,7 +149,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/two_entries"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/three"
@@ -158,7 +158,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/three_entries"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/four"
@@ -167,7 +167,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/four_entries"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/five"
@@ -176,7 +176,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/five_entries"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/six"
@@ -185,7 +185,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/six_entries"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <RadioButton
                         android:id="@+id/seven"
@@ -194,7 +194,7 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/seven_entries"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </RadioGroup>
             </androidx.cardview.widget.CardView>
 

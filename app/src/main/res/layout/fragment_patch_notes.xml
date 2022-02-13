@@ -126,7 +126,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Fixed issue with app crashing on app launch because it was failing to check for updates"
+                        android:text="- Fixed issue with break text box in edit view not having a clear button icon"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -159,7 +159,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Added error checking to prevent crashing when deleting an entry in history"
+                        android:text="- Fixed issue with list not scrolling back to the top after deleting entry via edit view and then hitting the undo button"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -192,7 +192,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Added error checking to prevent crashing when opening edit view"
+                        android:text="- Fixed issue with text being to big in the App Settings view"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -225,7 +225,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Fixed issue with app deleting entry 1 instead of 0 when deleting multiple items at position 0"
+                        android:text="- Fixed issue with text being to big in the Automatic Deletion view"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -258,7 +258,106 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Fixed issue with app showing wrong data when undoing deletion of an hour"
+                        android:text="- Fixed issue with history showing wrong data after deleting entry via edit view and clicking the undo button"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bugFixesCardView6"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/patchNotesCardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="- Fixed issue with history showing wrong data after undoing deletion intermittently"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bugFixesCardView7"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/patchNotesCardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="- Fixed issue with history restoring wrong item intermittently when clicking undo button"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bugFixesCardView8"
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/patchNotesCardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="- Fixed issue with app crashing on launch because of data connection issue when checking for updates"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         tools:ignore="HardcodedText" />
@@ -428,7 +527,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Updated some libraries"
+                        android:text="- Tweaked follow system accent color dialog background"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         android:visibility="visible"
@@ -462,7 +561,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="- Made links in the Version Info section of the app clickable"
+                        android:text="- Added option in menu in the web browser to open link in default browser"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         android:visibility="visible"

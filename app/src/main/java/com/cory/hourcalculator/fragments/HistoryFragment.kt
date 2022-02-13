@@ -411,6 +411,7 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    @SuppressLint("Range")
     fun undo() {
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
 
@@ -419,15 +420,6 @@ class HistoryFragment : Fragment() {
         val dbHandler = DBHelper(requireContext(), null)
         val undoHoursData = UndoHoursData(requireContext())
 
-        val map = HashMap<String, String>()
-        map["id"] = undoHoursData.loadID().toString()
-        map["inTime"] = undoHoursData.loadInTime()
-        map["outTime"] = undoHoursData.loadOutTime()
-        map["breakTime"] = undoHoursData.loadBreakTime()
-        map["totalHours"] = undoHoursData.loadTotalHours()
-        map["date"] = undoHoursData.loadDate().toString()
-        dataList.add(map)
-
         dbHandler.insertRow(
             undoHoursData.loadInTime(),
             undoHoursData.loadOutTime(),
@@ -435,6 +427,24 @@ class HistoryFragment : Fragment() {
             undoHoursData.loadDate(),
             undoHoursData.loadBreakTime()
         )
+
+        dataList.clear()
+        val cursor2 = dbHandler.getAllRow(requireContext())
+        cursor2!!.moveToFirst()
+
+        while (!cursor2.isAfterLast) {
+            val map2 = HashMap<String, String>()
+            map2["id"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
+            map2["inTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
+            map2["outTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
+            map2["breakTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
+            map2["totalHours"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
+            map2["date"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
+            dataList.add(map2)
+
+            cursor2.moveToNext()
+
+        }
 
         listView?.adapter?.notifyItemInserted(ItemPosition(requireContext()).loadPosition())
     }

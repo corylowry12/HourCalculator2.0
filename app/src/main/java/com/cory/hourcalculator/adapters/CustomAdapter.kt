@@ -90,6 +90,7 @@ class CustomAdapter(
             val popup = PopupMenu(context12, imageView)
             popup.inflate(R.menu.menu_history_options)
             popup.setOnMenuItemClickListener { item ->
+                val itemPosition = holder.adapterPosition
                 Vibrate().vibration(context)
                 when (item.itemId) {
                     R.id.menu2 -> {
@@ -165,19 +166,19 @@ class CustomAdapter(
 
                                 while (!cursor2.isAfterLast) {
                                     val map2 = HashMap<String, String>()
-                                    map2["id"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                                    map2["inTime"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                                    map2["outTime"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                                    map2["breakTime"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                    map2["totalHours"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                    map2["date"] = cursor2.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
-                                    dataList.add(map)
+                                    map2["id"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
+                                    map2["inTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
+                                    map2["outTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
+                                    map2["breakTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                    map2["totalHours"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                    map2["date"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
+                                    dataList.add(map2)
 
                                     cursor2.moveToNext()
 
                                 }
 
-                                notifyItemInserted(position)
+                                notifyItemInserted(itemPosition)
 
                                 val restoreState = Runnable {
                                     (context as MainActivity).restoreState()
@@ -289,9 +290,9 @@ class CustomAdapter(
                         val map = HashMap<String, String>()
                         dataList.clear()
                         val cursor = dbHandler.getAllRow(context)
-                        cursor!!.moveToPosition(position)
+                        cursor!!.moveToPosition(itemPosition)
 
-                        while (cursor.position == position) {
+                        while (cursor.position == itemPosition) {
 
                             map["id"] =
                                 cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
@@ -320,7 +321,7 @@ class CustomAdapter(
                         ) {
 
                             val itemPositionData = ItemPosition(context)
-                            itemPositionData.setPosition(position)
+                            itemPositionData.setPosition(itemPosition)
                             IdData(context).setID(map["id"]!!.toInt())
                             val manager =
                                 (context as AppCompatActivity).supportFragmentManager.beginTransaction()
@@ -328,6 +329,13 @@ class CustomAdapter(
                             manager.replace(R.id.fragment_container, EditHours())
                                 .addToBackStack(null)
                             manager.commit()
+
+                            val saveState = Runnable {
+                                (context as MainActivity).saveState()
+
+                            }
+
+                            MainActivity().runOnUiThread(saveState)
 
                         } else {
                             Toast.makeText(context, context.getString(R.string.cant_edit_entry), Toast.LENGTH_SHORT).show()

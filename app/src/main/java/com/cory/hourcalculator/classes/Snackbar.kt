@@ -24,6 +24,13 @@ class Snackbar {
                 (context as MainActivity).undo()
             }
             MainActivity().runOnUiThread(runnable)
+
+            val restoreState = Runnable {
+                (context as MainActivity).restoreState()
+
+            }
+
+            MainActivity().runOnUiThread(restoreState)
         }
         snackbar.setActionTextColor(
             ContextCompat.getColorStateList(
