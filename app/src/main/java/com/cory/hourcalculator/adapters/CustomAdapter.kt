@@ -4,15 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.view.ContextThemeWrapper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
@@ -80,12 +74,296 @@ class CustomAdapter(
     @SuppressLint("Range")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         setAnimation(holder.itemView, position)
+        var isInflated = false
         val dbHandler = DBHelper(context, null)
-
+        val listItems = arrayOf("Edit", "Delete", "Delete All")
         val imageView = holder.itemView.findViewById<ImageView>(R.id.imageViewOptions)
         imageView.setOnClickListener {
             Vibrate().vibration(context)
-            val context12 =
+
+            val popupWindowAdapter = ArrayAdapter<String>(context, R.layout.historypopupwindow, R.id.details, listItems)
+            val listPopupWindow = ListPopupWindow(context)
+            listPopupWindow.setAdapter(popupWindowAdapter)
+            listPopupWindow.anchorView = imageView
+           listPopupWindow.width = 400
+            listPopupWindow.height = ListPopupWindow.WRAP_CONTENT
+            listPopupWindow.setDropDownGravity(Gravity.NO_GRAVITY)
+            if (isInflated) {
+                listPopupWindow.dismiss()
+                isInflated = false
+            }
+            else {
+                listPopupWindow.setOnItemClickListener(object : AdapterView.OnItemClickListener {
+                    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        val itemPosition = holder.adapterPosition
+                        if (p2 == 0) {
+                            listPopupWindow.dismiss()
+                            val map = HashMap<String, String>()
+                            dataList.clear()
+                            val cursor = dbHandler.getAllRow(context)
+                            cursor!!.moveToPosition(itemPosition)
+
+                            while (cursor.position == itemPosition) {
+
+                                map["id"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                                map["inTime"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                map["outTime"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                map["breakTime"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                map["totalHours"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                map["date"] =
+                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
+                                dataList.add(map)
+
+                                cursor.moveToNext()
+
+                            }
+                            if ((map["inTime"].toString()
+                                    .contains(context.getString(R.string.AM)) || map["inTime"].toString()
+                                    .contains(context.getString(R.string.PM))) &&
+                                (map["outTime"].toString()
+                                    .contains(context.getString(R.string.AM)) || map["outTime"].toString()
+                                    .contains(context.getString(R.string.PM)))
+                            ) {
+
+                                val itemPositionData = ItemPosition(context)
+                                itemPositionData.setPosition(itemPosition)
+                                IdData(context).setID(map["id"]!!.toInt())
+                                val manager =
+                                    (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                                manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                manager.replace(R.id.fragment_container, EditHours())
+                                    .addToBackStack(null)
+                                manager.commit()
+
+                                val saveState = Runnable {
+                                    (context as MainActivity).saveState()
+
+                                }
+
+                                MainActivity().runOnUiThread(saveState)
+
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.cant_edit_entry),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else if (p2 == 1) {
+                            listPopupWindow.dismiss()
+
+                            try {
+                                var inTime = ""
+                                var outTime = ""
+                                var breakTime = ""
+                                var totalHours = ""
+                                var day = 0L
+
+                                val map = HashMap<String, String>()
+                                val cursor = dbHandler.getAllRow(context)
+                                if (cursor!!.count > 0) {
+                                    cursor.moveToPosition(holder.adapterPosition)
+
+                                    while (cursor.position == holder.adapterPosition) {
+
+                                        map["id"] =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                                        map["inTime"] =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                        map["outTime"] =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                        map["breakTime"] =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                        map["totalHours"] =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                        map["date"] =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
+                                        inTime =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                                        outTime =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                                        breakTime =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                        totalHours =
+                                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                        day =
+                                            cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
+                                        dbHandler.deleteRow(map["id"].toString())
+                                        cursor.moveToNext()
+                                    }
+                                }
+
+                                val saveState = Runnable {
+                                    (context as MainActivity).saveState()
+
+                                }
+
+                                MainActivity().runOnUiThread(saveState)
+
+                                dataList.removeAt(holder.adapterPosition)
+                                notifyItemRemoved(holder.adapterPosition)
+
+                                val snackbar =
+                                    Snackbar.make(
+                                        holder.itemView,
+                                        context.getString(R.string.entry_deleted),
+                                        Snackbar.LENGTH_LONG
+                                    )
+                                        .setDuration(5000)
+
+                                snackbar.setAction(context.getString(R.string.undo)) {
+                                    Vibrate().vibration(context)
+                                    dbHandler.insertRow(inTime, outTime, totalHours, day, breakTime)
+
+                                    dataList.clear()
+                                    val cursor2 = dbHandler.getAllRow(context)
+                                    cursor2!!.moveToFirst()
+
+                                    while (!cursor2.isAfterLast) {
+                                        val map2 = HashMap<String, String>()
+                                        map2["id"] =
+                                            cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
+                                        map2["inTime"] =
+                                            cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
+                                        map2["outTime"] =
+                                            cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
+                                        map2["breakTime"] =
+                                            cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                        map2["totalHours"] =
+                                            cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                        map2["date"] =
+                                            cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
+                                        dataList.add(map2)
+
+                                        cursor2.moveToNext()
+
+                                    }
+
+                                    notifyItemInserted(itemPosition)
+
+                                    val restoreState = Runnable {
+                                        (context as MainActivity).restoreState()
+
+                                    }
+
+                                    MainActivity().runOnUiThread(restoreState)
+
+                                }
+                                snackbar.setActionTextColor(
+                                    ContextCompat.getColorStateList(
+                                        context,
+                                        AccentColor(context).snackbarActionTextColor()
+                                    )
+                                )
+                                snackbar.show()
+
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.there_was_an_error_deleting_this_entry),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else if (p2 == 2) {
+                            listPopupWindow.dismiss()
+
+                            val inTime = arrayOf<String>().toMutableList()
+                            val outTime = arrayOf<String>().toMutableList()
+                            val breakTime = arrayOf<String>().toMutableList()
+                            val totalHours = arrayOf<String>().toMutableList()
+                            val day = arrayOf<Long>().toMutableList()
+
+                            val alertDialog = MaterialAlertDialogBuilder(
+                                context,
+                                AccentColor(context).alertTheme()
+                            )
+                            alertDialog.setTitle(context.getString(R.string.warning))
+                            alertDialog.setMessage(context.getString(R.string.would_you_like_to_delete_all))
+                            alertDialog.setCancelable(false)
+                            alertDialog.setPositiveButton(context.getString(R.string.yes)) { _, _ ->
+                                Vibrate().vibration(context)
+
+                                val cursor = dbHandler.getAllRow(context)
+                                cursor!!.moveToFirst()
+
+                                while (!cursor.isAfterLast) {
+                                    val map = HashMap<String, String>()
+                                    map["id"] =
+                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                                    inTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN)))
+
+                                    outTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT)))
+
+                                    breakTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
+                                    totalHours.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
+
+                                    day.add(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
+
+
+                                    cursor.moveToNext()
+                                }
+
+                                dbHandler.deleteAll()
+                                val runnable = Runnable {
+                                    (context as MainActivity).deleteAll()
+                                }
+                                MainActivity().runOnUiThread(runnable)
+
+                                val snackBar = Snackbar.make(
+                                    holder.itemView,
+                                    context.getString(R.string.all_entries_deleted),
+                                    Snackbar.LENGTH_LONG
+                                )
+                                    .setDuration(5000)
+
+                                snackBar.setActionTextColor(
+                                    ContextCompat.getColorStateList(
+                                        context,
+                                        AccentColor(context).snackbarActionTextColor()
+                                    )
+                                )
+                                snackBar.setAction(context.getString(R.string.undo)) {
+                                    Vibrate().vibration(context)
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        for (i in inTime.indices) {
+                                            dbHandler.insertRow(
+                                                inTime.elementAt(i),
+                                                outTime.elementAt(i),
+                                                totalHours.elementAt(i),
+                                                day.elementAt(i),
+                                                breakTime.elementAt(i)
+                                            )
+                                        }
+
+                                        val runnable2 = Runnable {
+                                            (context as MainActivity).undoDeleteAll()
+                                        }
+                                        MainActivity().runOnUiThread(runnable2)
+                                    }
+                                }
+                                snackBar.show()
+                            }
+                                .setNeutralButton(context.getString(R.string.no)) { _, _ ->
+                                    Vibrate().vibration(context)
+                                }
+                            val alert = alertDialog.create()
+                            alert.show()
+                        }
+                    }
+
+                })
+                listPopupWindow.show()
+                isInflated = true
+            }
+            /*val context12 =
                 ContextThemeWrapper(context, AccentColor(context).menuTheme(context))
             val popup = PopupMenu(context12, imageView)
             popup.inflate(R.menu.menu_history_options)
@@ -344,7 +622,7 @@ class CustomAdapter(
                 }
                 true
             }
-            popup.show()
+            popup.show()*/
         }
         (holder as ViewHolder).bind(position)
     }

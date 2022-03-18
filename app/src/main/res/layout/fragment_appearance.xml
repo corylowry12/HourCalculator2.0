@@ -451,9 +451,65 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/followSystemVersionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/navbarCardView"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Follow System Accent Color Selection"
+                android:textColor="?attr/textColor"
+                android:textSize="14sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/followSystemVersionCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/followSystemVersionTextView"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/normalSystemTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="App Theming"
+                            android:textColor="?attr/settingsTextColor"
+                            android:textSize="12sp"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <RadioButton
+                            android:id="@+id/googleSystemTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Follow Google Apps"
+                            android:textColor="?attr/settingsTextColor"
+                            android:textSize="12sp"
+                            app:layout_constraintTop_toBottomOf="@id/normalSystemTheme" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </RadioGroup>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/followSystemVersionCardView"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"

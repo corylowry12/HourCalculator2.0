@@ -26,6 +26,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class SettingsFragment : Fragment() {
 
+    var themeSelection = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,41 +36,64 @@ class SettingsFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
+                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                        themeSelection = false
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        themeSelection = true
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        themeSelection = true
+                    }
                 }
             }
         }
 
         val accentColor = AccentColor(requireContext())
-                    when {
-                        accentColor.loadAccent() == 0 -> {
-                            activity?.theme?.applyStyle(R.style.teal_accent, true)
-                        }
-                        accentColor.loadAccent() == 1 -> {
-                            activity?.theme?.applyStyle(R.style.pink_accent, true)
-                        }
-                        accentColor.loadAccent() == 2 -> {
-                            activity?.theme?.applyStyle(R.style.orange_accent, true)
-                        }
-                        accentColor.loadAccent() == 3 -> {
-                            activity?.theme?.applyStyle(R.style.red_accent, true)
-                        }
-                        accentColor.loadAccent() == 4 -> {
-                            activity?.theme?.applyStyle(R.style.system_accent, true)
-                        }
-                    }
+        val followSystemVersion = FollowSystemVersion(requireContext())
 
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                if (!followSystemVersion.loadSystemColor()) {
+                    activity?.theme?.applyStyle(R.style.system_accent, true)
+                }
+                else {
+                    if (themeSelection) {
+                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
+                    }
+                    else {
+                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
+                    }
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 

@@ -13,13 +13,23 @@
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/date_picker.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/followsystemcircleimageview.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/graycircleimageview.xml" value="0.24375" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/history_selector.xml" value="0.2025" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/home_selector.xml" value="0.2025" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_arrow_upward_24px.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.24375" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_history_24.xml" value="0.2025" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.23645833333333333" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.4161458333333333" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_more_vert_24_white.xml" value="0.4161458333333333" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.228" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_outline_home_24.xml" value="0.228" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_outline_settings_24.xml" value="0.228" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_work_history_black_24dp.xml" value="0.228" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_work_history_outline_black_24dp.xml" value="0.228" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/menu_background.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/menu_rounded_corners.xml" value="0.24375" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/rounded_menu.xml" value="0.2175" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/settings_selector.xml" value="0.2025" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/tealmenubackground.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/whitecircleimageview.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/activity_main.xml" value="0.30842391304347827" />
@@ -38,6 +48,7 @@
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_patch_notes.xml" value="0.176" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_webview.xml" value="0.1" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/historypopupwindow.xml" value="0.2916666666666667" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/include_switch_main.xml" value="0.2203125" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/list_row.xml" value="0.2203125" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/monet_switch.xml" value="0.2203125" />
@@ -49,6 +60,7 @@
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/menu/menu_history.xml" value="0.2203125" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/menu/menu_history_options.xml" value="0.22760416666666666" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.24375" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/xml/remote_defaults.xml" value="0.10764944275582573" />
         <entry key="..\:/HourCalculator4/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/app/src/main/res/drawable/circleimagevieworange.xml" value="0.24375" />
         <entry key="..\:/HourCalculator4/app/src/main/res/drawable/circleimageviewsystemaccent.xml" value="0.24375" />

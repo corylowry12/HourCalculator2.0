@@ -13,6 +13,9 @@
     <color name="darkTeal">#00766c</color>
     <color name="darkPink">#bf5f82</color>
 
+    <color name="googleItemIndicatorColor" tools:targetApi="s">@android:color/system_accent2_600</color>
+    <color name="googleItemIndicatorColor_light" tools:targetApi="s">@android:color/system_accent2_300</color>
+
     <color name="colorPrimaryLightAppBar">#64d8cb</color>
     <color name="colorPrimaryPinkAppBar">#ffc1e3</color>
     <color name="colorPrimaryOrangeAppBar">#FA986B</color>
@@ -39,6 +42,9 @@
     <color name="systemAccent" tools:targetApi="s">@android:color/system_accent1_400</color>
     <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_500</color>
 
+    <color name="systemAccentGoogleDark" tools:targetApi="s">@android:color/system_neutral2_800</color>
+    <color name="systemAccentGoogleDark_light" tools:targetApi="s">@android:color/system_neutral2_300</color>
+
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
 
@@ -48,7 +54,7 @@
     <color name="redBadgeColor">#BF3030</color>
     <color name="lightRedBadgeColor">#FF4030</color>
 
-    <color name="tealNavBarIconTint">#006058</color>
+    <color name="tealNavBarIconTint">#003C32</color>
     <color name="pinkNavBarIconTint">#88445D</color>
     <color name="orangeNavBarIconTint">#702700</color>
     <color name="redNavBarIconTint">#680004</color>

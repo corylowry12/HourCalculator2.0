@@ -5,13 +5,14 @@
     <item
         android:id="@+id/info"
         android:icon="@drawable/ic_baseline_info_24"
-        android:iconTint="?attr/historyItemMenuTint"
+        app:iconTint="?attr/historyActionBarIconTint"
         android:title="@string/info"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/mnuSort"
         android:icon="@drawable/ic_sort_24px"
+        app:iconTint="?attr/historyActionBarIconTint"
         android:title="@string/sort"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />

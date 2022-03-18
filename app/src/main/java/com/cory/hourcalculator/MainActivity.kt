@@ -1,10 +1,16 @@
 package com.cory.hourcalculator
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Looper
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,6 +27,15 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.abt.FirebaseABTesting
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,28 +54,87 @@ class MainActivity : AppCompatActivity() {
 
     private val dbHandler = DBHelper(this, null)
 
+    var themeSelection = false
+
+    private fun checkForUpdates() {
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+
+                val response =
+                    URL("https://raw.githubusercontent.com/corylowry12/json/main/mandatoryUpdate.json").readText()
+                val stringBuilder = StringBuilder(response)
+                val updater = AppUpdater(this@MainActivity)
+                updater.setUpdateFrom(UpdateFrom.JSON)
+                updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
+                updater.setCancelable(false)
+                updater.setButtonUpdate(getString(R.string.update))
+                if (stringBuilder.toString().contains(getString(R.string.yes_app_update_dialog))) {
+                    updater.setButtonDismiss("")
+                    updater.setButtonDoNotShowAgain("")
+                } else {
+                    updater.setButtonDismiss(getString(R.string.next_time))
+                    updater.setButtonDoNotShowAgain("")
+                }
+                updater.start()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                val snackbar = Snackbar.make(findViewById(R.id.mainConstraint), getString(R.string.error_checking_for_updates), Snackbar.LENGTH_INDEFINITE)
+                snackbar.anchorView = findViewById(R.id.adView)
+                snackbar.setAction(getString(R.string.retry)) {
+                        checkForUpdates()
+                    snackbar.dismiss()
+                }
+                snackbar.duration = 5000
+                snackbar.setActionTextColor(
+                    ContextCompat.getColorStateList(
+                        this@MainActivity,
+                        AccentColor(this@MainActivity).snackbarActionTextColor()
+                    )
+                )
+                snackbar.show()
+
+            }
+        }
+    }
+
+    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val darkThemeData = DarkThemeData(this)
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 setTheme(R.style.Theme_DarkTheme)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 setTheme(R.style.Theme_MyApplication)
+                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 setTheme(R.style.Theme_AMOLED)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> setTheme(AccentColor(this).followSystemTheme(this))
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        setTheme(R.style.Theme_MyApplication)
+                        themeSelection = false
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        setTheme(AccentColor(this).followSystemTheme(this))
+                        themeSelection = true
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        setTheme(R.style.Theme_AMOLED)
+                        themeSelection = true
+                    }
                 }
             }
         }
         val accentColor = AccentColor(this)
+        val followSystemVersion = FollowSystemVersion(this)
 
         when {
             accentColor.loadAccent() == 0 -> {
@@ -76,39 +150,24 @@ class MainActivity : AppCompatActivity() {
                 theme?.applyStyle(R.style.red_accent, true)
             }
             accentColor.loadAccent() == 4 -> {
-                theme?.applyStyle(R.style.system_accent, true)
+                if (!followSystemVersion.loadSystemColor()) {
+                    theme?.applyStyle(R.style.system_accent, true)
+                }
+                else {
+                    if (themeSelection) {
+                        theme?.applyStyle(R.style.system_accent_google, true)
+                    }
+                    else {
+                        theme?.applyStyle(R.style.system_accent_google_light, true)
+                    }
+                }
             }
         }
 
         setContentView(R.layout.activity_main)
 
         replaceFragment(homeFragment)
-
-            try {
-            val response =
-                URL("https://raw.githubusercontent.com/corylowry12/json/main/mandatoryUpdate.json").readText()
-
-            val stringBuilder = StringBuilder(response)
-
-                val updater = AppUpdater(this@MainActivity)
-                updater.setUpdateFrom(UpdateFrom.JSON)
-                updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
-                updater.setCancelable(false)
-                updater.setButtonUpdate(getString(R.string.update))
-                if (stringBuilder.toString().contains(getString(R.string.yes_app_update_dialog))) {
-                    updater.setButtonDismiss("")
-                    updater.setButtonDoNotShowAgain("")
-                } else {
-                    updater.setButtonDismiss(getString(R.string.next_time))
-                    updater.setButtonDoNotShowAgain("")
-                }
-                updater.start()
-            }
-            catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this, getString(R.string.error_checking_for_updates), Toast.LENGTH_LONG).show()
-            }
-
+        
         val context = this
         GlobalScope.launch(Dispatchers.Main) {
             MobileAds.initialize(context)
@@ -156,11 +215,23 @@ class MainActivity : AppCompatActivity() {
                     ContextCompat.getColorStateList(this, R.color.colorPrimaryRedAppBar)
             }
             accentColor.loadAccent() == 4 -> {
-                bottomNav.itemActiveIndicatorColor =
-                    ContextCompat.getColorStateList(this, R.color.colorPrimaryPixelAppBar)
+                if (!FollowSystemVersion(this).loadSystemColor()) {
+                    bottomNav.itemActiveIndicatorColor =
+                        ContextCompat.getColorStateList(this, R.color.colorPrimaryPixelAppBar)
+                }
+                else {
+                    if (themeSelection) {
+                        bottomNav.itemActiveIndicatorColor =
+                            ContextCompat.getColorStateList(this, R.color.googleItemIndicatorColor)
+                    }
+                    else {
+                        bottomNav.itemActiveIndicatorColor =
+                            ContextCompat.getColorStateList(this, R.color.googleItemIndicatorColor_light)
+                    }
+                }
             }
         }
-
+        checkForUpdates()
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -381,6 +452,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        if (FollowSystemVersion(this).loadSystemColor() && AccentColor(this).loadAccent() == 4) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }

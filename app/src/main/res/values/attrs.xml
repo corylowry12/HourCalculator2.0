@@ -23,4 +23,8 @@
 
     <attr name="backgroundColorDialog" format="color" />
 
+    <attr name="navBarRippleColor" format="color" />
+
+    <attr name="historyActionBarIconTint" format="color" />
+
 </resources>

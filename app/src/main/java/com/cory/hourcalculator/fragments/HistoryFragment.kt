@@ -24,6 +24,8 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -43,6 +45,8 @@ class HistoryFragment : Fragment() {
 
     private var containsColon = false
 
+    var themeSelection = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,41 +55,64 @@ class HistoryFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
+                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                        themeSelection = false
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        themeSelection = true
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        themeSelection = true
+                    }
                 }
             }
         }
 
         val accentColor = AccentColor(requireContext())
-                    when {
-                        accentColor.loadAccent() == 0 -> {
-                            activity?.theme?.applyStyle(R.style.teal_accent, true)
-                        }
-                        accentColor.loadAccent() == 1 -> {
-                            activity?.theme?.applyStyle(R.style.pink_accent, true)
-                        }
-                        accentColor.loadAccent() == 2 -> {
-                            activity?.theme?.applyStyle(R.style.orange_accent, true)
-                        }
-                        accentColor.loadAccent() == 3 -> {
-                            activity?.theme?.applyStyle(R.style.red_accent, true)
-                        }
-                        accentColor.loadAccent() == 4 -> {
-                            activity?.theme?.applyStyle(R.style.system_accent, true)
-                        }
-                    }
+        val followSystemVersion = FollowSystemVersion(requireContext())
 
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                if (!followSystemVersion.loadSystemColor()) {
+                    activity?.theme?.applyStyle(R.style.system_accent, true)
+                }
+                else {
+                    if (themeSelection) {
+                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
+                    }
+                    else {
+                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
+                    }
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
@@ -127,8 +154,21 @@ class HistoryFragment : Fragment() {
                     ContextCompat.getColorStateList(requireContext(), R.color.redAccent)
             }
             accentColor.loadAccent() == 4 -> {
-                floatingActionButtonHistory?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
+                val followSystemVersion = FollowSystemVersion(requireContext())
+                if (!followSystemVersion.loadSystemColor()) {
+                    floatingActionButtonHistory?.backgroundTintList =
+                        ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
+                }
+                else {
+                    if (themeSelection) {
+                        floatingActionButtonHistory?.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.systemAccentGoogleDark)
+                    }
+                    else {
+                        floatingActionButtonHistory?.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.systemAccentGoogleDark_light)
+                    }
+                }
             }
         }
 
@@ -314,6 +354,8 @@ class HistoryFragment : Fragment() {
         floatingActionButtonHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             listView?.smoothScrollToPosition(0)
+            val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+            collapsingToolbarLayout.setExpanded(true, true)
         }
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -367,7 +409,7 @@ class HistoryFragment : Fragment() {
                     y += decimalTime
 
                 } catch (e: java.lang.NumberFormatException) {
-                    Toast.makeText(requireContext(), "There was an error calculating hours", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.error_calculating_hours), Toast.LENGTH_SHORT).show()
                 }
 
                 containsColon = true
@@ -459,6 +501,48 @@ class HistoryFragment : Fragment() {
 
         textViewVisibility()
 
+        calculateWages()
+    }
+
+    @SuppressLint("Range")
+    private fun calculateWages() {
+
+        val dbHandler = DBHelper(requireContext(), null)
+
+        var y = 0.0
+
+        val cursor = dbHandler.getAllRow(requireContext())
+        cursor!!.moveToFirst()
+
+        while (!cursor.isAfterLast) {
+
+            val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
+
+            var decimalTime: Double
+            if (array.contains(":")) {
+                val (hours, minutes) = array.split(":")
+                val decimal =
+                    (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                        .toString().drop(2)
+                try {
+                    decimalTime = "$hours.$decimal".toDouble()
+                    y += decimalTime
+
+                } catch (e: java.lang.NumberFormatException) {
+                    e.printStackTrace()
+                }
+
+                containsColon = true
+
+            } else {
+                y += array.toDouble()
+            }
+
+            output = String.format("%.2f", y)
+            cursor.moveToNext()
+
+        }
+
     }
 
     private fun textViewVisibility() {
@@ -478,6 +562,8 @@ class HistoryFragment : Fragment() {
         recyclerView?.layoutManager?.onRestoreInstanceState(recyclerViewState)
 
         textViewVisibility()
+
+        calculateWages()
     }
 
     fun deleteAll() {

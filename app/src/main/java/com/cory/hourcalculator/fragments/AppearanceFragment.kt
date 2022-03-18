@@ -14,8 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -32,6 +34,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class AppearanceFragment : Fragment() {
 
     private lateinit var followSystemImageViewDrawable: Drawable
+    var themeSelection = false
 
     private fun setDrawable(): Drawable {
         when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
@@ -96,36 +99,40 @@ class AppearanceFragment : Fragment() {
         val darkThemeData = DarkThemeData(requireContext())
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                followSystemImageViewDrawable = setDrawable()
                 activity?.setTheme(R.style.Theme_DarkTheme)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
-                followSystemImageViewDrawable = setDrawable()
                 activity?.setTheme(R.style.Theme_MyApplication)
+                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
-                followSystemImageViewDrawable = setDrawable()
                 activity?.setTheme(R.style.Theme_AMOLED)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        followSystemImageViewDrawable = setDrawable()
+                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
-                        followSystemImageViewDrawable = setDrawable()
+                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
-                        followSystemImageViewDrawable = setDrawable()
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        themeSelection = true
                     }
                 }
             }
         }
 
+        followSystemImageViewDrawable = setDrawable()
+
         val accentColor = AccentColor(requireContext())
+        val followSystemVersion = FollowSystemVersion(requireContext())
+
         when {
             accentColor.loadAccent() == 0 -> {
                 activity?.theme?.applyStyle(R.style.teal_accent, true)
@@ -140,7 +147,17 @@ class AppearanceFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.red_accent, true)
             }
             accentColor.loadAccent() == 4 -> {
-                activity?.theme?.applyStyle(R.style.system_accent, true)
+                if (!followSystemVersion.loadSystemColor()) {
+                    activity?.theme?.applyStyle(R.style.system_accent, true)
+                }
+                else {
+                    if (themeSelection) {
+                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
+                    }
+                    else {
+                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
+                    }
+                }
             }
         }
         return inflater.inflate(R.layout.fragment_appearance, container, false)
@@ -208,12 +225,39 @@ class AppearanceFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                darkThemeData.setDarkModeState(0)
-                darkThemeButton?.isChecked = false
-                amoledThemeButton?.isChecked = false
-                followSystemThemeButton?.isChecked = false
-                restartThemeChange()
-
+                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
+                    val alert =
+                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setTitle(getString(R.string.warning))
+                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        darkThemeData.setDarkModeState(0)
+                        darkThemeButton?.isChecked = false
+                        amoledThemeButton?.isChecked = false
+                        followSystemThemeButton?.isChecked = false
+                        restartThemeChange()
+                    }
+                    alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        if (darkThemeData.loadDarkModeState() == 1) {
+                            darkThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 2) {
+                            amoledThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 3) {
+                            followSystemThemeButton?.isChecked = true
+                        }
+                        lightThemeButton.isChecked = false
+                    }
+                    alert.show()
+                }
+                else {
+                    darkThemeData.setDarkModeState(0)
+                    darkThemeButton?.isChecked = false
+                    amoledThemeButton?.isChecked = false
+                    followSystemThemeButton?.isChecked = false
+                    restartThemeChange()
+                }
             }
         }
         darkThemeButton?.setOnClickListener {
@@ -222,12 +266,39 @@ class AppearanceFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.dark_theme_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                darkThemeData.setDarkModeState(1)
-                lightThemeButton?.isChecked = false
-                amoledThemeButton?.isChecked = false
-                followSystemThemeButton?.isChecked = false
-                restartThemeChange()
-
+                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
+                    val alert =
+                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setTitle(getString(R.string.warning))
+                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        darkThemeData.setDarkModeState(1)
+                        lightThemeButton?.isChecked = false
+                        amoledThemeButton?.isChecked = false
+                        followSystemThemeButton?.isChecked = false
+                        restartThemeChange()
+                    }
+                    alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        if (darkThemeData.loadDarkModeState() == 0) {
+                            lightThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 2) {
+                            amoledThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 3) {
+                            followSystemThemeButton?.isChecked = true
+                        }
+                        darkThemeButton.isChecked = false
+                    }
+                    alert.show()
+                }
+                else {
+                    darkThemeData.setDarkModeState(1)
+                    lightThemeButton?.isChecked = false
+                    amoledThemeButton?.isChecked = false
+                    followSystemThemeButton?.isChecked = false
+                    restartThemeChange()
+                }
             }
         }
         amoledThemeButton?.setOnClickListener {
@@ -239,12 +310,39 @@ class AppearanceFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                darkThemeData.setDarkModeState(2)
-                lightThemeButton?.isChecked = false
-                darkThemeButton?.isChecked = false
-                followSystemThemeButton?.isChecked = false
-                restartThemeChange()
-
+                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
+                    val alert =
+                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setTitle(getString(R.string.warning))
+                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        darkThemeData.setDarkModeState(2)
+                        lightThemeButton?.isChecked = false
+                        darkThemeButton?.isChecked = false
+                        followSystemThemeButton?.isChecked = false
+                        restartThemeChange()
+                    }
+                    alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        if (darkThemeData.loadDarkModeState() == 0) {
+                            lightThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 1) {
+                            darkThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 3) {
+                            followSystemThemeButton?.isChecked = true
+                        }
+                        amoledThemeButton.isChecked = false
+                    }
+                    alert.show()
+                }
+                else {
+                    darkThemeData.setDarkModeState(2)
+                    lightThemeButton?.isChecked = false
+                    darkThemeButton?.isChecked = false
+                    followSystemThemeButton?.isChecked = false
+                    restartThemeChange()
+                }
             }
         }
         followSystemThemeButton?.setOnClickListener {
@@ -256,11 +354,39 @@ class AppearanceFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                darkThemeData.setDarkModeState(3)
-                lightThemeButton?.isChecked = false
-                darkThemeButton?.isChecked = false
-                amoledThemeButton?.isChecked = false
-                restartThemeChange()
+                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
+                    val alert =
+                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+                    alert.setTitle(getString(R.string.warning))
+                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        darkThemeData.setDarkModeState(3)
+                        lightThemeButton?.isChecked = false
+                        darkThemeButton?.isChecked = false
+                        amoledThemeButton?.isChecked = false
+                        restartThemeChange()
+                    }
+                    alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        if (darkThemeData.loadDarkModeState() == 0) {
+                            lightThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 1) {
+                            darkThemeButton?.isChecked = true
+                        }
+                        else if (darkThemeData.loadDarkModeState() == 2) {
+                            amoledThemeButton?.isChecked = true
+                        }
+                        followSystemThemeButton.isChecked = false
+                    }
+                    alert.show()
+                }
+                else {
+                    darkThemeData.setDarkModeState(3)
+                    lightThemeButton?.isChecked = false
+                    darkThemeButton?.isChecked = false
+                    amoledThemeButton?.isChecked = false
+                    restartThemeChange()
+                }
 
             }
         }
@@ -282,12 +408,37 @@ class AppearanceFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.follow_system_already_set_to_black_theme), Toast.LENGTH_SHORT).show()
             }
             else {
-                followSystemThemeChoice.setFollowSystemThemePreference(0)
-                darkTheme?.isChecked = false
+                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
+                    val alert =
+                        MaterialAlertDialogBuilder(
+                            requireContext(),
+                            AccentColor(requireContext()).alertTheme()
+                        )
+                    alert.setTitle(getString(R.string.warning))
+                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        followSystemThemeChoice.setFollowSystemThemePreference(0)
+                        darkTheme?.isChecked = false
 
-                if (darkThemeData.loadDarkModeState() == 3) {
-                    if (getCurrentNightTheme()) {
-                        restartThemeChange()
+                        if (darkThemeData.loadDarkModeState() == 3) {
+                            if (getCurrentNightTheme()) {
+                                restartThemeChange()
+                            }
+                        }
+                    }
+                    alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        blackTheme.isChecked = false
+                    }
+                alert.show()
+                }
+                else {
+                    followSystemThemeChoice.setFollowSystemThemePreference(0)
+                    darkTheme?.isChecked = false
+
+                    if (darkThemeData.loadDarkModeState() == 3) {
+                        if (getCurrentNightTheme()) {
+                            restartThemeChange()
+                        }
                     }
                 }
             }
@@ -296,8 +447,28 @@ class AppearanceFragment : Fragment() {
         }
 
         darkTheme?.setOnClickListener {
-            if (followSystemThemeChoice.loadFollowSystemThemePreference() == 1) {
-                Toast.makeText(requireContext(), getString(R.string.follow_system_already_set_to_dark_theme), Toast.LENGTH_SHORT).show()
+            if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
+                val alert =
+                    MaterialAlertDialogBuilder(
+                        requireContext(),
+                        AccentColor(requireContext()).alertTheme()
+                    )
+                alert.setTitle(getString(R.string.warning))
+                alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
+                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    followSystemThemeChoice.setFollowSystemThemePreference(1)
+                    blackTheme?.isChecked = false
+
+                    if (darkThemeData.loadDarkModeState() == 3) {
+                        if (getCurrentNightTheme()) {
+                            restartThemeChange()
+                        }
+                    }
+                }
+                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                    darkTheme.isChecked = false
+                }
+                alert.show()
             }
             else {
                 followSystemThemeChoice.setFollowSystemThemePreference(1)
@@ -309,7 +480,6 @@ class AppearanceFragment : Fragment() {
                     }
                 }
             }
-
             followSystemImageView?.setImageDrawable(setDrawable())
         }
 
@@ -323,7 +493,7 @@ class AppearanceFragment : Fragment() {
 
         val systemAccentImage = activity?.findViewById<ImageView>(R.id.systemAccentImageView)
 
-        if (Build.VERSION.RELEASE.toInt() < 12) {
+        if (Build.VERSION.SDK_INT < 31) {
             systemAccentButton?.visibility = View.GONE
             systemAccentImage?.visibility = View.GONE
         }
@@ -697,6 +867,34 @@ class AppearanceFragment : Fragment() {
 
                 Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_disabled), Toast.LENGTH_SHORT).show()
             }
+        }
+
+        val normalStyle = view.findViewById<RadioButton>(R.id.normalSystemTheme)
+        val googleStyle = view.findViewById<RadioButton>(R.id.googleSystemTheme)
+        val followSystemVersion = FollowSystemVersion(requireContext())
+
+        val followSystemVersionCardView = view.findViewById<CardView>(R.id.followSystemVersionCardView)
+        val followSystemVersionTextView = view.findViewById<TextView>(R.id.followSystemVersionTextView)
+
+        if (Build.VERSION.SDK_INT < 31 && RemoteConfig(requireContext()).loadRemoteSystemColor() == "0") {
+            followSystemVersionCardView?.visibility = View.GONE
+            followSystemVersionTextView?.visibility = View.GONE
+        }
+
+        if (!followSystemVersion.loadSystemColor()) {
+            normalStyle.isChecked = true
+        } else {
+            googleStyle.isChecked = true
+        }
+
+        normalStyle.setOnClickListener {
+            followSystemVersion.setSystemColor(false)
+            restartApplication()
+        }
+
+        googleStyle.setOnClickListener {
+            followSystemVersion.setSystemColor(true)
+            restartApplication()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

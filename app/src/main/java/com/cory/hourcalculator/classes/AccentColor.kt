@@ -9,6 +9,7 @@ class AccentColor(context: Context) {
 
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences("file", Context.MODE_PRIVATE)
+    val followSystemVersion = FollowSystemVersion(context)
 
     fun setAccentState(state: Int) {
         val editor = sharedPreferences.edit()
@@ -38,7 +39,13 @@ class AccentColor(context: Context) {
                 return R.style.AlertDialogStyleRed
             }
             4 -> {
-                return R.style.AlertDialogStyleSystemAccent
+                if (!followSystemVersion.loadSystemColor()) {
+                    return R.style.AlertDialogStyleSystemAccent
+                }
+                else {
+                    return R.style.AlertDialogStyleSystemAccentGoogle
+                }
+
             }
             else -> return R.style.AlertDialogStyle
         }
@@ -126,7 +133,12 @@ class AccentColor(context: Context) {
                 return R.color.redAccent
             }
             4 -> {
-                return R.color.systemAccent
+                if (!followSystemVersion.loadSystemColor()) {
+                    return R.color.systemAccent
+                }
+                else {
+                    return R.color.systemAccentGoogleDark_light
+                }
             }
         }
         return R.color.colorPrimary

@@ -241,4 +241,7 @@
     <string name="error_checking_for_updates">There was an error checking for updates</string>
     <string name="next_time">Next Time</string>
     <string name="open_in_browser">Open in Browser</string>
+    <string name="retry">Retry</string>
+    <string name="error_calculating_hours">There was an error calculating hours</string>
+    <string name="followSystemGoogleDialogWarning">Since you have \"Match Google Apps\" version of theming enabled, the entire app will need to restart. Continue?"</string>
 </resources>

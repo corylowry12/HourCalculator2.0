@@ -11,10 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
-import com.cory.hourcalculator.classes.Version
-import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -25,6 +22,8 @@ class PatchNotesFragment : Fragment() {
     private var enhancementsBool = false
     private var bugFixesBool = false
 
+    var themeSelection = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,23 +32,37 @@ class PatchNotesFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
+                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
+                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> activity?.setTheme(R.style.Theme_MyApplication)
-                    Configuration.UI_MODE_NIGHT_YES -> activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> activity?.setTheme(R.style.Theme_AMOLED)
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                        themeSelection = false
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        themeSelection = true
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        themeSelection = true
+                    }
                 }
             }
         }
 
         val accentColor = AccentColor(requireContext())
+        val followSystemVersion = FollowSystemVersion(requireContext())
+
         when {
             accentColor.loadAccent() == 0 -> {
                 activity?.theme?.applyStyle(R.style.teal_accent, true)
@@ -64,7 +77,17 @@ class PatchNotesFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.red_accent, true)
             }
             accentColor.loadAccent() == 4 -> {
-                activity?.theme?.applyStyle(R.style.system_accent, true)
+                if (!followSystemVersion.loadSystemColor()) {
+                    activity?.theme?.applyStyle(R.style.system_accent, true)
+                }
+                else {
+                    if (themeSelection) {
+                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
+                    }
+                    else {
+                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
+                    }
+                }
             }
         }
         return inflater.inflate(R.layout.fragment_patch_notes, container, false)

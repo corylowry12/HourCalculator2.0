@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:background="?attr/backgroundColor"
     android:tag="history"
+    android:id="@+id/coordinatorLayoutHistory"
     tools:context=".fragments.HistoryFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
+   <!-- <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolBarHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,20 +19,54 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_history"
         app:title="@string/history"
-        app:titleCentered="true" />
+        app:titleCentered="true" /> -->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutHistory"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="?attr/backgroundColor"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolBarHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginBottom="28dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolBarHistory"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:title="@string/history"
+                app:titleCentered="true"
+                app:menu="@menu/menu_history"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
         android:divider="@null"
         android:paddingBottom="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/materialToolBarHistory" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayoutHistory" />
 
     <TextView
         android:id="@+id/noHoursStoredTextView"
@@ -44,7 +78,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_gravity="center"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonHistory"
@@ -58,8 +93,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="15dp"
-        app:tint="@android:color/black"
+        app:tint="?attr/historyActionBarIconTint"
         app:srcCompat="@drawable/ic_arrow_upward_24px"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        android:layout_gravity="bottom|center"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
