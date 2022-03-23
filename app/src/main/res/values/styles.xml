@@ -221,23 +221,21 @@
     </style>
 
     <style name="datePickerLight" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-
         <item name="backgroundColorDialog">@color/white</item>
-
         <item name="android:windowBackground">@drawable/date_picker</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.70</item>
-
+        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_800</item>
+        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
     </style>
 
     <style name="datePickerDark" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-
         <item name="backgroundColorDialog">@color/darkThemeBackground</item>
-
         <item name="android:windowBackground">@drawable/date_picker</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.70</item>
-
+        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_300</item>
+        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_300</item>
     </style>
 
 </resources>

@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -27,6 +28,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class SettingsFragment : Fragment() {
 
     var themeSelection = false
+    private var scrollPosition = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,6 +109,13 @@ class SettingsFragment : Fragment() {
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         main()
+
+        val nestedScrollView = view.findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
+
+        nestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+
+            scrollPosition = scrollX
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -119,6 +128,10 @@ class SettingsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         main()
+
+        val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
+
+        nestedScrollView.scrollTo(scrollPosition, 0)
     }
 
     private fun main() {

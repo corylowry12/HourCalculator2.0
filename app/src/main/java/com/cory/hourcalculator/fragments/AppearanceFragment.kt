@@ -876,7 +876,7 @@ class AppearanceFragment : Fragment() {
         val followSystemVersionCardView = view.findViewById<CardView>(R.id.followSystemVersionCardView)
         val followSystemVersionTextView = view.findViewById<TextView>(R.id.followSystemVersionTextView)
 
-        if (Build.VERSION.SDK_INT < 31 && RemoteConfig(requireContext()).loadRemoteSystemColor() == "0") {
+        if (Build.VERSION.SDK_INT < 31) {
             followSystemVersionCardView?.visibility = View.GONE
             followSystemVersionTextView?.visibility = View.GONE
         }
@@ -888,13 +888,31 @@ class AppearanceFragment : Fragment() {
         }
 
         normalStyle.setOnClickListener {
-            followSystemVersion.setSystemColor(false)
-            restartApplication()
+            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            alert.setTitle(requireContext().getString(R.string.warning))
+            alert.setMessage("Enabling this option when require the app to restart. Would you like to continue?")
+            alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                followSystemVersion.setSystemColor(false)
+                restartApplication()
+            }
+            alert.setNegativeButton(requireContext().getString(R.string.no)) {_, _ ->
+                normalStyle.isChecked = false
+            }
+            alert.show()
         }
 
         googleStyle.setOnClickListener {
-            followSystemVersion.setSystemColor(true)
-            restartApplication()
+            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            alert.setTitle(requireContext().getString(R.string.warning))
+            alert.setMessage("Enabling this option when require the app to restart. Would you like to continue?")
+            alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                followSystemVersion.setSystemColor(true)
+                restartApplication()
+            }
+            alert.setNegativeButton(requireContext().getString(R.string.no)) {_, _ ->
+                googleStyle.isChecked = false
+            }
+            alert.show()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(
