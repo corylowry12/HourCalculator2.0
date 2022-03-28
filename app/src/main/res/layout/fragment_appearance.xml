@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
+    android:id="@+id/coordinatorLayoutAppearance"
     tools:context=".fragments.AppearanceFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutAppearance"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"

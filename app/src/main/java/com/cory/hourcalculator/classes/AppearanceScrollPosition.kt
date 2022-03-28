@@ -7,14 +7,25 @@ class AppearanceScrollPosition(context: Context) {
 
     private var sharedPreferences: SharedPreferences = context.getSharedPreferences("file", Context.MODE_PRIVATE)
 
-    fun setScroll(state: Float) {
+    fun setScroll(state: Int) {
         val editor = sharedPreferences.edit()
-        editor.putFloat("scrollPosition", state)
+        editor.putInt("scrollPosition", state)
         editor.apply()
     }
 
-    fun loadScroll(): Float {
-        val state = sharedPreferences.getFloat("scrollPosition", 0f)
+    fun loadScroll(): Int {
+        val state = sharedPreferences.getInt("scrollPosition", 0)
+        return (state)
+    }
+
+    fun setCollapsed(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("appearanceCollapsedToolBar", state)
+        editor.apply()
+    }
+
+    fun loadCollapsed(): Boolean {
+        val state = sharedPreferences.getBoolean("appearanceCollapsedToolBar", false)
         return (state)
     }
 }

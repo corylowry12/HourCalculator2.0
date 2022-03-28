@@ -11,9 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
-import com.cory.hourcalculator.fragments.HistoryFragment
-import com.cory.hourcalculator.fragments.HomeFragment
-import com.cory.hourcalculator.fragments.SettingsFragment
+import com.cory.hourcalculator.fragments.*
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.gms.ads.AdRequest
@@ -150,6 +148,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         replaceFragment(homeFragment)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, HistoryFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, SettingsFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, AppearanceFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, EditHours()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, AppSettingsFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, AutomaticDeletionFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, PatchNotesFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, AboutFragment()).addToBackStack(null)
+        transaction.replace(R.id.fragment_container, FAQFragment()).addToBackStack(null)
         
         val context = this
         GlobalScope.launch(Dispatchers.Main) {

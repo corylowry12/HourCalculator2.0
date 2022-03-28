@@ -272,6 +272,7 @@ class HistoryFragment : Fragment() {
                             Vibrate().vibration(requireContext())
                             when (i) {
                                 0 -> {
+                                    listView?.smoothScrollToPosition(0)
                                     sortData.setSortState(getString(R.string.day_desc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -285,6 +286,7 @@ class HistoryFragment : Fragment() {
                                     ).show()
                                 }
                                 1 -> {
+                                    listView?.smoothScrollToPosition(0)
                                     sortData.setSortState(getString(R.string.day_asc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -298,6 +300,7 @@ class HistoryFragment : Fragment() {
                                     ).show()
                                 }
                                 2 -> {
+                                    listView?.smoothScrollToPosition(0)
                                     sortData.setSortState(getString(R.string.total_desc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -311,6 +314,7 @@ class HistoryFragment : Fragment() {
                                     ).show()
                                 }
                                 3 -> {
+                                    listView?.smoothScrollToPosition(0)
                                     sortData.setSortState(getString(R.string.total_asc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(

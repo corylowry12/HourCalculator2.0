@@ -70,48 +70,44 @@ class AccentColor(context: Context) {
         return R.style.SplashBlackTheme
     }
 
-    fun menuTheme(context: Context): Int {
-
-        when (DarkThemeData(context).loadDarkModeState()) {
-            0 -> {
-                return R.style.PopupMenuLight
-
-            }
-            1 -> {
-                return R.style.PopupMenuDark
-            }
-            2 -> {
-                return R.style.PopupMenuDark
-            }
-            3 -> {
-                when (context.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> return R.style.PopupMenuLight
-                    Configuration.UI_MODE_NIGHT_YES -> return R.style.PopupMenuDark
-                }
-            }
-        }
-        return R.style.PopupMenuLight
-    }
-
     fun dateDialogTheme(context: Context): Int {
 
         when (DarkThemeData(context).loadDarkModeState()) {
             0 -> {
+                if (this.loadAccent() == 4 && FollowSystemVersion(context).loadSystemColor()) {
+                    return R.style.datePickerGoogleLight
+                }
                 return R.style.datePickerLight
-
             }
             1 -> {
+                if (this.loadAccent() == 4 && FollowSystemVersion(context).loadSystemColor()) {
+                    return R.style.datePickerGoogleDark
+                }
                 return R.style.datePickerDark
             }
             2 -> {
+                if (this.loadAccent() == 4 && FollowSystemVersion(context).loadSystemColor()) {
+                    return R.style.datePickerGoogleDark
+                }
                 return R.style.datePickerDark
             }
             3 -> {
                 when (context.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> return R.style.datePickerLight
-                    Configuration.UI_MODE_NIGHT_YES -> return R.style.datePickerDark
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        if (this.loadAccent() == 4 && FollowSystemVersion(context).loadSystemColor()) {
+                            return R.style.datePickerGoogleLight
+                        }
+                        return R.style.datePickerLight
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        if (this.loadAccent() == 4 && FollowSystemVersion(context).loadSystemColor()) {
+                            return R.style.datePickerGoogleDark
+                        }
+                        return R.style.datePickerDark
+                    }
                 }
             }
+
         }
         return R.style.datePickerLight
     }

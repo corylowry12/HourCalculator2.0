@@ -5,8 +5,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.InputType
-import android.text.method.DigitsKeyListener
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -16,28 +14,17 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
-import com.github.javiersantos.appupdater.AppUpdater
-import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.json.JSONObject
-import org.jsoup.parser.Parser
 import java.lang.NumberFormatException
-import java.lang.StringBuilder
 import java.math.RoundingMode
-import java.net.URL
-import java.util.*
 
 @DelicateCoroutinesApi
 class HomeFragment : Fragment() {
@@ -117,8 +104,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         val breakTextBox = view.findViewById<TextInputEditText>(R.id.breakTime)
 
         activity?.window?.setBackgroundDrawable(null)
@@ -145,8 +130,20 @@ class HomeFragment : Fragment() {
                         ContextCompat.getColor(requireContext(), R.color.redAccent)
                 }
                 accentColor.loadAccent() == 4 -> {
-                    activity?.window?.navigationBarColor =
-                        ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                    if (!FollowSystemVersion(requireContext()).loadSystemColor()) {
+                        activity?.window?.navigationBarColor =
+                            ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                    }
+                    else {
+                        if (themeSelection) {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.navBarGoogle)
+                        }
+                        else {
+                            activity?.window?.navigationBarColor =
+                                ContextCompat.getColor(requireContext(), R.color.navBarGoogleLight)
+                        }
+                    }
                 }
             }
         } else {

@@ -5,8 +5,7 @@
     android:id="@+id/homeConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
-    tools:context=".fragments.HomeFragment">
+    android:background="?attr/backgroundColor">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolBar"
@@ -61,6 +60,11 @@
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         app:endIconMode="clear_text"
+        android:textColorHint="#939090"
+        app:boxCornerRadiusBottomEnd="14dp"
+        app:boxCornerRadiusBottomStart="14dp"
+        app:boxCornerRadiusTopEnd="14dp"
+        app:boxCornerRadiusTopStart="14dp"
         app:layout_constraintTop_toBottomOf="@id/textViewBreak">
 
         <com.google.android.material.textfield.TextInputEditText

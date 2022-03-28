@@ -1,9 +1,12 @@
 package com.cory.hourcalculator.fragments
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -25,15 +28,19 @@ import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlin.math.abs
 
 
 @DelicateCoroutinesApi
 class AppearanceFragment : Fragment() {
 
     private lateinit var followSystemImageViewDrawable: Drawable
+    private lateinit var materialYouDrawable: Drawable
     var themeSelection = false
 
     private fun setDrawable(): Drawable {
@@ -73,6 +80,81 @@ class AppearanceFragment : Fragment() {
         }
 
         return ContextCompat.getDrawable(requireContext(), R.drawable.blackcircleimageview)!!
+    }
+
+    private fun materialYouDrawable() : Drawable {
+
+        val darkThemeData = DarkThemeData(requireContext())
+        val followSystemVersion = FollowSystemVersion(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 && followSystemVersion.loadSystemColor() -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.materialyouimageview)!!
+            }
+            darkThemeData.loadDarkModeState() == 1 && !followSystemVersion.loadSystemColor() -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.followsystemcircleimageview)!!
+            }
+            darkThemeData.loadDarkModeState() == 0 && followSystemVersion.loadSystemColor() -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.materialyouimageview)!!
+            }
+            darkThemeData.loadDarkModeState() == 0 && !followSystemVersion.loadSystemColor() -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.followsystemcircleimageview)!!
+            }
+            darkThemeData.loadDarkModeState() == 2 && followSystemVersion.loadSystemColor() -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.materialyouimageview)!!
+            }
+            darkThemeData.loadDarkModeState() == 2 && !followSystemVersion.loadSystemColor() -> {
+                return ContextCompat.getDrawable(requireContext(), R.drawable.followsystemcircleimageview)!!
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        if (followSystemVersion.loadSystemColor()) {
+                            return ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.materialyouimageview
+                            )!!
+                        }
+                        else {
+                            return ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.followsystemcircleimageview
+                            )!!
+                        }
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        if (followSystemVersion.loadSystemColor()) {
+                            return ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.materialyouimageview
+                            )!!
+                        }
+                        else {
+                            return ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.followsystemcircleimageview
+                            )!!
+                        }
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        if (followSystemVersion.loadSystemColor()) {
+                            return ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.materialyouimageview
+                            )!!
+                        }
+                        else {
+                            return ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.followsystemcircleimageview
+                            )!!
+                        }
+                    }
+                }
+            }
+        }
+
+        return ContextCompat.getDrawable(requireContext(), R.drawable.followsystemcircleimageview)!!
     }
 
     private fun getCurrentNightTheme(): Boolean {
@@ -129,6 +211,7 @@ class AppearanceFragment : Fragment() {
         }
 
         followSystemImageViewDrawable = setDrawable()
+        materialYouDrawable = materialYouDrawable()
 
         val accentColor = AccentColor(requireContext())
         val followSystemVersion = FollowSystemVersion(requireContext())
@@ -163,6 +246,7 @@ class AppearanceFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_appearance, container, false)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -184,15 +268,28 @@ class AppearanceFragment : Fragment() {
             }
         }
 
-        val nestedScrollViewAppearance =
-            view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
+        val nestedScrollView = view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
+        val appBar = view.findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
 
-        nestedScrollViewAppearance.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            AppearanceScrollPosition(requireContext()).setScroll(scrollY.toFloat())
+        nestedScrollView.setOnScrollChangeListener { _, scrollX, _, _, _ ->
+
+            AppearanceScrollPosition(requireContext()).setScroll(scrollX)
+
         }
+
+        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            if (abs(verticalOffset) - appBar.totalScrollRange == 0) {
+                AppearanceScrollPosition(requireContext()).setCollapsed(false)
+            } else {
+                AppearanceScrollPosition(requireContext()).setCollapsed(true)
+            }
+        })
 
         val followSystemImageView = activity?.findViewById<ImageView>(R.id.followSystemImageView)
         followSystemImageView?.setImageDrawable(followSystemImageViewDrawable)
+
+        val materialYouImageView = activity?.findViewById<ImageView>(R.id.systemAccentImageView)
+        materialYouImageView?.setImageDrawable(materialYouDrawable)
 
         val darkThemeData = DarkThemeData(requireContext())
 
@@ -231,6 +328,7 @@ class AppearanceFragment : Fragment() {
                     alert.setTitle(getString(R.string.warning))
                     alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         darkThemeData.setDarkModeState(0)
                         darkThemeButton?.isChecked = false
                         amoledThemeButton?.isChecked = false
@@ -238,6 +336,7 @@ class AppearanceFragment : Fragment() {
                         restartThemeChange()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         if (darkThemeData.loadDarkModeState() == 1) {
                             darkThemeButton?.isChecked = true
                         }
@@ -272,6 +371,7 @@ class AppearanceFragment : Fragment() {
                     alert.setTitle(getString(R.string.warning))
                     alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         darkThemeData.setDarkModeState(1)
                         lightThemeButton?.isChecked = false
                         amoledThemeButton?.isChecked = false
@@ -279,6 +379,7 @@ class AppearanceFragment : Fragment() {
                         restartThemeChange()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         if (darkThemeData.loadDarkModeState() == 0) {
                             lightThemeButton?.isChecked = true
                         }
@@ -293,6 +394,7 @@ class AppearanceFragment : Fragment() {
                     alert.show()
                 }
                 else {
+                    Vibrate().vibration(requireContext())
                     darkThemeData.setDarkModeState(1)
                     lightThemeButton?.isChecked = false
                     amoledThemeButton?.isChecked = false
@@ -316,6 +418,7 @@ class AppearanceFragment : Fragment() {
                     alert.setTitle(getString(R.string.warning))
                     alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         darkThemeData.setDarkModeState(2)
                         lightThemeButton?.isChecked = false
                         darkThemeButton?.isChecked = false
@@ -323,6 +426,7 @@ class AppearanceFragment : Fragment() {
                         restartThemeChange()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         if (darkThemeData.loadDarkModeState() == 0) {
                             lightThemeButton?.isChecked = true
                         }
@@ -360,6 +464,7 @@ class AppearanceFragment : Fragment() {
                     alert.setTitle(getString(R.string.warning))
                     alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         darkThemeData.setDarkModeState(3)
                         lightThemeButton?.isChecked = false
                         darkThemeButton?.isChecked = false
@@ -367,6 +472,7 @@ class AppearanceFragment : Fragment() {
                         restartThemeChange()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         if (darkThemeData.loadDarkModeState() == 0) {
                             lightThemeButton?.isChecked = true
                         }
@@ -404,6 +510,7 @@ class AppearanceFragment : Fragment() {
         }
 
         blackTheme?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (followSystemThemeChoice.loadFollowSystemThemePreference() == 0) {
                 Toast.makeText(requireContext(), getString(R.string.follow_system_already_set_to_black_theme), Toast.LENGTH_SHORT).show()
             }
@@ -417,6 +524,7 @@ class AppearanceFragment : Fragment() {
                     alert.setTitle(getString(R.string.warning))
                     alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         followSystemThemeChoice.setFollowSystemThemePreference(0)
                         darkTheme?.isChecked = false
 
@@ -427,6 +535,7 @@ class AppearanceFragment : Fragment() {
                         }
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
                         blackTheme.isChecked = false
                     }
                 alert.show()
@@ -447,6 +556,7 @@ class AppearanceFragment : Fragment() {
         }
 
         darkTheme?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
                 val alert =
                     MaterialAlertDialogBuilder(
@@ -456,6 +566,7 @@ class AppearanceFragment : Fragment() {
                 alert.setTitle(getString(R.string.warning))
                 alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    Vibrate().vibration(requireContext())
                     followSystemThemeChoice.setFollowSystemThemePreference(1)
                     blackTheme?.isChecked = false
 
@@ -466,6 +577,7 @@ class AppearanceFragment : Fragment() {
                     }
                 }
                 alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                    Vibrate().vibration(requireContext())
                     darkTheme.isChecked = false
                 }
                 alert.show()
@@ -803,7 +915,6 @@ class AppearanceFragment : Fragment() {
         }
 
         enableColoredNavBar.setOnClickListener {
-
             Vibrate().vibration(requireContext())
             if (coloredNavBarData.loadNavBar()) {
                 Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_is_already_enabled), Toast.LENGTH_SHORT).show()
@@ -839,8 +950,20 @@ class AppearanceFragment : Fragment() {
                                 ContextCompat.getColor(requireContext(), R.color.redAccent)
                         }
                         accentColor.loadAccent() == 4 -> {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                            if (!FollowSystemVersion(requireContext()).loadSystemColor()) {
+                                activity?.window?.navigationBarColor =
+                                    ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                            }
+                            else {
+                                if (themeSelection) {
+                                    activity?.window?.navigationBarColor =
+                                        ContextCompat.getColor(requireContext(), R.color.navBarGoogle)
+                                }
+                                else {
+                                    activity?.window?.navigationBarColor =
+                                        ContextCompat.getColor(requireContext(), R.color.navBarGoogleLight)
+                                }
+                            }
                         }
                     }
 
@@ -888,28 +1011,34 @@ class AppearanceFragment : Fragment() {
         }
 
         normalStyle.setOnClickListener {
+            Vibrate().vibration(requireContext())
             val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
             alert.setTitle(requireContext().getString(R.string.warning))
             alert.setMessage("Enabling this option when require the app to restart. Would you like to continue?")
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                Vibrate().vibration(requireContext())
                 followSystemVersion.setSystemColor(false)
                 restartApplication()
             }
             alert.setNegativeButton(requireContext().getString(R.string.no)) {_, _ ->
+                Vibrate().vibration(requireContext())
                 normalStyle.isChecked = false
             }
             alert.show()
         }
 
         googleStyle.setOnClickListener {
+            Vibrate().vibration(requireContext())
             val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-            alert.setTitle(requireContext().getString(R.string.warning))
-            alert.setMessage("Enabling this option when require the app to restart. Would you like to continue?")
+            alert.setTitle(requireContext().getString(R.string.warning_experimental))
+            alert.setMessage("This option may produce unwanted results and enabling this option when require the app to restart. Would you like to continue?")
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                Vibrate().vibration(requireContext())
                 followSystemVersion.setSystemColor(true)
                 restartApplication()
             }
             alert.setNegativeButton(requireContext().getString(R.string.no)) {_, _ ->
+                Vibrate().vibration(requireContext())
                 googleStyle.isChecked = false
             }
             alert.show()
@@ -937,7 +1066,12 @@ class AppearanceFragment : Fragment() {
             ?.attach(this)?.commitNow()
 
         view?.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
-            ?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll().toInt())
+            ?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll())
+
+        val collapsingToolbarLayout =
+            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
+
+            collapsingToolbarLayout.setExpanded(AppearanceScrollPosition(requireContext()).loadCollapsed(), false)
 
     }
 

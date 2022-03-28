@@ -272,6 +272,7 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="12dp"
+                    android:textColorHint="#939090"
                     app:boxCornerRadiusBottomEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
                     app:boxCornerRadiusTopEnd="14dp"

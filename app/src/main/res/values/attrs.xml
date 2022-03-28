@@ -27,4 +27,6 @@
 
     <attr name="historyActionBarIconTint" format="color" />
 
+    <attr name="SystemAccent" format="color" />
+
 </resources>

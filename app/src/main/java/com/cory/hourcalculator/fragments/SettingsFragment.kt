@@ -129,9 +129,9 @@ class SettingsFragment : Fragment() {
         super.onResume()
         main()
 
-        val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
+        //val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
 
-        nestedScrollView.scrollTo(scrollPosition, 0)
+        //nestedScrollView.scrollTo(scrollPosition, 0)
     }
 
     private fun main() {
@@ -174,6 +174,12 @@ class SettingsFragment : Fragment() {
             )
         }
 
+        val updateConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintUpdate)
+
+        updateConstraint?.setOnClickListener {
+            openFragment(UpdateFragment())
+        }
+
         val leaveAReviewConstraint =
             view?.findViewById<ConstraintLayout>(R.id.constraintLeaveAReview)
 
@@ -195,13 +201,6 @@ class SettingsFragment : Fragment() {
             openFragment(WebviewFragment())
         }
 
-        val deleteAppDataConstraint =
-            view?.findViewById<ConstraintLayout>(R.id.constraintDeleteAppData)
-
-        deleteAppDataConstraint?.setOnClickListener {
-            showDeleteDataAlert()
-        }
-
         val faqConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintFAQ)
 
         faqConstraint?.setOnClickListener {
@@ -212,6 +211,13 @@ class SettingsFragment : Fragment() {
 
         versionInfoConstraint?.setOnClickListener {
             openFragment(AboutFragment())
+        }
+
+        val deleteAppDataConstraint =
+            view?.findViewById<ConstraintLayout>(R.id.constraintDeleteAppData)
+
+        deleteAppDataConstraint?.setOnClickListener {
+            showDeleteDataAlert()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

@@ -76,7 +76,7 @@ class CustomAdapter(
         setAnimation(holder.itemView, position)
         var isInflated = false
         val dbHandler = DBHelper(context, null)
-        val listItems = arrayOf("Edit", "Delete", "Delete All")
+        val listItems = arrayOf(context.getString(R.string.edit), context.getString(R.string.delete), context.getString(R.string.delete_all))
         val imageView = holder.itemView.findViewById<ImageView>(R.id.imageViewOptions)
         imageView.setOnClickListener {
             Vibrate().vibration(context)
@@ -85,7 +85,7 @@ class CustomAdapter(
             val listPopupWindow = ListPopupWindow(context)
             listPopupWindow.setAdapter(popupWindowAdapter)
             listPopupWindow.anchorView = imageView
-           listPopupWindow.width = 400
+          listPopupWindow.width = holder.itemView.width / 2
             listPopupWindow.height = ListPopupWindow.WRAP_CONTENT
             listPopupWindow.setDropDownGravity(Gravity.NO_GRAVITY)
             if (isInflated) {
@@ -97,6 +97,7 @@ class CustomAdapter(
                     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                         val itemPosition = holder.adapterPosition
                         if (p2 == 0) {
+                            Vibrate().vibration(context)
                             listPopupWindow.dismiss()
                             val map = HashMap<String, String>()
                             dataList.clear()
@@ -157,7 +158,7 @@ class CustomAdapter(
                             }
                         } else if (p2 == 1) {
                             listPopupWindow.dismiss()
-
+                            Vibrate().vibration(context)
                             try {
                                 var inTime = ""
                                 var outTime = ""
@@ -274,7 +275,7 @@ class CustomAdapter(
                             }
                         } else if (p2 == 2) {
                             listPopupWindow.dismiss()
-
+                            Vibrate().vibration(context)
                             val inTime = arrayOf<String>().toMutableList()
                             val outTime = arrayOf<String>().toMutableList()
                             val breakTime = arrayOf<String>().toMutableList()

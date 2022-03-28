@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/main_menu_webview"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        app:navigationIconTint="@android:color/white"
+        app:navigationIconTint="?attr/textColor"
         app:title="@string/web_browser"
         app:titleCentered="true"
         app:titleTextColor="?attr/textColor" />

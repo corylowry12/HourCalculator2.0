@@ -1,6 +1,9 @@
 package com.cory.hourcalculator.fragments
 
 import android.animation.LayoutTransition
+import android.app.AlertDialog
+import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +11,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.adapters.FAQCustomAdapter
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.FollowSystemVersion
 import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 
 class FAQFragment : Fragment() {
+
+    val client = OkHttpClient()
+    private val dataList = ArrayList<HashMap<String, String>>()
+    private lateinit var dialog: MaterialAlertDialogBuilder
 
     var themeSelection = false
 
@@ -96,6 +115,21 @@ class FAQFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dialog = MaterialAlertDialogBuilder(
+            requireContext(),
+            AccentColor(requireContext()).alertTheme())
+            val progressBar =
+                ProgressBar(requireContext(), null, android.R.attr.progressBarStyleLarge)
+
+            dialog.setTitle("Fetching Frequently Asked Questions...")
+            dialog.setView(progressBar)
+            dialog.setNegativeButton("Cancel") { d, _ ->
+                d.dismiss()
+            }
+            val d = dialog.create()
+            d.show()
+
+
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarFAQ)
 
         topAppBar?.setNavigationOnClickListener {
@@ -103,55 +137,9 @@ class FAQFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        val linearLayout = view.findViewById<LinearLayout>(R.id.linearLayout)
-        linearLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        runFAQ("https://raw.githubusercontent.com/corylowry12/faq_json/main/faq.json")
 
-        val sortMethodsSubtitle = view.findViewById<TextView>(R.id.sortMethodsSubtitle)
-        val sortMethodChevron = view.findViewById<ImageView>(R.id.sortMethodChevronImage)
-        val sortMethodsConstraint = view.findViewById<ConstraintLayout>(R.id.sortMethodsConstraint)
-
-        sortMethodsConstraint.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (sortMethodsSubtitle.visibility == View.GONE) {
-                sortMethodsSubtitle.visibility = View.VISIBLE
-                sortMethodChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24)
-            } else {
-                sortMethodsSubtitle.visibility = View.GONE
-                sortMethodChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
-            }
-        }
-
-        val systemThemingSubtitle = view.findViewById<TextView>(R.id.systemThemeSubtitle)
-        val systemThemingChevron = view.findViewById<ImageView>(R.id.systemThemeChevronImage)
-        val systemThemingConstraint =
-            view.findViewById<ConstraintLayout>(R.id.systemThemeConstraint)
-
-        systemThemingConstraint.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (systemThemingSubtitle.visibility == View.GONE) {
-                systemThemingSubtitle.visibility = View.VISIBLE
-                systemThemingChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24)
-            } else {
-                systemThemingSubtitle.visibility = View.GONE
-                systemThemingChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
-            }
-        }
-
-        val bugReportingSubtitle = view.findViewById<TextView>(R.id.bugReportingSubtitle)
-        val bugReportingChevron = view.findViewById<ImageView>(R.id.bugReportingChevronImage)
-        val bugReportingConstraint =
-            view.findViewById<ConstraintLayout>(R.id.bugReportingConstraint)
-
-        bugReportingConstraint.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (bugReportingSubtitle.visibility == View.GONE) {
-                bugReportingSubtitle.visibility = View.VISIBLE
-                bugReportingChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24)
-            } else {
-                bugReportingSubtitle.visibility = View.GONE
-                bugReportingChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
-            }
-        }
+        d.dismiss()
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -160,5 +148,57 @@ class FAQFragment : Fragment() {
                     activity?.supportFragmentManager?.popBackStack()
                 }
             })
+    }
+
+    fun runFAQ(url : String) {
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    val alert = MaterialAlertDialogBuilder(
+                        requireContext(),
+                        AccentColor(requireContext()).alertTheme()
+                    )
+                    alert.setTitle("Error")
+                    alert.setMessage("There was an error fetching Frequently Asked Questions. Check your data connection.")
+                    alert.setPositiveButton("OK") { _, _ ->
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
+                    alert.show()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val str_response = response.body()!!.string()
+                //creating json object
+                val json_contact:JSONObject = JSONObject(str_response)
+                //creating json array
+                val jsonarray_info: JSONArray = json_contact.getJSONArray("faq")
+
+                val size:Int = jsonarray_info.length()
+
+                for (i in 0 until size) {
+                    val json_objectdetail: JSONObject =jsonarray_info.getJSONObject(i)
+
+                    val arrayList_details = HashMap<String, String>()
+                    arrayList_details["question"] = (json_objectdetail.get("question").toString())
+                    arrayList_details["answer"] = (json_objectdetail.get("answer").toString())
+                    dataList.add(arrayList_details)
+
+                }
+
+                val recyclerView = requireView().findViewById<RecyclerView>(R.id.faqRecyclerView)
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+                    recyclerView?.adapter = FAQCustomAdapter(requireContext(), dataList)
+
+                }
+            }
+        })
     }
 }

@@ -16,6 +16,7 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
@@ -84,6 +85,7 @@ class AutomaticDeletionFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
                 if (!followSystemVersion.loadSystemColor()) {
                     activity?.theme?.applyStyle(R.style.system_accent, true)
+                    color = ContextCompat.getColor(requireContext(), R.color.systemAccent)
                 }
                 else {
                     if (themeSelection) {
@@ -405,14 +407,65 @@ class AutomaticDeletionFragment : Fragment() {
             } else {
                 alert.setMessage(getString(R.string.history_deletion_single, greaterThan))
             }
+
+            val historyDeletion2 = HistoryDeletion(requireContext())
             alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                HistoryDeletion(requireContext()).deletion()
 
+                val undoValues = historyDeletion2.deletion()
                 val runnable = Runnable {
                     (context as MainActivity).changeBadgeNumber()
                 }
                 MainActivity().runOnUiThread(runnable)
+
+                val snackbar = Snackbar.make(requireView(), greaterThan.toString() + " Entries Deleted", Snackbar.LENGTH_LONG)
+                snackbar.duration = 5000
+
+                snackbar.setAction(getString(R.string.undo)) {
+
+                    historyDeletion.setHistoryDeletionState(false)
+
+                    for (i in 1..undoValues["count"]!!.toInt()) {
+                        dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["breakTime"].toString().toLong(), undoValues["breakTime"].toString())
+                    }
+
+                    MainActivity().runOnUiThread(runnable)
+
+                    enableHistoryAutomaticDeletion?.isChecked = false
+                    disableHistoryAutomaticDeletion?.isChecked = true
+
+                    one?.isEnabled = false
+                    two?.isEnabled = false
+                    three?.isEnabled = false
+                    four?.isEnabled = false
+                    five?.isEnabled = false
+                    six?.isEnabled = false
+                    seven?.isEnabled = false
+
+                    one?.isChecked = false
+                    two?.isChecked = false
+                    three?.isChecked = false
+                    four?.isChecked = false
+                    five?.isChecked = false
+                    six?.isChecked = false
+                    seven?.isChecked = true
+
+                    one?.setTextColor(color)
+                    two?.setTextColor(color)
+                    three?.setTextColor(color)
+                    four?.setTextColor(color)
+                    five?.setTextColor(color)
+                    six?.setTextColor(color)
+                    seven?.setTextColor(color)
+                }
+
+                snackbar.setActionTextColor(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        AccentColor(requireContext()).snackbarActionTextColor()
+                    )
+                )
+                snackbar.show()
             }
             alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                 Vibrate().vibration(requireContext())

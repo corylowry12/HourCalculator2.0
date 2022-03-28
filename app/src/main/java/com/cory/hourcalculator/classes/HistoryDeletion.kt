@@ -2,21 +2,27 @@ package com.cory.hourcalculator.classes
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.database.DBHelper
+import com.google.protobuf.LazyStringArrayList
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class HistoryDeletion(context: Context) {
 
     private val dbHandler = DBHelper(context, null)
 
-    private val dataList = ArrayList<HashMap<String, String>>()
-
     private val daysWorkedPerWeek = DaysWorkedPerWeek(context)
 
     @SuppressLint("Range")
-    fun deletion() {
+    fun deletion() : HashMap<String, String> {
         val numberToDelete = dbHandler.getCount() - daysWorkedPerWeek.loadDaysWorked()
-        dataList.clear()
         val cursor = dbHandler.automaticDeletion(numberToDelete)
+
         cursor!!.moveToFirst()
 
         val map = HashMap<String, String>()
@@ -28,11 +34,13 @@ class HistoryDeletion(context: Context) {
             map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
             map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
             map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
-            dataList.add(map)
+            map["count"] = numberToDelete.toString()
 
             dbHandler.deleteRow(map["id"].toString())
 
             cursor.moveToNext()
         }
+
+        return map
     }
 }

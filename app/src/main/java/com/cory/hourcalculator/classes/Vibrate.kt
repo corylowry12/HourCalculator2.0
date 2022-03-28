@@ -18,10 +18,7 @@ class Vibrate {
                     context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibrator = vibratorManager.defaultVibrator
                 vibrator.vibrate(
-                    VibrationEffect.createOneShot(
-                        2,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
+                    VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
                 )
             } else {
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
