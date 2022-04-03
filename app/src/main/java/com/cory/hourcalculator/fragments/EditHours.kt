@@ -267,7 +267,7 @@ class EditHours : Fragment() {
             })
 
             inTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
-                Vibrate().vibration(requireContext())
+                Vibrate().vibrationTimePickers(requireContext())
                 val inTimeMinutesNumbers: Int
 
                 val (inTimeHours, inTimeMinutes) = inTime.split(":")
@@ -290,7 +290,7 @@ class EditHours : Fragment() {
             }
 
             outTimePickerEdit?.setOnTimeChangedListener { _, i, i2 ->
-                Vibrate().vibration(requireContext())
+                Vibrate().vibrationTimePickers(requireContext())
                 val outTimeMinutesNumbers: Int
                 val (outTimeHours, outTimeMinutes) = outTime.split(":")
                 var outTimeHoursInteger: Int = outTimeHours.toInt()

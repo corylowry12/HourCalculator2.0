@@ -57,8 +57,8 @@
     <color name="lightRedBadgeColor">#B71C1C</color>
 
     <color name="tealNavBarIconTint">#005A4B</color>
-    <color name="pinkNavBarIconTint">#88445D</color>
-    <color name="orangeNavBarIconTint">#702700</color>
+    <color name="pinkNavBarIconTint">#6E394D</color>
+    <color name="orangeNavBarIconTint">#802C00</color>
     <color name="redNavBarIconTint">#7C1B1B</color>
     <color name="systemNavBarIconTint" tools:targetApi="s">@android:color/system_accent1_900</color>
     <color name="historyActionBarIconTint" tools:targetApi="s">@android:color/system_accent1_600</color>
@@ -73,5 +73,7 @@
 
     <color name="navBarGoogleLight" tools:targetApi="s">@android:color/system_neutral2_100</color>
     <color name="navBarGoogle" tools:targetApi="s">@android:color/system_neutral2_800</color>
+
+    <color name="patchNotesBadgeColor">#807F7F</color>
 
 </resources>

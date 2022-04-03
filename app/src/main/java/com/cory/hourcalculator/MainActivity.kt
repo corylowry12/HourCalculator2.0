@@ -4,9 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewGroupCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.classes.*
@@ -61,21 +71,28 @@ class MainActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                val snackbar = Snackbar.make(findViewById(R.id.mainConstraint), getString(R.string.error_checking_for_updates), Snackbar.LENGTH_INDEFINITE)
-                snackbar.anchorView = findViewById(R.id.adView)
-                snackbar.setAction(getString(R.string.retry)) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val snackbar = Snackbar.make(findViewById(R.id.mainConstraint), getString(R.string.error_checking_for_updates), Snackbar.LENGTH_INDEFINITE)
+                    snackbar.anchorView = findViewById(R.id.bottom_nav)
+                    val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
+                    params.gravity = Gravity.BOTTOM
+                    snackbar.view.layoutParams = params
+                    snackbar.setAction(getString(R.string.retry)) {
                         checkForUpdates()
-                    snackbar.dismiss()
-                }
-                snackbar.duration = 5000
-                snackbar.setActionTextColor(
-                    ContextCompat.getColorStateList(
-                        this@MainActivity,
-                        AccentColor(this@MainActivity).snackbarActionTextColor()
+                        snackbar.dismiss()
+                    }
+                    snackbar.duration = 5000
+                    snackbar.setActionTextColor(
+                        ContextCompat.getColorStateList(
+                            this@MainActivity,
+                            AccentColor(this@MainActivity).snackbarActionTextColor()
+                        )
                     )
-                )
-                snackbar.show()
-
+                    snackbar.apply {
+                        snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
+                    }
+                    snackbar.show()
+                }, 500)
             }
         }
     }
@@ -182,7 +199,9 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.ic_home -> replaceFragment(homeFragment)
                 R.id.history -> replaceFragment(historyFragment)
-                R.id.settings -> replaceFragment(settingsFragment)
+                R.id.settings -> {
+                        replaceFragment(settingsFragment)
+                }
             }
 
             true
@@ -378,20 +397,14 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                bottomNavigation.itemTextColor =
-                    ContextCompat.getColorStateList(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
-                bottomNavigation.itemTextColor =
-                    ContextCompat.getColorStateList(this, R.color.white)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                bottomNavigation.itemTextColor =
-                    ContextCompat.getColorStateList(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
@@ -403,8 +416,6 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
-                        bottomNavigation.itemTextColor =
-                            ContextCompat.getColorStateList(this, R.color.white)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         if (FollowSystemThemeChoice(this).loadFollowSystemThemePreference() == 0) {
@@ -415,8 +426,6 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                             badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                            bottomNavigation.itemTextColor =
-                                ContextCompat.getColorStateList(this, R.color.black)
                         }
                         else {
                             mainConstraint.setBackgroundColor(
@@ -426,8 +435,6 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                             badge.badgeTextColor = ContextCompat.getColor(this, R.color.darkThemeBackground)
-                            bottomNavigation.itemTextColor =
-                                ContextCompat.getColorStateList(this, R.color.darkThemeBackground)
                         }
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -438,8 +445,6 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                        bottomNavigation.itemTextColor =
-                            ContextCompat.getColorStateList(this, R.color.black)
                     }
                 }
             }

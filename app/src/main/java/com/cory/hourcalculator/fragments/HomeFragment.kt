@@ -201,13 +201,13 @@ class HomeFragment : Fragment() {
         }
 
         timePickerInTime.setOnTimeChangedListener { _, hourOfDay, minute ->
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrationTimePickers(requireContext())
             dateData.setMinutes1(minute.toString())
             dateData.setHours1(hourOfDay.toString())
         }
 
         timePickerOutTime?.setOnTimeChangedListener { _, hourOfDay, minute ->
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrationTimePickers(requireContext())
             dateData.setMinutes2(minute.toString())
             dateData.setHours2(hourOfDay.toString())
         }

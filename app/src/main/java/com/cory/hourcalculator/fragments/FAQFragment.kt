@@ -4,8 +4,11 @@ import android.animation.LayoutTransition
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -119,7 +122,7 @@ class FAQFragment : Fragment() {
             requireContext(),
             AccentColor(requireContext()).alertTheme())
             val progressBar =
-                ProgressBar(requireContext(), null, android.R.attr.progressBarStyleLarge)
+                ProgressBar(requireContext(), null, android.R.attr.progressBarStyle)
 
             dialog.setTitle("Fetching Frequently Asked Questions...")
             dialog.setView(progressBar)
@@ -137,9 +140,13 @@ class FAQFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        runFAQ("https://raw.githubusercontent.com/corylowry12/faq_json/main/faq.json")
+        Handler(Looper.getMainLooper()).postDelayed({
+            runFAQ("https://raw.githubusercontent.com/corylowry12/faq_json/main/faq.json")
+        }, 100)
 
-        d.dismiss()
+        Handler(Looper.getMainLooper()).postDelayed({
+            d.dismiss()
+        }, 1000)
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,

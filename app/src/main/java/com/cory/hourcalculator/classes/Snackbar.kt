@@ -1,8 +1,10 @@
 package com.cory.hourcalculator.classes
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.google.android.material.snackbar.Snackbar
@@ -41,6 +43,9 @@ class Snackbar {
                 AccentColor(context).snackbarActionTextColor()
             )
         )
+        snackbar.apply {
+            snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
+        }
         snackbar.show()
     }
 }

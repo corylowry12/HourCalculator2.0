@@ -35,9 +35,6 @@ class FAQCustomAdapter(val context: Context,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val layout = holder.itemView.findViewById<LinearLayout>(R.id.linearLayout)
-        val layoutTransition = layout.layoutTransition
-        layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
         val layout2 = holder.itemView.findViewById<RelativeLayout>(R.id.relativeLayoutUpdate)
         val layoutTransition2 = layout2.layoutTransition

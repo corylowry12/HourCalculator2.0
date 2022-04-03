@@ -260,6 +260,8 @@ class HistoryFragment : Fragment() {
                             )
                         }
 
+                        val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+
                         val alert = MaterialAlertDialogBuilder(
                             requireContext(),
                             AccentColor(requireContext()).alertTheme()
@@ -273,6 +275,7 @@ class HistoryFragment : Fragment() {
                             when (i) {
                                 0 -> {
                                     listView?.smoothScrollToPosition(0)
+                                    collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.day_desc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -287,6 +290,7 @@ class HistoryFragment : Fragment() {
                                 }
                                 1 -> {
                                     listView?.smoothScrollToPosition(0)
+                                    collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.day_asc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -301,6 +305,7 @@ class HistoryFragment : Fragment() {
                                 }
                                 2 -> {
                                     listView?.smoothScrollToPosition(0)
+                                    collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.total_desc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -315,6 +320,7 @@ class HistoryFragment : Fragment() {
                                 }
                                 3 -> {
                                     listView?.smoothScrollToPosition(0)
+                                    collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.total_asc))
                                     changeSortMethod()
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -351,6 +357,8 @@ class HistoryFragment : Fragment() {
                     floatingActionButtonHistory?.visibility = View.VISIBLE
                 } else {
                     floatingActionButtonHistory?.visibility = View.INVISIBLE
+                   // val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+                   // collapsingToolbarLayout.setExpanded(true, true)
                 }
             }
         })
@@ -358,9 +366,20 @@ class HistoryFragment : Fragment() {
         floatingActionButtonHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             listView?.smoothScrollToPosition(0)
-            val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-            collapsingToolbarLayout.setExpanded(true, true)
         }
+
+        listView?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val pastVisibleItems = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+                if (pastVisibleItems == 0) {
+                    val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+                    collapsingToolbarLayout.setExpanded(true, true)
+                }
+            }
+        })
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -382,6 +401,7 @@ class HistoryFragment : Fragment() {
         } else {
             val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
             noHoursStoredTextView?.visibility = View.VISIBLE
+
         }
 
         var y = 0.0

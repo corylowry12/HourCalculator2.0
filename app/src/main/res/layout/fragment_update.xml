@@ -37,7 +37,8 @@
                 app:title="App News"
                 app:titleCentered="true"
                 app:navigationIconTint="?attr/textColor"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:menu="@menu/main_menu_close_all"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -127,6 +128,7 @@
                     android:layout_marginEnd="10dp"
                     app:cardBackgroundColor="?attr/cardBackground"
                     app:cardCornerRadius="28dp"
+                    android:layout_marginTop="10dp"
                     android:animateLayoutChanges="true"
                     app:cardPreventCornerOverlap="false"
                     app:cardUseCompatPadding="true">
@@ -186,6 +188,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
                     app:cardBackgroundColor="?attr/cardBackground"
                     app:cardCornerRadius="28dp"
                     android:animateLayoutChanges="true"

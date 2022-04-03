@@ -3,6 +3,7 @@ package com.cory.hourcalculator.classes
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.os.Build
 import com.cory.hourcalculator.R
 
 class AccentColor(context: Context) {
@@ -18,7 +19,11 @@ class AccentColor(context: Context) {
     }
 
     fun loadAccent(): Int {
-        val state = sharedPreferences.getInt("Accent", 0)
+        var state = sharedPreferences.getInt("Accent", 0)
+        if (Build.VERSION.SDK_INT >= 31) {
+            state = sharedPreferences.getInt("Accent", 4)
+        }
+
         return (state)
     }
 

@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
-    tools:context=".fragments.PatchNotesFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.PatchNotesFragment"
+    android:id="@+id/patchNotesFragmentCoordinator">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutPatchNotes"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
-        app:liftOnScroll="true">
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolBarPatchNotes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
@@ -28,27 +34,30 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/main_menu_close_all"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor"
                 app:title="Patch Notes"
-                app:titleCentered="true" />
+                app:titleCentered="true"
+                app:navigationIconTint="?attr/textColor"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:menu="@menu/main_menu_close_all"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollViewAppNews"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
         android:overScrollMode="always"
         android:paddingBottom="25dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/linearLayoutAppNews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="25dp">
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
@@ -58,6 +67,7 @@
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
+                android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -77,13 +87,25 @@
                         android:paddingBottom="10dp"
                         android:text="Bug Fixes"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/bugFixesChevronImage"
+                        app:layout_constraintEnd_toStartOf="@id/bugFixesCounterTextView"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/bugFixesCounterTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textAlignment="center"
+                        android:background="@drawable/rounded_text_view"
+                        app:layout_constraintEnd_toStartOf="@id/bugFixesChevronImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <ImageView
                         android:id="@+id/bugFixesChevronImage"
@@ -101,279 +123,25 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView1"
-                style="?attr/materialCardViewElevatedStyle"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bugFixesRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
+                android:layout_height="match_parent"
                 android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with break text box in edit view not having a clear button icon"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView2"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with list not scrolling back to the top after deleting entry via edit view and then hitting the undo button"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView3"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with text being to big in the App Settings view"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView4"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with text being to big in the Automatic Deletion view"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView5"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with history showing wrong data after deleting entry via edit view and clicking the undo button"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView6"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with history showing wrong data after undoing deletion intermittently"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView7"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with history restoring wrong item intermittently when clicking undo button"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bugFixesCardView8"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Fixed issue with app crashing on launch because of data connection issue when checking for updates"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                tools:visibility="visible" />
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
+                android:layout_marginTop="10dp"
+                android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -393,13 +161,25 @@
                         android:paddingBottom="10dp"
                         android:text="New Features"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/newFeaturesChevronImage"
+                        app:layout_constraintEnd_toStartOf="@id/newFeaturesCounterTextView"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/newFeaturesCounterTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textAlignment="center"
+                        android:background="@drawable/rounded_text_view"
+                        app:layout_constraintEnd_toStartOf="@id/newFeaturesChevronImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <ImageView
                         android:id="@+id/newFeaturesChevronImage"
@@ -417,48 +197,25 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/newFeaturesCardView1"
-                style="?attr/materialCardViewElevatedStyle"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/newFeaturesRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- No new features in this update"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                tools:visibility="visible" />
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
+                android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true">
 
@@ -478,13 +235,25 @@
                         android:paddingBottom="10dp"
                         android:text="Enhancements"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/enhancementsChevronImage"
+                        app:layout_constraintEnd_toStartOf="@id/enhancementsCounterTextView"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText,TooManyViews" />
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/enhancementsCounterTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textAlignment="center"
+                        android:background="@drawable/rounded_text_view"
+                        app:layout_constraintEnd_toStartOf="@id/enhancementsChevronImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <ImageView
                         android:id="@+id/enhancementsChevronImage"
@@ -502,75 +271,14 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/enhancementsCardView1"
-                style="?attr/materialCardViewElevatedStyle"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/enhancementsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="10dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Tweaked follow system accent color dialog background"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        android:visibility="visible"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/enhancementsCardView2"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/patchNotesCardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="10dp"
-                        android:text="- Added option in menu in the web browser to open link in default browser"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        android:visibility="visible"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
+                tools:visibility="visible" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

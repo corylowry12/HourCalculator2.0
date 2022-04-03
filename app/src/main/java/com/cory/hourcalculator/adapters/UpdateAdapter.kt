@@ -11,6 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.Vibrate
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -48,6 +49,7 @@ private val dataList:  ArrayList<HashMap<String, String>>
         layoutTransition2.enableTransitionType(LayoutTransition.CHANGING)
 
         holder.itemView.setOnClickListener {
+            Vibrate().vibration(context)
             if (holder.itemView.findViewById<TextView>(R.id.tvBody).visibility == View.VISIBLE) {
                 holder.itemView.findViewById<TextView>(R.id.tvBody).visibility = View.GONE
                 holder.itemView.findViewById<ImageView>(R.id.updateChevronImage).setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)

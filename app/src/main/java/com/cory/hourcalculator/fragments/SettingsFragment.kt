@@ -3,6 +3,7 @@ package com.cory.hourcalculator.fragments
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.icu.util.VersionInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.github.javiersantos.appupdater.objects.Update
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.DelicateCoroutinesApi

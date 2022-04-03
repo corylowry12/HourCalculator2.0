@@ -5,15 +5,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 
-class KnownIssuesAdapter(val context: Context,
-                         private val dataList:  ArrayList<HashMap<String, String>>
+class PatchNotesBugFixesAdapter(
+    val context: Context,
+    private val dataList: Array<String>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -22,25 +22,23 @@ class KnownIssuesAdapter(val context: Context,
 
         fun bind(position: Int) {
 
-            val dataItem = dataList[position]
-
-            title.text = dataItem["title"]
+            title.text = dataList.elementAt(position).toString()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.known_issues_list_row, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.patch_notes_list_row, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val layout2 = holder.itemView.findViewById<RelativeLayout>(R.id.relativeLayoutUpdate)
+        val layout2 = holder.itemView.findViewById<RelativeLayout>(R.id.relativeLayoutPatchNotes)
         val layoutTransition2 = layout2.layoutTransition
         layoutTransition2.enableTransitionType(LayoutTransition.CHANGING)
 
-        (holder as KnownIssuesAdapter.ViewHolder).bind(position)
+        (holder as PatchNotesBugFixesAdapter.ViewHolder).bind(position)
     }
 
     override fun getItemCount(): Int {

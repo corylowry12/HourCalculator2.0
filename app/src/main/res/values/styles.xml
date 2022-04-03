@@ -86,6 +86,7 @@
         <item name="bottomNavIconTint">@color/pinkNavBarIconTint</item>
         <item name="bottomNavTextColor">@color/pinkNavBarIconTint</item>
         <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_pink</item>
+        <item name="historyActionBarIconTint" tools:targetApi="s">@color/pinkNavBarIconTint</item>
     </style>
 
     <style name="teal_accent">

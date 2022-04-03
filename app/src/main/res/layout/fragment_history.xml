@@ -9,18 +9,6 @@
     android:id="@+id/coordinatorLayoutHistory"
     tools:context=".fragments.HistoryFragment">
 
-   <!-- <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolBarHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/appBarBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/menu_history"
-        app:title="@string/history"
-        app:titleCentered="true" /> -->
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutHistory"
         android:layout_width="match_parent"

@@ -78,6 +78,11 @@
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:hint="@string/fifteen"
+        android:textColorHint="#939090"
+        app:boxCornerRadiusBottomEnd="14dp"
+        app:boxCornerRadiusBottomStart="14dp"
+        app:boxCornerRadiusTopEnd="14dp"
+        app:boxCornerRadiusTopStart="14dp"
         app:endIconMode="clear_text"
         app:layout_constraintTop_toBottomOf="@id/textViewBreak">
 

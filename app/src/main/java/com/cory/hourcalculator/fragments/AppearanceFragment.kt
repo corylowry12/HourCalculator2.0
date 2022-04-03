@@ -5,8 +5,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -29,7 +27,6 @@ import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -109,42 +106,39 @@ class AppearanceFragment : Fragment() {
 
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
-                        if (followSystemVersion.loadSystemColor()) {
-                            return ContextCompat.getDrawable(
+                        return if (followSystemVersion.loadSystemColor()) {
+                            ContextCompat.getDrawable(
                                 requireContext(),
                                 R.drawable.materialyouimageview
                             )!!
-                        }
-                        else {
-                            return ContextCompat.getDrawable(
+                        } else {
+                            ContextCompat.getDrawable(
                                 requireContext(),
                                 R.drawable.followsystemcircleimageview
                             )!!
                         }
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        if (followSystemVersion.loadSystemColor()) {
-                            return ContextCompat.getDrawable(
+                        return if (followSystemVersion.loadSystemColor()) {
+                            ContextCompat.getDrawable(
                                 requireContext(),
                                 R.drawable.materialyouimageview
                             )!!
-                        }
-                        else {
-                            return ContextCompat.getDrawable(
+                        } else {
+                            ContextCompat.getDrawable(
                                 requireContext(),
                                 R.drawable.followsystemcircleimageview
                             )!!
                         }
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                        if (followSystemVersion.loadSystemColor()) {
-                            return ContextCompat.getDrawable(
+                        return if (followSystemVersion.loadSystemColor()) {
+                            ContextCompat.getDrawable(
                                 requireContext(),
                                 R.drawable.materialyouimageview
                             )!!
-                        }
-                        else {
-                            return ContextCompat.getDrawable(
+                        } else {
+                            ContextCompat.getDrawable(
                                 requireContext(),
                                 R.drawable.followsystemcircleimageview
                             )!!
@@ -337,14 +331,16 @@ class AppearanceFragment : Fragment() {
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
-                        if (darkThemeData.loadDarkModeState() == 1) {
-                            darkThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 2) {
-                            amoledThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 3) {
-                            followSystemThemeButton?.isChecked = true
+                        when {
+                            darkThemeData.loadDarkModeState() == 1 -> {
+                                darkThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 2 -> {
+                                amoledThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 3 -> {
+                                followSystemThemeButton?.isChecked = true
+                            }
                         }
                         lightThemeButton.isChecked = false
                     }
@@ -380,21 +376,22 @@ class AppearanceFragment : Fragment() {
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
-                        if (darkThemeData.loadDarkModeState() == 0) {
-                            lightThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 2) {
-                            amoledThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 3) {
-                            followSystemThemeButton?.isChecked = true
+                        when {
+                            darkThemeData.loadDarkModeState() == 0 -> {
+                                lightThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 2 -> {
+                                amoledThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 3 -> {
+                                followSystemThemeButton?.isChecked = true
+                            }
                         }
                         darkThemeButton.isChecked = false
                     }
                     alert.show()
                 }
                 else {
-                    Vibrate().vibration(requireContext())
                     darkThemeData.setDarkModeState(1)
                     lightThemeButton?.isChecked = false
                     amoledThemeButton?.isChecked = false
@@ -427,14 +424,16 @@ class AppearanceFragment : Fragment() {
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
-                        if (darkThemeData.loadDarkModeState() == 0) {
-                            lightThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 1) {
-                            darkThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 3) {
-                            followSystemThemeButton?.isChecked = true
+                        when {
+                            darkThemeData.loadDarkModeState() == 0 -> {
+                                lightThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 1 -> {
+                                darkThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 3 -> {
+                                followSystemThemeButton?.isChecked = true
+                            }
                         }
                         amoledThemeButton.isChecked = false
                     }
@@ -473,14 +472,16 @@ class AppearanceFragment : Fragment() {
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
-                        if (darkThemeData.loadDarkModeState() == 0) {
-                            lightThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 1) {
-                            darkThemeButton?.isChecked = true
-                        }
-                        else if (darkThemeData.loadDarkModeState() == 2) {
-                            amoledThemeButton?.isChecked = true
+                        when {
+                            darkThemeData.loadDarkModeState() == 0 -> {
+                                lightThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 1 -> {
+                                darkThemeButton?.isChecked = true
+                            }
+                            darkThemeData.loadDarkModeState() == 2 -> {
+                                amoledThemeButton?.isChecked = true
+                            }
                         }
                         followSystemThemeButton.isChecked = false
                     }
@@ -1012,36 +1013,80 @@ class AppearanceFragment : Fragment() {
 
         normalStyle.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-            alert.setTitle(requireContext().getString(R.string.warning))
-            alert.setMessage("Enabling this option when require the app to restart. Would you like to continue?")
-            alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
-                Vibrate().vibration(requireContext())
-                followSystemVersion.setSystemColor(false)
-                restartApplication()
+            if (followSystemVersion.loadSystemColor()) {
+                if (accentColor.loadAccent() == 4) {
+                    val alert = MaterialAlertDialogBuilder(
+                        requireContext(),
+                        AccentColor(requireContext()).alertTheme()
+                    )
+                    alert.setTitle(requireContext().getString(R.string.warning_experimental))
+                    alert.setMessage("This option may produce unwanted results and enabling this option when require the app to restart. Would you like to continue?")
+                    alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
+                        followSystemVersion.setSystemColor(false)
+                        restartApplication()
+                    }
+                    alert.setNegativeButton(requireContext().getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
+                        normalStyle.isChecked = false
+                    }
+                    alert.show()
+                } else {
+                    googleStyle.isChecked = false
+                    followSystemVersion.setSystemColor(false)
+                    Toast.makeText(
+                        requireContext(),
+                        "App Theme will now match wallpaper",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), followSystemVersion.loadSystemColor().toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Follow App theming already enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            alert.setNegativeButton(requireContext().getString(R.string.no)) {_, _ ->
-                Vibrate().vibration(requireContext())
-                normalStyle.isChecked = false
-            }
-            alert.show()
         }
 
         googleStyle.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-            alert.setTitle(requireContext().getString(R.string.warning_experimental))
-            alert.setMessage("This option may produce unwanted results and enabling this option when require the app to restart. Would you like to continue?")
-            alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
-                Vibrate().vibration(requireContext())
-                followSystemVersion.setSystemColor(true)
-                restartApplication()
+            if (!followSystemVersion.loadSystemColor()) {
+                if (accentColor.loadAccent() == 4) {
+                    val alert = MaterialAlertDialogBuilder(
+                        requireContext(),
+                        AccentColor(requireContext()).alertTheme()
+                    )
+                    alert.setTitle(requireContext().getString(R.string.warning_experimental))
+                    alert.setMessage("This option may produce unwanted results and enabling this option when require the app to restart. Would you like to continue?")
+                    alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                        Vibrate().vibration(requireContext())
+                        followSystemVersion.setSystemColor(true)
+                        restartApplication()
+                    }
+                    alert.setNegativeButton(requireContext().getString(R.string.no)) { _, _ ->
+                        Vibrate().vibration(requireContext())
+                        googleStyle.isChecked = false
+                    }
+                    alert.show()
+                } else {
+                    normalStyle.isChecked = false
+                    followSystemVersion.setSystemColor(true)
+                    Toast.makeText(
+                        requireContext(),
+                        "App will now match the theming of Googles Apps",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-            alert.setNegativeButton(requireContext().getString(R.string.no)) {_, _ ->
-                Vibrate().vibration(requireContext())
-                googleStyle.isChecked = false
+            else {
+                Toast.makeText(
+                    requireContext(),
+                    "Follow Google apps theming already enabled",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            alert.show()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -1071,7 +1116,10 @@ class AppearanceFragment : Fragment() {
         val collapsingToolbarLayout =
             requireView().findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
 
-            collapsingToolbarLayout.setExpanded(AppearanceScrollPosition(requireContext()).loadCollapsed(), false)
+        collapsingToolbarLayout.setExpanded(
+            AppearanceScrollPosition(requireContext()).loadCollapsed(),
+            false
+        )
 
     }
 
