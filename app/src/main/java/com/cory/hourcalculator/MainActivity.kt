@@ -29,6 +29,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
     private val settingsFragment = SettingsFragment()
+    private val editHours = EditHours()
 
     private val dbHandler = DBHelper(this, null)
 
@@ -198,10 +200,17 @@ class MainActivity : AppCompatActivity() {
             Vibrate().vibration(this)
             when (it.itemId) {
                 R.id.ic_home -> replaceFragment(homeFragment)
-                R.id.history -> replaceFragment(historyFragment)
-                R.id.settings -> {
-                        replaceFragment(settingsFragment)
+                R.id.history -> {
+                    val currentFragment = supportFragmentManager.fragments.last()
+
+                    if (currentFragment.toString().startsWith("EditHours", true)) {
+                        editHours.historyTabClicked(this)
+                    }
+                    else {
+                        replaceFragment(historyFragment)
+                    }
                 }
+                R.id.settings -> replaceFragment(settingsFragment)
             }
 
             true

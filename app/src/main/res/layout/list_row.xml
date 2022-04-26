@@ -23,20 +23,35 @@
         tools:ignore="PrivateResource"
         tools:visibility="visible">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:paddingEnd="20dp"
+            android:paddingTop="20dp"
+            android:paddingStart="20dp"
+            android:paddingBottom="20dp">
 
+        <CheckBox
+            android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+           app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
 
             <TextView
                 android:id="@+id/row_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="In TIme"
+                android:text="In Time"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/row_out"
@@ -46,7 +61,9 @@
                 android:text="Out Time"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_in"/>
 
             <TextView
                 android:id="@+id/row_break"
@@ -56,7 +73,9 @@
                 android:text="Break"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_out"/>
 
             <TextView
                 android:id="@+id/row_total"
@@ -66,7 +85,9 @@
                 android:text="Total"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_break"/>
 
             <TextView
                 android:id="@+id/row_day"
@@ -76,7 +97,10 @@
                 android:text="Day"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_total"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageButton
                 android:id="@+id/imageViewOptions"
@@ -89,9 +113,11 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_more_vert_24px"
                 app:tint="?attr/historyItemMenuTint"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

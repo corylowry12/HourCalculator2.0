@@ -2,12 +2,15 @@ package com.cory.hourcalculator.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +20,8 @@ import com.cory.hourcalculator.adapters.PatchNotesBugFixesAdapter
 import com.cory.hourcalculator.adapters.PatchNotesEnhancementsAdapter
 import com.cory.hourcalculator.adapters.PatchNotesNewFeaturesAdapter
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -26,8 +31,12 @@ class PatchNotesFragment : Fragment() {
     private var bugFixesArray = arrayOf("Fixed crashing in the appearance fragment when checking if you are on android 12 or later if your version was 8.0.0", "Fixed crashing when checking for updates if you had no internet connection", "Fixed issue with settings not remembering scroll position if you left view and came back to it",
                                         "Fixed issue with appearance settings not remembering scroll position if you changed the theme and the view restarted", "Fixed issues with there being no haptic feedback for most dialogs in the appearance settings view",
                                         "Fixed issues with some radio buttons not providing haptic feedback when clicked in the Appearance Settings view", "Fixed issue with the back arrow not being the same color as title in webview when light theme was active",
-                                        "Fixed issue with Calculate button having no space between it and the break text box", "Fixed issue with app vibrating twice if you selected gray theme", "Fixed issue with Snackbar message showing up in a different location after you clicked retry if it failed to check for updates")
-    private var newFeaturesArray = arrayOf("Added option to match googles apps when using the follow system theme option in the appearance settings (not available on devices not on android 12 or later)", "Added the ability to undo the deletion and disable automatic deletion if you enable it and it prompts you to delete and you click yes. It will display in a snackbar message with an undo button")
+                                        "Fixed issue with Calculate button having no space between it and the break text box", "Fixed issue with app vibrating twice if you selected gray theme", "Fixed issue with Snackbar message showing up in a different location after you clicked retry if it failed to check for updates",
+                                        "Fixed issue with app not recognizing date changes as pending changes in the Edit Hours view", "Fixed issue with Reset to Defaults menu not resetting the number of days worked per week setting", "Fixed some issues with item deletion animations in the History view")
+
+    private var newFeaturesArray = arrayOf("Added option to match googles apps when using the follow system theme option in the appearance settings (not available on devices not on android 12 or later)", "Added the ability to undo the deletion and disable automatic deletion if you enable it and it prompts you to delete and you click yes. It will display in a snackbar message with an undo button",
+                                            "Added a snackbar message that will display when you automatically scroll up to restore your position")
+
     private var enhancementsArray = arrayOf("Updated Dependencies", "Changed icons in the bottom nav bar to be outlined", "Changed History Tab Icon",
                                             "Icons in the bottom nav bar will now be shaded if for each active tab", "Improved performance when setting icons in the Appearance Settings",
                                             "Redesigned title bar in the History View", "Title bar in History will now collapse on scroll", "Floating action button will now slide up when snackbar message shows up in history",
@@ -40,7 +49,8 @@ class PatchNotesFragment : Fragment() {
                                             "Rewrote the FAQ fragment, it can now be updated and changed remotely (No longer requires an app update to change the questions)", "History will now automatically scroll back to the top when you change the sorting method",
                                             "Reworded the toast messages that pop up when you change automatic deletion settings", "Made haptic feedback more pleasant when changing the time", "Appearance Settings has been renamed to Appearance",
                                             "App will now default to Material You theming if you are on Android 12 or later", "Added a badge to let you know how many items are in each section in the patch notes view", "Added a 500 millisecond delay to the \"failed to check for updates\" snackbar message so it will no longer show up as soon as the app opens",
-                                            "Tapping the copy menu item in the webview will now say \"URL copied to clipboard\" instead of \"Text copied to clipboard\"")
+                                            "Tapping the copy menu item in the webview will now say \"URL copied to clipboard\" instead of \"Text copied to clipboard\"", "Added a snackbar message to restore scroll position if you accidentally hit the scroll to top button", "Renamed 'Automatic Deletion Settings' to 'History Settings'",
+                                            "A dialog will now pop up if you are in the edit view and you click the history tab and you have pending changes", "Animations are now slightly faster to make the app feel more responsive", "Animations will now speed up if you change animation speed in the developer options of your phone")
 
     var themeSelection = false
 
@@ -215,6 +225,13 @@ class PatchNotesFragment : Fragment() {
                         enhancementsRecyclerView.visibility = View.GONE
                         enhancementsChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
                     }
+
+                    val handler = Handler(Looper.getMainLooper())
+                    val runnable = Runnable {
+                        val collapsingToolbarLayoutPatchNotes = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutPatchNotes)
+                        collapsingToolbarLayoutPatchNotes.setExpanded(true, true)
+                    }
+                    handler.postDelayed(runnable, 50)
                     true
                 }
                 else -> true

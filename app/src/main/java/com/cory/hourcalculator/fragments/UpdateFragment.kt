@@ -10,10 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
@@ -22,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.KnownIssuesAdapter
+import com.cory.hourcalculator.adapters.RoadmapAdapter
 import com.cory.hourcalculator.adapters.UpdateAdapter
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.Vibrate
@@ -46,9 +44,13 @@ class UpdateFragment : Fragment() {
 
     private val dataListKnownIssues = ArrayList<HashMap<String, String>>()
 
-    private val dataListRoadMap = ArrayList<HashMap<String, String>>()
+    private val dataListRoadMap = ArrayList<String>()
 
     private lateinit var alert : MaterialAlertDialogBuilder
+
+    private var size: Int = 0
+    private var size_known_issues = 0
+    private var size_road_map = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,15 +111,22 @@ class UpdateFragment : Fragment() {
                     val knownIssuesRecyclerView = requireView().findViewById<RecyclerView>(R.id.knownIssuesRecyclerView)
                     val upcomingFeaturesRecyclerView = requireView().findViewById<RecyclerView>(R.id.upcomingRecyclerView)
 
+                    val updateChevron = requireView().findViewById<ImageView>(R.id.updatesChevronImage)
+                    val knownIssuesChevron = requireView().findViewById<ImageView>(R.id.knownIssuesChevronImage)
+                    val upcomingFeatures = requireView().findViewById<ImageView>(R.id.upcomingChevronImage)
+
                     if (updateRecyclerView.visibility == View.VISIBLE) {
                         updateRecyclerView.visibility = View.GONE
+                        updateChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
                     }
                     if (knownIssuesRecyclerView.visibility == View.VISIBLE) {
                         knownIssuesRecyclerView.visibility = View.GONE
+                        knownIssuesChevron.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
                     }
 
                     if (upcomingFeaturesRecyclerView.visibility == View.VISIBLE) {
                         upcomingFeaturesRecyclerView.visibility = View.GONE
+                        upcomingFeatures.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
                     }
                     true
                 }
@@ -127,8 +136,6 @@ class UpdateFragment : Fragment() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             run("https://raw.githubusercontent.com/corylowry12/update_json/main/update_json.json")
-            //runKnownIssues("https://raw.githubusercontent.com/corylowry12/update_json/main/update_json.json")
-            //runRoadmap("https://raw.githubusercontent.com/corylowry12/update_json/main/update_json.json")
         }, 100)
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -220,7 +227,7 @@ class UpdateFragment : Fragment() {
                 //creating json array
                 val jsonarray_info: JSONArray = json_contact.getJSONArray("update")
 
-                val size:Int = jsonarray_info.length()
+                size = jsonarray_info.length()
 
                 for (i in 0 until size) {
                     val json_objectdetail:JSONObject=jsonarray_info.getJSONObject(i)
@@ -234,7 +241,7 @@ class UpdateFragment : Fragment() {
 
                 val jsonarray_info_known_issues: JSONArray = json_contact.getJSONArray("known issues")
 
-                val size_known_issues:Int = jsonarray_info.length()
+                size_known_issues = jsonarray_info_known_issues.length()
 
                 for (i in 0 until size_known_issues) {
                     val json_objectdetail:JSONObject=jsonarray_info_known_issues.getJSONObject(i)
@@ -250,6 +257,9 @@ class UpdateFragment : Fragment() {
                 GlobalScope.launch(Dispatchers.Main) {
                     recyclerViewKnownIssues?.layoutManager = LinearLayoutManager(requireContext())
                     recyclerViewKnownIssues?.adapter = KnownIssuesAdapter(requireContext(), dataListKnownIssues)
+
+                    val knownIssuesCounter = requireView().findViewById<TextView>(R.id.knownIssuesCounterTextView)
+                    knownIssuesCounter.text = size_known_issues.toString()
                 }
 
                 val recyclerViewUpdate = requireView().findViewById<RecyclerView>(R.id.updateRecyclerView)
@@ -257,25 +267,29 @@ class UpdateFragment : Fragment() {
                 GlobalScope.launch(Dispatchers.Main) {
                     recyclerViewUpdate?.layoutManager = LinearLayoutManager(requireContext())
                     recyclerViewUpdate?.adapter = UpdateAdapter(requireContext(), dataList)
+
+                    val updatesCounter = requireView().findViewById<TextView>(R.id.updatesCounterTextView)
+                    updatesCounter.text = size.toString()
                 }
 
                 val jsonarray_info_road_map: JSONArray = json_contact.getJSONArray("roadmap")
 
-                val size_road_map:Int = jsonarray_info.length()
+                size_road_map = jsonarray_info_road_map.length()
 
                 for (i in 0 until size_road_map) {
                     val json_objectdetail:JSONObject=jsonarray_info_road_map.getJSONObject(i)
 
-                    val arrayList_details = HashMap<String, String>()
-                    arrayList_details["title"] = (json_objectdetail.get("title").toString())
-                    dataListRoadMap.add(arrayList_details)
+                    dataListRoadMap.add(json_objectdetail.get("title").toString())
                 }
 
                 val recyclerViewRoadMap = requireView().findViewById<RecyclerView>(R.id.upcomingRecyclerView)
 
                 GlobalScope.launch(Dispatchers.Main) {
                     recyclerViewRoadMap?.layoutManager = LinearLayoutManager(requireContext())
-                    recyclerViewRoadMap?.adapter = KnownIssuesAdapter(requireContext(), dataListRoadMap)
+                    recyclerViewRoadMap?.adapter = RoadmapAdapter(requireContext(), dataListRoadMap)
+
+                    val upcomingFeatures = requireView().findViewById<TextView>(R.id.upcomingFeaturesCounterTextView)
+                    upcomingFeatures.text = size_road_map.toString()
 
                 }
 

@@ -90,10 +90,22 @@
                         android:textSize="18sp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/updatesChevronImage"
+                        app:layout_constraintEnd_toStartOf="@id/updatesCounterTextView"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/updatesCounterTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textAlignment="center"
+                        android:background="@drawable/rounded_text_view"
+                        app:layout_constraintEnd_toStartOf="@id/updatesChevronImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <ImageView
                         android:id="@+id/updatesChevronImage"
@@ -152,10 +164,22 @@
                             android:textSize="18sp"
                             android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/knownIssuesChevronImage"
+                            app:layout_constraintEnd_toStartOf="@id/knownIssuesCounterTextView"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/knownIssuesCounterTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:textColor="?attr/settingsTextColor"
+                            android:textAlignment="center"
+                            android:background="@drawable/rounded_text_view"
+                            app:layout_constraintEnd_toStartOf="@id/knownIssuesChevronImage"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <ImageView
                             android:id="@+id/knownIssuesChevronImage"
@@ -214,10 +238,22 @@
                             android:textSize="18sp"
                             android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/upcomingChevronImage"
+                            app:layout_constraintEnd_toStartOf="@id/upcomingFeaturesCounterTextView"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/upcomingFeaturesCounterTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:textColor="?attr/settingsTextColor"
+                            android:textAlignment="center"
+                            android:background="@drawable/rounded_text_view"
+                            app:layout_constraintEnd_toStartOf="@id/upcomingChevronImage"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <ImageView
                             android:id="@+id/upcomingChevronImage"

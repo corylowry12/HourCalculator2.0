@@ -504,59 +504,68 @@ class AutomaticDeletionFragment : Fragment() {
     }
 
     private fun reset() {
+        val historyDeletion = HistoryAutomaticDeletion(requireContext())
+        val daysWorked = DaysWorkedPerWeek(requireContext())
 
-        val alert = MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-        alert.setTitle(getString(R.string.warning))
-        alert.setMessage(getString(R.string.reset_automatic_deletion_settings_warning))
-        alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-            Vibrate().vibration(requireContext())
-            val enableHistoryAutomaticDeletion =
-                activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
-            val disableHistoryAutomaticDeletion =
-                activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
+        if (historyDeletion.loadHistoryDeletionState() || daysWorked.loadDaysWorked() != 7) {
+            val alert = MaterialAlertDialogBuilder(
+                requireContext(),
+                AccentColor(requireContext()).alertTheme()
+            )
+            alert.setTitle(getString(R.string.warning))
+            alert.setMessage(getString(R.string.reset_automatic_deletion_settings_warning))
+            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                Vibrate().vibration(requireContext())
+                val enableHistoryAutomaticDeletion =
+                    activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
+                val disableHistoryAutomaticDeletion =
+                    activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
 
-            val one = activity?.findViewById<RadioButton>(R.id.one)
-            val two = activity?.findViewById<RadioButton>(R.id.two)
-            val three = activity?.findViewById<RadioButton>(R.id.three)
-            val four = activity?.findViewById<RadioButton>(R.id.four)
-            val five = activity?.findViewById<RadioButton>(R.id.five)
-            val six = activity?.findViewById<RadioButton>(R.id.six)
-            val seven = activity?.findViewById<RadioButton>(R.id.seven)
+                val one = activity?.findViewById<RadioButton>(R.id.one)
+                val two = activity?.findViewById<RadioButton>(R.id.two)
+                val three = activity?.findViewById<RadioButton>(R.id.three)
+                val four = activity?.findViewById<RadioButton>(R.id.four)
+                val five = activity?.findViewById<RadioButton>(R.id.five)
+                val six = activity?.findViewById<RadioButton>(R.id.six)
+                val seven = activity?.findViewById<RadioButton>(R.id.seven)
 
-            val historyDeletion = HistoryAutomaticDeletion(requireContext())
+                historyDeletion.setHistoryDeletionState(false)
+                daysWorked.setDaysWorked(7)
 
-            historyDeletion.setHistoryDeletionState(false)
+                enableHistoryAutomaticDeletion?.isChecked = false
+                disableHistoryAutomaticDeletion?.isChecked = true
 
-            enableHistoryAutomaticDeletion?.isChecked = false
-            disableHistoryAutomaticDeletion?.isChecked = true
+                one?.isEnabled = false
+                two?.isEnabled = false
+                three?.isEnabled = false
+                four?.isEnabled = false
+                five?.isEnabled = false
+                six?.isEnabled = false
+                seven?.isEnabled = false
 
-            one?.isEnabled = false
-            two?.isEnabled = false
-            three?.isEnabled = false
-            four?.isEnabled = false
-            five?.isEnabled = false
-            six?.isEnabled = false
-            seven?.isEnabled = false
+                one?.isChecked = false
+                two?.isChecked = false
+                three?.isChecked = false
+                four?.isChecked = false
+                five?.isChecked = false
+                six?.isChecked = false
+                seven?.isChecked = true
 
-            one?.isChecked = false
-            two?.isChecked = false
-            three?.isChecked = false
-            four?.isChecked = false
-            five?.isChecked = false
-            six?.isChecked = false
-            seven?.isChecked = true
-
-            one?.setTextColor(color)
-            two?.setTextColor(color)
-            three?.setTextColor(color)
-            four?.setTextColor(color)
-            five?.setTextColor(color)
-            six?.setTextColor(color)
-            seven?.setTextColor(color)
+                one?.setTextColor(color)
+                two?.setTextColor(color)
+                three?.setTextColor(color)
+                four?.setTextColor(color)
+                five?.setTextColor(color)
+                six?.setTextColor(color)
+                seven?.setTextColor(color)
+            }
+            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                Vibrate().vibration(requireContext())
+            }
+            alert.show()
         }
-        alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-            Vibrate().vibration(requireContext())
+        else {
+            Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()
         }
-        alert.show()
     }
 }

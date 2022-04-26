@@ -17,9 +17,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.*
@@ -30,7 +33,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.lang.Exception
 import java.math.RoundingMode
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -44,6 +49,8 @@ class HistoryFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private var containsColon = false
+
+    var scrollPosition = 0
 
     var themeSelection = false
 
@@ -357,15 +364,38 @@ class HistoryFragment : Fragment() {
                     floatingActionButtonHistory?.visibility = View.VISIBLE
                 } else {
                     floatingActionButtonHistory?.visibility = View.INVISIBLE
-                   // val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-                   // collapsingToolbarLayout.setExpanded(true, true)
                 }
             }
         })
 
         floatingActionButtonHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            val savedState =  listView?.layoutManager?.onSaveInstanceState()
             listView?.smoothScrollToPosition(0)
+
+            val snackbar =
+                Snackbar.make(view, "Restore Position?", Snackbar.LENGTH_LONG)
+                    .setDuration(5000)
+
+            snackbar.setAction("Restore") {
+                Vibrate().vibration(requireContext())
+
+                listView?.layoutManager?.onRestoreInstanceState(savedState)
+
+                    val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+                    collapsingToolbarLayout.setExpanded(false, false)
+
+            }
+            snackbar.setActionTextColor(
+                ContextCompat.getColorStateList(
+                    requireContext(),
+                    AccentColor(requireContext()).snackbarActionTextColor()
+                )
+            )
+            snackbar.apply {
+                snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
+            }
+            snackbar.show()
         }
 
         listView?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
@@ -377,9 +407,12 @@ class HistoryFragment : Fragment() {
                 if (pastVisibleItems == 0) {
                     val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
                     collapsingToolbarLayout.setExpanded(true, true)
+
+
                 }
             }
         })
+
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -521,7 +554,7 @@ class HistoryFragment : Fragment() {
 
         val recyclerView = view?.findViewById<RecyclerView>(R.id.listView)
 
-        recyclerViewState = recyclerView?.layoutManager?.onSaveInstanceState()!!
+            recyclerViewState = recyclerView?.layoutManager?.onSaveInstanceState()!!
 
         textViewVisibility()
 
@@ -620,5 +653,6 @@ class HistoryFragment : Fragment() {
         listView?.alpha = 1f
 
         restoreState()
+
     }
 }

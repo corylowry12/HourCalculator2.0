@@ -233,7 +233,7 @@
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="@string/automatic_deletion"
+                        android:text="@string/history_settings"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@id/automaticChevron"
