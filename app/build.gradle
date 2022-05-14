@@ -67,7 +67,7 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-analytics-ktx:20.1.2'
     implementation 'com.google.firebase:firebase-perf-ktx:20.0.6'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.10'
 
     //GoogleAds
     implementation 'com.google.android.gms:play-services-ads:20.6.0'

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,6 @@ import com.cory.hourcalculator.adapters.PatchNotesEnhancementsAdapter
 import com.cory.hourcalculator.adapters.PatchNotesNewFeaturesAdapter
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -34,7 +32,7 @@ class PatchNotesFragment : Fragment() {
                                         "Fixed issue with Calculate button having no space between it and the break text box", "Fixed issue with app vibrating twice if you selected gray theme", "Fixed issue with Snackbar message showing up in a different location after you clicked retry if it failed to check for updates",
                                         "Fixed issue with app not recognizing date changes as pending changes in the Edit Hours view", "Fixed issue with Reset to Defaults menu not resetting the number of days worked per week setting", "Fixed some issues with item deletion animations in the History view")
 
-    private var newFeaturesArray = arrayOf("Added option to match googles apps when using the follow system theme option in the appearance settings (not available on devices not on android 12 or later)", "Added the ability to undo the deletion and disable automatic deletion if you enable it and it prompts you to delete and you click yes. It will display in a snackbar message with an undo button",
+    private var newFeaturesArray = arrayOf("Added option to long press an item in history and show a checkbox to select multiple items for deletion", "Added option to match googles apps when using the follow system theme option in the appearance settings (not available on devices not on android 12 or later)", "Added the ability to undo the deletion and disable automatic deletion if you enable it and it prompts you to delete and you click yes. It will display in a snackbar message with an undo button",
                                             "Added a snackbar message that will display when you automatically scroll up to restore your position")
 
     private var enhancementsArray = arrayOf("Updated Dependencies", "Changed icons in the bottom nav bar to be outlined", "Changed History Tab Icon",

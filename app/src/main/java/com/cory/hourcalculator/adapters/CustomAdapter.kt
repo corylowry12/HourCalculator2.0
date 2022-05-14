@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.logging.Handler
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.elementAt
@@ -45,10 +44,22 @@ class CustomAdapter(
 
     private var lastPosition = -1
     var checkBoxVisible = false
-    var selectedItems  = arrayOf<Int>()
-    var selectedItemsList = selectedItems.toMutableList()
+    private var selectedItems  = arrayOf<Int>()
+    private var selectedItemsList = selectedItems.toMutableList()
 
-    lateinit var snackbarDeleteSelected : Snackbar
+    private lateinit var snackbarDeleteSelected : Snackbar
+    private lateinit var snackbarDismissCheckBox : Snackbar
+
+    fun checkboxVisible() {
+        checkBoxVisible = false
+        notifyItemRangeChanged(0, dataList.size)
+        snackbarDeleteSelected.dismiss()
+        snackbarDismissCheckBox.dismiss()
+    }
+
+    fun isCheckBoxVisible() : Boolean {
+        return checkBoxVisible
+    }
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -117,10 +128,20 @@ class CustomAdapter(
                 day.clear()
                 selectedItemsList.clear()
                 checkBoxVisible = true
+
+                val historyCheckBox = Runnable {
+                    (context as MainActivity).checkBoxVisible(checkBoxVisible)
+
+                }
+
+                MainActivity().runOnUiThread(historyCheckBox)
+
                 notifyItemRangeChanged(0, dataList.count())
                 checkBox.isChecked = true
 
                     selectedItemsList.add(holder.adapterPosition)
+
+                snackbarDismissCheckBox = Snackbar.make(holder.itemView, "Would you like to hide checkboxes?", Snackbar.LENGTH_INDEFINITE)
 
                 snackbarDeleteSelected =
                     Snackbar.make(
@@ -128,6 +149,12 @@ class CustomAdapter(
                         "Items selected",
                         Snackbar.LENGTH_INDEFINITE
                     )
+                snackbarDeleteSelected.setActionTextColor(
+                    ContextCompat.getColorStateList(
+                        context,
+                        AccentColor(context).snackbarActionTextColor()
+                    )
+                )
                 snackbarDeleteSelected.apply {
                     snackbarDeleteSelected.view.background = ResourcesCompat.getDrawable(
                         context.resources,
@@ -144,6 +171,13 @@ class CustomAdapter(
                     }
 
                     MainActivity().runOnUiThread(saveState)
+
+                    val hideNavigationIcon = Runnable {
+                        (context as MainActivity).hideNavigationIcon()
+
+                    }
+
+                    MainActivity().runOnUiThread(hideNavigationIcon)
 
                     val map = HashMap<String, String>()
                     val cursor = dbHandler.getAllRow(context)
@@ -184,8 +218,7 @@ class CustomAdapter(
 
                     checkBoxVisible = false
                     notifyItemRangeChanged(0, dataList.size)
-                        var entriesDeleted = ""
-                    entriesDeleted = if (selectedItemsList.count() == 1) {
+                    val entriesDeleted: String = if (selectedItemsList.count() == 1) {
                         selectedItemsList.count().toString() + " Entry Deleted"
                     } else {
                         selectedItemsList.count().toString() + " Entries Deleted"
@@ -281,9 +314,212 @@ class CustomAdapter(
             }
         }
 
+            checkBox.setOnLongClickListener {
+
+                selectedItemsList.clear()
+                selectedItemsList.add(holder.adapterPosition)
+                for (i in 0 until dataList.count()) {
+                    selectedItemsList.add(i)
+                }
+                notifyItemRangeChanged(0, dataList.size)
+
+                snackbarDeleteSelected.setAction("Delete") {
+                    Vibrate().vibration(context)
+
+                    val saveState = Runnable {
+                        (context as MainActivity).saveState()
+
+                    }
+
+                    MainActivity().runOnUiThread(saveState)
+
+                    val hideNavigationIcon = Runnable {
+                        (context as MainActivity).hideNavigationIcon()
+
+                    }
+
+                    MainActivity().runOnUiThread(hideNavigationIcon)
+
+                    val map = HashMap<String, String>()
+                    val cursor = dbHandler.getAllRow(context)
+                    if (cursor!!.count > 0) {
+
+                        for (i in 0 until selectedItemsList.count()) {
+                            cursor.moveToPosition(selectedItemsList.elementAt(i))
+                            map["id"] =
+                                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                            map["inTime"] =
+                                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                            map["outTime"] =
+                                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                            map["breakTime"] =
+                                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                            map["totalHours"] =
+                                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                            map["date"] =
+                                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
+                            inTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN)))
+
+                            outTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT)))
+
+                            breakTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
+                            totalHours.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
+
+                            day.add(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
+
+                            dbHandler.deleteRow(map["id"].toString())
+                            dataList.removeAt(selectedItemsList.elementAt(i))
+                            notifyItemRemoved(selectedItemsList.elementAt(i))
+
+                        }
+                        checkBoxVisible = false
+                        notifyItemRangeChanged(0, dataList.size)
+                    }
+
+                    val entriesDeleted: String = if (selectedItemsList.count() == 1) {
+                        selectedItemsList.count().toString() + " Entry Deleted"
+                    } else {
+                        selectedItemsList.count().toString() + " Entries Deleted"
+                    }
+                    val snackBar = Snackbar.make(
+                        snackbarDeleteSelected.view,
+                        entriesDeleted,
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setDuration(5000)
+
+                    snackBar.setActionTextColor(
+                        ContextCompat.getColorStateList(
+                            context,
+                            AccentColor(context).snackbarActionTextColor()
+                        )
+                    )
+                    snackBar.setAction(context.getString(R.string.undo)) {
+                        Vibrate().vibration(context)
+
+                        for (i in inTime.indices) {
+                            dbHandler.insertRow(
+                                inTime.elementAt(i),
+                                outTime.elementAt(i),
+                                totalHours.elementAt(i),
+                                day.elementAt(i),
+                                breakTime.elementAt(i)
+                            )
+                        }
+
+                        dataList.clear()
+
+                        val cursor2 = dbHandler.getAllRow(context)
+                        cursor2!!.moveToFirst()
+                        if (cursor2.count > 0) {
+
+                            while (!cursor2.isAfterLast) {
+                                val map2 = HashMap<String, String>()
+                                map2["id"] =
+                                    cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
+                                map2["inTime"] =
+                                    cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
+                                map2["outTime"] =
+                                    cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
+                                map2["breakTime"] =
+                                    cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
+                                map2["totalHours"] =
+                                    cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                                map2["date"] =
+                                    cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
+                                dataList.add(map2)
+
+                                cursor2.moveToNext()
+                            }
+                        }
+
+                        for (i in 0 until selectedItemsList.count()) {
+                            notifyItemInserted(selectedItemsList.elementAt(i))
+                        }
+                        selectedItemsList.clear()
+
+                        val restoreState = Runnable {
+                            (context as MainActivity).restoreState()
+
+                        }
+
+                        MainActivity().runOnUiThread(restoreState)
+                    }
+                    snackBar.apply {
+                        snackBar.view.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.snackbar_corners,
+                            context.theme
+                        )
+                    }
+                    snackBar.show()
+
+                    val handler = android.os.Handler(Looper.getMainLooper())
+                    val runnable = Runnable {
+                        selectedItemsList.clear()
+                    }
+                    handler.postDelayed(runnable, 5000)
+                }
+
+                if (selectedItemsList.count() > 0) {
+                    var isInIt = false
+
+                    for (i in 0 until selectedItemsList.count()) {
+                        isInIt = selectedItemsList.contains(holder.adapterPosition)
+                    }
+                    if (isInIt) {
+
+                        if (selectedItemsList.contains(holder.adapterPosition)) {
+                            val index = selectedItemsList.indexOf(holder.adapterPosition)
+                            selectedItemsList.removeAt(index)
+                        }
+                    } else {
+                        selectedItemsList.add(holder.adapterPosition)
+                    }
+                } else {
+                    selectedItemsList.add(holder.adapterPosition)
+                }
+
+                selectedItemsList.sortDescending()
+                if (selectedItemsList.count() > 0) {
+                    if (selectedItemsList.count() <= 1) {
+                        snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Item Selected")
+                    } else {
+                        snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Items Selected")
+                    }
+                    snackbarDeleteSelected.show()
+                } else if (selectedItemsList.count() == 0) {
+                    snackbarDeleteSelected.dismiss()
+
+                    snackbarDismissCheckBox.setAction("Hide") {
+                        checkBoxVisible = false
+                        notifyItemRangeChanged(0, dataList.size)
+                    }
+                    snackbarDismissCheckBox.apply {
+                        snackbarDismissCheckBox.view.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.snackbar_corners,
+                            context.theme
+                        )
+                    }
+                    snackbarDismissCheckBox.setActionTextColor(
+                        ContextCompat.getColorStateList(
+                            context,
+                            AccentColor(context).snackbarActionTextColor()
+                        )
+                    )
+                    snackbarDismissCheckBox.show()
+                }
+
+                return@setOnLongClickListener true
+            }
+
         checkBox.setOnClickListener {
             Vibrate().vibration(context)
-            snackbarDeleteSelected.setAction("Delete") {
+            snackbarDismissCheckBox = Snackbar.make(holder.itemView, context.getString(R.string.would_you_like_to_hide_check_boxes), Snackbar.LENGTH_INDEFINITE)
+
+            snackbarDeleteSelected.setAction(context.getString(R.string.delete)) {
                 Vibrate().vibration(context)
 
                 val saveState = Runnable {
@@ -292,6 +528,13 @@ class CustomAdapter(
                 }
 
                 MainActivity().runOnUiThread(saveState)
+
+                val hideNavigationIcon = Runnable {
+                    (context as MainActivity).hideNavigationIcon()
+
+                }
+
+                MainActivity().runOnUiThread(hideNavigationIcon)
 
                 val map = HashMap<String, String>()
                 val cursor = dbHandler.getAllRow(context)
@@ -330,8 +573,7 @@ class CustomAdapter(
                     notifyItemRangeChanged(0, dataList.size)
                 }
 
-                var entriesDeleted = ""
-                entriesDeleted = if (selectedItemsList.count() == 1) {
+                val entriesDeleted: String = if (selectedItemsList.count() == 1) {
                     selectedItemsList.count().toString() + " Entry Deleted"
                 } else {
                     selectedItemsList.count().toString() + " Entries Deleted"
@@ -446,7 +688,6 @@ class CustomAdapter(
                     snackbarDeleteSelected.show()
                 } else if (selectedItemsList.count() == 0) {
                     snackbarDeleteSelected.dismiss()
-                    val snackbarDismissCheckBox = Snackbar.make(holder.itemView, "Would you like to hide checkboxes?", Snackbar.LENGTH_INDEFINITE)
 
                     snackbarDismissCheckBox.setAction("Hide") {
                         checkBoxVisible = false
@@ -472,7 +713,7 @@ class CustomAdapter(
         imageView.setOnClickListener {
             Vibrate().vibration(context)
 
-            val popupWindowAdapter = ArrayAdapter<String>(context, R.layout.historypopupwindow, R.id.details, listItems)
+            val popupWindowAdapter = ArrayAdapter(context, R.layout.historypopupwindow, R.id.details, listItems)
             val listPopupWindow = ListPopupWindow(context)
             listPopupWindow.setAdapter(popupWindowAdapter)
             listPopupWindow.anchorView = imageView
@@ -769,6 +1010,8 @@ class CustomAdapter(
                             }
                         val alert = alertDialog.create()
                         alert.show()
+
+                        checkBoxVisible = false
                     }
                 }
                 listPopupWindow.show()

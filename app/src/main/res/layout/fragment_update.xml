@@ -4,11 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.UpdateFragment"
-    android:id="@+id/updateFragmentCoordinator">
+    tools:context=".fragments.UpdateFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayoutUpdate"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
@@ -19,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolBarUpdate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
@@ -43,7 +40,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollViewAppNews"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -99,7 +95,7 @@
                         android:id="@+id/updatesCounterTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
+                        android:text="@string/_1"
                         android:textColor="?attr/settingsTextColor"
                         android:textAlignment="center"
                         android:background="@drawable/rounded_text_view"
@@ -173,7 +169,7 @@
                             android:id="@+id/knownIssuesCounterTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1"
+                            android:text="@string/_1"
                             android:textColor="?attr/settingsTextColor"
                             android:textAlignment="center"
                             android:background="@drawable/rounded_text_view"
@@ -247,7 +243,7 @@
                             android:id="@+id/upcomingFeaturesCounterTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1"
+                            android:text="@string/_1"
                             android:textColor="?attr/settingsTextColor"
                             android:textAlignment="center"
                             android:background="@drawable/rounded_text_view"

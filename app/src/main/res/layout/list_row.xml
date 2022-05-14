@@ -26,21 +26,22 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:paddingTop="20dp"
             android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
             android:paddingBottom="20dp">
 
-        <CheckBox
-            android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-           app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"
-            tools:visibility="visible"
-            />
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="-10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible"
+                android:button="@drawable/checkbox_rounded"/>
 
             <TextView
                 android:id="@+id/row_in"
@@ -49,9 +50,9 @@
                 android:text="In Time"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_out"
@@ -61,9 +62,9 @@
                 android:text="Out Time"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
-                app:layout_constraintTop_toBottomOf="@id/row_in"/>
+                app:layout_constraintTop_toBottomOf="@id/row_in"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_break"
@@ -73,9 +74,9 @@
                 android:text="Break"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
-                app:layout_constraintTop_toBottomOf="@id/row_out"/>
+                app:layout_constraintTop_toBottomOf="@id/row_out"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_total"
@@ -85,9 +86,9 @@
                 android:text="Total"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
-                app:layout_constraintTop_toBottomOf="@id/row_break"/>
+                app:layout_constraintTop_toBottomOf="@id/row_break"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_day"
@@ -97,10 +98,10 @@
                 android:text="Day"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
                 app:layout_constraintTop_toBottomOf="@id/row_total"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                tools:ignore="HardcodedText" />
 
             <ImageButton
                 android:id="@+id/imageViewOptions"
@@ -112,10 +113,10 @@
                 android:contentDescription="more items button"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_more_vert_24px"
-                app:tint="?attr/historyItemMenuTint"
-                tools:ignore="HardcodedText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?attr/historyItemMenuTint"
+                tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

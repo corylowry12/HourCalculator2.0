@@ -16,7 +16,7 @@ class RoadmapAdapter(val context: Context,
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var title = itemView.findViewById<TextView>(R.id.tvTitle)
+        var title = itemView.findViewById<TextView>(R.id.tvTitle)!!
 
         fun bind(position: Int) {
 

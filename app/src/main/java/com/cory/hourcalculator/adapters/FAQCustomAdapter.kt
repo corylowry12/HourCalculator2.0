@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +17,8 @@ class FAQCustomAdapter(val context: Context,
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var title = itemView.findViewById<TextView>(R.id.tvTitle)
-        var body = itemView.findViewById<TextView>(R.id.tvBody)
+        var title = itemView.findViewById<TextView>(R.id.tvTitle)!!
+        var body = itemView.findViewById<TextView>(R.id.tvBody)!!
 
         fun bind(position: Int) {
 

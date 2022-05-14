@@ -2,31 +2,28 @@ package com.cory.hourcalculator.fragments
 
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.KnownIssuesAdapter
 import com.cory.hourcalculator.adapters.RoadmapAdapter
 import com.cory.hourcalculator.adapters.UpdateAdapter
 import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.classes.FollowSystemVersion
 import com.cory.hourcalculator.classes.Vibrate
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,12 +31,12 @@ import kotlinx.coroutines.launch
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 import java.io.IOException
 
+@Suppress("OPT_IN_IS_NOT_ENABLED")
 class UpdateFragment : Fragment() {
 
-    val client = OkHttpClient()
+    private val client = OkHttpClient()
     private val dataList = ArrayList<HashMap<String, String>>()
 
     private val dataListKnownIssues = ArrayList<HashMap<String, String>>()
@@ -49,21 +46,81 @@ class UpdateFragment : Fragment() {
     private lateinit var alert : MaterialAlertDialogBuilder
 
     private var size: Int = 0
-    private var size_known_issues = 0
-    private var size_road_map = 0
+    private var sizeKnownIssues = 0
+    private var sizeRoadMap = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var themeSelection = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+                themeSelection = true
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+                themeSelection = false
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+                themeSelection = true
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                        themeSelection = false
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        themeSelection = true
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                        themeSelection = true
+                    }
+                }
+            }
+        }
+
+        val accentColor = AccentColor(requireContext())
+        val followSystemVersion = FollowSystemVersion(requireContext())
+
+        when {
+            accentColor.loadAccent() == 0 -> {
+                activity?.theme?.applyStyle(R.style.teal_accent, true)
+            }
+            accentColor.loadAccent() == 1 -> {
+                activity?.theme?.applyStyle(R.style.pink_accent, true)
+            }
+            accentColor.loadAccent() == 2 -> {
+                activity?.theme?.applyStyle(R.style.orange_accent, true)
+            }
+            accentColor.loadAccent() == 3 -> {
+                activity?.theme?.applyStyle(R.style.red_accent, true)
+            }
+            accentColor.loadAccent() == 4 -> {
+                if (!followSystemVersion.loadSystemColor()) {
+                    activity?.theme?.applyStyle(R.style.system_accent, true)
+                }
+                else {
+                    if (themeSelection) {
+                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
+                    }
+                    else {
+                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
+                    }
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_update, container, false)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -221,34 +278,32 @@ class UpdateFragment : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val str_response = response.body()!!.string()
-                //creating json object
-                val json_contact:JSONObject = JSONObject(str_response)
-                //creating json array
-                val jsonarray_info: JSONArray = json_contact.getJSONArray("update")
+                val strResponse = response.body()!!.string()
+                val jsonContact = JSONObject(strResponse)
+                val jsonArrayInfo: JSONArray = jsonContact.getJSONArray("update")
 
-                size = jsonarray_info.length()
+                size = jsonArrayInfo.length()
 
                 for (i in 0 until size) {
-                    val json_objectdetail:JSONObject=jsonarray_info.getJSONObject(i)
+                    val jsonObjectDetail:JSONObject=jsonArrayInfo.getJSONObject(i)
 
-                    val arrayList_details = HashMap<String, String>()
-                    arrayList_details["date"] = json_objectdetail.get("date").toString()
-                    arrayList_details["title"] = (json_objectdetail.get("title").toString())
-                    arrayList_details["body"] = (json_objectdetail.get("body").toString())
-                    dataList.add(arrayList_details)
+                    val arrayListDetails = HashMap<String, String>()
+                    arrayListDetails["date"] = jsonObjectDetail.get("date").toString()
+                    arrayListDetails["title"] = (jsonObjectDetail.get("title").toString())
+                    arrayListDetails["body"] = (jsonObjectDetail.get("body").toString())
+                    dataList.add(arrayListDetails)
                 }
 
-                val jsonarray_info_known_issues: JSONArray = json_contact.getJSONArray("known issues")
+                val jsonArrayInfoKnownIssues: JSONArray = jsonContact.getJSONArray("known issues")
 
-                size_known_issues = jsonarray_info_known_issues.length()
+                sizeKnownIssues = jsonArrayInfoKnownIssues.length()
 
-                for (i in 0 until size_known_issues) {
-                    val json_objectdetail:JSONObject=jsonarray_info_known_issues.getJSONObject(i)
+                for (i in 0 until sizeKnownIssues) {
+                    val jsonObjectDetail:JSONObject=jsonArrayInfoKnownIssues.getJSONObject(i)
 
-                    val arrayList_details = HashMap<String, String>()
-                    arrayList_details["title"] = (json_objectdetail.get("title").toString())
-                    dataListKnownIssues.add(arrayList_details)
+                    val arrayListDetails = HashMap<String, String>()
+                    arrayListDetails["title"] = (jsonObjectDetail.get("title").toString())
+                    dataListKnownIssues.add(arrayListDetails)
 
                 }
 
@@ -259,7 +314,7 @@ class UpdateFragment : Fragment() {
                     recyclerViewKnownIssues?.adapter = KnownIssuesAdapter(requireContext(), dataListKnownIssues)
 
                     val knownIssuesCounter = requireView().findViewById<TextView>(R.id.knownIssuesCounterTextView)
-                    knownIssuesCounter.text = size_known_issues.toString()
+                    knownIssuesCounter.text = sizeKnownIssues.toString()
                 }
 
                 val recyclerViewUpdate = requireView().findViewById<RecyclerView>(R.id.updateRecyclerView)
@@ -272,14 +327,14 @@ class UpdateFragment : Fragment() {
                     updatesCounter.text = size.toString()
                 }
 
-                val jsonarray_info_road_map: JSONArray = json_contact.getJSONArray("roadmap")
+                val jsonArrayInfoRoadMap: JSONArray = jsonContact.getJSONArray("roadmap")
 
-                size_road_map = jsonarray_info_road_map.length()
+                sizeRoadMap = jsonArrayInfoRoadMap.length()
 
-                for (i in 0 until size_road_map) {
-                    val json_objectdetail:JSONObject=jsonarray_info_road_map.getJSONObject(i)
+                for (i in 0 until sizeRoadMap) {
+                    val jsonObjectDetail:JSONObject=jsonArrayInfoRoadMap.getJSONObject(i)
 
-                    dataListRoadMap.add(json_objectdetail.get("title").toString())
+                    dataListRoadMap.add(jsonObjectDetail.get("title").toString())
                 }
 
                 val recyclerViewRoadMap = requireView().findViewById<RecyclerView>(R.id.upcomingRecyclerView)
@@ -289,7 +344,7 @@ class UpdateFragment : Fragment() {
                     recyclerViewRoadMap?.adapter = RoadmapAdapter(requireContext(), dataListRoadMap)
 
                     val upcomingFeatures = requireView().findViewById<TextView>(R.id.upcomingFeaturesCounterTextView)
-                    upcomingFeatures.text = size_road_map.toString()
+                    upcomingFeatures.text = sizeRoadMap.toString()
 
                 }
 

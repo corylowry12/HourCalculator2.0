@@ -18,9 +18,9 @@ private val dataList:  ArrayList<HashMap<String, String>>
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var title = itemView.findViewById<TextView>(R.id.tvTitle)
-        var body = itemView.findViewById<TextView>(R.id.tvBody)
-        val date = itemView.findViewById<TextView>(R.id.tvDate)
+        var title = itemView.findViewById<TextView>(R.id.tvTitle)!!
+        var body = itemView.findViewById<TextView>(R.id.tvBody)!!
+        val date = itemView.findViewById<TextView>(R.id.tvDate)!!
 
         fun bind(position: Int) {
 

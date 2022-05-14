@@ -1020,7 +1020,7 @@ class AppearanceFragment : Fragment() {
                         AccentColor(requireContext()).alertTheme()
                     )
                     alert.setTitle(requireContext().getString(R.string.warning_experimental))
-                    alert.setMessage("This option may produce unwanted results and enabling this option when require the app to restart. Would you like to continue?")
+                    alert.setMessage(getString(R.string.may_produce_unwanted_results))
                     alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                         Vibrate().vibration(requireContext())
                         followSystemVersion.setSystemColor(false)
@@ -1036,15 +1036,14 @@ class AppearanceFragment : Fragment() {
                     followSystemVersion.setSystemColor(false)
                     Toast.makeText(
                         requireContext(),
-                        "App Theme will now match wallpaper",
+                        getString(R.string.app_theme_will_now_match_wallpaper),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } else {
-                Toast.makeText(requireContext(), followSystemVersion.loadSystemColor().toString(), Toast.LENGTH_SHORT).show()
                 Toast.makeText(
                     requireContext(),
-                    "Follow App theming already enabled",
+                    getString(R.string.follow_app_theming_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -1059,7 +1058,7 @@ class AppearanceFragment : Fragment() {
                         AccentColor(requireContext()).alertTheme()
                     )
                     alert.setTitle(requireContext().getString(R.string.warning_experimental))
-                    alert.setMessage("This option may produce unwanted results and enabling this option when require the app to restart. Would you like to continue?")
+                    alert.setMessage(getString(R.string.this_option_may_require_the_app_to_restart_desc))
                     alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                         Vibrate().vibration(requireContext())
                         followSystemVersion.setSystemColor(true)
@@ -1075,7 +1074,7 @@ class AppearanceFragment : Fragment() {
                     followSystemVersion.setSystemColor(true)
                     Toast.makeText(
                         requireContext(),
-                        "App will now match the theming of Googles Apps",
+                        getString(R.string.app_will_now_match_google_apps),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -1083,7 +1082,7 @@ class AppearanceFragment : Fragment() {
             else {
                 Toast.makeText(
                     requireContext(),
-                    "Follow Google apps theming already enabled",
+                    getString(R.string.follow_google_apps_already_enabled),
                     Toast.LENGTH_SHORT
                 ).show()
             }

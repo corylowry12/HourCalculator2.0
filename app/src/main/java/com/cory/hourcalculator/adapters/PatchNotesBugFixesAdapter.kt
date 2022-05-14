@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,7 @@ class PatchNotesBugFixesAdapter(
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var title = itemView.findViewById<TextView>(R.id.tvTitle)
+        var title = itemView.findViewById<TextView>(R.id.tvTitle)!!
 
         fun bind(position: Int) {
 

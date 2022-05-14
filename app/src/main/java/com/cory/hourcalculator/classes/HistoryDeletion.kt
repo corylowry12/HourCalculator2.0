@@ -2,15 +2,7 @@ package com.cory.hourcalculator.classes
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
-import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.database.DBHelper
-import com.google.protobuf.LazyStringArrayList
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class HistoryDeletion(context: Context) {
 

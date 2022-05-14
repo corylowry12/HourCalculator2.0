@@ -7,16 +7,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewGroupCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.classes.*
@@ -29,7 +24,6 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -340,6 +334,14 @@ class MainActivity : AppCompatActivity() {
 
         changeBadgeNumber()
         historyFragment.deleteAll()
+    }
+
+    fun checkBoxVisible(visible: Boolean) {
+        historyFragment.checkBoxVisible(visible)
+    }
+
+    fun hideNavigationIcon() {
+        historyFragment.hideNavigationIcon()
     }
 
     fun undoDeleteAll() {

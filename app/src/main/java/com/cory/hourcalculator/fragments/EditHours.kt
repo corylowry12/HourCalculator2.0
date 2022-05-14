@@ -1,7 +1,6 @@
 package com.cory.hourcalculator.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.Configuration
@@ -10,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +18,6 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -32,14 +27,9 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.lang.Exception
-import java.lang.NumberFormatException
 import java.math.RoundingMode
-import java.sql.Time
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 @DelicateCoroutinesApi
 class EditHours : Fragment() {
@@ -55,14 +45,14 @@ class EditHours : Fragment() {
 
     private lateinit var undoHoursData: UndoHoursData
 
-    lateinit var inTime: String
-    lateinit var outTime: String
+    private lateinit var inTime: String
+    private lateinit var outTime: String
     lateinit var breakTime: String
 
     private var inTimeBool = false
     private var outTimeBool = false
     var breakTimeBool = false
-    var dateChangedBool = false
+    private var dateChangedBool = false
 
     var themeSelection = false
 
@@ -182,10 +172,10 @@ class EditHours : Fragment() {
             }
         }
 
-        timePickerInTime = view.findViewById<TimePicker>(R.id.timePickerInTimeEdit)
+        timePickerInTime = view.findViewById(R.id.timePickerInTimeEdit)
         timePickerOutTime =
-            view.findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
-        infoTextView1 = view.findViewById<TextView>(R.id.infoTextView1)
+            view.findViewById(R.id.timePickerOutTimeEdit)
+        infoTextView1 = view.findViewById(R.id.infoTextView1)
 
         val timeEditHourData = TimeEditHourData(requireContext())
         timeEditHourData.setInTimeBool(false)
@@ -371,7 +361,7 @@ class EditHours : Fragment() {
                 Vibrate().vibration(context)
 
                 val timePickerInTime2 = (context as AppCompatActivity).findViewById<TimePicker>(R.id.timePickerInTimeEdit)
-                val timePickerOutTime2 = (context as AppCompatActivity).findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
+                val timePickerOutTime2 = (context).findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
 
                 var inTimeMinutesEdit = timePickerInTime2?.minute.toString()
                 val inTimeHoursEdit = timePickerInTime2?.hour.toString()
@@ -446,7 +436,7 @@ class EditHours : Fragment() {
                     val breakTimeNumber: Double
                     val totalHours = "$hoursDifference.$minutesWithoutFirstDecimal".toDouble()
 
-                    val breakTime = (context as AppCompatActivity).findViewById<TextInputEditText>(R.id.breakTimeEdit)
+                    val breakTime = (context).findViewById<TextInputEditText>(R.id.breakTimeEdit)
                     if (breakTime?.text != null && breakTime.text.toString() != "") {
                         if (!breakTimeNumeric(breakTime)) {
                             infoTextView1.text = context.getString(R.string.error_with_break_time_must_be_numbers_only)
@@ -735,7 +725,7 @@ class EditHours : Fragment() {
         }
     }
 
-    fun calculate(idMap: String, day: String) {
+    private fun calculate(idMap: String, day: String) {
 
         var inTimeMinutesEdit = timePickerInTime.minute.toString()
         val inTimeHoursEdit = timePickerInTime.hour.toString()

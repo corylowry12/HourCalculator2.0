@@ -84,18 +84,16 @@ class AutomaticDeletionFragment : Fragment() {
             }
             accentColor.loadAccent() == 4 -> {
                 activity?.theme?.applyStyle(R.style.system_accent, true)
-                if (!followSystemVersion.loadSystemColor()) {
+                color = if (!followSystemVersion.loadSystemColor()) {
                     activity?.theme?.applyStyle(R.style.system_accent, true)
-                    color = ContextCompat.getColor(requireContext(), R.color.systemAccent)
-                }
-                else {
+                    ContextCompat.getColor(requireContext(), R.color.systemAccent)
+                } else {
                     if (themeSelection) {
                         activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                        color = ContextCompat.getColor(requireContext(), R.color.systemAccentGoogleDark)
-                    }
-                    else {
+                        ContextCompat.getColor(requireContext(), R.color.systemAccentGoogleDark)
+                    } else {
                         activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                        color = ContextCompat.getColor(requireContext(), R.color.systemAccentGoogleDark_light)
+                        ContextCompat.getColor(requireContext(), R.color.systemAccentGoogleDark_light)
                     }
                 }
             }

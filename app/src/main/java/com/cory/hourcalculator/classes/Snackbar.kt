@@ -1,7 +1,6 @@
 package com.cory.hourcalculator.classes
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat

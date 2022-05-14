@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
-    android:id="@+id/coordinatorLayoutAppearance"
     tools:context=".fragments.AppearanceFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -460,7 +459,7 @@
                 android:gravity="center"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="Follow System Accent Color Selection"
+                android:text="@string/follow_system_accent_color_selection"
                 android:textColor="?attr/textColor"
                 android:textSize="14sp" />
 
@@ -489,7 +488,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="App Theming"
+                            android:text="@string/app_theming"
                             android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -499,7 +498,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Follow Google Apps"
+                            android:text="@string/follow_google_apps"
                             android:textColor="?attr/settingsTextColor"
                             android:textSize="12sp"
                             app:layout_constraintTop_toBottomOf="@id/normalSystemTheme" />

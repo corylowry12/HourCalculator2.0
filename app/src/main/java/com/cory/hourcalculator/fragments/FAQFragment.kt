@@ -1,10 +1,8 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+
 package com.cory.hourcalculator.fragments
 
-import android.animation.LayoutTransition
-import android.app.AlertDialog
-import android.app.ProgressDialog
-import android.content.DialogInterface
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
@@ -12,12 +10,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +23,7 @@ import com.cory.hourcalculator.classes.FollowSystemVersion
 import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,9 +34,8 @@ import java.io.IOException
 
 class FAQFragment : Fragment() {
 
-    val client = OkHttpClient()
+    private val client = OkHttpClient()
     private val dataList = ArrayList<HashMap<String, String>>()
-    private lateinit var dialog: MaterialAlertDialogBuilder
 
     var themeSelection = false
 
@@ -124,9 +118,9 @@ class FAQFragment : Fragment() {
             val progressBar =
                 ProgressBar(requireContext(), null, android.R.attr.progressBarStyle)
 
-            dialog.setTitle("Fetching Frequently Asked Questions...")
+            dialog.setTitle(getString(R.string.fetching_frequently_asked_questions))
             dialog.setView(progressBar)
-            dialog.setNegativeButton("Cancel") { d, _ ->
+            dialog.setNegativeButton(getString(R.string.cancel)) { d, _ ->
                 d.dismiss()
             }
             val d = dialog.create()
@@ -141,7 +135,7 @@ class FAQFragment : Fragment() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            runFAQ("https://raw.githubusercontent.com/corylowry12/faq_json/main/faq.json")
+            runFAQ()
         }, 100)
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -157,9 +151,9 @@ class FAQFragment : Fragment() {
             })
     }
 
-    fun runFAQ(url : String) {
+    private fun runFAQ() {
         val request = Request.Builder()
-            .url(url)
+            .url("https://raw.githubusercontent.com/corylowry12/faq_json/main/faq.json")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -180,21 +174,21 @@ class FAQFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
 
-                val str_response = response.body()!!.string()
-                //creating json object
-                val json_contact:JSONObject = JSONObject(str_response)
-                //creating json array
-                val jsonarray_info: JSONArray = json_contact.getJSONArray("faq")
+                val strResponse = response.body()!!.string()
 
-                val size:Int = jsonarray_info.length()
+                val jsonContact = JSONObject(strResponse)
+                //creating json array
+                val jsonArrayInfo: JSONArray = jsonContact.getJSONArray("faq")
+
+                val size:Int = jsonArrayInfo.length()
 
                 for (i in 0 until size) {
-                    val json_objectdetail: JSONObject =jsonarray_info.getJSONObject(i)
+                    val jsonObjectDetail: JSONObject =jsonArrayInfo.getJSONObject(i)
 
-                    val arrayList_details = HashMap<String, String>()
-                    arrayList_details["question"] = (json_objectdetail.get("question").toString())
-                    arrayList_details["answer"] = (json_objectdetail.get("answer").toString())
-                    dataList.add(arrayList_details)
+                    val arrayListDetails = HashMap<String, String>()
+                    arrayListDetails["question"] = (jsonObjectDetail.get("question").toString())
+                    arrayListDetails["answer"] = (jsonObjectDetail.get("answer").toString())
+                    dataList.add(arrayListDetails)
 
                 }
 

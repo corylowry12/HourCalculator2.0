@@ -18,27 +18,20 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.lang.Exception
 import java.math.RoundingMode
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 @DelicateCoroutinesApi
 class HistoryFragment : Fragment() {
@@ -50,9 +43,9 @@ class HistoryFragment : Fragment() {
 
     private var containsColon = false
 
-    var scrollPosition = 0
-
     var themeSelection = false
+
+    private lateinit var customAdapter: CustomAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,6 +118,8 @@ class HistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        customAdapter = CustomAdapter(requireContext(), dataList)
 
         linearLayoutManager = LinearLayoutManager(requireContext())
 
@@ -353,6 +348,13 @@ class HistoryFragment : Fragment() {
 
         loadIntoList()
 
+        if (customAdapter.isCheckBoxVisible()) {
+            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(requireContext().resources, R.drawable.ic_baseline_close_24, requireContext().theme)
+        }
+        else {
+            topAppBar?.navigationIcon = null
+        }
+
         listView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -395,7 +397,9 @@ class HistoryFragment : Fragment() {
             snackbar.apply {
                 snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
             }
-            snackbar.show()
+            if (!customAdapter.isCheckBoxVisible()) {
+                snackbar.show()
+            }
         }
 
         listView?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
@@ -482,7 +486,7 @@ class HistoryFragment : Fragment() {
 
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
         listView?.layoutManager = linearLayoutManager
-        listView?.adapter = CustomAdapter(requireContext(), dataList)
+        listView?.adapter = customAdapter
 
     }
 
@@ -554,7 +558,7 @@ class HistoryFragment : Fragment() {
 
         val recyclerView = view?.findViewById<RecyclerView>(R.id.listView)
 
-            recyclerViewState = recyclerView?.layoutManager?.onSaveInstanceState()!!
+        recyclerViewState = recyclerView?.layoutManager?.onSaveInstanceState()!!
 
         textViewVisibility()
 
@@ -640,6 +644,29 @@ class HistoryFragment : Fragment() {
 
         saveState()
 
+    }
+
+    fun checkBoxVisible(visible: Boolean) {
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
+        val recyclerView = activity?.findViewById<RecyclerView>(R.id.listView)
+
+        if (visible) {
+            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(requireContext().resources, R.drawable.ic_baseline_close_24, requireContext().theme)
+        }
+        else {
+            topAppBar?.navigationIcon = null
+        }
+
+        topAppBar?.setNavigationOnClickListener {
+            customAdapter.checkboxVisible()
+            topAppBar.navigationIcon = null
+        }
+    }
+
+    fun hideNavigationIcon() {
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
+        topAppBar?.navigationIcon = null
     }
 
     fun undoDeleteAll() {

@@ -44,11 +44,10 @@ class AccentColor(context: Context) {
                 return R.style.AlertDialogStyleRed
             }
             4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    return R.style.AlertDialogStyleSystemAccent
-                }
-                else {
-                    return R.style.AlertDialogStyleSystemAccentGoogle
+                return if (!followSystemVersion.loadSystemColor()) {
+                    R.style.AlertDialogStyleSystemAccent
+                } else {
+                    R.style.AlertDialogStyleSystemAccentGoogle
                 }
 
             }
@@ -134,11 +133,10 @@ class AccentColor(context: Context) {
                 return R.color.redAccent
             }
             4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    return R.color.systemAccent
-                }
-                else {
-                    return R.color.systemAccentGoogleDark_light
+                return if (!followSystemVersion.loadSystemColor()) {
+                    R.color.systemAccent
+                } else {
+                    R.color.systemAccentGoogleDark_light
                 }
             }
         }
