@@ -33,7 +33,7 @@ class PatchNotesFragment : Fragment() {
                                         "Fixed issue with app not recognizing date changes as pending changes in the Edit Hours view", "Fixed issue with Reset to Defaults menu not resetting the number of days worked per week setting", "Fixed some issues with item deletion animations in the History view")
 
     private var newFeaturesArray = arrayOf("Added option to long press an item in history and show a checkbox to select multiple items for deletion", "Added option to match googles apps when using the follow system theme option in the appearance settings (not available on devices not on android 12 or later)", "Added the ability to undo the deletion and disable automatic deletion if you enable it and it prompts you to delete and you click yes. It will display in a snackbar message with an undo button",
-                                            "Added a snackbar message that will display when you automatically scroll up to restore your position")
+                                            "Added a snackbar message that will display when you automatically scroll up to restore your position", "Added a search to the FAQ view")
 
     private var enhancementsArray = arrayOf("Updated Dependencies", "Changed icons in the bottom nav bar to be outlined", "Changed History Tab Icon",
                                             "Icons in the bottom nav bar will now be shaded if for each active tab", "Improved performance when setting icons in the Appearance Settings",
@@ -48,7 +48,8 @@ class PatchNotesFragment : Fragment() {
                                             "Reworded the toast messages that pop up when you change automatic deletion settings", "Made haptic feedback more pleasant when changing the time", "Appearance Settings has been renamed to Appearance",
                                             "App will now default to Material You theming if you are on Android 12 or later", "Added a badge to let you know how many items are in each section in the patch notes view", "Added a 500 millisecond delay to the \"failed to check for updates\" snackbar message so it will no longer show up as soon as the app opens",
                                             "Tapping the copy menu item in the webview will now say \"URL copied to clipboard\" instead of \"Text copied to clipboard\"", "Added a snackbar message to restore scroll position if you accidentally hit the scroll to top button", "Renamed 'Automatic Deletion Settings' to 'History Settings'",
-                                            "A dialog will now pop up if you are in the edit view and you click the history tab and you have pending changes", "Animations are now slightly faster to make the app feel more responsive", "Animations will now speed up if you change animation speed in the developer options of your phone")
+                                            "A dialog will now pop up if you are in the edit view and you click the history tab and you have pending changes", "Animations are now slightly faster to make the app feel more responsive", "Animations will now speed up if you change animation speed in the developer options of your phone",
+                                            "Tweaked the Version Info view")
 
     var themeSelection = false
 

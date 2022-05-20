@@ -280,6 +280,15 @@ class HistoryFragment : Fragment() {
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.day_desc))
                                     changeSortMethod()
+                                    customAdapter.checkBoxVisible = false
+                                    try {
+                                        topAppBar.navigationIcon = null
+                                        customAdapter.snackbarDeleteSelected.dismiss()
+                                        customAdapter.snackbarDismissCheckBox.dismiss()
+                                    }
+                                    catch (e : UninitializedPropertyAccessException) {
+                                        e.printStackTrace()
+                                    }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
                                         0,
                                         dataList.size
@@ -295,6 +304,15 @@ class HistoryFragment : Fragment() {
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.day_asc))
                                     changeSortMethod()
+                                    customAdapter.checkBoxVisible = false
+                                    try {
+                                        topAppBar.navigationIcon = null
+                                        customAdapter.snackbarDeleteSelected.dismiss()
+                                        customAdapter.snackbarDismissCheckBox.dismiss()
+                                    }
+                                    catch (e : UninitializedPropertyAccessException) {
+                                        e.printStackTrace()
+                                    }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
                                         0,
                                         dataList.size
@@ -310,6 +328,15 @@ class HistoryFragment : Fragment() {
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.total_desc))
                                     changeSortMethod()
+                                    customAdapter.checkBoxVisible = false
+                                    try {
+                                        topAppBar.navigationIcon = null
+                                        customAdapter.snackbarDeleteSelected.dismiss()
+                                        customAdapter.snackbarDismissCheckBox.dismiss()
+                                    }
+                                    catch (e : UninitializedPropertyAccessException) {
+                                        e.printStackTrace()
+                                    }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
                                         0,
                                         dataList.size
@@ -325,6 +352,14 @@ class HistoryFragment : Fragment() {
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.total_asc))
                                     changeSortMethod()
+                                    customAdapter.checkBoxVisible = false
+                                    try {
+                                        topAppBar.navigationIcon = null
+                                        customAdapter.snackbarDeleteSelected.dismiss()
+                                        customAdapter.snackbarDismissCheckBox.dismiss()
+                                    } catch (e: UninitializedPropertyAccessException) {
+                                        e.printStackTrace()
+                                    }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
                                         0,
                                         dataList.size

@@ -3,13 +3,19 @@
 
 package com.cory.hourcalculator.fragments
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -23,6 +29,7 @@ import com.cory.hourcalculator.classes.FollowSystemVersion
 import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,8 +43,21 @@ class FAQFragment : Fragment() {
 
     private val client = OkHttpClient()
     private val dataList = ArrayList<HashMap<String, String>>()
+    private val selectedItems = ArrayList<HashMap<String, String>>()
+
+    lateinit var faqCustomAdapter : FAQCustomAdapter
 
     var themeSelection = false
+
+    private lateinit var recyclerViewState: Parcelable
+
+    lateinit var recyclerView : RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        faqCustomAdapter = FAQCustomAdapter(requireContext(), dataList)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,6 +131,111 @@ class FAQFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recyclerView = view.findViewById(R.id.faqRecyclerView)
+
+        recyclerView.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+            //recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()!!
+        }
+
+        val search = view.findViewById<TextInputEditText>(R.id.search)
+
+        search?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
+            if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
+                search.clearFocus()
+                hideKeyboard()
+                return@OnKeyListener true
+            }
+            if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
+                hideKeyboard()
+                search.clearFocus()
+                return@OnKeyListener true
+            }
+            false
+        })
+
+        search?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                selectedItems.clear()
+                try {
+                    if (s.toString() != "") {
+                        for (i in 0 until dataList.count()) {
+                            if (dataList[i]["question"]!!.contains(s.toString())) {
+                                selectedItems.add(dataList[i])
+
+                                 faqCustomAdapter = FAQCustomAdapter(requireContext(), selectedItems)
+
+                                recyclerView.adapter = faqCustomAdapter
+                                recyclerView.invalidate()
+                            }
+                        }
+                    }
+                    else {
+                        faqCustomAdapter = FAQCustomAdapter(requireContext(), dataList)
+
+                        recyclerView.adapter = faqCustomAdapter
+                        recyclerView.invalidate()
+                        recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                selectedItems.clear()
+                try {
+                    if (s.toString() != "") {
+                        for (i in 0 until dataList.count()) {
+                            if (dataList[i]["question"]!!.contains(s.toString())) {
+                                selectedItems.add(dataList[i])
+
+                                faqCustomAdapter = FAQCustomAdapter(requireContext(), selectedItems)
+
+                                recyclerView.adapter = faqCustomAdapter
+                                recyclerView.invalidate()
+                            }
+                        }
+                    }
+                    else {
+                        faqCustomAdapter = FAQCustomAdapter(requireContext(), dataList)
+
+                        recyclerView.adapter = faqCustomAdapter
+                        recyclerView.invalidate()
+                        recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                selectedItems.clear()
+                try {
+                    if (s.toString() != "") {
+                        for (i in 0 until dataList.count()) {
+                            if (dataList[i]["question"]!!.contains(s.toString())) {
+                                selectedItems.add(dataList[i])
+
+                                faqCustomAdapter = FAQCustomAdapter(requireContext(), selectedItems)
+
+                                recyclerView.adapter = faqCustomAdapter
+                                recyclerView.invalidate()
+                            }
+                        }
+                    }
+                    else {
+                        faqCustomAdapter = FAQCustomAdapter(requireContext(), dataList)
+
+                        recyclerView.adapter = faqCustomAdapter
+                        recyclerView.invalidate()
+                        //recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        })
 
         val dialog = MaterialAlertDialogBuilder(
             requireContext(),
@@ -192,14 +317,25 @@ class FAQFragment : Fragment() {
 
                 }
 
-                val recyclerView = requireView().findViewById<RecyclerView>(R.id.faqRecyclerView)
-
                 GlobalScope.launch(Dispatchers.Main) {
-                    recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-                    recyclerView?.adapter = FAQCustomAdapter(requireContext(), dataList)
+                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                    recyclerView.adapter = faqCustomAdapter
 
                 }
             }
         })
+    }
+
+    private fun hideKeyboard() {
+        val inputManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusedView = activity?.currentFocus
+
+        if (focusedView != null) {
+            inputManager.hideSoftInputFromWindow(
+                focusedView.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
 }

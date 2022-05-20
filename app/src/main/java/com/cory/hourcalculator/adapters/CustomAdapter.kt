@@ -47,8 +47,8 @@ class CustomAdapter(
     private var selectedItems  = arrayOf<Int>()
     private var selectedItemsList = selectedItems.toMutableList()
 
-    private lateinit var snackbarDeleteSelected : Snackbar
-    private lateinit var snackbarDismissCheckBox : Snackbar
+    lateinit var snackbarDeleteSelected : Snackbar
+    lateinit var snackbarDismissCheckBox : Snackbar
 
     fun checkboxVisible() {
         checkBoxVisible = false
@@ -462,7 +462,7 @@ class CustomAdapter(
                     handler.postDelayed(runnable, 5000)
                 }
 
-                if (selectedItemsList.count() > 0) {
+                if (selectedItemsList.isNotEmpty()) {
                     var isInIt = false
 
                     for (i in 0 until selectedItemsList.count()) {
@@ -482,14 +482,14 @@ class CustomAdapter(
                 }
 
                 selectedItemsList.sortDescending()
-                if (selectedItemsList.count() > 0) {
+                if (selectedItemsList.isNotEmpty()) {
                     if (selectedItemsList.count() <= 1) {
                         snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Item Selected")
                     } else {
                         snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Items Selected")
                     }
                     snackbarDeleteSelected.show()
-                } else if (selectedItemsList.count() == 0) {
+                } else if (selectedItemsList.isEmpty()) {
                     snackbarDeleteSelected.dismiss()
 
                     snackbarDismissCheckBox.setAction("Hide") {
@@ -658,7 +658,7 @@ class CustomAdapter(
                 handler.postDelayed(runnable, 5000)
             }
 
-                if (selectedItemsList.count() > 0) {
+                if (selectedItemsList.isNotEmpty()) {
                     var isInIt = false
 
                     for (i in 0 until selectedItemsList.count()) {
@@ -678,7 +678,7 @@ class CustomAdapter(
                 }
 
                 selectedItemsList.sortDescending()
-                if (selectedItemsList.count() > 0) {
+                if (selectedItemsList.isNotEmpty()) {
                     if (selectedItemsList.count() <= 1) {
                         snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Item Selected")
                     }
@@ -686,7 +686,7 @@ class CustomAdapter(
                         snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Items Selected")
                     }
                     snackbarDeleteSelected.show()
-                } else if (selectedItemsList.count() == 0) {
+                } else if (selectedItemsList.isEmpty()) {
                     snackbarDeleteSelected.dismiss()
 
                     snackbarDismissCheckBox.setAction("Hide") {

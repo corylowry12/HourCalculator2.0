@@ -71,4 +71,6 @@
 
     <color name="patchNotesBadgeColor">#807F7F</color>
 
+    <color name="green">#057C05</color>
+    <color name="red">#9F0101</color>
 </resources>

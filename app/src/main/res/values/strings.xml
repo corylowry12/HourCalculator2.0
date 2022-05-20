@@ -90,7 +90,7 @@
     <string name="total_hours_decimal_format">Total Hours: %1$d.%2$s</string>
     <string name="time">Time</string>
     <string name="decimal">Decimal</string>
-    <string name="version_number">9.1.0</string>
+    <string name="version_number">9.2.0</string>
     <string name="there_was_an_error_please_try_again">There was an error, please try again</string>
     <string name="would_you_like_to_delete_all_app_data">Would you like to delete all app data?</string>
     <string name="app_data_cleared">App Data Cleared</string>
@@ -253,4 +253,5 @@
     <string name="menuItem">MenuItem</string>
     <string name="cancel">Cancel</string>
     <string name="fetching_frequently_asked_questions">Fetching Frequently Asked Questions…</string>
+    <string name="search">Search...</string>
 </resources>

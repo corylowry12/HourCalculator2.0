@@ -41,7 +41,7 @@ class UpdateFragment : Fragment() {
 
     private val dataListKnownIssues = ArrayList<HashMap<String, String>>()
 
-    private val dataListRoadMap = ArrayList<String>()
+    private val dataListRoadMap = ArrayList<HashMap<String, String>>()
 
     private lateinit var alert : MaterialAlertDialogBuilder
 
@@ -334,7 +334,10 @@ class UpdateFragment : Fragment() {
                 for (i in 0 until sizeRoadMap) {
                     val jsonObjectDetail:JSONObject=jsonArrayInfoRoadMap.getJSONObject(i)
 
-                    dataListRoadMap.add(jsonObjectDetail.get("title").toString())
+                    val arrayListRoadMap = HashMap<String, String>()
+                    arrayListRoadMap["title"] = (jsonObjectDetail.get("title").toString())
+                    arrayListRoadMap["status"] = (jsonObjectDetail.get("status").toString())
+                    dataListRoadMap.add(arrayListRoadMap)
                 }
 
                 val recyclerViewRoadMap = requireView().findViewById<RecyclerView>(R.id.upcomingRecyclerView)
