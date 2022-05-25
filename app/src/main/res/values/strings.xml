@@ -90,7 +90,7 @@
     <string name="total_hours_decimal_format">Total Hours: %1$d.%2$s</string>
     <string name="time">Time</string>
     <string name="decimal">Decimal</string>
-    <string name="version_number">9.2.0</string>
+    <string name="version_number">9.2.3</string>
     <string name="there_was_an_error_please_try_again">There was an error, please try again</string>
     <string name="would_you_like_to_delete_all_app_data">Would you like to delete all app data?</string>
     <string name="app_data_cleared">App Data Cleared</string>
@@ -101,7 +101,7 @@
     <string name="splash_screen_image">Splash Screen Image</string>
     <string name="version_number_text">Version Number:</string>
     <string name="build_number">Build Number:</string>
-    <string name="build_number_number">121</string>
+    <string name="build_number_number">125</string>
     <string name="material_3">Material 3</string>
     <string name="material_3_link">https://m3.material.io/</string>
     <string name="google_ads">Google Ads</string>
@@ -253,5 +253,10 @@
     <string name="menuItem">MenuItem</string>
     <string name="cancel">Cancel</string>
     <string name="fetching_frequently_asked_questions">Fetching Frequently Asked Questions…</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
+    <string name="item_selected">" Item Selected"</string>
+    <string name="items_selected">" Items Selected"</string>
+    <string name="hide">Hide</string>
+    <string name="date_last_updated">Date Last Updated:</string>
+    <string name="date">05/24/2022</string>
 </resources>

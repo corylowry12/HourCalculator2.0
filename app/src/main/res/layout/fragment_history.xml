@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
     android:tag="history"
+    android:id="@+id/historyCoordinatorLayout"
     tools:context=".fragments.HistoryFragment">
 
     <com.google.android.material.appbar.AppBarLayout

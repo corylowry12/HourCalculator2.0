@@ -408,7 +408,7 @@ class HistoryFragment : Fragment() {
         floatingActionButtonHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
             val savedState =  listView?.layoutManager?.onSaveInstanceState()
-            listView?.smoothScrollToPosition(0)
+            listView?.scrollToPosition(0)
 
             val snackbar =
                 Snackbar.make(view, "Restore Position?", Snackbar.LENGTH_LONG)

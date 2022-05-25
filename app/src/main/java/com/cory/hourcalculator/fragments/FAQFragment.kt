@@ -3,6 +3,7 @@
 
 package com.cory.hourcalculator.fragments
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -160,7 +162,7 @@ class FAQFragment : Fragment() {
                 try {
                     if (s.toString() != "") {
                         for (i in 0 until dataList.count()) {
-                            if (dataList[i]["question"]!!.contains(s.toString())) {
+                            if (dataList[i]["question"]!!.lowercase().contains(s.toString().lowercase())) {
                                 selectedItems.add(dataList[i])
 
                                  faqCustomAdapter = FAQCustomAdapter(requireContext(), selectedItems)
@@ -187,7 +189,7 @@ class FAQFragment : Fragment() {
                 try {
                     if (s.toString() != "") {
                         for (i in 0 until dataList.count()) {
-                            if (dataList[i]["question"]!!.contains(s.toString())) {
+                            if (dataList[i]["question"]!!.lowercase().contains(s.toString().lowercase())) {
                                 selectedItems.add(dataList[i])
 
                                 faqCustomAdapter = FAQCustomAdapter(requireContext(), selectedItems)
@@ -214,7 +216,7 @@ class FAQFragment : Fragment() {
                 try {
                     if (s.toString() != "") {
                         for (i in 0 until dataList.count()) {
-                            if (dataList[i]["question"]!!.contains(s.toString())) {
+                            if (dataList[i]["question"]!!.lowercase().contains(s.toString().lowercase())) {
                                 selectedItems.add(dataList[i])
 
                                 faqCustomAdapter = FAQCustomAdapter(requireContext(), selectedItems)

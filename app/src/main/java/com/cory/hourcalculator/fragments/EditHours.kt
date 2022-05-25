@@ -208,7 +208,6 @@ class EditHours : Fragment() {
 
                 datePicker.datePicker.setOnDateChangedListener { _, _, _, _ ->
                     Vibrate().vibration(requireContext())
-                    Toast.makeText(requireContext(), datePicker.datePicker.dayOfMonth.toString(),Toast.LENGTH_SHORT).show()
                     if (datePicker.datePicker.month == month2.toInt() || datePicker.datePicker.dayOfMonth != day2.toInt() || datePicker.datePicker.year != year2.toInt()) {
                         dateChangedBool = true
                         timeEditHourData.setDateBool(true)

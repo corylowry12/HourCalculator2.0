@@ -495,6 +495,13 @@ class CustomAdapter(
                     snackbarDismissCheckBox.setAction("Hide") {
                         checkBoxVisible = false
                         notifyItemRangeChanged(0, dataList.size)
+
+                        val hideNavigationIcon = Runnable {
+                            (context as MainActivity).hideNavigationIcon()
+
+                        }
+
+                        MainActivity().runOnUiThread(hideNavigationIcon)
                     }
                     snackbarDismissCheckBox.apply {
                         snackbarDismissCheckBox.view.background = ResourcesCompat.getDrawable(
@@ -651,25 +658,19 @@ class CustomAdapter(
                 }
                 snackBar.show()
 
-                val handler = android.os.Handler(Looper.getMainLooper())
-                val runnable = Runnable {
-                    selectedItemsList.clear()
-                }
-                handler.postDelayed(runnable, 5000)
             }
 
                 if (selectedItemsList.isNotEmpty()) {
                     var isInIt = false
 
                     for (i in 0 until selectedItemsList.count()) {
-                        isInIt = selectedItemsList.contains(holder.adapterPosition)
+                        if (selectedItemsList.elementAt(i) == holder.adapterPosition) {
+                            isInIt = true
+                        }
                     }
                     if (isInIt) {
-
-                        if (selectedItemsList.contains(holder.adapterPosition)) {
                            val index = selectedItemsList.indexOf(holder.adapterPosition)
                             selectedItemsList.removeAt(index)
-                        }
                     } else {
                         selectedItemsList.add(holder.adapterPosition)
                     }
@@ -680,18 +681,27 @@ class CustomAdapter(
                 selectedItemsList.sortDescending()
                 if (selectedItemsList.isNotEmpty()) {
                     if (selectedItemsList.count() <= 1) {
-                        snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Item Selected")
+                        snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + context.getString(
+                                                    R.string.item_selected))
                     }
                     else {
-                        snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Items Selected")
+                        snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + context.getString(
+                                                    R.string.items_selected))
                     }
                     snackbarDeleteSelected.show()
                 } else if (selectedItemsList.isEmpty()) {
                     snackbarDeleteSelected.dismiss()
 
-                    snackbarDismissCheckBox.setAction("Hide") {
+                    snackbarDismissCheckBox.setAction(context.getString(R.string.hide)) {
                         checkBoxVisible = false
                         notifyItemRangeChanged(0, dataList.size)
+
+                        val hideNavigationIcon = Runnable {
+                            (context as MainActivity).hideNavigationIcon()
+
+                        }
+
+                        MainActivity().runOnUiThread(hideNavigationIcon)
                     }
                     snackbarDismissCheckBox.apply {
                         snackbarDismissCheckBox.view.background = ResourcesCompat.getDrawable(
