@@ -79,8 +79,23 @@ class CustomAdapter(
 
             inTime.text = context.getString(R.string.in_time_adapter, dataItem["inTime"])
             outTime.text = context.getString(R.string.out_time_adapter, dataItem["outTime"])
-            breakTime.text = context.getString(R.string.break_time_adapter, dataItem["breakTime"])
-            totalTime.text = context.getString(R.string.total_time_adapter, dataItem["totalHours"])
+
+            if (dataItem["breakTime"] == "1") {
+                breakTime.text = context.getString(R.string.break_time_adapter_singular, dataItem["breakTime"])
+            }
+            else {
+                breakTime.text = context.getString(R.string.break_time_adapter_plural, dataItem["breakTime"])
+            }
+            if (dataItem["totalHours"] == "1.0") {
+                totalTime.text = context.getString(R.string.total_time_adapter_singular, "1")
+            }
+            else if (dataItem["totalHours"]!!.endsWith(".0")) {
+                val total = dataItem["totalHours"]!!.substringBefore(".")
+                totalTime.text = context.getString(R.string.total_time_adapter_plural, total)
+            }
+            else {
+                totalTime.text = context.getString(R.string.total_time_adapter_plural, dataItem["totalHours"])
+            }
             date.text = context.getString(R.string.date_adapter, dateString.toString())
 
             if (checkBoxVisible) {
@@ -1033,6 +1048,14 @@ class CustomAdapter(
 
     override fun getItemCount(): Int {
         return dataList.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        super.setHasStableIds(true)
     }
 
     private fun setAnimation(viewToAnimate: View, position: Int) {

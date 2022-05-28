@@ -14,18 +14,6 @@
         android:orientation="vertical"
         android:animateLayoutChanges="true">
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="2dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="?attr/textColor"
-            tools:text="test" />
-
         <com.google.android.material.card.MaterialCardView
             style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
@@ -34,7 +22,8 @@
             app:cardCornerRadius="28dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
-            android:animateLayoutChanges="true">
+            android:animateLayoutChanges="true"
+            android:layout_marginBottom="5dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

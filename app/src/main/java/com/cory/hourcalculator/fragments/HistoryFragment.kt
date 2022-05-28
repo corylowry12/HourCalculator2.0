@@ -72,7 +72,11 @@ class HistoryFragment : Fragment() {
                         themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        activity?.setTheme(
+                            AccentColor(requireContext()).followSystemTheme(
+                                requireContext()
+                            )
+                        )
                         themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -102,12 +106,10 @@ class HistoryFragment : Fragment() {
             accentColor.loadAccent() == 4 -> {
                 if (!followSystemVersion.loadSystemColor()) {
                     activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
+                } else {
                     if (themeSelection) {
                         activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
+                    } else {
                         activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
                     }
                 }
@@ -160,15 +162,19 @@ class HistoryFragment : Fragment() {
                 if (!followSystemVersion.loadSystemColor()) {
                     floatingActionButtonHistory?.backgroundTintList =
                         ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
-                }
-                else {
+                } else {
                     if (themeSelection) {
                         floatingActionButtonHistory?.backgroundTintList =
-                            ContextCompat.getColorStateList(requireContext(), R.color.systemAccentGoogleDark)
-                    }
-                    else {
+                            ContextCompat.getColorStateList(
+                                requireContext(),
+                                R.color.systemAccentGoogleDark
+                            )
+                    } else {
                         floatingActionButtonHistory?.backgroundTintList =
-                            ContextCompat.getColorStateList(requireContext(), R.color.systemAccentGoogleDark_light)
+                            ContextCompat.getColorStateList(
+                                requireContext(),
+                                R.color.systemAccentGoogleDark_light
+                            )
                     }
                 }
             }
@@ -197,13 +203,32 @@ class HistoryFragment : Fragment() {
                                     output.toDouble() * wagesData.loadWageAmount().toString()
                                         .toDouble()
                                 val wagesRounded = String.format("%.2f", wages)
-                                alert.setMessage(getString(R.string.history_info_dialog, output, dbHandler.getCount(), wagesRounded))
+                                alert.setMessage(
+                                    getString(
+                                        R.string.history_info_dialog,
+                                        output,
+                                        dbHandler.getCount(),
+                                        wagesRounded
+                                    )
+                                )
                             } catch (e: NumberFormatException) {
                                 e.printStackTrace()
-                                alert.setMessage(getString(R.string.history_info_dialog_error, output, dbHandler.getCount()))
+                                alert.setMessage(
+                                    getString(
+                                        R.string.history_info_dialog_error,
+                                        output,
+                                        dbHandler.getCount()
+                                    )
+                                )
                             }
                         } else {
-                            alert.setMessage(getString(R.string.history_info_dialog_error, output, dbHandler.getCount()))
+                            alert.setMessage(
+                                getString(
+                                    R.string.history_info_dialog_error,
+                                    output,
+                                    dbHandler.getCount()
+                                )
+                            )
                         }
                         alert.setPositiveButton(getString(R.string.ok)) { _, _ ->
                             Vibrate().vibration(requireContext())
@@ -245,7 +270,10 @@ class HistoryFragment : Fragment() {
                         }
 
                         val listItems: Array<String> = if (containsColon) {
-                            if ((sortData.loadSortState() == getString(R.string.total_desc) || sortData.loadSortState() == getString(R.string.total_asc)) && containsColon) {
+                            if ((sortData.loadSortState() == getString(R.string.total_desc) || sortData.loadSortState() == getString(
+                                    R.string.total_asc
+                                )) && containsColon
+                            ) {
                                 selectedItem = 0
                                 sortData.setSortState(getString(R.string.day_desc))
                             }
@@ -262,7 +290,8 @@ class HistoryFragment : Fragment() {
                             )
                         }
 
-                        val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+                        val collapsingToolbarLayout =
+                            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
 
                         val alert = MaterialAlertDialogBuilder(
                             requireContext(),
@@ -276,7 +305,7 @@ class HistoryFragment : Fragment() {
                             Vibrate().vibration(requireContext())
                             when (i) {
                                 0 -> {
-                                    listView?.smoothScrollToPosition(0)
+                                    listView?.scrollToPosition(0)
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.day_desc))
                                     changeSortMethod()
@@ -285,8 +314,7 @@ class HistoryFragment : Fragment() {
                                         topAppBar.navigationIcon = null
                                         customAdapter.snackbarDeleteSelected.dismiss()
                                         customAdapter.snackbarDismissCheckBox.dismiss()
-                                    }
-                                    catch (e : UninitializedPropertyAccessException) {
+                                    } catch (e: UninitializedPropertyAccessException) {
                                         e.printStackTrace()
                                     }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -300,7 +328,7 @@ class HistoryFragment : Fragment() {
                                     ).show()
                                 }
                                 1 -> {
-                                    listView?.smoothScrollToPosition(0)
+                                    listView?.scrollToPosition(0)
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.day_asc))
                                     changeSortMethod()
@@ -309,8 +337,7 @@ class HistoryFragment : Fragment() {
                                         topAppBar.navigationIcon = null
                                         customAdapter.snackbarDeleteSelected.dismiss()
                                         customAdapter.snackbarDismissCheckBox.dismiss()
-                                    }
-                                    catch (e : UninitializedPropertyAccessException) {
+                                    } catch (e: UninitializedPropertyAccessException) {
                                         e.printStackTrace()
                                     }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -324,7 +351,7 @@ class HistoryFragment : Fragment() {
                                     ).show()
                                 }
                                 2 -> {
-                                    listView?.smoothScrollToPosition(0)
+                                    listView?.scrollToPosition(0)
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.total_desc))
                                     changeSortMethod()
@@ -333,8 +360,7 @@ class HistoryFragment : Fragment() {
                                         topAppBar.navigationIcon = null
                                         customAdapter.snackbarDeleteSelected.dismiss()
                                         customAdapter.snackbarDismissCheckBox.dismiss()
-                                    }
-                                    catch (e : UninitializedPropertyAccessException) {
+                                    } catch (e: UninitializedPropertyAccessException) {
                                         e.printStackTrace()
                                     }
                                     view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
@@ -348,7 +374,7 @@ class HistoryFragment : Fragment() {
                                     ).show()
                                 }
                                 3 -> {
-                                    listView?.smoothScrollToPosition(0)
+                                    listView?.scrollToPosition(0)
                                     collapsingToolbarLayout.setExpanded(true, true)
                                     sortData.setSortState(getString(R.string.total_asc))
                                     changeSortMethod()
@@ -384,9 +410,12 @@ class HistoryFragment : Fragment() {
         loadIntoList()
 
         if (customAdapter.isCheckBoxVisible()) {
-            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(requireContext().resources, R.drawable.ic_baseline_close_24, requireContext().theme)
-        }
-        else {
+            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(
+                requireContext().resources,
+                R.drawable.ic_baseline_close_24,
+                requireContext().theme
+            )
+        } else {
             topAppBar?.navigationIcon = null
         }
 
@@ -398,29 +427,29 @@ class HistoryFragment : Fragment() {
                 val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
 
                 if (pastVisibleItems > 0) {
-                    floatingActionButtonHistory?.visibility = View.VISIBLE
+                    floatingActionButtonHistory?.show()
                 } else {
-                    floatingActionButtonHistory?.visibility = View.INVISIBLE
+                    floatingActionButtonHistory?.hide()
                 }
             }
         })
 
         floatingActionButtonHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val savedState =  listView?.layoutManager?.onSaveInstanceState()
+            val savedState = listView?.layoutManager?.onSaveInstanceState()
             listView?.scrollToPosition(0)
-
+            val collapsingToolbarLayout =
+                requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+            collapsingToolbarLayout.setExpanded(true, true)
             val snackbar =
-                Snackbar.make(view, "Restore Position?", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, getString(R.string.restore_position), Snackbar.LENGTH_LONG)
                     .setDuration(5000)
 
-            snackbar.setAction("Restore") {
+            snackbar.setAction(getString(R.string.restore)) {
                 Vibrate().vibration(requireContext())
 
                 listView?.layoutManager?.onRestoreInstanceState(savedState)
-
-                    val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-                    collapsingToolbarLayout.setExpanded(false, false)
+                collapsingToolbarLayout.setExpanded(false, false)
 
             }
             snackbar.setActionTextColor(
@@ -430,28 +459,16 @@ class HistoryFragment : Fragment() {
                 )
             )
             snackbar.apply {
-                snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
+                snackbar.view.background = ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.snackbar_corners,
+                    context.theme
+                )
             }
             if (!customAdapter.isCheckBoxVisible()) {
                 snackbar.show()
             }
         }
-
-        listView?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val pastVisibleItems = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
-                if (pastVisibleItems == 0) {
-                    val collapsingToolbarLayout = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-                    collapsingToolbarLayout.setExpanded(true, true)
-
-
-                }
-            }
-        })
-
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -505,7 +522,11 @@ class HistoryFragment : Fragment() {
                     y += decimalTime
 
                 } catch (e: java.lang.NumberFormatException) {
-                    Toast.makeText(requireContext(), getString(R.string.error_calculating_hours), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.error_calculating_hours),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 containsColon = true
@@ -687,9 +708,12 @@ class HistoryFragment : Fragment() {
         val recyclerView = activity?.findViewById<RecyclerView>(R.id.listView)
 
         if (visible) {
-            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(requireContext().resources, R.drawable.ic_baseline_close_24, requireContext().theme)
-        }
-        else {
+            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(
+                requireContext().resources,
+                R.drawable.ic_baseline_close_24,
+                requireContext().theme
+            )
+        } else {
             topAppBar?.navigationIcon = null
         }
 

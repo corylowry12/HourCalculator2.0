@@ -3,8 +3,10 @@
     <string name="app_name">Hour Calculator</string>
     <string name="in_time_adapter">In Time: %1$s</string>
     <string name="out_time_adapter">Out Time: %1$s</string>
-    <string name="break_time_adapter">Break Time: %1$s Minutes</string>
-    <string name="total_time_adapter">Total Time: %1$s</string>
+    <string name="break_time_adapter_plural">Break Time: %1$s Minutes</string>
+    <string name="break_time_adapter_singular">Break Time: %1$s Minute</string>
+    <string name="total_time_adapter_singular">Total: %1$s Hour</string>
+    <string name="total_time_adapter_plural">Total: %1$s Hours</string>
     <string name="date_adapter">Date: %1$s</string>
 
     <string name="total_asc">totalHours ASC</string>
@@ -90,7 +92,7 @@
     <string name="total_hours_decimal_format">Total Hours: %1$d.%2$s</string>
     <string name="time">Time</string>
     <string name="decimal">Decimal</string>
-    <string name="version_number">9.2.3</string>
+    <string name="version_number">9.2.4</string>
     <string name="there_was_an_error_please_try_again">There was an error, please try again</string>
     <string name="would_you_like_to_delete_all_app_data">Would you like to delete all app data?</string>
     <string name="app_data_cleared">App Data Cleared</string>
@@ -101,7 +103,7 @@
     <string name="splash_screen_image">Splash Screen Image</string>
     <string name="version_number_text">Version Number:</string>
     <string name="build_number">Build Number:</string>
-    <string name="build_number_number">125</string>
+    <string name="build_number_number">126</string>
     <string name="material_3">Material 3</string>
     <string name="material_3_link">https://m3.material.io/</string>
     <string name="google_ads">Google Ads</string>
@@ -258,5 +260,7 @@
     <string name="items_selected">" Items Selected"</string>
     <string name="hide">Hide</string>
     <string name="date_last_updated">Date Last Updated:</string>
-    <string name="date">05/24/2022</string>
+    <string name="date">05/28/2022</string>
+    <string name="restore_position">Restore Position?</string>
+    <string name="restore">Restore</string>
 </resources>

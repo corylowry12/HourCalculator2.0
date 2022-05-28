@@ -327,7 +327,7 @@ class AppearanceFragment : Fragment() {
                         darkThemeButton?.isChecked = false
                         amoledThemeButton?.isChecked = false
                         followSystemThemeButton?.isChecked = false
-                        restartThemeChange()
+                        restartApplication()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
@@ -372,7 +372,7 @@ class AppearanceFragment : Fragment() {
                         lightThemeButton?.isChecked = false
                         amoledThemeButton?.isChecked = false
                         followSystemThemeButton?.isChecked = false
-                        restartThemeChange()
+                        restartApplication()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
@@ -420,7 +420,7 @@ class AppearanceFragment : Fragment() {
                         lightThemeButton?.isChecked = false
                         darkThemeButton?.isChecked = false
                         followSystemThemeButton?.isChecked = false
-                        restartThemeChange()
+                        restartApplication()
                     }
                     alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                         Vibrate().vibration(requireContext())
