@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -465,5 +466,23 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (homeFragment.isVisible) {
+                bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+            }
+            else if (historyFragment.isVisible) {
+                bottomNav.menu.findItem(R.id.history).isChecked = true
+            }
+            else if (settingsFragment.isVisible) {
+                bottomNav.menu.findItem(R.id.settings).isChecked = true
+            }
+        }, 200)
     }
 }

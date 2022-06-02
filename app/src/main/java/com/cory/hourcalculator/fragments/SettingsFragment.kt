@@ -292,4 +292,5 @@ class SettingsFragment : Fragment() {
         }
         alert.show()
     }
+
 }
