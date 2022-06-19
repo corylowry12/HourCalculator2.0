@@ -177,7 +177,6 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             MobileAds.initialize(context)
             val adView = AdView(context)
-            adView.adSize = AdSize.BANNER
             adView.adUnitId = "ca-app-pub-4546055219731501/5171269817"
             val mAdView = findViewById<AdView>(R.id.adView)
             val adRequest = AdRequest.Builder().build()
@@ -397,7 +396,6 @@ class MainActivity : AppCompatActivity() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
         val badge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         val darkThemeData = DarkThemeData(this)
         when {

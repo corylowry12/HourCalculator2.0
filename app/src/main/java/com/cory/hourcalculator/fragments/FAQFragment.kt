@@ -136,10 +136,6 @@ class FAQFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.faqRecyclerView)
 
-        recyclerView.setOnScrollChangeListener { view, i, i2, i3, i4 ->
-            //recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()!!
-        }
-
         val search = view.findViewById<TextInputEditText>(R.id.search)
 
         search?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->

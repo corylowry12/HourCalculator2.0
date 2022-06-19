@@ -26,34 +26,11 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class PatchNotesFragment : Fragment() {
 
-    private var bugFixesArray = arrayOf("Fixed crashing in the appearance fragment when checking if you are on android 12 or later if your version was 8.0.0", "Fixed crashing when checking for updates if you had no internet connection", "Fixed issue with settings not remembering scroll position if you left view and came back to it",
-                                        "Fixed issue with appearance settings not remembering scroll position if you changed the theme and the view restarted", "Fixed issues with there being no haptic feedback for most dialogs in the appearance settings view",
-                                        "Fixed issues with some radio buttons not providing haptic feedback when clicked in the Appearance Settings view", "Fixed issue with the back arrow not being the same color as title in webview when light theme was active",
-                                        "Fixed issue with Calculate button having no space between it and the break text box", "Fixed issue with app vibrating twice if you selected gray theme", "Fixed issue with Snackbar message showing up in a different location after you clicked retry if it failed to check for updates",
-                                        "Fixed issue with app not recognizing date changes as pending changes in the Edit Hours view", "Fixed issue with Reset to Defaults menu not resetting the number of days worked per week setting", "Fixed some issues with item deletion animations in the History view",
-                                        "Fixed a few issues with the checkbox selection in the history introduced in the last update", "Fixed an issue with the toolbar in history and settings not remembering if it should be collapsed or not", "Fixed issue with scroll to top button in history not animating when it appeared",
-                                        "Fixed an issue where if you went to another view and hit the back button the active tab on the bottom nav bar wouldn't reflect the change")
+    private var bugFixesArray = arrayOf("Fixed issue with text color on splash screen not being set properly in light theme only")
 
-    private var newFeaturesArray = arrayOf("Added option to long press an item in history and show a checkbox to select multiple items for deletion", "Added option to match googles apps when using the follow system theme option in the appearance settings (not available on devices not on android 12 or later)", "Added the ability to undo the deletion and disable automatic deletion if you enable it and it prompts you to delete and you click yes. It will display in a snackbar message with an undo button",
-                                            "Added a snackbar message that will display when you automatically scroll up to restore your position", "Added a search to the FAQ view")
+    private var newFeaturesArray = arrayOf("Added a setting in Settings->App Settings to allow you to have out time automatically set to current time or previously stored time")
 
-    private var enhancementsArray = arrayOf("Updated Dependencies", "Changed icons in the bottom nav bar to be outlined", "Changed History Tab Icon",
-                                            "Icons in the bottom nav bar will now be shaded if for each active tab", "Improved performance when setting icons in the Appearance Settings",
-                                            "Redesigned title bar in the History View", "Title bar in History will now collapse on scroll", "Floating action button will now slide up when snackbar message shows up in history",
-                                            "Added rounded corners to menu in history", "Icons in the title bar in History will now be whatever color the chosen accent color is", "Redesigned the reset to defaults menus throughout the app",
-                                            "Redesigned the menu in the webview", "The \"Follow System\" option in the Appearance Settings has been renamed to \"Material You\"", "Improved haptic feedback on devices Android 12+",
-                                            "Improved animations when scrolling back to the top after clicking FAB in the History View", "Text Color in bottom nav bar will now be the same color as the icons",
-                                            "Tweaked red accent colors", "Tweaked break text box hint color to make it more legible when the gray theme is enabled", "Adjusted the corner radius of the break text box to make it match with the rest of the app",
-                                            "Tweaked badge color that contains the number of hours stored", "Improved the speed of animations when switching tabs", "Snackbar undo message after hour deletion will now disappear when you leave the history tab",
-                                            "Performance improvements when deleting entries automatically via Automatic Deletion in the Settings", "Reordered some items in the settings", "Tweaked some colors throughout the UI",
-                                            "Rewrote the FAQ fragment, it can now be updated and changed remotely (No longer requires an app update to change the questions)", "History will now automatically scroll back to the top when you change the sorting method",
-                                            "Reworded the toast messages that pop up when you change automatic deletion settings", "Made haptic feedback more pleasant when changing the time", "Appearance Settings has been renamed to Appearance",
-                                            "App will now default to Material You theming if you are on Android 12 or later", "Added a badge to let you know how many items are in each section in the patch notes view", "Added a 500 millisecond delay to the \"failed to check for updates\" snackbar message so it will no longer show up as soon as the app opens",
-                                            "Tapping the copy menu item in the webview will now say \"URL copied to clipboard\" instead of \"Text copied to clipboard\"", "Added a snackbar message to restore scroll position if you accidentally hit the scroll to top button", "Renamed 'Automatic Deletion Settings' to 'History Settings'",
-                                            "A dialog will now pop up if you are in the edit view and you click the history tab and you have pending changes", "Animations are now slightly faster to make the app feel more responsive", "Animations will now speed up if you change animation speed in the developer options of your phone",
-                                            "Tweaked the Version Info view", "Changed the way history scrolls back to the top when the FAB is clicked", "Improved the search functionality in the FAQ view that was introduced in the last update", "Added a \"Date Last Updated\" section to the Version Info view",
-                                            "App will now say Minute or Minutes based on how long break time is", "App will now say Hour or Hours based on how many total hours are stored in history", "Total Hours: has been changed to Total: in history",
-                                            "App will no longer show a point 0 in history eg, if your entry is 8.0, it will now show 8 instead", "Changed the style of the ads that will show in the app")
+    private var enhancementsArray = arrayOf("Dependency Updates", "Various Optimizations")
 
     var themeSelection = false
 

@@ -189,15 +189,18 @@ class HomeFragment : Fragment() {
         } else {
             dateData.setHours1(timePickerInTime.hour.toString())
         }
-        if (dateData.loadMinutes2() != "") {
-            timePickerOutTime.minute = dateData.loadMinutes2()!!.toInt()
-        } else {
-            dateData.setMinutes2(timePickerOutTime.minute.toString())
-        }
-        if (dateData.loadHours2() != "") {
-            timePickerOutTime.hour = dateData.loadHours2()!!.toInt()
-        } else {
-            dateData.setHours2(timePickerOutTime.hour.toString())
+
+        if (OutTimeData(requireContext()).loadOutTimeState()) {
+            if (dateData.loadMinutes2() != "") {
+                timePickerOutTime.minute = dateData.loadMinutes2()!!.toInt()
+            } else {
+                dateData.setMinutes2(timePickerOutTime.minute.toString())
+            }
+            if (dateData.loadHours2() != "") {
+                timePickerOutTime.hour = dateData.loadHours2()!!.toInt()
+            } else {
+                dateData.setHours2(timePickerOutTime.hour.toString())
+            }
         }
 
         timePickerInTime.setOnTimeChangedListener { _, hourOfDay, minute ->

@@ -461,7 +461,7 @@ class EditHours : Fragment() {
                 }
 
             }
-            alert.setNegativeButton(context.getString(R.string.no)) { dialog, _ ->
+            alert.setNegativeButton(context.getString(R.string.no)) { _, _ ->
                 Vibrate().vibration(context)
                 (context as AppCompatActivity).supportFragmentManager.popBackStack()
             }

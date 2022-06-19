@@ -79,6 +79,7 @@ class SplashScreen : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
     }
 
     private fun load() {
@@ -98,7 +99,7 @@ class SplashScreen : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (Build.VERSION.SDK_INT < 31) {
+       if (Build.VERSION.SDK_INT < 31) {
             load()
         } else {
             val intent = Intent(this, MainActivity::class.java)

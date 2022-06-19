@@ -129,6 +129,46 @@ class AppSettingsFragment : Fragment() {
             }
         }
 
+        val outTimeData = OutTimeData(requireContext())
+        val enableOutTime = activity?.findViewById<RadioButton>(R.id.enableOutTime)
+        val disableOutTime = activity?.findViewById<RadioButton>(R.id.disableOutTime)
+
+        if (outTimeData.loadOutTimeState()) {
+            enableOutTime?.isChecked = true
+        }
+        else {
+            disableOutTime?.isChecked = true
+        }
+
+        enableOutTime?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            if (outTimeData.loadOutTimeState()) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.this_setting_is_already_enabled),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                outTimeData.setOutTimeState(true)
+                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_previous_stored_time), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        disableOutTime?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            if (!outTimeData.loadOutTimeState()) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.this_setting_is_already_enabled),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                outTimeData.setOutTimeState(false)
+                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_current_time), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
         val calculationData = CalculationType(requireContext())
         val enableCalculation = activity?.findViewById<RadioButton>(R.id.enableCalculation)
         val disableCalculation = activity?.findViewById<RadioButton>(R.id.disableCalculation)
