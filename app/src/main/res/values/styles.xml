@@ -92,6 +92,7 @@
     <style name="teal_accent">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/darkTeal</item>
         <item name="colorPrimaryDark">@color/darkTeal</item>
         <item name="appBarBackground">@color/colorPrimary</item>
         <item name="cardBackground">@color/cardTeal</item>
@@ -144,7 +145,7 @@
     <style name="system_accent_google_light">
         <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_100</item>
         <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_100</item>
-        <item name="colorPrimaryDark" tools:targetApi="s">@android:color/system_neutral2_300</item>
+        <item name="colorPrimaryDark" tools:targetApi="s">@color/systemAccentGoogleDark_light</item>
         <item name="appBarBackground" tools:targetApi="s">@android:color/system_neutral2_100</item>
         <item name="cardBackground" tools:targetApi="s">@android:color/system_accent2_200</item>
         <item name="selectedTint">@color/systemAccent</item>
@@ -256,6 +257,13 @@
         <item name="android:backgroundDimAmount">0.70</item>
         <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_300</item>
         <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_300</item>
+    </style>
+
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen" >
+        <item name="windowSplashScreenBackground">#555353</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/splash_screen_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
+        <item name="windowSplashScreenAnimationDuration">2000</item>
     </style>
 
 </resources>

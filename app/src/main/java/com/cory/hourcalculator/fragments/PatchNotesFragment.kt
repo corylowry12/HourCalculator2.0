@@ -26,11 +26,11 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class PatchNotesFragment : Fragment() {
 
-    private var bugFixesArray = arrayOf("Fixed issue with text color on splash screen not being set properly in light theme only")
+    private var bugFixesArray = arrayOf("Fixed issue with the reset to defaults dialog in the app settings view having the wrong title", "Fixed issue with the out time setting not resetting when resetting settings to default in the app settings view")
 
-    private var newFeaturesArray = arrayOf("Added a setting in Settings->App Settings to allow you to have out time automatically set to current time or previously stored time")
+    private var newFeaturesArray = arrayOf("No new features")
 
-    private var enhancementsArray = arrayOf("Dependency Updates", "Various Optimizations")
+    private var enhancementsArray = arrayOf("Tweaked the splash screen", "Can now fetch and install updates directly within the app", "Updated content in the version info view")
 
     var themeSelection = false
 

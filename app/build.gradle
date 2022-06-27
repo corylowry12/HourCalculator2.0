@@ -18,8 +18,8 @@ android {
         applicationId "com.cory.hourcalculator"
         minSdk 26
         targetSdk 32
-        versionCode 128
-        versionName "9.2.6"
+        versionCode 129
+        versionName "9.2.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -77,12 +77,11 @@ dependencies {
 
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
-    implementation 'com.github.javiersantos:AppUpdater:2.7'
-
     implementation 'androidx.transition:transition:1.4.1'
 
     implementation 'com.squareup.okhttp3:okhttp:3.14.9'
 
     implementation 'com.google.code.gson:gson:2.8.9'
 
+    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
 }

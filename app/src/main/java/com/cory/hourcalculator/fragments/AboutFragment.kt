@@ -154,14 +154,6 @@ class AboutFragment : Fragment() {
             LinkClass(requireContext()).setLink(inAppReviewSubtitle.text.toString())
             openFragment(WebviewFragment())
         }
-
-        val appUpdaterConstraint = view.findViewById<ConstraintLayout>(R.id.appUpdaterConstraint)
-        val appUpdaterSubtitle = view.findViewById<TextView>(R.id.appUpdaterSubtitle)
-
-        appUpdaterConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(appUpdaterSubtitle.text.toString())
-            openFragment(WebviewFragment())
-        }
     }
 
     private fun openFragment(fragment: Fragment) {

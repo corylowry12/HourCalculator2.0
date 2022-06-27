@@ -705,7 +705,6 @@ class HistoryFragment : Fragment() {
     fun checkBoxVisible(visible: Boolean) {
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
-        val recyclerView = activity?.findViewById<RecyclerView>(R.id.listView)
 
         if (visible) {
             topAppBar?.navigationIcon = ResourcesCompat.getDrawable(

@@ -13,19 +13,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.*
-import com.github.javiersantos.appupdater.AppUpdater
-import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,6 +40,8 @@ import java.net.URL
 
 @DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var appUpdateManager: AppUpdateManager
 
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
@@ -44,58 +52,82 @@ class MainActivity : AppCompatActivity() {
 
     var themeSelection = false
 
-    private fun checkForUpdates() {
-
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-
-                val response =
-                    URL("https://raw.githubusercontent.com/corylowry12/json/main/mandatoryUpdate.json").readText()
-                val stringBuilder = StringBuilder(response)
-                val updater = AppUpdater(this@MainActivity)
-                updater.setUpdateFrom(UpdateFrom.JSON)
-                updater.setUpdateJSON("https://raw.githubusercontent.com/corylowry12/json/main/json.json")
-                updater.setCancelable(false)
-                updater.setButtonUpdate(getString(R.string.update))
-                if (stringBuilder.toString().contains(getString(R.string.yes_app_update_dialog))) {
-                    updater.setButtonDismiss("")
-                    updater.setButtonDoNotShowAgain("")
+    fun setStatusBarColor() {
+        val accentColor = AccentColor(this)
+        val followSystemVersion = FollowSystemVersion(this)
+        when {
+            accentColor.loadAccent() == 0 -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.darkTeal)
+            }
+            accentColor.loadAccent() == 1 -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.darkPink)
+            }
+            accentColor.loadAccent() == 2 -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.darkOrangeAccent)
+            }
+            accentColor.loadAccent() == 3 -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.darkRed)
+            }
+            accentColor.loadAccent() == 4 -> {
+                if (!followSystemVersion.loadSystemColor()) {
+                    window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentDark)
                 } else {
-                    updater.setButtonDismiss(getString(R.string.next_time))
-                    updater.setButtonDoNotShowAgain("")
+                    if (themeSelection) {
+                        window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentGoogleDark)
+                    } else {
+                        window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentGoogleDark_light)
+                    }
                 }
-                updater.start()
+            }
+        }
 
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val snackbar = Snackbar.make(findViewById(R.id.mainConstraint), getString(R.string.error_checking_for_updates), Snackbar.LENGTH_INDEFINITE)
-                    snackbar.anchorView = findViewById(R.id.bottom_nav)
-                    val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
-                    params.gravity = Gravity.BOTTOM
-                    snackbar.view.layoutParams = params
-                    snackbar.setAction(getString(R.string.retry)) {
-                        checkForUpdates()
-                        snackbar.dismiss()
-                    }
-                    snackbar.duration = 5000
-                    snackbar.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            this@MainActivity,
-                            AccentColor(this@MainActivity).snackbarActionTextColor()
-                        )
-                    )
-                    snackbar.apply {
-                        snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
-                    }
-                    snackbar.show()
-                }, 500)
+    }
+
+    private val listener = InstallStateUpdatedListener { installState ->
+        if (installState.installStatus() == InstallStatus.DOWNLOADED) {
+            val materialAlertDialogBuilder =
+                MaterialAlertDialogBuilder(this, R.style.AlertDialogStyle)
+            materialAlertDialogBuilder.setCancelable(false)
+            materialAlertDialogBuilder.setTitle("Update Downloaded")
+            materialAlertDialogBuilder.setMessage("App Update Downloaded, click restart to install")
+            materialAlertDialogBuilder.setPositiveButton("Restart") { _, _ ->
+                appUpdateManager.completeUpdate()
+                val intent =
+                    packageManager.getLaunchIntentForPackage(packageName)
+                intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            }
+            materialAlertDialogBuilder.show()
+        }
+        else if (installState.installStatus() == InstallStatus.INSTALLED) {
+            unregister()
+        }
+    }
+
+    private fun unregister() {
+        appUpdateManager.unregisterListener(listener)
+    }
+
+    private fun checkUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateManager.registerListener(listener)
+        appUpdateInfoTask.addOnSuccessListener {
+            if (it.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && it.isUpdateTypeAllowed(
+                    AppUpdateType.IMMEDIATE
+                )
+            ) {
+                appUpdateManager.startUpdateFlowForResult(it, AppUpdateType.IMMEDIATE, this, 123)
+                appUpdateManager.completeUpdate()
             }
         }
     }
 
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         val darkThemeData = DarkThemeData(this)
         when {
@@ -133,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 
         when {
             accentColor.loadAccent() == 0 -> {
-                theme?.applyStyle(R.style.teal_accent, true)
+                theme!!.applyStyle(R.style.teal_accent, true)
             }
             accentColor.loadAccent() == 1 -> {
                 theme?.applyStyle(R.style.pink_accent, true)
@@ -146,11 +178,11 @@ class MainActivity : AppCompatActivity() {
             }
             accentColor.loadAccent() == 4 -> {
                 if (!followSystemVersion.loadSystemColor()) {
-                    theme?.applyStyle(R.style.system_accent, true)
+                    theme!!.applyStyle(R.style.system_accent, true)
                 }
                 else {
                     if (themeSelection) {
-                        theme?.applyStyle(R.style.system_accent_google, true)
+                        theme!!.applyStyle(R.style.system_accent_google, true)
                     }
                     else {
                         theme?.applyStyle(R.style.system_accent_google_light, true)
@@ -158,8 +190,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
         setContentView(R.layout.activity_main)
+
+        setStatusBarColor()
+        checkUpdate()
 
         replaceFragment(homeFragment)
         val transaction = supportFragmentManager.beginTransaction()
@@ -231,20 +265,20 @@ class MainActivity : AppCompatActivity() {
                 if (!FollowSystemVersion(this).loadSystemColor()) {
                     bottomNav.itemActiveIndicatorColor =
                         ContextCompat.getColorStateList(this, R.color.colorPrimaryPixelAppBar)
-                }
-                else {
+                } else {
                     if (themeSelection) {
                         bottomNav.itemActiveIndicatorColor =
                             ContextCompat.getColorStateList(this, R.color.googleItemIndicatorColor)
-                    }
-                    else {
+                    } else {
                         bottomNav.itemActiveIndicatorColor =
-                            ContextCompat.getColorStateList(this, R.color.googleItemIndicatorColor_light)
+                            ContextCompat.getColorStateList(
+                                this,
+                                R.color.googleItemIndicatorColor_light
+                            )
                     }
                 }
             }
         }
-        checkForUpdates()
     }
 
     private fun replaceFragment(fragment: Fragment) {

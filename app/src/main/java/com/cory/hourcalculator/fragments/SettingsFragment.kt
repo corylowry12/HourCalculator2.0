@@ -112,7 +112,7 @@ class SettingsFragment : Fragment() {
 
         val nestedScrollView = view.findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
 
-        nestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+        nestedScrollView.setOnScrollChangeListener { _, scrollX, _, _, _ ->
 
             scrollPosition = scrollX
         }

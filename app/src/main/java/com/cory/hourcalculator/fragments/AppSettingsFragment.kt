@@ -112,7 +112,7 @@ class AppSettingsFragment : Fragment() {
                         AccentColor(requireContext()).alertTheme()
                     )
                     alert.setCancelable(false)
-                    alert.setTitle(getString(R.string.yes))
+                    alert.setTitle(getString(R.string.warning))
                     alert.setMessage(getString(R.string.reset_app_settings_warning))
                     alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                         Vibrate().vibration(requireContext())
@@ -379,6 +379,8 @@ class AppSettingsFragment : Fragment() {
     }
 
     private fun reset() {
+        val enableOutTime = view?.findViewById<RadioButton>(R.id.enableOutTime)
+        val disableOutTime = view?.findViewById<RadioButton>(R.id.disableOutTime)
         val decimalFormat = view?.findViewById<RadioButton>(R.id.enableCalculation)
         val timeFormat = view?.findViewById<RadioButton>(R.id.disableCalculation)
         val enableVibration = view?.findViewById<RadioButton>(R.id.enableVibration)
@@ -394,7 +396,10 @@ class AppSettingsFragment : Fragment() {
         HistoryToggleData(requireContext()).setHistoryToggle(true)
         BreakTextBoxVisibilityClass(requireContext()).setVisibility(0)
         WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
+        OutTimeData(requireContext()).setOutTimeState(true)
 
+        enableOutTime?.isChecked = true
+        disableOutTime?.isChecked = false
         decimalFormat?.isChecked = true
         timeFormat?.isChecked = false
         enableVibration?.isChecked = true
