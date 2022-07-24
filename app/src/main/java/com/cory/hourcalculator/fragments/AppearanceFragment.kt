@@ -271,13 +271,13 @@ class AppearanceFragment : Fragment() {
 
         }
 
-        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+        appBar.addOnOffsetChangedListener { _, verticalOffset ->
             if (abs(verticalOffset) - appBar.totalScrollRange == 0) {
                 AppearanceScrollPosition(requireContext()).setCollapsed(false)
             } else {
                 AppearanceScrollPosition(requireContext()).setCollapsed(true)
             }
-        })
+        }
 
         val followSystemImageView = activity?.findViewById<ImageView>(R.id.followSystemImageView)
         followSystemImageView?.setImageDrawable(followSystemImageViewDrawable)
@@ -643,6 +643,7 @@ class AppearanceFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
+                    if (Build.VERSION.SDK_INT < 33) {
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -677,6 +678,42 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(0)
                     restartApplication()
                 }
+                    else {
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashOrange"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashRed"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashPink"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashScreenNoIcon"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+                        )
+                        accentColor.setAccentState(0)
+                        restartApplication()
+                    }
+                }
                 alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     tealAccentButton.isChecked = false
@@ -698,6 +735,7 @@ class AppearanceFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
+                    if (Build.VERSION.SDK_INT < 33) {
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -732,6 +770,42 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(1)
                     restartApplication()
                 }
+                    else {
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashOrange"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashRed"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashPink"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashScreenNoIcon"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+                        )
+                        accentColor.setAccentState(1)
+                        restartApplication()
+                    }
+                }
                 alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     pinkAccentButton.isChecked = false
@@ -753,6 +827,7 @@ class AppearanceFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
+                    if (Build.VERSION.SDK_INT < 33) {
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -787,6 +862,42 @@ class AppearanceFragment : Fragment() {
                     accentColor.setAccentState(2)
                     restartApplication()
                 }
+                    else {
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashOrange"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashRed"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashPink"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashScreenNoIcon"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+                        )
+                        accentColor.setAccentState(2)
+                        restartApplication()
+                    }
+                }
                 alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
                     orangeAccentButton.isChecked = false
@@ -808,6 +919,7 @@ class AppearanceFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
+                    if (Build.VERSION.SDK_INT < 33) {
                     activity?.packageManager?.setComponentEnabledSetting(
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
@@ -841,6 +953,42 @@ class AppearanceFragment : Fragment() {
                     )
                     accentColor.setAccentState(3)
                     restartApplication()
+                }
+                    else {
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashOrange"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashRed"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashPink"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashScreenNoIcon"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+                        )
+                        accentColor.setAccentState(3)
+                        restartApplication()
+                    }
                 }
                 alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                     Vibrate().vibration(requireContext())
@@ -1129,6 +1277,7 @@ class AppearanceFragment : Fragment() {
         alert.setMessage(getString(R.string.would_you_like_to_reset_appearance_settings))
         alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
             Vibrate().vibration(requireContext())
+            if (Build.VERSION.SDK_INT < 31) {
             when {
                 AccentColor(requireContext()).loadAccent() != 0 -> {
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -1178,6 +1327,61 @@ class AppearanceFragment : Fragment() {
                 else -> {
                     AccentColor(requireContext()).setAccentState(0)
                     DarkThemeData(requireContext()).setDarkModeState(3)
+                }
+            }
+            }
+            else if (Build.VERSION.SDK_INT >= 31) {
+                when {
+                    AccentColor(requireContext()).loadAccent() != 4 -> {
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashOrange"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashRed"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashPink"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        activity?.packageManager?.setComponentEnabledSetting(
+                            ComponentName(
+                                BuildConfig.APPLICATION_ID,
+                                "com.cory.hourcalculator.SplashScreenNoIcon"
+                            ),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                        AccentColor(requireContext()).setAccentState(4)
+                        DarkThemeData(requireContext()).setDarkModeState(3)
+                        restartApplication()
+                    }
+                    DarkThemeData(requireContext()).loadDarkModeState() != 3 -> {
+                        view?.findViewById<RadioButton>(R.id.lightTheme)?.isChecked = false
+                        view?.findViewById<RadioButton>(R.id.darkTheme)?.isChecked = false
+                        view?.findViewById<RadioButton>(R.id.blackTheme)?.isChecked = false
+                        view?.findViewById<RadioButton>(R.id.followSystem)?.isChecked = true
+                        AccentColor(requireContext()).setAccentState(4)
+                        DarkThemeData(requireContext()).setDarkModeState(3)
+                        restartThemeChange()
+                    }
+                    else -> {
+                        AccentColor(requireContext()).setAccentState(4)
+                        DarkThemeData(requireContext()).setDarkModeState(3)
+                    }
                 }
             }
             ColoredNavBarData(requireContext()).setNavBar(false)

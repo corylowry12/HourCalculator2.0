@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/rounded_menu_dark">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/reset"
-        android:title="@string/reset_to_defaults" />
+        android:title="@string/reset_to_defaults"
+        app:showAsAction="always"
+        android:iconTint="?attr/textColor"
+        android:icon="@drawable/ic_baseline_restore_24"/>
 </menu>

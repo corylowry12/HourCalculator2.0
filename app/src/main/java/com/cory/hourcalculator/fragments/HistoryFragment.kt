@@ -717,6 +717,7 @@ class HistoryFragment : Fragment() {
         }
 
         topAppBar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
             customAdapter.checkboxVisible()
             topAppBar.navigationIcon = null
         }

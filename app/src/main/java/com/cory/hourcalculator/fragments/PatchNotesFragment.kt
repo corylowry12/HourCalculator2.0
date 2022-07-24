@@ -26,11 +26,12 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class PatchNotesFragment : Fragment() {
 
-    private var bugFixesArray = arrayOf("Fixed issue with the reset to defaults dialog in the app settings view having the wrong title", "Fixed issue with the out time setting not resetting when resetting settings to default in the app settings view")
+    private var bugFixesArray = arrayOf("Fixed issue with there being no vibration when clicking the X to hide checkboxes in the history view", "Fixed issue where if you were on Android 12+ it would set the theme to be Teal instead of Material You")
 
-    private var newFeaturesArray = arrayOf("No new features")
+    private var newFeaturesArray = arrayOf("Added support for the themed icons (Requires Android 13)")
 
-    private var enhancementsArray = arrayOf("Tweaked the splash screen", "Can now fetch and install updates directly within the app", "Updated content in the version info view")
+    private var enhancementsArray = arrayOf("Tweaked the design of the radio buttons throughout the app", "Changed the animation when a toolbar collapses",
+                                            "Changed the reset to defaults to be an icon instead of a menu")
 
     var themeSelection = false
 

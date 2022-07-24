@@ -25,7 +25,9 @@
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.23645833333333333" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.4161458333333333" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_more_vert_24_white.xml" value="0.4161458333333333" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_restore_24.xml" value="0.272" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.228" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_front.xml" value="0.2" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_outline_home_24.xml" value="0.228" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_outline_settings_24.xml" value="0.228" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/drawable/ic_work_history_black_24dp.xml" value="0.228" />
@@ -56,7 +58,7 @@
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_edit_hours.xml" value="0.22760416666666666" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_f_a_q.xml" value="0.24895833333333334" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_gallery.xml" value="0.10764944275582573" />
-        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_history.xml" value="0.1" />
+        <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_history.xml" value="0.264" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_home.xml" value="0.5564142194744977" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_layout_settings.xml" value="0.264" />
         <entry key="..\:/HourCalculator4/HourCalculator2.0/app/src/main/res/layout/fragment_patch_notes.xml" value="0.2" />

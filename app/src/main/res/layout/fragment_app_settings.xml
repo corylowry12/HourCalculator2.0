@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
+            app:titleCollapseMode="scale"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -82,6 +83,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/set_out_time_to_previous_time"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                     <RadioButton
@@ -91,6 +94,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/set_out_time_to_current_time"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                 </RadioGroup>
@@ -100,9 +105,9 @@
                 android:id="@+id/calculationTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewSetOutTime"
                 android:gravity="center"
                 android:paddingTop="4dp"
-                android:layout_below="@id/cardViewSetOutTime"
                 android:paddingBottom="4dp"
                 android:text="@string/calculation_type"
                 android:textColor="?attr/textColor" />
@@ -124,12 +129,14 @@
                     android:layout_height="wrap_content">
 
                     <RadioButton
+                        android:theme="?attr/radioButtonTheme"
                         android:id="@+id/enableCalculation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="@string/decimal_format"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
                         android:textColor="?attr/settingsTextColor" />
 
                     <RadioButton
@@ -139,6 +146,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/time_format"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                 </RadioGroup>
@@ -179,6 +188,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/enable_vibration"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                     <RadioButton
@@ -188,6 +199,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/disable_vibration"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                 </RadioGroup>
@@ -227,6 +240,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/enable_history"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                     <RadioButton
@@ -236,6 +251,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/disable_history"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                 </RadioGroup>
@@ -275,6 +292,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/enable_break_text_box"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                     <RadioButton
@@ -284,6 +303,8 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/disable_break_text_box"
                         android:textSize="12sp"
+                        android:minHeight="48dp"
+                        android:theme="?attr/radioButtonTheme"
                         android:textColor="?attr/settingsTextColor" />
 
                 </RadioGroup>

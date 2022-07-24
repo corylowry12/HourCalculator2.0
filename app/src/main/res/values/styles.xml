@@ -61,22 +61,20 @@
         <item name="historyItemMenuTint">#000000</item>
     </style>
 
-    <style name="SplashLightTheme">
-        <item name="android:background">@color/white</item>
-        <item name="colorPrimaryDark">@color/white</item>
-    </style>
-
     <style name="SplashDarkTheme">
+        <item name="settingsTextColor">@android:color/black</item>
         <item name="android:background">@color/darkThemeBackground</item>
         <item name="colorPrimaryDark">@color/darkThemeBackground</item>
     </style>
 
     <style name="SplashBlackTheme">
+        <item name="settingsTextColor">@android:color/black</item>
         <item name="android:background">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
     </style>
 
     <style name="pink_accent">
+        <item name="radioButtonTheme">@style/RadioButtonPink</item>
         <item name="colorPrimary">@color/pinkAccent</item>
         <item name="colorAccent">@color/pinkAccent</item>
         <item name="colorPrimaryDark">@color/darkPink</item>
@@ -90,6 +88,7 @@
     </style>
 
     <style name="teal_accent">
+        <item name="radioButtonTheme">@style/RadioButtonTeal</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/darkTeal</item>
@@ -104,6 +103,7 @@
     </style>
 
     <style name="orange_accent">
+        <item name="radioButtonTheme">@style/RadioButtonOrange</item>
         <item name="colorPrimary">@color/orangeAccent</item>
         <item name="colorAccent">@color/orangeAccent</item>
         <item name="colorPrimaryDark">@color/darkOrangeAccent</item>
@@ -117,6 +117,7 @@
     </style>
 
     <style name="red_accent">
+        <item name="radioButtonTheme">@style/RadioButtonRed</item>
         <item name="colorPrimary">@color/redAccent</item>
         <item name="colorAccent">@color/redAccent</item>
         <item name="colorPrimaryDark">@color/darkRed</item>
@@ -130,6 +131,7 @@
     </style>
 
     <style name="system_accent">
+        <item name="radioButtonTheme">@style/RadioButtonMaterialYou</item>
         <item name="colorPrimary">@color/systemAccent</item>
         <item name="colorAccent">@color/systemAccent</item>
         <item name="colorPrimaryDark">@color/systemAccentDark</item>
@@ -143,6 +145,7 @@
     </style>
 
     <style name="system_accent_google_light">
+        <item name="radioButtonTheme">@style/RadioButtonMaterialYouGoogle</item>
         <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_100</item>
         <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_100</item>
         <item name="colorPrimaryDark" tools:targetApi="s">@color/systemAccentGoogleDark_light</item>
@@ -156,6 +159,7 @@
     </style>
 
     <style name="system_accent_google">
+        <item name="radioButtonTheme">@style/RadioButtonMaterialYouGoogle</item>
         <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_800</item>
         <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
         <item name="colorPrimaryDark" tools:targetApi="s">@android:color/system_neutral2_900</item>
@@ -170,6 +174,7 @@
     </style>
 
     <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary">@color/darkTeal</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="colorSurface">@color/colorPrimaryLightDialog</item>
@@ -179,6 +184,7 @@
     </style>
 
     <style name="AlertDialogStylePink" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary">@color/darkPink</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="colorSurface">@color/pinkDialog</item>
@@ -188,6 +194,7 @@
     </style>
 
     <style name="AlertDialogStyleOrange" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary">@color/darkOrangeAccent</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="colorSurface">@color/orangeDialog</item>
@@ -197,6 +204,7 @@
     </style>
 
     <style name="AlertDialogStyleRed" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary">@color/darkRed</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="colorSurface">@color/redDialog</item>
@@ -206,6 +214,7 @@
     </style>
 
     <style name="AlertDialogStyleSystemAccent" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary">@color/systemAccentDark</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="colorSurface">@color/systemAccentDialog</item>
@@ -215,6 +224,7 @@
     </style>
 
     <style name="AlertDialogStyleSystemAccentGoogle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_800</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="colorSurface" tools:targetApi="s">@android:color/system_neutral2_100</item>
@@ -264,6 +274,43 @@
         <item name="windowSplashScreenAnimatedIcon">@mipmap/splash_screen_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
         <item name="windowSplashScreenAnimationDuration">2000</item>
+    </style>
+
+    <style name="RadioButtonTeal" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@android:color/transparent</item>
+        <item name="colorAccent">@color/darkTeal</item>
+        <item name="android:textColorSecondary">#a9a9a9</item>
+        <item name="colorControlNormal">#000000</item>
+    </style>
+
+    <style name="RadioButtonPink" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/pinkAccent</item>
+        <item name="android:textColorSecondary">#a9a9a9</item>
+        <item name="colorControlNormal">#000000</item>
+    </style>
+
+    <style name="RadioButtonOrange" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/darkOrangeAccent</item>
+        <item name="android:textColorSecondary">#a9a9a9</item>
+        <item name="colorControlNormal">#000000</item>
+    </style>
+
+    <style name="RadioButtonRed" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/darkRed</item>
+        <item name="android:textColorSecondary">#a9a9a9</item>
+        <item name="colorControlNormal">#000000</item>
+    </style>
+
+    <style name="RadioButtonMaterialYou" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/systemAccentDark</item>
+        <item name="android:textColorSecondary">#a9a9a9</item>
+        <item name="colorControlNormal">#000000</item>
+    </style>
+
+    <style name="RadioButtonMaterialYouGoogle" parent="Theme.AppCompat.Light">
+        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
+        <item name="android:textColorSecondary">#a9a9a9</item>
+        <item name="colorControlNormal">#000000</item>
     </style>
 
 </resources>

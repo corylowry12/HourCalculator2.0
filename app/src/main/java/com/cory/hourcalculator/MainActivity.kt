@@ -28,6 +28,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.testing.FakeAppUpdateManager
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
@@ -40,8 +41,6 @@ import java.net.URL
 
 @DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var appUpdateManager: AppUpdateManager
 
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
@@ -81,48 +80,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private val listener = InstallStateUpdatedListener { installState ->
-        if (installState.installStatus() == InstallStatus.DOWNLOADED) {
-            val materialAlertDialogBuilder =
-                MaterialAlertDialogBuilder(this, R.style.AlertDialogStyle)
-            materialAlertDialogBuilder.setCancelable(false)
-            materialAlertDialogBuilder.setTitle("Update Downloaded")
-            materialAlertDialogBuilder.setMessage("App Update Downloaded, click restart to install")
-            materialAlertDialogBuilder.setPositiveButton("Restart") { _, _ ->
-                appUpdateManager.completeUpdate()
-                val intent =
-                    packageManager.getLaunchIntentForPackage(packageName)
-                intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }
-            materialAlertDialogBuilder.show()
-        }
-        else if (installState.installStatus() == InstallStatus.INSTALLED) {
-            unregister()
-        }
-    }
-
-    private fun unregister() {
-        appUpdateManager.unregisterListener(listener)
-    }
-
-    private fun checkUpdate() {
-        appUpdateManager = AppUpdateManagerFactory.create(this)
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateManager.registerListener(listener)
-        appUpdateInfoTask.addOnSuccessListener {
-            if (it.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && it.isUpdateTypeAllowed(
-                    AppUpdateType.IMMEDIATE
-                )
-            ) {
-                appUpdateManager.startUpdateFlowForResult(it, AppUpdateType.IMMEDIATE, this, 123)
-                appUpdateManager.completeUpdate()
-            }
-        }
     }
 
     @SuppressLint("CutPasteId")
@@ -193,7 +150,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setStatusBarColor()
-        checkUpdate()
 
         replaceFragment(homeFragment)
         val transaction = supportFragmentManager.beginTransaction()

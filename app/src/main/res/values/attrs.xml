@@ -29,4 +29,6 @@
 
     <attr name="SystemAccent" format="color" />
 
+    <attr name="radioButtonTheme" format="color" />
+
 </resources>
