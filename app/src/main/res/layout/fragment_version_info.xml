@@ -7,7 +7,7 @@
     android:background="?attr/backgroundColor"
     android:fitsSystemWindows="true"
     android:id="@+id/coordinatorLayoutVersionInfo"
-    tools:context=".fragments.AboutFragment">
+    tools:context=".fragments.VersionInfoFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

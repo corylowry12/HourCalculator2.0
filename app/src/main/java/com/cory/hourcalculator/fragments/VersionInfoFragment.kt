@@ -20,7 +20,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class AboutFragment : Fragment() {
+class VersionInfoFragment : Fragment() {
 
     var themeSelection = false
 

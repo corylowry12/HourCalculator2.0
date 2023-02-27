@@ -1,6 +1,5 @@
 package com.cory.hourcalculator.fragments
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
@@ -200,7 +199,7 @@ class AboutAppFragment : Fragment() {
         }
 
         versionInfo?.setOnClickListener {
-            openFragment(AboutFragment())
+            openFragment(VersionInfoFragment())
         }
 
         val githubLogoButton = activity?.findViewById<MaterialButton>(R.id.githubLogoButton)
