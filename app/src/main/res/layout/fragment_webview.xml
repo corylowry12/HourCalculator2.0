@@ -20,7 +20,8 @@
         app:navigationIconTint="?attr/textColor"
         app:title="@string/web_browser"
         app:titleCentered="true"
-        app:titleTextColor="?attr/textColor" />
+        app:titleTextColor="?attr/textColor"
+        app:buttonGravity="center_vertical"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
