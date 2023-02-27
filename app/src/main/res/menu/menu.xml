@@ -12,6 +12,11 @@
         android:title="@string/history" />
 
     <item
+        android:id="@+id/timeCards"
+        android:icon="@drawable/timecardselector"
+        android:title="Time Cards" />
+
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/settings_selector"
         android:title="@string/settings" />
