@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class AutomaticDeletionFragment : Fragment() {
+class HistorySettingsFragment : Fragment() {
 
     private var color: Int = 0
     var themeSelection = false
@@ -101,7 +101,7 @@ class AutomaticDeletionFragment : Fragment() {
                 }
             }
             }
-        return inflater.inflate(R.layout.fragment_automatic_deletion, container, false)
+        return inflater.inflate(R.layout.fragment_history_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

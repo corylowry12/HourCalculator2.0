@@ -157,7 +157,7 @@ class SettingsFragment : Fragment() {
 
         constraintHistorySettings?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 2
-            openFragment(AutomaticDeletionFragment())
+            openFragment(HistorySettingsFragment())
         }
 
         val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
