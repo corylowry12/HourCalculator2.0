@@ -53,16 +53,13 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/versionHeadingCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -103,16 +100,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/buildNumberCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -153,16 +148,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/dateUpdatedCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -203,16 +196,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/materialDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/materialConstraintLayout"
@@ -269,16 +260,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/googleAdsDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/googleAdsConstraint"
@@ -336,16 +325,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/firebaseAnalyticsDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firebaseAnalyticsConstraint"
@@ -402,16 +389,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/firebaseCrashlyticsDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firebaseCrashlyticsConstraint"
@@ -469,16 +454,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/firebasePerformanceMonitoringDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firebasePerfConstraint"
@@ -536,16 +519,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
+                android:id="@+id/inAppReviewDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/inAppReviewConstraint"
