@@ -266,22 +266,30 @@ class HomeFragment : Fragment() {
             }
 
             if (calculationType.loadCalculationState()) {
-                calculate()
+                calculate(0)
             } else {
                 calculateTime(0)
             }
         }
 
         calculateButton?.setOnLongClickListener {
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (imm.isAcceptingText) {
-                imm.hideSoftInputFromWindow(constraintLayout?.windowToken, 0)
-                breakTextBox?.clearFocus()
+            if (LongPressCalculateButtonEnabled(requireContext()).loadLongClick()) {
+                val imm =
+                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                if (imm.isAcceptingText) {
+                    imm.hideSoftInputFromWindow(constraintLayout?.windowToken, 0)
+                    breakTextBox?.clearFocus()
+                }
+                if (calculationType.loadCalculationState()) {
+                    calculateTime(1)
+                } else {
+                    calculate(1)
+                }
+                return@setOnLongClickListener true
             }
-
-            calculateTime(1)
-
-            return@setOnLongClickListener true
+            else {
+                return@setOnLongClickListener false
+            }
         }
 
         breakTextBox?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
@@ -477,7 +485,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun calculate() {
+    private fun calculate(method: Int) {
 
         val timePickerInTime = activity?.findViewById<TimePicker>(R.id.timePickerInTime)
         val timePickerOutTime = activity?.findViewById<TimePicker>(R.id.timePickerOutTime)
@@ -595,6 +603,9 @@ class HomeFragment : Fragment() {
                             minutesWithoutFirstDecimal,
                             totalHoursWithBreak.toString()
                         )
+                        if (method == 1) {
+                            Toast.makeText(requireContext(), getString(R.string.hour_calculated_in_decimal_format), Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             } else {
@@ -604,6 +615,9 @@ class HomeFragment : Fragment() {
                     hoursDifference,
                     minutesWithoutFirstDecimal
                 )
+                if (method == 1) {
+                    Toast.makeText(requireContext(), getString(R.string.hour_calculated_in_decimal_format), Toast.LENGTH_SHORT).show()
+                }
             }
 
             val daysWorked = DaysWorkedPerWeek(requireContext())

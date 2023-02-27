@@ -499,7 +499,7 @@ class EditHours : Fragment() {
             alert.setMessage(getString(R.string.you_have_pending_changes))
             alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                calculate(idMap, day)
+                calculate(idMap, day, 0)
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.hour_is_updated),
@@ -615,15 +615,25 @@ class EditHours : Fragment() {
         saveButton?.setOnClickListener {
 
             if (calculationType.loadCalculationState()) {
-                calculate(idMap, day)
+                calculate(idMap, day, 0)
             } else {
                 calculateTime(idMap, day, 0)
             }
         }
 
         saveButton?.setOnLongClickListener {
-            calculateTime(idMap, day, 1)
-            return@setOnLongClickListener true
+
+            if (LongPressCalculateButtonEnabled(requireContext()).loadLongClick()) {
+                if (calculationType.loadCalculationState()) {
+                    calculateTime(idMap, day, 1)
+                } else {
+                    calculate(idMap, day, 1)
+                }
+                return@setOnLongClickListener true
+            }
+            else {
+                return@setOnLongClickListener false
+            }
         }
     }
 
@@ -757,7 +767,7 @@ class EditHours : Fragment() {
         }
     }
 
-    private fun calculate(idMap: String, day: String) {
+    private fun calculate(idMap: String, day: String, method: Int) {
 
         var inTimeMinutesEdit = timePickerInTime.minute.toString()
         val inTimeHoursEdit = timePickerInTime.hour.toString()
@@ -844,6 +854,10 @@ class EditHours : Fragment() {
                     val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
                         .setScale(2, RoundingMode.HALF_EVEN).toString()
 
+                    if (method == 1) {
+                        Toast.makeText(requireContext(), requireContext().getString(R.string.hour_calculated_in_time_format), Toast.LENGTH_SHORT).show()
+                    }
+
                     savingHours(
                         idMap,
                         totalHoursWithBreak,
@@ -854,6 +868,10 @@ class EditHours : Fragment() {
                     )
                 }
             } else {
+                if (method == 1) {
+                    Toast.makeText(requireContext(), requireContext().getString(R.string.hour_calculated_in_time_format), Toast.LENGTH_SHORT).show()
+                }
+
                 savingHours(idMap, totalHours.toString(), inTimeTotal, outTimeTotal, "0", day)
             }
 
