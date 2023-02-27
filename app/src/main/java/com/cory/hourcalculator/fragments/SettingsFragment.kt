@@ -152,10 +152,10 @@ class SettingsFragment : Fragment() {
             openFragment(AppSettingsFragment())
         }
 
-        val automaticDeletionConstraint =
-            view?.findViewById<ConstraintLayout>(R.id.constraintAutomaticDeletion)
+        val constraintHistorySettings =
+            view?.findViewById<ConstraintLayout>(R.id.constraintHistorySettings)
 
-        automaticDeletionConstraint?.setOnClickListener {
+        constraintHistorySettings?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 2
             openFragment(AutomaticDeletionFragment())
         }
@@ -179,13 +179,6 @@ class SettingsFragment : Fragment() {
             )
         }
 
-        val updateConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintUpdate)
-
-        updateConstraint?.setOnClickListener {
-            (context as MainActivity).currentSettingsItem = 4
-            openFragment(UpdateFragment())
-        }
-
         val faqConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintFAQ)
 
         faqConstraint?.setOnClickListener {
@@ -193,9 +186,9 @@ class SettingsFragment : Fragment() {
             openFragment(FAQFragment())
         }
 
-        val versionInfoConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintVersionInfo)
+        val constraintAboutApp = view?.findViewById<ConstraintLayout>(R.id.constraintAboutApp)
 
-        versionInfoConstraint?.setOnClickListener {
+        constraintAboutApp?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 6
             openFragment(AboutAppFragment())
         }
