@@ -7,14 +7,14 @@ class DialogData(context: Context) {
 
     private var sharedPreferences: SharedPreferences = context.getSharedPreferences("file", Context.MODE_PRIVATE)
 
-    fun setDialogState(state: Boolean) {
+    fun setOnboardingComplete(state: Boolean) {
         val editor = sharedPreferences.edit()
-        editor.putBoolean("Dialog", state)
+        editor.putBoolean("Onboarding", state)
         editor.apply()
     }
 
-    fun loadDialogState(): Boolean {
-        val state = sharedPreferences.getBoolean("Dialog", false)
+    fun loadOnboardingComplete(): Boolean {
+        val state = sharedPreferences.getBoolean("Onboarding", false)
         return (state)
     }
 
