@@ -65,14 +65,13 @@ class AccentColor(context: Context) {
         return R.style.Theme_AMOLED
     }
 
-    fun followSystemThemeSplashScreen(context: Context): Int {
-
+   /* fun followSystemThemeSplashScreen(context: Context): Int {
         when (FollowSystemThemeChoice(context).loadFollowSystemThemePreference()) {
             0 -> return R.style.SplashBlackTheme
             1 -> return R.style.SplashDarkTheme
         }
         return R.style.SplashBlackTheme
-    }
+    }*/
 
     fun dateDialogTheme(context: Context): Int {
 
