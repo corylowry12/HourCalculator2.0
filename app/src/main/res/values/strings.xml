@@ -209,4 +209,5 @@
     <string name="toggle_history">Toggle History</string>
     <string name="material_you">Material You</string>
     <string name="hour_calculated_in_time_format">Hour calculated in time format</string>
+    <string name="hour_calculated_in_decimal_format">Hour calculated in decimal format</string>
 </resources>
