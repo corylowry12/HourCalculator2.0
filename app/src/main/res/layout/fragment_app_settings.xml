@@ -118,10 +118,43 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewHistoryClickable"
+                android:id="@+id/cardViewDisableLongPress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewCalculation"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                style="@style/Widget.Material3.CardView.Filled">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/toggleLongPressingCalculateSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Toggle Long Pressing Calculate Button"
+                        android:textSize="14sp"
+                        android:textColor="?attr/settingsTextColor"
+                        app:thumbIconTint="?attr/colorPrimary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewHistoryClickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewDisableLongPress"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"

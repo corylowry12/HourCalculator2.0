@@ -151,6 +151,7 @@ class AppSettingsFragment : Fragment() {
 
         val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
         val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
+        val longClickEnabledCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
         val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
         val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
         val historyCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
@@ -165,6 +166,13 @@ class AppSettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         calculationTypeCardView.shapeAppearanceModel = calculationTypeCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        longClickEnabledCardView.shapeAppearanceModel = longClickEnabledCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -240,27 +248,52 @@ class AppSettingsFragment : Fragment() {
         val calculationTypeSwitch = activity?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
 
         if (calculationData.loadCalculationState()) {
-            calculationTypeSwitch?.isChecked = true
-            calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        }
-        else {
             calculationTypeSwitch?.isChecked = false
             calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+        else {
+            calculationTypeSwitch?.isChecked = true
+            calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         }
 
         calculationTypeSwitch?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            calculationData.setCalculationState(!calculationTypeSwitch.isChecked)
             if (calculationTypeSwitch.isChecked) {
                 calculationTypeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                calculationData.setCalculationState(true)
                 Toast.makeText(requireContext(), getString(R.string.decimal_calculation_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
             else {
                 calculationTypeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                calculationData.setCalculationState(false)
                 Toast.makeText(requireContext(), getString(R.string.time_calculation_enabled), Toast.LENGTH_SHORT)
                     .show()
+            }
+        }
+
+        val longClickEnabled = LongPressCalculateButtonEnabled(requireContext())
+
+        val longClickEnabledSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
+
+        if (longClickEnabled.loadLongClick()) {
+            longClickEnabledSwitch.isChecked = true
+            longClickEnabledSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        }
+        else {
+            longClickEnabledSwitch.isChecked = false
+            longClickEnabledSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        longClickEnabledSwitch.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            longClickEnabled.setLongClick(longClickEnabledSwitch.isChecked)
+            if (longClickEnabledSwitch.isChecked) {
+                longClickEnabledSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                Toast.makeText(requireContext(), "Can now long click calculate button", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                longClickEnabledSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                Toast.makeText(requireContext(), "Can no longer long click calculate button", Toast.LENGTH_SHORT).show()
             }
         }
 
