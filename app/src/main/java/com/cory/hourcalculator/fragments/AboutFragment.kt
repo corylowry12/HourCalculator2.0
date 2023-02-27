@@ -92,7 +92,7 @@ class AboutFragment : Fragment() {
                 }
             }
         }
-        return inflater.inflate(R.layout.fragment_about, container, false)
+        return inflater.inflate(R.layout.fragment_version_info, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
