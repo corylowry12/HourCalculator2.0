@@ -14,7 +14,7 @@ class ClickableHistoryEntry(context: Context) {
     }
 
     fun loadHistoryItemClickable(): Boolean {
-        val state = sharedPreferences.getBoolean("clickable", true)
+        val state = sharedPreferences.getBoolean("clickable", false)
         return (state)
     }
 
