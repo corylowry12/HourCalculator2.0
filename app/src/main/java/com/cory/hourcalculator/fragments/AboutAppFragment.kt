@@ -114,37 +114,37 @@ class AboutAppFragment : Fragment() {
         val appIconCardView = view.findViewById<CardView>(R.id.appIconCardView)
         if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
             if (accentColor.loadAccent() == 0 || accentColor.loadAccent() == 4) {
-                autoIcon.setImageResource(R.mipmap.ic_launcher)
+                autoIcon.setImageResource(R.drawable.hourcalclogoteal)
                 appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
             }
             else if (accentColor.loadAccent() == 1) {
                 appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pinkAccent))
-                autoIcon.setImageResource(R.mipmap.ic_launcher_pink)
+                autoIcon.setImageResource(R.drawable.hourcalclogopink)
             }
             else if (accentColor.loadAccent() == 2) {
                 appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.orangeAccent))
-                autoIcon.setImageResource(R.mipmap.ic_launcher_orange)
+                autoIcon.setImageResource(R.drawable.hourcalclogoorange)
             }
             else if (accentColor.loadAccent() == 3) {
                 appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.redAccent))
-                autoIcon.setImageResource(R.mipmap.ic_launcher_red)
+                autoIcon.setImageResource(R.drawable.hourcalclogored)
             }
         }
         else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 1) {
-            autoIcon.setImageResource(R.mipmap.ic_launcher)
+            autoIcon.setImageResource(R.drawable.hourcalclogoteal)
             appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         }
         else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 2) {
             appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pinkIcon))
-            autoIcon.setImageResource(R.mipmap.ic_launcher_pink)
+            autoIcon.setImageResource(R.drawable.hourcalclogopink)
         }
         else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 3) {
             appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.orangeAccent))
-            autoIcon.setImageResource(R.mipmap.ic_launcher_orange)
+            autoIcon.setImageResource(R.drawable.hourcalclogoorange)
         }
         else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 4) {
             appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.redIcon))
-            autoIcon.setImageResource(R.mipmap.ic_launcher_red)
+            autoIcon.setImageResource(R.drawable.hourcalclogored)
         }
 
         val patchNotesTextView = activity?.findViewById<TextView>(R.id.patchNotes)
