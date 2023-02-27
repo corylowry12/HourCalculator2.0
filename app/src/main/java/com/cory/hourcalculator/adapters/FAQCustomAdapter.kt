@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.Vibrate
 
 class FAQCustomAdapter(val context: Context,
                        private val dataList:  ArrayList<HashMap<String, String>>
@@ -36,11 +37,9 @@ class FAQCustomAdapter(val context: Context,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val layout2 = holder.itemView.findViewById<RelativeLayout>(R.id.relativeLayoutFAQ)
-        val layoutTransition2 = layout2.layoutTransition
-        layoutTransition2.enableTransitionType(LayoutTransition.CHANGING)
 
         holder.itemView.setOnClickListener {
+            Vibrate().vibration(context)
             if (holder.itemView.findViewById<TextView>(R.id.tvBody).visibility == View.VISIBLE) {
                 holder.itemView.findViewById<TextView>(R.id.tvBody).visibility = View.GONE
                 holder.itemView.findViewById<ImageView>(R.id.updateChevronImage).setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
