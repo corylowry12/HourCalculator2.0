@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
     android:id="@+id/settingsCoordinatorLayout"
     tools:context=".fragments.SettingsFragment">
@@ -13,13 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:titleCollapseMode="scale"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -355,7 +356,8 @@
                 app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                android:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintUpdate"
@@ -416,236 +418,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="?attr/settingsIconTint"
                         tools:ignore="ContentDescription" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/reviewCardView"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView5">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLeaveAReview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/reviewImage"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:src="@drawable/ic_feedback_black_24dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/reviewHeading"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="5dp"
-                        android:text="@string/leave_a_review"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/leaveAReviewChevron"
-                        app:layout_constraintStart_toEndOf="@id/reviewImage"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="4dp"
-                        android:text="@string/leave_a_review_to_give_feedback_about_the_app"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/leaveAReviewChevron"
-                        app:layout_constraintStart_toEndOf="@id/reviewImage"
-                        app:layout_constraintTop_toBottomOf="@+id/reviewHeading" />
-
-                    <ImageView
-                        android:id="@+id/leaveAReviewChevron"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_baseline_chevron_right_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reviewCardView">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintReportABug"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/reportABug"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:src="@drawable/ic_bug_report_black_24dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/bugHeading"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="5dp"
-                        android:text="@string/report_a_bug"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/reportABugChevron"
-                        app:layout_constraintStart_toEndOf="@id/reportABug"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="4dp"
-                        android:text="@string/report_a_bug_that_you_are_facing"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/reportABugChevron"
-                        app:layout_constraintStart_toEndOf="@id/reportABug"
-                        app:layout_constraintTop_toBottomOf="@+id/bugHeading" />
-
-                    <ImageView
-                        android:id="@+id/reportABugChevron"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_baseline_chevron_right_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintViewGithub"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/githubImage"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:src="@drawable/ic_github_seeklogo_com"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/textViewGithubHeading"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="12dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="5dp"
-                        android:text="@string/view_github_repository"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/githubChevron"
-                        app:layout_constraintStart_toEndOf="@id/githubImage"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="4dp"
-                        android:text="@string/view_github_repository_to_stay_up_to_date"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/githubChevron"
-                        app:layout_constraintStart_toEndOf="@id/githubImage"
-                        app:layout_constraintTop_toBottomOf="@+id/textViewGithubHeading" />
-
-                    <ImageView
-                        android:id="@+id/githubChevron"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_baseline_chevron_right_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -744,7 +516,7 @@
                     android:foreground="?attr/selectableItemBackground">
 
                     <ImageView
-                        android:id="@+id/versionImage"
+                        android:id="@+id/aboutImage"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
@@ -756,36 +528,36 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:id="@+id/versionHeading"
+                        android:id="@+id/aboutHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="@string/version_info"
+                        android:text="About"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/versionChevronImage"
-                        app:layout_constraintStart_toEndOf="@id/versionImage"
+                        app:layout_constraintEnd_toStartOf="@id/aboutChevronImage"
+                        app:layout_constraintStart_toEndOf="@id/aboutImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/versionHeading"
-                        android:layout_alignStart="@id/versionHeading"
+                        android:layout_below="@id/aboutHeading"
+                        android:layout_alignStart="@id/aboutHeading"
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
-                        android:text="@string/view_information_about_this_build_of_the_app"
+                        android:text="View Information About The App"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/versionChevronImage"
-                        app:layout_constraintStart_toEndOf="@id/versionImage"
-                        app:layout_constraintTop_toBottomOf="@id/versionHeading" />
+                        app:layout_constraintEnd_toStartOf="@id/aboutChevronImage"
+                        app:layout_constraintStart_toEndOf="@id/aboutImage"
+                        app:layout_constraintTop_toBottomOf="@id/aboutHeading" />
 
                     <ImageView
-                        android:id="@+id/versionChevronImage"
+                        android:id="@+id/aboutChevronImage"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
