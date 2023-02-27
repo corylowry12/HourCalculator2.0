@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -34,6 +35,7 @@ class OnboardingActivity : AppCompatActivity() {
     val fragment4 = OnBoardingAccentFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_MyApplication)
         theme!!.applyStyle(R.style.teal_accent, true)

@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         val darkThemeData = DarkThemeData(this)
         when {
