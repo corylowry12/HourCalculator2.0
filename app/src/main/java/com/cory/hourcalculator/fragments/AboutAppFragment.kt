@@ -1,10 +1,11 @@
 package com.cory.hourcalculator.fragments
 
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
@@ -162,40 +164,7 @@ class AboutAppFragment : Fragment() {
         reportABug?.setOnClickListener {
             Vibrate().vibration(requireContext())
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-
-            val builder = CustomTabsIntent.Builder()
-
-            // to set the toolbar color use CustomTabColorSchemeParams
-            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
-
-            val params = CustomTabColorSchemeParams.Builder()
-            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-            builder.setDefaultColorSchemeParams(params.build())
-
-            // shows the title of web-page in toolbar
-            builder.setShowTitle(true)
-
-            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
-            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
-
-            // To modify the close button, use
-            // builder.setCloseButtonIcon(bitmap)
-
-            // to set weather instant apps is enabled for the custom tab or not, use
-            builder.setInstantAppsEnabled(true)
-
-            //  To use animations use -
-            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
-            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
-            val customBuilder = builder.build()
-
-            if (this.isPackageInstalled(package_name)) {
-                // if chrome is available use chrome custom tabs
-                customBuilder.intent.setPackage(package_name)
-                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
-            } else {
-                openFragment(WebviewFragment())
-            }
+            openCustomTab()
         }
 
         versionInfo?.setOnClickListener {
@@ -205,10 +174,31 @@ class AboutAppFragment : Fragment() {
         val githubLogoButton = activity?.findViewById<MaterialButton>(R.id.githubLogoButton)
         githubLogoButton?.setOnClickListener {
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/")
-            openFragment(WebviewFragment())
+            openCustomTab()
         }
     }
 
+    fun openCustomTab() {
+        val builder = CustomTabsIntent.Builder()
+        val params = CustomTabColorSchemeParams.Builder()
+        val typedValue = TypedValue()
+        (context as Activity).getTheme()
+            .resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
+        params.setToolbarColor(ContextCompat.getColor(requireContext(), typedValue.resourceId))
+        builder.setDefaultColorSchemeParams(params.build())
+        builder.setShowTitle(true)
+        builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+        builder.setInstantAppsEnabled(true)
+        val customBuilder = builder.build()
+
+        if (this.isPackageInstalled(package_name)) {
+            // if chrome is available use chrome custom tabs
+            customBuilder.intent.setPackage(package_name)
+            customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.there_was_an_error), Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun leaveAReview() {
         Vibrate().vibration(requireContext())
         val reviewManager = ReviewManagerFactory.create(requireContext())
