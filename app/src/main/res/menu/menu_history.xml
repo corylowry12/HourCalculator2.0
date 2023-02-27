@@ -4,6 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/options"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        app:iconTint="?attr/historyActionBarIconTint"
+        android:title="Options"
+        app:showAsAction="always"
+        android:visible="false" />
+
+    <item
         android:id="@+id/info"
         android:icon="@drawable/ic_baseline_info_24"
         app:iconTint="?attr/historyActionBarIconTint"
