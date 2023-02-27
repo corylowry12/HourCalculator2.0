@@ -17,14 +17,26 @@ class Vibrate {
                 val vibratorManager =
                     context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibrator = vibratorManager.defaultVibrator
-                vibrator.vibrate(
-                    VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+               vibrator.vibrate(
+                    VibrationEffect.createOneShot(35, VibrationEffect.DEFAULT_AMPLITUDE)
                 )
             } else {
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator.vibrate(2)
             }
 
+        }
+    }
+
+    fun vibrateOnError(context: Context) {
+
+        val vibrationData = VibrationData(context)
+
+        val vibrator: Vibrator
+        if (vibrationData.loadVibrationState()) {
+            val pattern = longArrayOf(0, 50, 15, 50)
+            vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(pattern, -1)
         }
     }
 
