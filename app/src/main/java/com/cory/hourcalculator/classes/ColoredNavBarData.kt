@@ -14,7 +14,7 @@ class ColoredNavBarData(context: Context) {
     }
 
     fun loadNavBar(): Boolean {
-        val state = sharedPreferences.getBoolean("ColoredNavBar", false)
+        val state = sharedPreferences.getBoolean("ColoredNavBar", true)
         return (state)
     }
 }
