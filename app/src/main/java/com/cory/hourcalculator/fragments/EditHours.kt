@@ -23,6 +23,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -141,14 +142,21 @@ class EditHours : Fragment() {
             when (it.itemId) {
                 R.id.delete -> {
                     Vibrate().vibration(requireContext())
-                    val alert = MaterialAlertDialogBuilder(
+                    val dialog = BottomSheetDialog(requireContext())
+                    val deleteAllLayout = layoutInflater.inflate(R.layout.delete_entry_bottom_sheet, null)
+                    dialog.setContentView(deleteAllLayout)
+                    dialog.setCancelable(true)
+                    val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
+                    val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+                    /*val alert = MaterialAlertDialogBuilder(
                         requireContext(),
                         AccentColor(requireContext()).alertTheme()
                     )
                     alert.setCancelable(false)
                     alert.setTitle(getString(R.string.delete))
                     alert.setMessage(getString(R.string.would_you_like_to_delete_history))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
+                    yesButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         val dbHandler = DBHelper(requireContext(), null)
                         dbHandler.deleteRow(idMap)
@@ -160,12 +168,15 @@ class EditHours : Fragment() {
                         activity?.supportFragmentManager?.popBackStack()
 
                         Snackbar().snackbar(requireContext(), requireView())
+                        dialog.dismiss()
                     }
-                    alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    //alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    noButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         dialog.dismiss()
                     }
-                    alert.show()
+                    //alert.show()
+                    dialog.show()
                     true
                 }
                 else -> false
@@ -471,7 +482,6 @@ class EditHours : Fragment() {
             (context as AppCompatActivity).supportFragmentManager.popBackStack()
         }
     }
-
     fun exit() {
         try {
             hideKeyboard(requireActivity().findViewById(R.id.breakTimeEdit))
@@ -603,17 +613,21 @@ class EditHours : Fragment() {
         val calculationType = CalculationType(requireContext())
 
         saveButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
 
             if (calculationType.loadCalculationState()) {
                 calculate(idMap, day)
             } else {
-                calculateTime(idMap, day)
+                calculateTime(idMap, day, 0)
             }
+        }
+
+        saveButton?.setOnLongClickListener {
+            calculateTime(idMap, day, 1)
+            return@setOnLongClickListener true
         }
     }
 
-    private fun calculateTime(idMap: String, day: String) {
+    private fun calculateTime(idMap: String, day: String, method: Int) {
 
         val inTimeTotal: String
         val outTimeTotal: String
@@ -644,6 +658,7 @@ class EditHours : Fragment() {
         }
 
         if (diffHours == 0 && diffMinutes.toInt() == 0) {
+            Vibrate().vibrateOnError(requireContext())
             infoTextView1.text = getString(R.string.in_time_and_out_time_can_not_be_the_same)
         } else {
             if (diffHours < 0) {
@@ -685,6 +700,7 @@ class EditHours : Fragment() {
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
                 if (!breakTimeNumeric(breakTime)) {
+                    Vibrate().vibrateOnError(requireContext())
                     infoTextView1.text = getString(R.string.error_with_break_time_must_be_numbers_only)
                 }
                 else {
@@ -697,10 +713,19 @@ class EditHours : Fragment() {
                     }
 
                     if (diffHours < 0) {
+                        Vibrate().vibrateOnError(requireContext())
                         infoTextView1.text = getString(R.string.the_entered_break_time_is_too_big)
                     } else {
                         if (withBreak.length == 1) {
                             withBreak = "0$withBreak"
+                        }
+
+                        if (method == 1) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.hour_calculated_in_time_format),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         savingHours(
@@ -713,6 +738,14 @@ class EditHours : Fragment() {
                     }
                 }
             } else {
+                if (method == 1) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.hour_calculated_in_time_format),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
                 savingHours(
                     idMap, "$diffHours:$diffMinutes",
                     inTimeTotal,
@@ -754,6 +787,7 @@ class EditHours : Fragment() {
         }
         var hoursDifference = outTimeHoursEdit.toInt() - inTimeHoursEdit.toInt()
         if ("$hoursDifference.$minutesWithoutFirstDecimal".toDouble() == 0.0) {
+            Vibrate().vibrateOnError(requireContext())
             infoTextView1.text = getString(R.string.in_time_and_out_time_can_not_be_the_same)
         }
         else {
@@ -802,6 +836,7 @@ class EditHours : Fragment() {
             val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
                 if (!breakTimeNumeric(breakTime)) {
+                    Vibrate().vibrateOnError(requireContext())
                     infoTextView1.text = getString(R.string.error_with_break_time_must_be_numbers_only)
                 }
                 else {
@@ -833,7 +868,7 @@ class EditHours : Fragment() {
         breakTime: String,
         dayOfWeek: String
     ) {
-
+        Vibrate().vibration(requireContext())
         val dbHandler = DBHelper(requireContext(), null)
 
         val calendar = Calendar.getInstance()
@@ -856,7 +891,7 @@ class EditHours : Fragment() {
         breakTime: String,
         dayOfWeek: String
     ) {
-
+        Vibrate().vibration(context)
         val dbHandler = DBHelper(context, null)
 
         val calendar = Calendar.getInstance()

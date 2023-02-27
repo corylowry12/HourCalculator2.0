@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
     tools:context=".fragments.AppSettingsFragment">
 
@@ -18,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:titleCollapseMode="scale"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -34,7 +36,8 @@
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
                 app:title="App Settings"
-                app:titleCentered="true" />
+                app:titleCentered="true"
+                app:buttonGravity="center_vertical"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,288 +53,212 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/setOutTimeTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/out_time_settings"
-                android:textColor="?attr/textColor" />
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewSetOutTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/setOutTimeTextView"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <RadioButton
-                        android:id="@+id/enableOutTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/set_out_time_to_previous_time"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/setOutTimeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Set out time to current time"
+                    android:textSize="14sp"
+                    android:textColor="?attr/settingsTextColor"
+                    app:thumbIconTint="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                    <RadioButton
-                        android:id="@+id/disableOutTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/set_out_time_to_current_time"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
-
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/calculationTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewSetOutTime"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/calculation_type"
-                android:textColor="?attr/textColor" />
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewCalculation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/calculationTextView"
+                android:layout_below="@id/cardViewSetOutTime"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <RadioButton
-                        android:theme="?attr/radioButtonTheme"
-                        android:id="@+id/enableCalculation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/decimal_format"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:textColor="?attr/settingsTextColor" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/setCalculationTypeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Calculate time in Time Format"
+                    android:textSize="14sp"
+                    android:textColor="?attr/settingsTextColor"
+                    app:thumbIconTint="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                    <RadioButton
-                        android:id="@+id/disableCalculation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/time_format"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
-
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
-
-
-            <TextView
-                android:id="@+id/vibrationTextView"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewHistoryClickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewCalculation"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/vibration_settings"
-                android:textColor="?attr/textColor" />
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                style="@style/Widget.Material3.CardView.Filled">
 
-            <androidx.cardview.widget.CardView
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/clickableHistorySwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Open hour for editing on history item click"
+                    android:textSize="14sp"
+                    android:textColor="?attr/settingsTextColor"
+                    app:thumbIconTint="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewVibration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/vibrationTextView"
+                android:layout_below="@id/cardViewHistoryClickable"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <RadioButton
-                        android:id="@+id/enableVibration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/enable_vibration"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/vibrationSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/toggle_vibration"
+                    android:textSize="14sp"
+                    android:textColor="?attr/settingsTextColor"
+                    app:thumbIconTint="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                    <RadioButton
-                        android:id="@+id/disableVibration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/disable_vibration"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
-
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/historyTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewVibration"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/history_settings"
-                android:textColor="?attr/textColor" />
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/historyTextView"
+                android:layout_below="@id/cardViewVibration"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <RadioButton
-                        android:id="@+id/enableHistory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/enable_history"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/historySwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/toggle_history"
+                    android:textSize="14sp"
+                    android:textColor="?attr/settingsTextColor"
+                    app:thumbIconTint="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                    <RadioButton
-                        android:id="@+id/disableHistory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/disable_history"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
-
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/breakTextBoxTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewHistory"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/break_text_box_visibility"
-                android:textColor="?attr/textColor" />
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewBreakTextBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/breakTextBoxTextView"
+                android:layout_below="@id/cardViewHistory"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <RadioButton
-                        android:id="@+id/showBreakTextBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/enable_break_text_box"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/breakTextBoxSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/toggle_break_text_box"
+                    android:textSize="14sp"
+                    android:textColor="?attr/settingsTextColor"
+                    app:thumbIconTint="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                    <RadioButton
-                        android:id="@+id/hideBreakTextBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/disable_break_text_box"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"
-                        android:textColor="?attr/settingsTextColor" />
-
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/wagesTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewBreakTextBox"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/wage_settings"
-                android:textColor="?attr/textColor" />
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewWages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/wagesTextView"
+                android:layout_below="@id/cardViewBreakTextBox"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -344,8 +271,8 @@
                     android:textColorHint="#939090"
                     app:boxCornerRadiusBottomEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="0dp"
+                    app:boxCornerRadiusTopStart="0dp"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -362,19 +289,7 @@
 
 
                 </com.google.android.material.textfield.TextInputLayout>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewWages"
-                android:gravity="center"
-                android:padding="10dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/these_settings_will_reflect_changes_throughout_the_app"
-                android:textColor="?attr/textColor"
-                android:textSize="12sp" />
+            </com.google.android.material.card.MaterialCardView>
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

@@ -3,19 +3,21 @@ package com.cory.hourcalculator.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -27,8 +29,11 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
@@ -37,11 +42,13 @@ import java.math.RoundingMode
 class HistoryFragment : Fragment() {
 
     private var output: String = ""
+    private var outputWages: String = ""
     private val dataList = ArrayList<HashMap<String, String>>()
 
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private var containsColon = false
+    var calculateTimeColon = false
 
     var themeSelection = false
 
@@ -181,18 +188,73 @@ class HistoryFragment : Fragment() {
         }
 
         val sortData = SortData(requireContext())
+        val dialog = BottomSheetDialog(requireContext())
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
 
         topAppBar?.setOnMenuItemClickListener { menuItem ->
             val dbHandler = DBHelper(requireContext(), null)
             when (menuItem.itemId) {
+                R.id.options -> {
+                    Vibrate().vibration(requireContext())
+                    val dialog = BottomSheetDialog(requireContext())
+                    val historyOptions =
+                        layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
+                    dialog.window?.navigationBarColor =
+                        ContextCompat.getColor(requireContext(), R.color.black)
+                    dialog.setContentView(historyOptions)
+                    val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
+                    val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
+
+                    val exportCardView = historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
+                    val deleteSelectedCardView = historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
+                    exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                    deleteSelectedCardView.shapeAppearanceModel = deleteSelectedCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+
+                    exportSelected.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        Toast.makeText(requireContext(), "Cant do this right now", Toast.LENGTH_SHORT).show()
+                    }
+
+                    deleteSelected.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        customAdapter.checkBoxVisible = false
+                        try {
+                            topAppBar.navigationIcon = null
+                            customAdapter.snackbarDeleteSelected.dismiss()
+                            customAdapter.snackbarDismissCheckBox.dismiss()
+                            customAdapter.deleteSelected()
+                            dialog.dismiss()
+                        } catch (e: UninitializedPropertyAccessException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    if (customAdapter.getSelectedCount() > 0) {
+                        dialog.show()
+                    }
+                    else {
+                        Toast.makeText(requireContext(), "There is nothing selected", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
                 R.id.info -> {
                     Vibrate().vibration(requireContext())
                     val wagesData = WagesData(requireContext())
 
                     if (dbHandler.getCount() > 0) {
-                        val alert = MaterialAlertDialogBuilder(
+                        /*val alert = MaterialAlertDialogBuilder(
                             requireActivity(),
                             AccentColor(requireContext()).alertTheme()
                         )
@@ -233,7 +295,86 @@ class HistoryFragment : Fragment() {
                         alert.setPositiveButton(getString(R.string.ok)) { _, _ ->
                             Vibrate().vibration(requireContext())
                         }
-                        alert.show()
+                        alert.show()*/
+                        val infoLayout =
+                            layoutInflater.inflate(R.layout.info_bottom_sheet, null)
+                        dialog.setContentView(infoLayout)
+                        dialog.setCancelable(true)
+                        dialog?.window?.navigationBarColor =
+                            ContextCompat.getColor(requireContext(), R.color.black)
+
+                        val totalHours = infoLayout.findViewById<TextView>(R.id.bodyTextView)
+                        val numberOfEntries = infoLayout.findViewById<TextView>(R.id.body1TextView)
+                        val wagesTextView = infoLayout.findViewById<TextView>(R.id.body2TextView)
+                        val okButton = infoLayout.findViewById<Button>(R.id.okButton)
+
+                        val totalHoursCardView = infoLayout.findViewById<MaterialCardView>(R.id.totalHoursCardView)
+                        val totalNumberOfEntriesCardView = infoLayout.findViewById<MaterialCardView>(R.id.totalNumberOfEntriesCardView)
+                        val wagesCardView = infoLayout.findViewById<MaterialCardView>(R.id.wagesCardView)
+
+                        totalHoursCardView.shapeAppearanceModel = totalHoursCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
+                            .build()
+                        totalNumberOfEntriesCardView.shapeAppearanceModel = totalNumberOfEntriesCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
+                            .build()
+                        wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(28f)
+                            .setBottomLeftCornerSize(28f)
+                            .build()
+
+                        if (wagesData.loadWageAmount() != "") {
+                            try {
+                                val wages =
+                                    outputWages.toDouble() * wagesData.loadWageAmount().toString()
+                                        .toDouble()
+                                val wagesRounded = String.format("%.2f", wages)
+                                totalHours.text = "Total Hours: $output"
+                                numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                                wagesTextView.text = "Wages: $$wagesRounded"
+                            } catch (e: NumberFormatException) {
+                                e.printStackTrace()
+                                totalHours.text = "Total Hours: $output"
+                                numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                                wagesTextView.text = "Wages: Error"
+                            }
+                        } else {
+                            totalHours.text = "Total Hours: $output"
+                            numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                            wagesCardView.visibility = View.GONE
+                            totalNumberOfEntriesCardView.shapeAppearanceModel = totalNumberOfEntriesCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(28f)
+                                .setBottomLeftCornerSize(28f)
+                                .build()
+                        }
+                        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+                        okButton.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            dialog.dismiss()
+                        }
+                        dialog.show()
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -269,7 +410,7 @@ class HistoryFragment : Fragment() {
                             }
                         }
 
-                        val listItems: Array<String> = if (containsColon) {
+                        /* val listItems: Array<String> = if (containsColon) {
                             if ((sortData.loadSortState() == getString(R.string.total_desc) || sortData.loadSortState() == getString(
                                     R.string.total_asc
                                 )) && containsColon
@@ -400,6 +541,189 @@ class HistoryFragment : Fragment() {
                             dialog.dismiss()
                         }
                         alert.show()
+                    }*/
+                        val sortingLayout =
+                            layoutInflater.inflate(R.layout.sorting_bottom_sheet, null)
+                        dialog.setContentView(sortingLayout)
+                        dialog.setCancelable(true)
+
+                        val dateDescendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.dateDescendingCardView)
+                        val dateAscendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.dateAscendingCardView)
+                        val totalDescendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.totalDescendingCardView)
+                        val totalAscendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.totalAscendingCardView)
+
+                            totalAscendingCardView.visibility = View.VISIBLE
+                            totalDescendingCardView.visibility = View.VISIBLE
+                            dateDescendingCardView.shapeAppearanceModel =
+                                dateDescendingCardView.shapeAppearanceModel
+                                    .toBuilder()
+                                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                    .setBottomRightCornerSize(0f)
+                                    .setBottomLeftCornerSize(0f)
+                                    .build()
+                            dateAscendingCardView.shapeAppearanceModel =
+                                dateAscendingCardView.shapeAppearanceModel
+                                    .toBuilder()
+                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                    .setBottomRightCornerSize(0f)
+                                    .setBottomLeftCornerSize(0f)
+                                    .build()
+                            totalDescendingCardView.shapeAppearanceModel =
+                                totalDescendingCardView.shapeAppearanceModel
+                                    .toBuilder()
+                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                    .setBottomRightCornerSize(0f)
+                                    .setBottomLeftCornerSize(0f)
+                                    .build()
+                            totalAscendingCardView.shapeAppearanceModel =
+                                totalAscendingCardView.shapeAppearanceModel
+                                    .toBuilder()
+                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                    .setBottomRightCornerSize(28f)
+                                    .setBottomLeftCornerSize(28f)
+                                    .build()
+
+                        dialog.window?.navigationBarColor =
+                            ContextCompat.getColor(requireContext(), R.color.black)
+                        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+
+                        val dateDescending = sortingLayout.findViewById<RadioButton>(R.id.dateDescending)
+                        val dateAscending = sortingLayout.findViewById<RadioButton>(R.id.dateAscending)
+                        val totalDescending = sortingLayout.findViewById<RadioButton>(R.id.totalDescending)
+                        val totalAscending = sortingLayout.findViewById<RadioButton>(R.id.totalAscending)
+
+                        if (selectedItem == 0) {
+                            dateDescending.isChecked = true
+                        }
+                        else if (selectedItem == 1) {
+                            dateAscending.isChecked = true
+                        }
+                        else if (selectedItem == 2) {
+                            totalDescending.isChecked = true
+                        }
+                        else if (selectedItem == 3) {
+                            totalAscending.isChecked = true
+                        }
+
+                        val collapsingToolbarLayout =
+                            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+
+                        dateDescending.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            dialog.dismiss()
+                            listView?.scrollToPosition(0)
+                            collapsingToolbarLayout.setExpanded(true, true)
+                            sortData.setSortState(getString(R.string.day_desc))
+                            changeSortMethod()
+                            customAdapter.checkBoxVisible = false
+                            try {
+                                topAppBar.navigationIcon = null
+                                customAdapter.snackbarDeleteSelected.dismiss()
+                                customAdapter.snackbarDismissCheckBox.dismiss()
+                            } catch (e: UninitializedPropertyAccessException) {
+                                e.printStackTrace()
+                            }
+                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                                0,
+                                dataList.size
+                            )
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.changed_sort_mode_last_entered),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        dateAscending.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            dialog.dismiss()
+                            listView?.scrollToPosition(0)
+                            collapsingToolbarLayout.setExpanded(true, true)
+                            sortData.setSortState(getString(R.string.day_asc))
+                            changeSortMethod()
+                            customAdapter.checkBoxVisible = false
+                            try {
+                                topAppBar.navigationIcon = null
+                                customAdapter.snackbarDeleteSelected.dismiss()
+                                customAdapter.snackbarDismissCheckBox.dismiss()
+                            } catch (e: UninitializedPropertyAccessException) {
+                                e.printStackTrace()
+                            }
+                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                                0,
+                                dataList.size
+                            )
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.changed_sort_mode_first_entered),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        totalDescending.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            dialog.dismiss()
+                            listView?.scrollToPosition(0)
+                            collapsingToolbarLayout.setExpanded(true, true)
+                            sortData.setSortState(getString(R.string.total_desc))
+                            changeSortMethod()
+                            customAdapter.checkBoxVisible = false
+                            try {
+                                topAppBar.navigationIcon = null
+                                customAdapter.snackbarDeleteSelected.dismiss()
+                                customAdapter.snackbarDismissCheckBox.dismiss()
+                            } catch (e: UninitializedPropertyAccessException) {
+                                e.printStackTrace()
+                            }
+                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                                0,
+                                dataList.size
+                            )
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.changed_sort_mode_most_entered),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        totalAscending.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            dialog.dismiss()
+                            listView?.scrollToPosition(0)
+                            collapsingToolbarLayout.setExpanded(true, true)
+                            sortData.setSortState(getString(R.string.total_asc))
+                            changeSortMethod()
+                            customAdapter.checkBoxVisible = false
+                            try {
+                                topAppBar.navigationIcon = null
+                                customAdapter.snackbarDeleteSelected.dismiss()
+                                customAdapter.snackbarDismissCheckBox.dismiss()
+                            } catch (e: UninitializedPropertyAccessException) {
+                                e.printStackTrace()
+                            }
+                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                                0,
+                                dataList.size
+                            )
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.changed_sort_mode_least_entered),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        dialog.show()
                     }
                     true
                 }
@@ -435,39 +759,7 @@ class HistoryFragment : Fragment() {
         })
 
         floatingActionButtonHistory?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            val savedState = listView?.layoutManager?.onSaveInstanceState()
-            listView?.scrollToPosition(0)
-            val collapsingToolbarLayout =
-                requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-            collapsingToolbarLayout.setExpanded(true, true)
-            val snackbar =
-                Snackbar.make(view, getString(R.string.restore_position), Snackbar.LENGTH_LONG)
-                    .setDuration(5000)
-
-            snackbar.setAction(getString(R.string.restore)) {
-                Vibrate().vibration(requireContext())
-
-                listView?.layoutManager?.onRestoreInstanceState(savedState)
-                collapsingToolbarLayout.setExpanded(false, false)
-
-            }
-            snackbar.setActionTextColor(
-                ContextCompat.getColorStateList(
-                    requireContext(),
-                    AccentColor(requireContext()).snackbarActionTextColor()
-                )
-            )
-            snackbar.apply {
-                snackbar.view.background = ResourcesCompat.getDrawable(
-                    context.resources,
-                    R.drawable.snackbar_corners,
-                    context.theme
-                )
-            }
-            if (!customAdapter.isCheckBoxVisible()) {
-                snackbar.show()
-            }
+            scrollToTop()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -499,6 +791,8 @@ class HistoryFragment : Fragment() {
         val cursor = dbHandler.getAllRow(requireContext())
         cursor!!.moveToFirst()
 
+        val containsColonArray = arrayListOf<String>()
+
         while (!cursor.isAfterLast) {
             val map = HashMap<String, String>()
             map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
@@ -510,6 +804,7 @@ class HistoryFragment : Fragment() {
             dataList.add(map)
 
             val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
+            containsColonArray.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString())
 
             var decimalTime: Double
             if (array.contains(":")) {
@@ -535,9 +830,31 @@ class HistoryFragment : Fragment() {
                 y += array.toDouble()
             }
 
+
+
             output = String.format("%.2f", y)
+            outputWages = output
             cursor.moveToNext()
 
+        }
+
+        for (i in 0 until dataList.count()) {
+            if (containsColonArray.elementAt(i).contains(":")) {
+                calculateTimeColon = true
+            }
+            else {
+                calculateTimeColon = false
+                break
+            }
+        }
+
+        if (calculateTimeColon) {
+            val (wholeNumber, decimal) = output.split(".")
+            var minute = (".$decimal".toDouble() * 60).toInt().toString()
+            if (minute.length == 1) {
+                minute = "0$minute"
+            }
+            output = "$wholeNumber" + ":$minute"
         }
 
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
@@ -682,7 +999,6 @@ class HistoryFragment : Fragment() {
 
         calculateWages()
     }
-
     fun deleteAll() {
         val animation = AlphaAnimation(1f, 0f)
         animation.duration = 500
@@ -712,22 +1028,72 @@ class HistoryFragment : Fragment() {
                 R.drawable.ic_baseline_close_24,
                 requireContext().theme
             )
+            showOptionsIcon()
         } else {
             topAppBar?.navigationIcon = null
+            hideOptionsIcon()
         }
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             customAdapter.checkboxVisible()
             topAppBar.navigationIcon = null
+            hideOptionsIcon()
         }
     }
 
     fun hideNavigationIcon() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
         topAppBar?.navigationIcon = null
+        hideOptionsIcon()
     }
 
+    fun showOptionsIcon() {
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
+        topAppBar?.menu?.findItem(R.id.options)?.isVisible = true
+    }
+
+    fun hideOptionsIcon() {
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
+        topAppBar?.menu?.findItem(R.id.options)?.isVisible = false
+    }
+
+    fun scrollToTop() {
+        val listView = view?.findViewById<RecyclerView>(R.id.listView)
+        Vibrate().vibration(requireContext())
+        val savedState = listView?.layoutManager?.onSaveInstanceState()
+        listView?.scrollToPosition(0)
+        val collapsingToolbarLayout =
+            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+        collapsingToolbarLayout.setExpanded(true, true)
+        val snackbar =
+            Snackbar.make(requireView(), getString(R.string.restore_position), Snackbar.LENGTH_LONG)
+                .setDuration(5000)
+
+        snackbar.setAction(getString(R.string.restore)) {
+            Vibrate().vibration(requireContext())
+
+            listView?.layoutManager?.onRestoreInstanceState(savedState)
+            collapsingToolbarLayout.setExpanded(false, false)
+
+        }
+        snackbar.setActionTextColor(
+            ContextCompat.getColorStateList(
+                requireContext(),
+                AccentColor(requireContext()).snackbarActionTextColor()
+            )
+        )
+        snackbar.apply {
+            snackbar.view.background = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.snackbar_corners,
+                context.theme
+            )
+        }
+        if (!customAdapter.isCheckBoxVisible()) {
+            snackbar.show()
+        }
+    }
     fun undoDeleteAll() {
         val animation = AlphaAnimation(0f, 1f)
         animation.duration = 500

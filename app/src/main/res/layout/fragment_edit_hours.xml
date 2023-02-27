@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
     tools:context=".fragments.EditHours">
 
@@ -22,7 +23,8 @@
         app:title="@string/edit_entry"
         app:titleCentered="true"
         app:titleTextColor="?attr/textColor"
-        app:navigationIconTint="?attr/textColor"/>
+        app:navigationIconTint="?attr/textColor"
+        app:buttonGravity="center_vertical"/>
 
     <TimePicker
         android:id="@+id/timePickerInTimeEdit"

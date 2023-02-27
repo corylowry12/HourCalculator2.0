@@ -6,13 +6,11 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Gravity
-import android.widget.FrameLayout
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -20,24 +18,14 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.*
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.appupdate.testing.FakeAppUpdateManager
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.net.URL
+
 
 @DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -46,6 +34,10 @@ class MainActivity : AppCompatActivity() {
     private val historyFragment = HistoryFragment()
     private val settingsFragment = SettingsFragment()
     private val editHours = EditHours()
+    private val timeCards = TimeCardsFragment()
+
+    var currentTab = 0
+    var currentSettingsItem = -1
 
     private val dbHandler = DBHelper(this, null)
 
@@ -56,25 +48,26 @@ class MainActivity : AppCompatActivity() {
         val followSystemVersion = FollowSystemVersion(this)
         when {
             accentColor.loadAccent() == 0 -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.darkTeal)
+                window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
             }
             accentColor.loadAccent() == 1 -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.darkPink)
+                window.statusBarColor = ContextCompat.getColor(this, R.color.pinkAccent)
             }
             accentColor.loadAccent() == 2 -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.darkOrangeAccent)
+                window.statusBarColor = ContextCompat.getColor(this, R.color.orangeAccent)
             }
             accentColor.loadAccent() == 3 -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.darkRed)
+                window.statusBarColor = ContextCompat.getColor(this, R.color.redAccent)
             }
             accentColor.loadAccent() == 4 -> {
                 if (!followSystemVersion.loadSystemColor()) {
-                    window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentDark)
+                    window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccent)
                 } else {
                     if (themeSelection) {
                         window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentGoogleDark)
                     } else {
                         window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentGoogleDark_light)
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     }
                 }
             }
@@ -149,19 +142,28 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
-        setStatusBarColor()
+        //setStatusBarColor()
 
-        replaceFragment(homeFragment)
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, HistoryFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, SettingsFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, AppearanceFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, EditHours()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, AppSettingsFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, AutomaticDeletionFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, PatchNotesFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, AboutFragment()).addToBackStack(null)
-        transaction.replace(R.id.fragment_container, FAQFragment()).addToBackStack(null)
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    }
+                }
+            }
+        }
+
+        //val intent = Intent(this, OnboardingActivity::class.java)
+        //startActivity(intent)
+
+        replaceFragment(homeFragment, 0)
         
         val context = this
         GlobalScope.launch(Dispatchers.Main) {
@@ -183,18 +185,90 @@ class MainActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener {
             Vibrate().vibration(this)
             when (it.itemId) {
-                R.id.ic_home -> replaceFragment(homeFragment)
-                R.id.history -> {
+                R.id.ic_home -> {
                     val currentFragment = supportFragmentManager.fragments.last()
-
                     if (currentFragment.toString().startsWith("EditHours", true)) {
-                        editHours.historyTabClicked(this)
+                        bottomNav.menu.findItem(R.id.ic_home).isChecked = false
+                        bottomNav.menu.findItem(R.id.history).isChecked = true
+                        Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
+                        return@setOnItemSelectedListener false
                     }
                     else {
-                        replaceFragment(historyFragment)
+                        replaceFragment(homeFragment, 0)
+                        currentTab = 0
+                        return@setOnItemSelectedListener true
                     }
                 }
-                R.id.settings -> replaceFragment(settingsFragment)
+                R.id.history -> {
+                    try {
+                        val currentFragment = supportFragmentManager.fragments.last()
+
+                        if (currentFragment.toString().startsWith("EditHours", true)) {
+                            editHours.historyTabClicked(this)
+                        } else if (currentFragment.toString().startsWith("History", true)) {
+                            historyFragment.scrollToTop()
+                        }
+                        else {
+                            replaceFragment(historyFragment, 1)
+                            currentTab = 1
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                R.id.timeCards -> {
+                    val currentFragment = supportFragmentManager.fragments.last()
+                    if (currentFragment.toString().startsWith("EditHours", true)) {
+                        bottomNav.menu.findItem(R.id.timeCards).isChecked = false
+                        bottomNav.menu.findItem(R.id.history).isChecked = true
+                        Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
+                        return@setOnItemSelectedListener false
+                    }
+                    else {
+                        replaceFragment(timeCards, 2)
+                        currentTab = 2
+                        return@setOnItemSelectedListener true
+                    }
+                }
+                R.id.settings -> {
+                    /*val currentFragment = supportFragmentManager.fragments.last()
+                    if (currentSettingsItem == 0 && !currentFragment.toString().startsWith("Appearance", true)) {
+                        replaceFragment(AppearanceFragment(), 3)
+                    }
+                    else if (currentSettingsItem == 1 && !currentFragment.toString().startsWith("AppSetting", true)) {
+                        replaceFragment(AppSettingsFragment(), 3)
+                    }
+                    else if (currentSettingsItem == 2 && !currentFragment.toString().startsWith("Automatic", true)) {
+                        replaceFragment(AutomaticDeletionFragment(), 3)
+                    }
+                    else if (currentSettingsItem == 3 && !currentFragment.toString().startsWith("Patch", true)) {
+                        replaceFragment(PatchNotesFragment(), 3)
+                    }
+                    else if (currentSettingsItem == 4 && !currentFragment.toString().startsWith("Update", true)) {
+                        replaceFragment(UpdateFragment(), 3)
+                    }
+                    else if (currentSettingsItem == 5 && !currentFragment.toString().startsWith("FAQ", true)) {
+                        replaceFragment(FAQFragment(), 3)
+                    }
+                    else if (currentSettingsItem == 6 && !currentFragment.toString().startsWith("About", true)) {
+                        replaceFragment(AboutAppFragment(), 3)
+                    }
+                    else {*/
+                        //replaceFragment(settingsFragment, 3)
+                    //}
+                    val currentFragment = supportFragmentManager.fragments.last()
+                    if (currentFragment.toString().startsWith("EditHours", true)) {
+                        bottomNav.menu.findItem(R.id.ic_home).isChecked = false
+                        bottomNav.menu.findItem(R.id.history).isChecked = true
+                        Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
+                        return@setOnItemSelectedListener false
+                    }
+                    else {
+                        replaceFragment(settingsFragment, 3)
+                        currentTab = 3
+                        return@setOnItemSelectedListener true
+                    }
+                }
             }
 
             true
@@ -237,12 +311,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, goingToTab: Int) {
 
         val transaction = supportFragmentManager.beginTransaction()
         val bottomNav = this.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
-        if (homeFragment.isVisible) {
+        /*if (homeFragment.isVisible) {
             transaction.setCustomAnimations(
                 R.anim.enter_from_right,
                 R.anim.exit_to_left,
@@ -294,7 +368,24 @@ class MainActivity : AppCompatActivity() {
                 R.anim.exit_to_left
             )
         }
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)*/
+
+        if (currentTab < goingToTab) {
+            transaction.setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+        }
+        else {
+            transaction.setCustomAnimations(
+                R.anim.enter_from_left,
+                R.anim.exit_to_right,
+                R.anim.enter_from_right,
+                R.anim.exit_to_left
+            )
+        }
 
         transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
         transaction.commit()
@@ -387,6 +478,9 @@ class MainActivity : AppCompatActivity() {
         val badge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
 
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
         val darkThemeData = DarkThemeData(this)
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
@@ -445,6 +539,47 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                    }
+                }
+            }
+        }
+
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                if (window.decorView.systemUiVisibility == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) {
+                    var flags: Int = this.getWindow().getDecorView()
+                        .getSystemUiVisibility() // get current flag
+
+                    flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    this.getWindow().getDecorView().setSystemUiVisibility(flags);
+                }
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        if (window.decorView.systemUiVisibility == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) {
+                            var flags: Int = this.getWindow().getDecorView()
+                                .getSystemUiVisibility() // get current flag
+
+                            flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                            this.getWindow().getDecorView().setSystemUiVisibility(flags);
+                        }
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        if (window.decorView.systemUiVisibility == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) {
+                            var flags: Int = this.getWindow().getDecorView()
+                                .getSystemUiVisibility() // get current flag
+
+                            flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                            this.getWindow().getDecorView().setSystemUiVisibility(flags);
+                        }
                     }
                 }
             }

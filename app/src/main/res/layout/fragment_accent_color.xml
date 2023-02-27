@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="?attr/backgroundColor"
+    tools:context=".fragments.BackgroundColorFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutAccentColorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="?attr/backgroundColor"
+        android:foreground="?attr/selectableItemBackground"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarAccentColorFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:statusBarScrim="?attr/colorPrimary"
+            app:expandedTitleMarginBottom="28dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleCollapseMode="scale">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolBarAccentColorFragment"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:menu="@menu/main_menu_reset"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:navigationIconTint="?attr/textColor"
+                app:buttonGravity="center_vertical"
+                app:title="@string/accent_color" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollViewAccentColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:overScrollMode="always"
+        android:paddingBottom="25dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tealCardViewAccentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/tealConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/tealAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/teal"
+                        android:textColor="?attr/settingsTextColor"
+                        android:theme="?attr/radioButtonTheme"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/circleimageviewteal"
+                        android:contentDescription="Teal Image View"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/pinkCardViewAccentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_below="@id/tealCardViewAccentColor"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/pinkConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/pinkAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/pink"
+                        android:textColor="?attr/settingsTextColor"
+                        android:theme="?attr/radioButtonTheme"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/circleimageviewpink"
+                        android:contentDescription="black image view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/orangeCardViewAccentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_below="@id/pinkCardViewAccentColor"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/orangeConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/orangeAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/orange"
+                        android:textColor="?attr/settingsTextColor"
+                        android:theme="?attr/radioButtonTheme" />
+
+                    <ImageView
+                        android:id="@+id/orangeImageView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/circleimagevieworange"
+                        android:contentDescription="follow system image view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/redCardViewAccentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_below="@id/orangeCardViewAccentColor"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/redConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/redAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/red"
+                        android:textColor="?attr/settingsTextColor"
+                        android:theme="?attr/radioButtonTheme" />
+
+                    <ImageView
+                        android:id="@+id/redImageView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/circleimageviewred"
+                        android:contentDescription="follow system image view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialYouCardViewAccentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_below="@id/redCardViewAccentColor"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/materialYouConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/materialYouAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/material_you"
+                        android:textColor="?attr/settingsTextColor"
+                        android:theme="?attr/radioButtonTheme" />
+
+                    <ImageView
+                        android:id="@+id/materialYouImageView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/circleimageviewsystemaccent"
+                        android:contentDescription="follow system image view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/followGoogleAppsCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/materialYouCardViewAccentColor"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_marginTop="1dp"
+                style="@style/Widget.Material3.CardView.Filled">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/followGoogleAppsConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/followGoogleAppsSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        app:thumbIconTint="?attr/colorPrimary"
+                        android:text="Toggle Different Material You Theming" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -297,7 +297,7 @@ class FAQFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
 
-                val strResponse = response.body()!!.string()
+                val strResponse = response.body!!.string()
 
                 val jsonContact = JSONObject(strResponse)
                 //creating json array

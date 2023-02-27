@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
     tools:context=".fragments.AppearanceFragment">
 
@@ -16,12 +17,14 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarAppearance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
-            app:titleCollapseMode="scale"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolBarAppearance"
@@ -35,7 +38,7 @@
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
                 app:title="@string/appearance_settings"
-                app:titleCentered="true" />
+                app:buttonGravity="center_vertical" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -56,29 +59,38 @@
                 android:id="@+id/themeSettingsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="start"
+                android:textStyle="bold"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="@string/background_theme"
+                android:text="Theme Settings"
                 android:textColor="?attr/textColor"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/themeCardView"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/themeCardViewAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/themeSettingsTextView"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_below="@id/themeSettingsTextView"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/backgroundThemeConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp">
+
+                <!--<RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -91,10 +103,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/light_theme"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,11 +125,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="@string/dark_theme"
                             android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
+                            android:text="@string/dark_theme"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
+                            android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toBottomOf="@id/lightTheme" />
 
                         <ImageView
@@ -137,10 +147,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/black_theme"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toBottomOf="@id/darkTheme" />
 
@@ -160,10 +169,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/follow_system"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toBottomOf="@id/blackTheme" />
 
@@ -180,35 +188,59 @@
                             tools:ignore="HardcodedText" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </RadioGroup>
+                </RadioGroup> -->
 
-            </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/currentSelectedTheme"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/followsystemcircleimageview"
+                    android:contentDescription="follow system image view"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/currentSelectedTheme"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        android:text="Background Color"
+                        android:layout_marginStart="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/followSystemThemeChoiceTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/themeCardView"
+                android:layout_below="@id/themeCardViewAppearance"
                 android:gravity="center"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
                 android:text="@string/follow_system_theme_background_color"
                 android:textColor="?attr/textColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/followSystemChoiceCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/followSystemThemeChoiceTextView"
+                android:layout_below="@id/themeCardViewAppearance"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <!--<RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -221,10 +253,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/black_theme"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -244,10 +275,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/dark_theme"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toBottomOf="@id/amoledSystemTheme" />
 
@@ -257,192 +287,59 @@
                             android:layout_marginEnd="16dp"
                             android:background="@drawable/graycircleimageview"
                             android:contentDescription="Pink image view"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/amoledSystemTheme"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             tools:ignore="HardcodedText" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </RadioGroup>
+                </RadioGroup> -->
 
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/accentSettingsTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/followSystemChoiceCardView"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/accent_color"
-                android:textColor="?attr/textColor"
-                android:textSize="14sp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/accentCardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/accentSettingsTextView"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
-
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/accentColorConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="20dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/currentSelectedAccentColorImageView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/currentaccentcolorimage"
+                        android:contentDescription="follow system image view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
 
-                        <RadioButton
-                            android:id="@+id/Teal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/teal"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/currentSelectedAccentColorImageView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        android:text="Accent Color"
+                        android:layout_marginStart="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/circleimageviewteal"
-                            android:contentDescription="Teal Image View"
-                            app:layout_constraintBottom_toTopOf="@id/Pink"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="HardcodedText" />
+            </com.google.android.material.card.MaterialCardView>
 
-                        <RadioButton
-                            android:id="@+id/Pink"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/pink"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/Teal" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/circleimageviewpink"
-                            android:contentDescription="Pink image view"
-                            app:layout_constraintBottom_toTopOf="@id/Orange"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/Pink"
-                            tools:ignore="HardcodedText" />
-
-                        <RadioButton
-                            android:id="@+id/Orange"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/orange"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/Pink" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/circleimagevieworange"
-                            android:contentDescription="orange image view"
-                            app:layout_constraintBottom_toTopOf="@id/Red"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/Orange"
-                            tools:ignore="HardcodedText" />
-
-                        <RadioButton
-                            android:id="@+id/Red"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/red"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/Orange" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/circleimageviewred"
-                            android:contentDescription="red image view"
-                            app:layout_constraintBottom_toTopOf="@id/systemAccent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/Orange"
-                            tools:ignore="HardcodedText" />
-
-                        <RadioButton
-                            android:id="@+id/systemAccent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/follow_system_experimental"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/Red" />
-
-                        <ImageView
-                            android:id="@+id/systemAccentImageView"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/circleimageviewsystemaccent"
-                            android:contentDescription="Follow system image view"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/Red"
-                            tools:ignore="HardcodedText" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/navBarSettingsTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/accentCardView"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/colored_navigation_bar"
-                android:textColor="?attr/textColor"
-                android:textSize="14sp" />
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/navbarCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/navBarSettingsTextView"
+                android:layout_below="@id/followSystemChoiceCardView"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="1dp"
+                style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <!--<RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -455,10 +352,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/enable_colored_navigation_bar"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -467,88 +363,366 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:minHeight="48dp"
                             android:text="@string/disable_colored_navigation_bar"
                             android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
                             android:theme="?attr/radioButtonTheme"
                             app:layout_constraintTop_toBottomOf="@id/enableColoredNavBar" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
+                </RadioGroup> -->
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/coloredNavBarConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/coloredNavBarSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        android:text="Toggle Colored Navigation Bar"
+                        app:thumbIconTint="?attr/colorPrimary"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/followSystemVersionTextView"
+                android:id="@+id/appIconsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/navbarCardView"
-                android:gravity="center"
+                android:gravity="start"
+                android:textStyle="bold"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="@string/follow_system_accent_color_selection"
+                android:text="App Icons"
                 android:textColor="?attr/textColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:layout_below="@id/navbarCardView"
+                android:layout_marginStart="10dp" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/followSystemVersionCardView"
-                android:layout_width="match_parent"
+            <HorizontalScrollView
+                android:id="@+id/appIconsHorizontalScrollView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/followSystemVersionTextView"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true">
+                android:layout_below="@id/appIconsTextView"
+                android:clipToPadding="false"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:scrollbars="none">
 
-                <RadioGroup
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/autoCardView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardBackgroundColor="?attr/cardBackground"
+                        app:cardCornerRadius="28dp">
 
-                        <RadioButton
-                            android:id="@+id/normalSystemTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/app_theming"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="135dp"
+                            android:layout_height="135dp">
 
-                        <RadioButton
-                            android:id="@+id/googleSystemTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/follow_google_apps"
-                            android:textColor="?attr/settingsTextColor"
-                            android:textSize="12sp"
-                            android:minHeight="48dp"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/normalSystemTheme" />
+                            <TextView
+                                android:id="@+id/autoTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:text="@string/auto"
+                                android:textColor="?attr/settingsTextColor"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </RadioGroup>
-            </androidx.cardview.widget.CardView>
+                            <com.google.android.material.card.MaterialCardView
+                                style="?attr/materialCardViewFilledStyle"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                app:cardBackgroundColor="?attr/cardBackground"
+                                app:cardCornerRadius="28dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/followSystemVersionCardView"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="20dp"
-                android:text="@string/changing_the_theme_here_will_reflect_within_the_entire_app"
-                android:textAlignment="center"
-                android:textColor="?attr/textColor"
-                android:textSize="12sp" />
+                                <ImageView
+                                    android:id="@+id/autoIconImageView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="fitXY"
+                                    android:src="@mipmap/ic_launcher_round" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <RadioButton
+                                android:id="@+id/autoIconRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="8dp"
+                                android:theme="?attr/radioButtonTheme"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:visibility="visible" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/tealCardView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardBackgroundColor="?attr/cardBackground"
+                        app:cardCornerRadius="28dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="135dp"
+                            android:layout_height="135dp">
+
+                            <TextView
+                                android:id="@+id/tealTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:text="@string/teal"
+                                android:textColor="?attr/settingsTextColor"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.card.MaterialCardView
+                                style="?attr/materialCardViewFilledStyle"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                app:cardBackgroundColor="?attr/cardBackground"
+                                app:cardCornerRadius="28dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/hourcalclogoteal" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <RadioButton
+                                android:id="@+id/tealIconRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="8dp"
+                                android:theme="?attr/radioButtonTheme"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:visibility="visible" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/pinkCardView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardBackgroundColor="?attr/cardBackground"
+                        app:cardCornerRadius="28dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="135dp"
+                            android:layout_height="135dp">
+
+                            <TextView
+                                android:id="@+id/pinkTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:text="@string/pink"
+                                android:textColor="?attr/settingsTextColor"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.card.MaterialCardView
+                                style="?attr/materialCardViewFilledStyle"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                app:cardBackgroundColor="?attr/cardBackground"
+                                app:cardCornerRadius="28dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/hourcalclogopink" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <RadioButton
+                                android:id="@+id/pinkIconRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="8dp"
+                                android:theme="?attr/radioButtonTheme"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:visibility="visible" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/orangeCardView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardBackgroundColor="?attr/cardBackground"
+                        app:cardCornerRadius="28dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="135dp"
+                            android:layout_height="135dp">
+
+                            <TextView
+                                android:id="@+id/orangeTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:text="Orange"
+                                android:textColor="?attr/settingsTextColor"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.card.MaterialCardView
+                                style="?attr/materialCardViewFilledStyle"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                app:cardBackgroundColor="?attr/cardBackground"
+                                app:cardCornerRadius="28dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/hourcalclogoorange" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <RadioButton
+                                android:id="@+id/orangeIconRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="8dp"
+                                android:theme="?attr/radioButtonTheme"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:visibility="visible" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/redCardView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardBackgroundColor="?attr/cardBackground"
+                        app:cardCornerRadius="28dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="135dp"
+                            android:layout_height="135dp">
+
+                            <TextView
+                                android:id="@+id/redTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:text="Red"
+                                android:textColor="?attr/settingsTextColor"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.card.MaterialCardView
+                                style="?attr/materialCardViewFilledStyle"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                app:cardBackgroundColor="?attr/cardBackground"
+                                app:cardCornerRadius="28dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/hourcalclogored" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <RadioButton
+                                android:id="@+id/redIconRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="8dp"
+                                android:theme="?attr/radioButtonTheme"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:visibility="visible" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="More"
+                        android:layout_gravity="center"
+                        android:textColor="?attr/settingsTextColor"
+                        android:drawableTint="@color/black"
+                        android:layout_marginStart="20dp"
+                        android:visibility="gone"
+                        android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </HorizontalScrollView>
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

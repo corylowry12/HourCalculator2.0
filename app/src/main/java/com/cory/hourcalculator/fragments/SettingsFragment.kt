@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
@@ -140,12 +141,14 @@ class SettingsFragment : Fragment() {
             view?.findViewById<ConstraintLayout>(R.id.constraintAppearance)
 
         appearanceConstraintLayout?.setOnClickListener {
+            (context as MainActivity).currentSettingsItem = 0
             openFragment(AppearanceFragment())
         }
 
         val appSettingsConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintAppSettings)
 
         appSettingsConstraint?.setOnClickListener {
+            (context as MainActivity).currentSettingsItem = 1
             openFragment(AppSettingsFragment())
         }
 
@@ -153,6 +156,7 @@ class SettingsFragment : Fragment() {
             view?.findViewById<ConstraintLayout>(R.id.constraintAutomaticDeletion)
 
         automaticDeletionConstraint?.setOnClickListener {
+            (context as MainActivity).currentSettingsItem = 2
             openFragment(AutomaticDeletionFragment())
         }
 
@@ -161,6 +165,7 @@ class SettingsFragment : Fragment() {
         val patchNotesConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintPatchNotes)
 
         patchNotesConstraint?.setOnClickListener {
+            (context as MainActivity).currentSettingsItem = 3
             openFragment(PatchNotesFragment())
         }
 
@@ -177,40 +182,22 @@ class SettingsFragment : Fragment() {
         val updateConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintUpdate)
 
         updateConstraint?.setOnClickListener {
+            (context as MainActivity).currentSettingsItem = 4
             openFragment(UpdateFragment())
-        }
-
-        val leaveAReviewConstraint =
-            view?.findViewById<ConstraintLayout>(R.id.constraintLeaveAReview)
-
-        leaveAReviewConstraint?.setOnClickListener {
-            leaveAReview()
-        }
-
-        val reportABugConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintReportABug)
-
-        reportABugConstraint?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
-            openFragment(WebviewFragment())
-        }
-
-        val viewGithubConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintViewGithub)
-
-        viewGithubConstraint?.setOnClickListener {
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0")
-            openFragment(WebviewFragment())
         }
 
         val faqConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintFAQ)
 
         faqConstraint?.setOnClickListener {
+            (context as MainActivity).currentSettingsItem = 5
             openFragment(FAQFragment())
         }
 
         val versionInfoConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintVersionInfo)
 
         versionInfoConstraint?.setOnClickListener {
-            openFragment(AboutFragment())
+            (context as MainActivity).currentSettingsItem = 6
+            openFragment(AboutAppFragment())
         }
 
         val deleteAppDataConstraint =

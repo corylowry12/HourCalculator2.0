@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
     tools:context=".fragments.AutomaticDeletionFragment">
 
@@ -18,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:titleCollapseMode="scale"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -34,7 +36,7 @@
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
                 app:title="@string/history_settings"
-                app:titleCentered="true" />
+                app:buttonGravity="center_vertical" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

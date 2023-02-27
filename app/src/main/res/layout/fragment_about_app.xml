@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="?attr/backgroundColor"
+    android:id="@+id/AboutAppCoordinatorLayout">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="?attr/backgroundColor"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:statusBarScrim="?attr/colorPrimary"
+            app:expandedTitleMarginBottom="28dp"
+            app:titleCollapseMode="scale"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBarAboutApp"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:navigationIconTint="?attr/textColor"
+                app:title="About"
+                app:titleCentered="true"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            style="?attr/materialCardViewElevatedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:cardCornerRadius="28dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/appIconCardView"
+                    style="?attr/materialCardViewElevatedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#26a69a"
+                    app:cardCornerRadius="28dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="true">
+                <ImageView
+                    android:id="@+id/appIconImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@mipmap/ic_launcher" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/appName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:text="Hour Calculator"
+                    android:textColor="?attr/settingsTextColor"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/appIconCardView" />
+
+                <TextView
+                    android:id="@+id/versionNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:text="Version:"
+                    android:textColor="?attr/settingsTextColor"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/appName" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/developerImageViewCardView"
+                        style="?attr/materialCardViewElevatedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="?attr/cardBackground"
+                        app:cardCornerRadius="28dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:cardPreventCornerOverlap="false"
+                        app:cardUseCompatPadding="true">
+                    <ImageView
+                        android:id="@+id/developerImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/devavatar" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/designedAndDevelopedBy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Designed and developed by"
+                        android:textAlignment="center"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/developerImageViewCardView" />
+
+                    <TextView
+                        android:id="@+id/creatorName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:text="Cory Lowry"
+                        android:textAlignment="center"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/designedAndDevelopedBy" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/linksDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/creatorName"
+                        android:layout_marginTop="10dp"
+                        app:dividerColor="#898989"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/linksDivider"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/githubLogoButton"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        style="@style/Widget.App.Button.IconOnly"
+                        app:layout_constraintStart_toStartOf="@id/linksDivider"
+                        app:layout_constraintTop_toBottomOf="@id/linksDivider"
+                        app:icon="@drawable/iconmonstr_github_1"
+                        app:iconSize="15dp"
+                        app:iconTint="#898989"
+                        android:backgroundTint="#00FFFFFF"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"/>
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="28dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                <TextView
+                        android:id="@+id/support"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:text="SUPPORT"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/support"
+                        android:layout_marginTop="10dp"
+                        app:dividerColor="#898989"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView
+                        android:id="@+id/patchNotes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Patch Notes"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="16sp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+                    <TextView
+                        android:id="@+id/rate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Rate App On The Play Store"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="16sp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/patchNotes" />
+
+                    <TextView
+                        android:id="@+id/reportABugTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Report A Bug"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rate" />
+
+                    <TextView
+                        android:id="@+id/versionInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Version Info"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/reportABugTextView" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

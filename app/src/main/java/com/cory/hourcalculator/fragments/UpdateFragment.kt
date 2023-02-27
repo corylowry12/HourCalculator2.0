@@ -278,7 +278,7 @@ class UpdateFragment : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val strResponse = response.body()!!.string()
+                val strResponse = response.body!!.string()
                 val jsonContact = JSONObject(strResponse)
                 val jsonArrayInfo: JSONArray = jsonContact.getJSONArray("update")
 

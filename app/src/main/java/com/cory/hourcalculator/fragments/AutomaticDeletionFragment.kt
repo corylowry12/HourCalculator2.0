@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -16,6 +18,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -104,6 +107,7 @@ class AutomaticDeletionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dialog = BottomSheetDialog(requireContext())
 
         val topAppBar =
             activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
@@ -117,7 +121,31 @@ class AutomaticDeletionFragment : Fragment() {
             Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-                    reset()
+                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    dialog.setContentView(resetSettingsLayout)
+                    dialog.setCancelable(false)
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset History Settings?"
+                    /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    yesResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        reset()
+                        dialog.dismiss()
+                    }
+                    cancelResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        dialog.dismiss()
+                    }
+                    dialog.show()
                     true
                 }
                 else -> true
@@ -506,13 +534,6 @@ class AutomaticDeletionFragment : Fragment() {
         val daysWorked = DaysWorkedPerWeek(requireContext())
 
         if (historyDeletion.loadHistoryDeletionState() || daysWorked.loadDaysWorked() != 7) {
-            val alert = MaterialAlertDialogBuilder(
-                requireContext(),
-                AccentColor(requireContext()).alertTheme()
-            )
-            alert.setTitle(getString(R.string.warning))
-            alert.setMessage(getString(R.string.reset_automatic_deletion_settings_warning))
-            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
                 val enableHistoryAutomaticDeletion =
                     activity?.findViewById<RadioButton>(R.id.enableHistoryDeletion)
@@ -556,11 +577,6 @@ class AutomaticDeletionFragment : Fragment() {
                 five?.setTextColor(color)
                 six?.setTextColor(color)
                 seven?.setTextColor(color)
-            }
-            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                Vibrate().vibration(requireContext())
-            }
-            alert.show()
         }
         else {
             Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()

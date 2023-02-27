@@ -4,18 +4,26 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -103,175 +111,224 @@ class AppSettingsFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        val dialog = BottomSheetDialog(requireContext())
+
         topAppBar?.setOnMenuItemClickListener {
             Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-                    val alert = MaterialAlertDialogBuilder(
-                        requireContext(),
-                        AccentColor(requireContext()).alertTheme()
-                    )
-                    alert.setCancelable(false)
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.reset_app_settings_warning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+
+                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    dialog.setContentView(resetSettingsLayout)
+                    dialog.setCancelable(false)
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset App Settings?"
+                    /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
+                        dialog.dismiss()
                     }
-                    alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    cancelResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         dialog.dismiss()
                     }
-                    alert.show()
+                    dialog.show()
                     true
                 }
                 else -> true
             }
         }
 
-        val outTimeData = OutTimeData(requireContext())
-        val enableOutTime = activity?.findViewById<RadioButton>(R.id.enableOutTime)
-        val disableOutTime = activity?.findViewById<RadioButton>(R.id.disableOutTime)
+        val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
+        val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
+        val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
+        val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
+        val historyCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
+        val breakTextBoxCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
+        val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
-        if (outTimeData.loadOutTimeState()) {
-            enableOutTime?.isChecked = true
+        outTimeCardView.shapeAppearanceModel = outTimeCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        calculationTypeCardView.shapeAppearanceModel = calculationTypeCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        clickableHistoryCardView.shapeAppearanceModel = clickableHistoryCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        breakTextBoxCardView.shapeAppearanceModel = breakTextBoxCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
+        val outTimeData = OutTimeData(requireContext())
+
+        val outTimeSwitch = activity?.findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
+
+        if (!outTimeData.loadOutTimeState()) {
+            outTimeSwitch?.isChecked = true
+            outTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         }
         else {
-            disableOutTime?.isChecked = true
+            outTimeSwitch?.isChecked = false
+            outTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        enableOutTime?.setOnClickListener {
+        outTimeSwitch?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            if (outTimeData.loadOutTimeState()) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.this_setting_is_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                outTimeData.setOutTimeState(true)
-                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_previous_stored_time), Toast.LENGTH_SHORT)
+            outTimeData.setOutTimeState(!outTimeSwitch.isChecked)
+            if (outTimeSwitch.isChecked) {
+                outTimeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_current_time), Toast.LENGTH_SHORT)
                     .show()
             }
-        }
-        disableOutTime?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (!outTimeData.loadOutTimeState()) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.this_setting_is_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                outTimeData.setOutTimeState(false)
-                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_current_time), Toast.LENGTH_SHORT)
+            else {
+                outTimeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_previous_stored_time), Toast.LENGTH_SHORT)
                     .show()
             }
         }
 
         val calculationData = CalculationType(requireContext())
-        val enableCalculation = activity?.findViewById<RadioButton>(R.id.enableCalculation)
-        val disableCalculation = activity?.findViewById<RadioButton>(R.id.disableCalculation)
+
+        val calculationTypeSwitch = activity?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
 
         if (calculationData.loadCalculationState()) {
-            enableCalculation?.isChecked = true
-        } else {
-            disableCalculation?.isChecked = true
+            calculationTypeSwitch?.isChecked = true
+            calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        }
+        else {
+            calculationTypeSwitch?.isChecked = false
+            calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        enableCalculation?.setOnClickListener {
+        calculationTypeSwitch?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            if (calculationData.loadCalculationState()) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.decimal_calculation_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
+            if (calculationTypeSwitch.isChecked) {
+                calculationTypeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                 calculationData.setCalculationState(true)
                 Toast.makeText(requireContext(), getString(R.string.decimal_calculation_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
-        }
-
-        disableCalculation?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (!calculationData.loadCalculationState()) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.time_calculation_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
+            else {
+                calculationTypeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 calculationData.setCalculationState(false)
                 Toast.makeText(requireContext(), getString(R.string.time_calculation_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
         }
 
-        val vibrationData = VibrationData(requireContext())
-        val enableVibration = activity?.findViewById<RadioButton>(R.id.enableVibration)
-        val disableVibration = activity?.findViewById<RadioButton>(R.id.disableVibration)
+        val historyClickable = ClickableHistoryEntry(requireContext())
+        val historyClickableSwitch = activity?.findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
 
-        if (vibrationData.loadVibrationState()) {
-            enableVibration?.isChecked = true
-        } else if (!vibrationData.loadVibrationState()) {
-            disableVibration?.isChecked = true
+        if (historyClickable.loadHistoryItemClickable()) {
+            historyClickableSwitch?.isChecked = true
+            historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!historyClickable.loadHistoryItemClickable()) {
+            historyClickableSwitch?.isChecked = false
+            historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        enableVibration?.setOnClickListener {
+        historyClickableSwitch?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            if (vibrationData.loadVibrationState()) {
-                Toast.makeText(requireContext(), getString(R.string.vibration_already_enabled), Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                vibrationData.setVibrationState(true)
-                Toast.makeText(requireContext(), getString(R.string.vibration_enabled), Toast.LENGTH_SHORT).show()
+            historyClickable.setHistoryItemClickable(historyClickableSwitch.isChecked)
+            if (historyClickableSwitch.isChecked) {
+                historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                Toast.makeText(requireContext(), "History items are now clickable", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                Toast.makeText(requireContext(), "History items are not clickable", Toast.LENGTH_SHORT).show()
             }
         }
-        disableVibration?.setOnClickListener {
+
+        val vibrationData = VibrationData(requireContext())
+        val toggleVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+
+        if (vibrationData.loadVibrationState()) {
+            toggleVibration?.isChecked = true
+            toggleVibration?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!vibrationData.loadVibrationState()) {
+            toggleVibration?.isChecked = false
+            toggleVibration?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        toggleVibration?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            if (!vibrationData.loadVibrationState()) {
-                Toast.makeText(requireContext(), getString(R.string.vibration_already_disabled), Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                vibrationData.setVibrationState(false)
+            vibrationData.setVibrationState(toggleVibration.isChecked)
+            if (toggleVibration.isChecked) {
+                toggleVibration.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                Toast.makeText(requireContext(), getString(R.string.vibration_enabled), Toast.LENGTH_SHORT).show()
+            }
+            else {
+                toggleVibration.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 Toast.makeText(requireContext(), getString(R.string.vibration_disabled), Toast.LENGTH_SHORT).show()
             }
         }
 
         val historyToggleData = HistoryToggleData(requireContext())
-        val enableHistory = activity?.findViewById<RadioButton>(R.id.enableHistory)
-        val disableHistory = activity?.findViewById<RadioButton>(R.id.disableHistory)
+        val toggleHistory = activity?.findViewById<MaterialSwitch>(R.id.historySwitch)
 
         if (historyToggleData.loadHistoryState()) {
-            enableHistory?.isChecked = true
+            toggleHistory?.isChecked = true
+            toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         } else if (!historyToggleData.loadHistoryState()) {
-            disableHistory?.isChecked = true
+            toggleHistory?.isChecked = true
+            toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        enableHistory?.setOnClickListener {
+        toggleHistory?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            if (historyToggleData.loadHistoryState()) {
-                Toast.makeText(requireContext(), getString(R.string.history_already_enabled), Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                historyToggleData.setHistoryToggle(true)
+            if (toggleHistory.isChecked) {
+                toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                 Toast.makeText(requireContext(), getString(R.string.history_is_enabled), Toast.LENGTH_SHORT).show()
-            }
-            val runnable = Runnable {
-                (context as MainActivity).toggleHistory()
-            }
-
-            MainActivity().runOnUiThread(runnable)
-        }
-        disableHistory?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (!historyToggleData.loadHistoryState()) {
-                Toast.makeText(requireContext(), getString(R.string.history_is_already_disabled), Toast.LENGTH_SHORT)
-                    .show()
             } else {
-                historyToggleData.setHistoryToggle(false)
                 val alertDialog = MaterialAlertDialogBuilder(
                     requireContext(),
                     AccentColor(requireContext()).alertTheme()
@@ -294,8 +351,10 @@ class AppSettingsFragment : Fragment() {
                     Vibrate().vibration(requireContext())
                 }
                 alertDialog.create().show()
+                toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 Toast.makeText(requireContext(), getString(R.string.history_disabled), Toast.LENGTH_SHORT).show()
             }
+            historyToggleData.setHistoryToggle(toggleHistory.isChecked)
             val runnable = Runnable {
                 (context as MainActivity).toggleHistory()
             }
@@ -304,43 +363,46 @@ class AppSettingsFragment : Fragment() {
         }
 
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
-        val enableBreakTextBox = activity?.findViewById<RadioButton>(R.id.showBreakTextBox)
-        val disableBreakTextBox = activity?.findViewById<RadioButton>(R.id.hideBreakTextBox)
+        val toggleBreakTextBox = activity?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
-            enableBreakTextBox?.isChecked = true
+            toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleBreakTextBox?.isChecked = true
         } else if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
-            disableBreakTextBox?.isChecked = true
+            toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleBreakTextBox?.isChecked = false
         }
 
-        enableBreakTextBox?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.break_text_box_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
+        toggleBreakTextBox?.setOnClickListener {
+            if (toggleBreakTextBox.isChecked) {
+                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                 breakTextBoxVisiblityClass.setVisibility(0)
                 Toast.makeText(requireContext(), getString(R.string.break_text_box_enabled), Toast.LENGTH_SHORT)
                     .show()
             }
-        }
-        disableBreakTextBox?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.break_text_box_already_disabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
+            else {
+                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 breakTextBoxVisiblityClass.setVisibility(1)
                 Toast.makeText(requireContext(), getString(R.string.break_text_box_disabled), Toast.LENGTH_SHORT)
                     .show()
             }
         }
+
+        /*toggleBreakTextBox?.setOnCheckedChangeListener { buttonView, isChecked ->
+            Vibrate().vibration(requireContext())
+            if (isChecked) {
+                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                breakTextBoxVisiblityClass.setVisibility(0)
+                Toast.makeText(requireContext(), getString(R.string.break_text_box_enabled), Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else {
+                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                breakTextBoxVisiblityClass.setVisibility(1)
+                Toast.makeText(requireContext(), getString(R.string.break_text_box_disabled), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }*/
 
         val wagesData = WagesData(requireContext())
         val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
@@ -379,16 +441,12 @@ class AppSettingsFragment : Fragment() {
     }
 
     private fun reset() {
-        val enableOutTime = view?.findViewById<RadioButton>(R.id.enableOutTime)
-        val disableOutTime = view?.findViewById<RadioButton>(R.id.disableOutTime)
-        val decimalFormat = view?.findViewById<RadioButton>(R.id.enableCalculation)
-        val timeFormat = view?.findViewById<RadioButton>(R.id.disableCalculation)
-        val enableVibration = view?.findViewById<RadioButton>(R.id.enableVibration)
-        val disableVibration = view?.findViewById<RadioButton>(R.id.disableVibration)
-        val enableHistory = view?.findViewById<RadioButton>(R.id.enableHistory)
-        val disableHistory = view?.findViewById<RadioButton>(R.id.disableHistory)
-        val enableBreakTextBox = view?.findViewById<RadioButton>(R.id.showBreakTextBox)
-        val disableBreakTextBox = view?.findViewById<RadioButton>(R.id.hideBreakTextBox)
+        val setOutTimeSwitch = view?.findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
+        val calculationTypeSwitch = view?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
+        val clickableHistorySwitch = view?.findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
+        val vibrationSwitch= view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+        val toggleHistory = view?.findViewById<MaterialSwitch>(R.id.historySwitch)
+        val toggleBreakTextBox = view?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
         val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
 
         CalculationType(requireContext()).setCalculationState(true)
@@ -397,18 +455,22 @@ class AppSettingsFragment : Fragment() {
         BreakTextBoxVisibilityClass(requireContext()).setVisibility(0)
         WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
         OutTimeData(requireContext()).setOutTimeState(true)
+        ClickableHistoryEntry(requireContext()).setHistoryItemClickable(true)
 
-        enableOutTime?.isChecked = true
-        disableOutTime?.isChecked = false
-        decimalFormat?.isChecked = true
-        timeFormat?.isChecked = false
-        enableVibration?.isChecked = true
-        disableVibration?.isChecked = false
-        enableHistory?.isChecked = true
-        disableHistory?.isChecked = false
-        enableBreakTextBox?.isChecked = true
-        disableBreakTextBox?.isChecked = false
+        setOutTimeSwitch?.isChecked = true
+        calculationTypeSwitch?.isChecked = true
+        clickableHistorySwitch?.isChecked = true
+        vibrationSwitch?.isChecked = true
+        toggleHistory?.isChecked = true
+        toggleBreakTextBox?.isChecked = true
         wagesEditText?.setText(getString(R.string.wages_default))
+
+        setOutTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        clickableHistorySwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        vibrationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
 
         val runnable = Runnable {
             (context as MainActivity).toggleHistory()
