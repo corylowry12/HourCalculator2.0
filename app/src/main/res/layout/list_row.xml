@@ -8,20 +8,18 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardViewHistory"
-        style="?attr/materialCardViewElevatedStyle"
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="1dp"
         app:cardBackgroundColor="?attr/cardBackground"
-        app:cardCornerRadius="28dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="PrivateResource"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        android:foreground="?attr/selectableItemBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:layout_marginStart="-10dp"
+android:layout_marginStart="-10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
