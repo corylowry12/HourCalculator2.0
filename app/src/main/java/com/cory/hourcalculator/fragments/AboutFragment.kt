@@ -1,13 +1,18 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -18,6 +23,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class AboutFragment : Fragment() {
 
     var themeSelection = false
+
+    private var package_name = "com.android.chrome"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,7 +119,39 @@ class AboutFragment : Fragment() {
 
         materialConstraint.setOnClickListener {
             LinkClass(requireContext()).setLink(materialSubtitle.text.toString())
-            openFragment(WebviewFragment())
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            builder.setDefaultColorSchemeParams(params.build())
+
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+
+            if (this.isPackageInstalled(package_name)) {
+                // if chrome is available use chrome custom tabs
+                customBuilder.intent.setPackage(package_name)
+                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            } else {
+                openFragment(WebviewFragment())
+            }
         }
 
         val googleAdsConstraint = view.findViewById<ConstraintLayout>(R.id.googleAdsConstraint)
@@ -120,7 +159,39 @@ class AboutFragment : Fragment() {
 
         googleAdsConstraint.setOnClickListener {
             LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
-            openFragment(WebviewFragment())
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            builder.setDefaultColorSchemeParams(params.build())
+
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+
+            if (this.isPackageInstalled(package_name)) {
+                // if chrome is available use chrome custom tabs
+                customBuilder.intent.setPackage(package_name)
+                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            } else {
+                openFragment(WebviewFragment())
+            }
         }
 
         val firebaseAnalyticsConstraint = view.findViewById<ConstraintLayout>(R.id.firebaseAnalyticsConstraint)
@@ -128,7 +199,39 @@ class AboutFragment : Fragment() {
 
         firebaseAnalyticsConstraint.setOnClickListener {
             LinkClass(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
-            openFragment(WebviewFragment())
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            builder.setDefaultColorSchemeParams(params.build())
+
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+
+            if (this.isPackageInstalled(package_name)) {
+                // if chrome is available use chrome custom tabs
+                customBuilder.intent.setPackage(package_name)
+                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            } else {
+                openFragment(WebviewFragment())
+            }
         }
 
         val firebaseCrashlyticsConstraint = view.findViewById<ConstraintLayout>(R.id.firebaseCrashlyticsConstraint)
@@ -136,7 +239,39 @@ class AboutFragment : Fragment() {
 
         firebaseCrashlyticsConstraint.setOnClickListener {
             LinkClass(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
-            openFragment(WebviewFragment())
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            builder.setDefaultColorSchemeParams(params.build())
+
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+
+            if (this.isPackageInstalled(package_name)) {
+                // if chrome is available use chrome custom tabs
+                customBuilder.intent.setPackage(package_name)
+                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            } else {
+                openFragment(WebviewFragment())
+            }
         }
 
         val firebasePerfConstraint = view.findViewById<ConstraintLayout>(R.id.firebasePerfConstraint)
@@ -144,7 +279,39 @@ class AboutFragment : Fragment() {
 
         firebasePerfConstraint.setOnClickListener {
             LinkClass(requireContext()).setLink(firebasePerfSubtitle.text.toString())
-            openFragment(WebviewFragment())
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            builder.setDefaultColorSchemeParams(params.build())
+
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+
+            if (this.isPackageInstalled(package_name)) {
+                // if chrome is available use chrome custom tabs
+                customBuilder.intent.setPackage(package_name)
+                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            } else {
+                openFragment(WebviewFragment())
+            }
         }
 
         val inAppReviewConstraint = view.findViewById<ConstraintLayout>(R.id.inAppReviewConstraint)
@@ -152,7 +319,39 @@ class AboutFragment : Fragment() {
 
         inAppReviewConstraint.setOnClickListener {
             LinkClass(requireContext()).setLink(inAppReviewSubtitle.text.toString())
-            openFragment(WebviewFragment())
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            builder.setDefaultColorSchemeParams(params.build())
+
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+
+            if (this.isPackageInstalled(package_name)) {
+                // if chrome is available use chrome custom tabs
+                customBuilder.intent.setPackage(package_name)
+                customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            } else {
+                openFragment(WebviewFragment())
+            }
         }
     }
 
@@ -168,5 +367,15 @@ class AboutFragment : Fragment() {
         )
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
+    }
+
+    fun isPackageInstalled(packageName: String): Boolean {
+        // check if chrome is installed or not
+        return try {
+            activity?.packageManager?.getPackageInfo(packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
     }
 }
