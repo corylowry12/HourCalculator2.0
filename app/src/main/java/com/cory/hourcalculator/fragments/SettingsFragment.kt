@@ -21,7 +21,9 @@ import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.shape.CornerFamily
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -119,23 +121,81 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+    /*override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
         main()
 
-    }
+    }*/
 
-    override fun onResume() {
+    /*override fun onResume() {
         super.onResume()
         main()
 
         //val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
 
         //nestedScrollView.scrollTo(scrollPosition, 0)
-    }
+    }*/
 
     private fun main() {
+
+        val appearanceCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardView)
+        val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
+        val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
+        val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
+        val faqCardView = requireActivity().findViewById<MaterialCardView>(R.id.FAQCardView)
+        val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
+        val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
+
+        appearanceCardView.shapeAppearanceModel = appearanceCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        appSettingsCardView.shapeAppearanceModel = appSettingsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        historySettingsCardView.shapeAppearanceModel = historySettingsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        patchNotesCardView.shapeAppearanceModel = patchNotesCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        faqCardView.shapeAppearanceModel = faqCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        aboutCardView.shapeAppearanceModel = aboutCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        deleteAppDataCardView.shapeAppearanceModel = deleteAppDataCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
 
         val appearanceConstraintLayout =
             view?.findViewById<ConstraintLayout>(R.id.constraintAppearance)
@@ -170,7 +230,7 @@ class SettingsFragment : Fragment() {
         }
 
         if (Version(requireContext()).loadVersion() != getString(R.string.version_number)) {
-            patchNotesChevron?.setImageResource(R.drawable.redcircle)
+            patchNotesChevron?.setImageResource(R.drawable.baseline_priority_high_24)
             patchNotesChevron?.setColorFilter(
                 ContextCompat.getColor(
                     requireContext(),
