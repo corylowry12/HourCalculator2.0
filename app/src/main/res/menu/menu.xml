@@ -14,7 +14,7 @@
     <item
         android:id="@+id/timeCards"
         android:icon="@drawable/timecardselector"
-        android:title="Time Cards" />
+        android:title="@string/time_cards" />
 
     <item
         android:id="@+id/settings"
