@@ -1,12 +1,22 @@
 package com.cory.hourcalculator.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.fragments.EditHours
+import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
+import com.google.android.material.card.MaterialCardView
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class TimeCardCustomAdapter(
     private val context: Context,
@@ -20,6 +30,18 @@ class TimeCardCustomAdapter(
 
         fun bind(position: Int) {
 
+            val dataItem = dataList[position]
+
+            if (dataItem["name"] == null) {
+                name.text = "Name: Unknown"
+            }
+            else {
+                name.text = "Name: ${dataItem["name"]}"
+            }
+
+            totalHours.text = "Total: ${dataItem["totalHours"]}"
+            week.text = "Week: ${dataItem["week"]}"
+
         }
     }
 
@@ -32,6 +54,19 @@ class TimeCardCustomAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        holder.itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setOnClickListener {
+            val timeCardInfoFragment = TimeCardItemInfoFragment()
+            timeCardInfoFragment.arguments = Bundle().apply {
+                putString("id", dataList[holder.adapterPosition]["id"])
+            }
+            val manager =
+                (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+            manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            manager.replace(R.id.fragment_container, timeCardInfoFragment)
+                .addToBackStack(null)
+            manager.commit()
+        }
         (holder as TimeCardCustomAdapter.ViewHolder).bind(position)
     }
 }
