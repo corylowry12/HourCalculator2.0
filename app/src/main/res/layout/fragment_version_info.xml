@@ -81,6 +81,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/versionNumber"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/versionHeading"
@@ -129,6 +130,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/buildNumber"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/buildHeading"
