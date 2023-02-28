@@ -41,14 +41,14 @@ class OnboardingActivity : AppCompatActivity() {
         theme!!.applyStyle(R.style.teal_accent, true)
         setContentView(R.layout.activity_onboarding)
 
-        if (DialogData(this).loadOnboardingComplete()) {
+        //if (DialogData(this).loadOnboardingComplete()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }
+       // }
 
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container_onboarding, fragment1).addToBackStack(null)
-        transaction.commit()
+        //val transaction = supportFragmentManager.beginTransaction()
+        //transaction.replace(R.id.fragment_container_onboarding, fragment1).addToBackStack(null)
+        //transaction.commit()
 
         /*val relativeLayout = findViewById<RelativeLayout>(R.id.layout1)
         val dotsIndicator = findViewById<DotsIndicator>(R.id.dotsIndicator)
