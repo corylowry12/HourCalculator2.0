@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.PatchNotesBugFixesAdapter
@@ -42,6 +43,12 @@ class PatchNotesFragment : Fragment() {
                                             "Optimizations when launching the app", "Optimizations in switching tabs", "Improved the quality of the app icon logos in the Appearance Settings view", "Status bar will now match the color of the theme and will change color based on scroll position",
                                             "App icon radio buttons will no be checked if you click the icon but not the radio button", "App will no longer let you go to another tab when edit view is visible to prevent accidentally leaving and losing edited data",
                                             "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item")
+
+    private var bugFixesArrayInternal = arrayOf("No new bug fixes yet")
+
+    private var newFeaturesArrayInternal = arrayOf("No new features yet")
+
+    private var enhancementsArrayInternal = arrayOf("No new enhancements yet")
 
     var themeSelection = false
 
@@ -119,19 +126,38 @@ class PatchNotesFragment : Fragment() {
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
+        if (BuildConfig.FLAVOR == "Internal") {
+            topAppBar?.title = "Patch Notes (Internal)"
+        }
+
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
 
         val bugFixesChip = requireView().findViewById<Chip>(R.id.bugFixesChip)
-        bugFixesChip.text = bugFixesArray.count().toString()
+        if (BuildConfig.FLAVOR == "Internal") {
+            bugFixesChip.text = bugFixesArrayInternal.count().toString()
+        }
+        else {
+            bugFixesChip.text = bugFixesArray.count().toString()
+        }
 
         val newFeaturesChip = requireView().findViewById<Chip>(R.id.newFeaturesChip)
-        newFeaturesChip.text = newFeaturesArray.count().toString()
+        if (BuildConfig.FLAVOR == "Internal") {
+            newFeaturesChip.text = newFeaturesArrayInternal.count().toString()
+        }
+        else {
+            newFeaturesChip.text = newFeaturesArray.count().toString()
+        }
 
         val enhancementsChip = requireView().findViewById<Chip>(R.id.enhancementsChip)
-        enhancementsChip.text = enhancementsArray.count().toString()
+        if (BuildConfig.FLAVOR == "Internal") {
+            enhancementsChip.text = enhancementsArrayInternal.count().toString()
+        }
+        else {
+            enhancementsChip.text = enhancementsArray.count().toString()
+        }
 
         val bugFixesConstraint = requireView().findViewById<ConstraintLayout>(R.id.bugFixesConstraint)
 
@@ -139,8 +165,14 @@ class PatchNotesFragment : Fragment() {
             Vibrate().vibration(requireContext())
             val bugFixesRecyclerView = requireView().findViewById<RecyclerView>(R.id.bugFixesRecyclerView)
             bugFixesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            bugFixesRecyclerView.adapter = PatchNotesBugFixesAdapter(requireContext(), bugFixesArray)
-
+            if (BuildConfig.FLAVOR == "Internal") {
+                bugFixesRecyclerView.adapter =
+                    PatchNotesBugFixesAdapter(requireContext(), bugFixesArrayInternal)
+            }
+            else {
+                bugFixesRecyclerView.adapter =
+                    PatchNotesBugFixesAdapter(requireContext(), bugFixesArray)
+            }
             if (bugFixesRecyclerView.visibility == View.GONE) {
                 bugFixesRecyclerView.visibility = View.VISIBLE
                 bugFixesChip.closeIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_keyboard_arrow_up_24)
@@ -157,7 +189,14 @@ class PatchNotesFragment : Fragment() {
             Vibrate().vibration(requireContext())
             val newFeaturesRecyclerView = requireView().findViewById<RecyclerView>(R.id.newFeaturesRecyclerView)
             newFeaturesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            newFeaturesRecyclerView.adapter = PatchNotesNewFeaturesAdapter(requireContext(), newFeaturesArray)
+            if (BuildConfig.FLAVOR == "Internal") {
+                newFeaturesRecyclerView.adapter =
+                    PatchNotesNewFeaturesAdapter(requireContext(), newFeaturesArrayInternal)
+            }
+            else {
+                newFeaturesRecyclerView.adapter =
+                    PatchNotesNewFeaturesAdapter(requireContext(), newFeaturesArray)
+            }
 
             if (newFeaturesRecyclerView.visibility == View.GONE) {
                 newFeaturesRecyclerView.visibility = View.VISIBLE
@@ -175,7 +214,14 @@ class PatchNotesFragment : Fragment() {
             Vibrate().vibration(requireContext())
             val enhancementsRecyclerView = requireView().findViewById<RecyclerView>(R.id.enhancementsRecyclerView)
             enhancementsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            enhancementsRecyclerView.adapter = PatchNotesEnhancementsAdapter(requireContext(), enhancementsArray)
+            if (BuildConfig.FLAVOR == "Internal") {
+                enhancementsRecyclerView.adapter =
+                    PatchNotesEnhancementsAdapter(requireContext(), enhancementsArrayInternal)
+            }
+            else {
+                enhancementsRecyclerView.adapter =
+                    PatchNotesEnhancementsAdapter(requireContext(), enhancementsArray)
+            }
 
             if (enhancementsRecyclerView.visibility == View.GONE) {
                 enhancementsRecyclerView.visibility = View.VISIBLE
@@ -222,7 +268,7 @@ class PatchNotesFragment : Fragment() {
             }
         }
 
-        Version(requireContext()).setVersion(getString(R.string.version_number))
+        Version(requireContext()).setVersion(BuildConfig.VERSION_NAME)
 
         val runnable = Runnable {
             (context as MainActivity).changeSettingsBadge()
