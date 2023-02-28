@@ -17,6 +17,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
@@ -102,7 +103,7 @@ class AboutAppFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
-        versionNumberTextView.text = "Version: ${getString(R.string.version_number)} (${getString(R.string.build_number_number)})"
+        versionNumberTextView.text = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         val accentColor = AccentColor(requireContext())
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAboutApp)
