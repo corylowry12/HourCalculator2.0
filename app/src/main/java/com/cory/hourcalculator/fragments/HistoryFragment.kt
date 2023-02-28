@@ -27,6 +27,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -35,6 +36,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
+import com.google.type.DateTime
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
 
@@ -208,6 +210,7 @@ class HistoryFragment : Fragment() {
 
                     val exportCardView = historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
                     val deleteSelectedCardView = historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
+
                     exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
                         .toBuilder()
                         .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
@@ -225,7 +228,14 @@ class HistoryFragment : Fragment() {
 
                     exportSelected.setOnClickListener {
                         Vibrate().vibration(requireContext())
-                        Toast.makeText(requireContext(), "Cant do this right now", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Cant do this right now", Toast.LENGTH_SHORT).show()
+                        if (HistoryToggleData(requireContext()).loadHistoryState()) {
+                            topAppBar.navigationIcon = null
+                            customAdapter.snackbarDeleteSelected.dismiss()
+                            customAdapter.snackbarDismissCheckBox.dismiss()
+                            customAdapter.exportSelected()
+                            dialog.dismiss()
+                        }
                     }
 
                     deleteSelected.setOnClickListener {
