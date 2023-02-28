@@ -17,7 +17,7 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
 
         db.execSQL(
             "CREATE TABLE $TABLE_NAME " +
-                    "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_IN TEXT, $COLUMN_OUT TEXT, $COLUMN_TOTAL TEXT, $COLUMN_DAY NUMERIC, $COLUMN_BREAK TEXT)"
+                    "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_NAME TEXT, $COLUMN_TOTAL TEXT, $COLUMN_WEEK TEXT)"
         )
     }
 
@@ -27,18 +27,12 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
     }
 
     fun insertRow(
-        inTime: String,
-        outTime: String,
-        total: String,
-        dayOfWeek: Long,
-        breakTime: String
+        week: String,
+        total: String
     ) {
         val values = ContentValues()
-        values.put(COLUMN_IN, inTime)
-        values.put(COLUMN_OUT, outTime)
+        values.put(COLUMN_WEEK, week)
         values.put(COLUMN_TOTAL, total)
-        values.put(COLUMN_DAY, dayOfWeek)
-        values.put(COLUMN_BREAK, breakTime)
 
         val db = this.writableDatabase
         db.insert(TABLE_NAME, null, values)
@@ -71,7 +65,19 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         val sortData = SortData(context)
         val sortType = sortData.loadSortState()
 
-        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $sortType", null)
+        return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    }
+
+    fun getLastRow(context: Context): Cursor? {
+        val db = this.writableDatabase
+
+        return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    }
+
+    fun getLatestRowID() : Cursor? {
+        val db = this.writableDatabase
+
+        return db.rawQuery("SELECT $COLUMN_ID from $TABLE_NAME order by $COLUMN_ID DESC limit 1", null)
     }
 
     fun deleteAll() {
@@ -82,15 +88,13 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
     }
 
     companion object {
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "storedTimeCards.db"
         const val TABLE_NAME = "time_cards"
 
         const val COLUMN_ID = "id"
-        const val COLUMN_IN = "inTime"
-        const val COLUMN_OUT = "outTime"
+        const val COLUMN_NAME = "name"
         const val COLUMN_TOTAL = "totalHours"
-        const val COLUMN_DAY = "date"
-        const val COLUMN_BREAK = "breakTime"
+        const val COLUMN_WEEK = "week"
     }
 }
