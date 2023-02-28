@@ -11,6 +11,18 @@ android {
             keyAlias 'key0'
             keyPassword 'corypreston2000'
         }
+        internal {
+            storeFile file('D:\\GooglePlayKeyStore.jks')
+            storePassword 'corypreston2000'
+            keyAlias 'key0'
+            keyPassword 'corypreston2000'
+        }
+        production {
+            storeFile file('D:\\GooglePlayKeyStore.jks')
+            storePassword 'corypreston2000'
+            keyAlias 'key0'
+            keyPassword 'corypreston2000'
+        }
     }
     compileSdk 33
 
@@ -18,10 +30,27 @@ android {
         applicationId "com.cory.hourcalculator"
         minSdk 26
         targetSdk 33
-        versionCode 133
-        versionName "9.3.0"
+        versionCode 134
+        versionName "10.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions "hour_calculator"
+    productFlavors {
+        Internal {
+            applicationId "com.cory.hourcalculator.internal"
+            dimension "hour_calculator"
+            versionCode 134
+            versionName "10.0.0-internal-alpha02"
+        }
+
+        Production {
+            applicationId "com.cory.hourcalculator"
+            dimension "hour_calculator"
+            versionCode 134
+            versionName "10.0.0-production"
+        }
     }
 
     buildTypes {
