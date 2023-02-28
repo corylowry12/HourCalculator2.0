@@ -17,6 +17,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
@@ -124,6 +125,12 @@ class VersionInfoFragment : Fragment() {
             LinkClass(requireContext()).setLink(materialSubtitle.text.toString())
             openCustomTab()
         }
+
+        val versionNumber = view.findViewById<TextView>(R.id.versionNumber)
+        val buildNumber = view.findViewById<TextView>(R.id.buildNumber)
+
+        versionNumber.text = BuildConfig.VERSION_NAME
+        buildNumber.text = BuildConfig.VERSION_CODE.toString()
 
         val googleAdsConstraint = view.findViewById<ConstraintLayout>(R.id.googleAdsConstraint)
         val googleAdsSubtitle = view.findViewById<TextView>(R.id.googleAdsSubtitle)
