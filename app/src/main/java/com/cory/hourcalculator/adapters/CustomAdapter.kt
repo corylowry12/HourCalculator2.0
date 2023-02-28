@@ -16,6 +16,8 @@ import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.database.TimeCardDBHelper
+import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.EditHours
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -167,6 +169,122 @@ class CustomAdapter(
 
     fun getSelectedCount() : Int {
         return selectedItemsList.count()
+    }
+
+    fun exportSelected() {
+        val dbHandler = DBHelper(context, null)
+        val timeCardDBHandler = TimeCardDBHelper(context, null)
+        val timeCardItemDBHandler = TimeCardsItemDBHelper(context, null)
+
+        Vibrate().vibration(context)
+        val saveState = Runnable {
+            (context as MainActivity).saveState()
+
+        }
+
+        MainActivity().runOnUiThread(saveState)
+
+        val hideNavigationIcon = Runnable {
+            (context as MainActivity).hideNavigationIcon()
+
+        }
+
+        MainActivity().runOnUiThread(hideNavigationIcon)
+
+        val map = HashMap<String, String>()
+        val cursor = dbHandler.getAllRow(context)
+        val timeCardCursor = timeCardDBHandler.getLastRow(context)
+
+        var totalHours = 0.0
+        val weekArray = arrayListOf<String>()
+
+        val inTimeArray = arrayListOf<String>()
+        val outTimeArray = arrayListOf<String>()
+        val breakTimeArray = arrayListOf<String>()
+        val totalHoursArray = arrayListOf<String>()
+        val dateArray = arrayListOf<Long>()
+        if (cursor!!.count > 0) {
+
+            for (i in 0 until selectedItemsList.count()) {
+                cursor.moveToPosition(selectedItemsList.elementAt(i))
+                map["id"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                map["inTime"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                map["outTime"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                map["breakTime"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                map["totalHours"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                map["date"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
+                weekArray.add(map["date"].toString())
+                totalHours += map["totalHours"]!!.toDouble()
+
+                inTimeArray.add(map["inTime"]!!)
+                outTimeArray.add(map["outTime"]!!)
+                breakTimeArray.add(map["breakTime"]!!)
+                totalHoursArray.add(map["totalHours"]!!)
+                dateArray.add(map["date"]!!.toLong())
+
+                dbHandler.deleteRow(map["id"].toString())
+                dataList.removeAt(selectedItemsList.elementAt(i))
+                notifyItemRemoved(selectedItemsList.elementAt(i))
+                checkBoxVisible = false
+                //checkBox.isChecked = false
+            }
+            var sortedList = weekArray.sortedWith(compareBy { it })
+            //val week = "${sortedList.first()}-${sortedList.last()}"
+
+            val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val firstDateString = formatter.format(sortedList.first().toString().toLong())
+            val lastDateString = formatter.format(sortedList.last().toString().toLong())
+            //Toast.makeText(context, "$firstDateString-$lastDateString", Toast.LENGTH_LONG).show()
+
+            timeCardDBHandler.insertRow("$firstDateString-$lastDateString", totalHours.toString())
+
+            //timeCardCursor?.moveToLast()
+            //val latestID = timeCardCursor?.getString(timeCardCursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))
+
+            val timeCardLatestRowCursor = timeCardDBHandler.getLatestRowID()
+            timeCardLatestRowCursor?.moveToFirst()
+            for (i in 0 until inTimeArray.count()) {
+                Toast.makeText(context, timeCardLatestRowCursor?.getString(timeCardLatestRowCursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID)), Toast.LENGTH_SHORT).show()
+                timeCardItemDBHandler.insertRow(timeCardLatestRowCursor?.getString(timeCardLatestRowCursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))!!, inTimeArray.elementAt(i),
+                outTimeArray.elementAt(i), totalHoursArray.elementAt(i), dateArray.elementAt(i), breakTimeArray.elementAt(i))
+            }
+        }
+
+        checkBoxVisible = false
+        notifyItemRangeChanged(0, dataList.size)
+        val entriesDeleted: String = if (selectedItemsList.count() == 1) {
+            selectedItemsList.count().toString() + " Entry Exported"
+        } else {
+            selectedItemsList.count().toString() + " Entries Exported"
+        }
+        val snackBar = Snackbar.make(
+            snackbarDeleteSelected.view,
+            entriesDeleted,
+            Snackbar.LENGTH_LONG
+        )
+            .setDuration(5000)
+
+        snackBar.apply {
+            snackBar.view.background = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.snackbar_corners,
+                context.theme
+            )
+        }
+        snackBar.show()
+
+        val handler = android.os.Handler(Looper.getMainLooper())
+        val runnable = Runnable {
+            selectedItemsList.clear()
+        }
+        handler.postDelayed(runnable, 5000)
     }
 
     fun deleteSelected() {
