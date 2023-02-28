@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -229,7 +230,7 @@ class SettingsFragment : Fragment() {
             openFragment(PatchNotesFragment())
         }
 
-        if (Version(requireContext()).loadVersion() != getString(R.string.version_number)) {
+        if (Version(requireContext()).loadVersion() != BuildConfig.VERSION_NAME) {
             patchNotesChevron?.setImageResource(R.drawable.baseline_priority_high_24)
             patchNotesChevron?.setColorFilter(
                 ContextCompat.getColor(
