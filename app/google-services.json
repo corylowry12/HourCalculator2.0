@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:377217919097:android:0ef1ff78f3a0db4be80ca8",
+        "android_client_info": {
+          "package_name": "com.cory.bookfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377217919097-hhh051769kkg0bbrkohd5g6vsa4ucosg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cory.bookfinder",
+            "certificate_hash": "a112af1f49ebcf9329ebefe7bd2f0f56da4abbd1"
+          }
+        },
+        {
+          "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQvjwEMXHK-tuSUICTl_CNraJwFR_PiCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377217919097-6rb1lekucoid48rni7gqp77u40fvks1b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cory.HourCalculator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:377217919097:android:b3e58050e59ffe01e80ca8",
         "android_client_info": {
           "package_name": "com.cory.hourcalculator"
@@ -38,6 +82,137 @@
             {
               "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "377217919097-6rb1lekucoid48rni7gqp77u40fvks1b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cory.HourCalculator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377217919097:android:ba8f88ce8f52aeb8e80ca8",
+        "android_client_info": {
+          "package_name": "com.cory.hourcalculator.internal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQvjwEMXHK-tuSUICTl_CNraJwFR_PiCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377217919097-6rb1lekucoid48rni7gqp77u40fvks1b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cory.HourCalculator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377217919097:android:9643390f879ea212e80ca8",
+        "android_client_info": {
+          "package_name": "com.cory.timeconverter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377217919097-stclirlbbar43d5a1254kl7jncpedj1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cory.timeconverter",
+            "certificate_hash": "ff5cdb063d73b07f40972fe6206d677824ac23eb"
+          }
+        },
+        {
+          "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQvjwEMXHK-tuSUICTl_CNraJwFR_PiCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377217919097-6rb1lekucoid48rni7gqp77u40fvks1b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cory.HourCalculator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377217919097:android:625082837edc282fe80ca8",
+        "android_client_info": {
+          "package_name": "com.cory.tipcalc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377217919097-3pfkujusoskhfsvv54rjcrbmcu57i6m6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cory.tipcalc",
+            "certificate_hash": "789c85435b301d32759b3c4059c7d068ac7cbbe8"
+          }
+        },
+        {
+          "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQvjwEMXHK-tuSUICTl_CNraJwFR_PiCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377217919097-k179lg93ao0qv6mmggtce9hkvehbbcc3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377217919097-6rb1lekucoid48rni7gqp77u40fvks1b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cory.HourCalculator"
+              }
             }
           ]
         }
