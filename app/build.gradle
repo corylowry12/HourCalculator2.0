@@ -39,9 +39,9 @@ android {
     flavorDimensions "hour_calculator"
     productFlavors {
         Internal {
-            applicationId "com.cory.hourcalculator.internal"
+            applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 134
+            versionCode 135
             versionName "10.0.0-internal-alpha02"
         }
 
