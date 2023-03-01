@@ -68,6 +68,11 @@ class TimeCardsItemDBHelper(context: Context, factory: SQLiteDatabase.CursorFact
 
     }
 
+    fun getCountForItemID(id: Int): Int {
+        val db = this.readableDatabase
+        return DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM $TABLE_NAME WHERE $COLUMN_ITEM_ID=$id", null).toInt()
+    }
+
     fun getAllRow(context: Context, id: String): Cursor? {
         val db = this.writableDatabase
         val sortData = SortData(context)
