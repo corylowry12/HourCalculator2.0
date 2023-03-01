@@ -8,5 +8,6 @@
         android:icon="@drawable/baseline_add_photo_alternate_24"
         android:title="Add photo"
         app:showAsAction="always"
+        android:iconTint="?attr/textColor"
         tools:ignore="AlwaysShowAction" />
 </menu>
