@@ -405,6 +405,11 @@ class MainActivity : AppCompatActivity() {
         historyFragment.saveState()
     }
 
+    fun saveTimeCardState() {
+
+        timeCards.saveState()
+    }
+
     fun restoreState() {
         changeBadgeNumber()
         historyFragment.restoreState()
@@ -414,6 +419,11 @@ class MainActivity : AppCompatActivity() {
 
         changeBadgeNumber()
         historyFragment.deleteAll()
+    }
+
+    fun deleteAllTimeCards() {
+
+        timeCards.deleteAll()
     }
 
     fun checkBoxVisible(visible: Boolean) {
