@@ -5,14 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.database.TimeCardDBHelper
+import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
+import com.google.android.material.shape.CornerFamily
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,26 +38,70 @@ class TimeCardCustomAdapter(
         var name: TextView = itemView.findViewById(R.id.row_name)
         var week: TextView = itemView.findViewById(R.id.row_week)
         var totalHours: TextView = itemView.findViewById(R.id.row_total_hours)
+        var countChip : Chip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
 
         fun bind(position: Int) {
 
             val dataItem = dataList[position]
 
-            if (dataItem["name"] == null) {
+            if (dataItem["name"] == null || dataItem["name"] == "") {
                 name.text = "Name: Unknown"
-            }
-            else {
+            } else {
                 name.text = "Name: ${dataItem["name"]}"
             }
 
-            totalHours.text = "Total: ${dataItem["totalHours"]}"
+            val totalHoursRounded =
+                dataItem["totalHours"].toString().toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+
+            totalHours.text = "Total: ${totalHoursRounded}"
             week.text = "Week: ${dataItem["week"]}"
+            countChip.text = dataItem["count"]
+
+            val timeCardCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
+
+            if (dataList.count() == 1) {
+                timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+            } else if (dataList.count() > 1) {
+                if (position == 0) {
+                    timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                } else if (position > 0 && position < dataList.count() - 1) {
+                    timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                } else if (position == dataList.count() - 1) {
+                    timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+                }
+            }
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.time_card_list_row, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.time_card_list_row, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -56,9 +111,11 @@ class TimeCardCustomAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         holder.itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setOnClickListener {
+            Vibrate().vibration(context)
             val timeCardInfoFragment = TimeCardItemInfoFragment()
             timeCardInfoFragment.arguments = Bundle().apply {
                 putString("id", dataList[holder.adapterPosition]["id"])
+                putString("name", dataList[holder.adapterPosition]["name"])
             }
             val manager =
                 (context as AppCompatActivity).supportFragmentManager.beginTransaction()
@@ -67,6 +124,83 @@ class TimeCardCustomAdapter(
                 .addToBackStack(null)
             manager.commit()
         }
+
+        holder.itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
+            .setOnLongClickListener {
+                Vibrate().vibration(context)
+                val dialog = BottomSheetDialog(context)
+                val timeCardOptionsLayout = LayoutInflater.from(context)
+                    .inflate(R.layout.time_card_options_bottom_sheet, null)
+                dialog.setContentView(timeCardOptionsLayout)
+
+                val deleteConstraint =
+                    timeCardOptionsLayout.findViewById<ConstraintLayout>(R.id.deleteConstraint)
+                val deleteAllConstraint =
+                    timeCardOptionsLayout.findViewById<ConstraintLayout>(R.id.deleteAllConstraint)
+
+                val deleteCardView =
+                    timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteCardView)
+                val deleteAllCardView =
+                    timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteAllCardView)
+
+                deleteCardView.shapeAppearanceModel = deleteCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+                deleteAllCardView.shapeAppearanceModel = deleteAllCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+
+                deleteConstraint.setOnClickListener {
+                    dialog.dismiss()
+                    TimeCardDBHelper(context, null).deleteRow(dataList[position]["id"].toString())
+                    TimeCardsItemDBHelper(context, null).deleteAllItemRow(context, dataList[position]["id"].toString())
+                    dataList.removeAt(holder.adapterPosition)
+                    notifyItemRemoved(holder.adapterPosition)
+
+                    val runnable = Runnable {
+                        (context as MainActivity).saveTimeCardState()
+                    }
+                    MainActivity().runOnUiThread(runnable)
+                }
+                deleteAllConstraint.setOnClickListener {
+                    dialog.dismiss()
+                    val deleteAllDialog = BottomSheetDialog(context)
+                    val deleteAllLayout =
+                        LayoutInflater.from(context).inflate(R.layout.delete_all_bottom_sheet, null)
+                    deleteAllDialog.setContentView(deleteAllLayout)
+                    deleteAllDialog.setCancelable(true)
+                    val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
+                    val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+
+                    yesButton.setOnClickListener {
+                        TimeCardDBHelper(context, null).deleteAll()
+                        TimeCardsItemDBHelper(context, null).deleteAll()
+                        dataList.clear()
+
+                        val runnable = Runnable {
+                            (context as MainActivity).deleteAllTimeCards()
+                        }
+                        MainActivity().runOnUiThread(runnable)
+
+                        deleteAllDialog.dismiss()
+                    }
+                    noButton.setOnClickListener {
+                        deleteAllDialog.dismiss()
+                    }
+                    deleteAllDialog.show()
+                }
+
+                dialog.show()
+                return@setOnLongClickListener true
+            }
         (holder as TimeCardCustomAdapter.ViewHolder).bind(position)
     }
 }
