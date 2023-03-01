@@ -9,6 +9,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.CornerFamily
 
 class PatchNotesEnhancementsAdapter(
     val context: Context,
@@ -22,6 +24,47 @@ class PatchNotesEnhancementsAdapter(
         fun bind(position: Int) {
 
             title.text = dataList.elementAt(position).toString()
+
+            val patchNotesItemCardView = itemView.findViewById<MaterialCardView>(R.id.patchNotesItemCardView)
+
+            if (dataList.count() == 1) {
+                patchNotesItemCardView.shapeAppearanceModel = patchNotesItemCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+            }
+            else if (dataList.count() > 1) {
+                if (position == 0) {
+                    patchNotesItemCardView.shapeAppearanceModel = patchNotesItemCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                }
+                else if (position > 0 && position < dataList.count() - 1) {
+                    patchNotesItemCardView.shapeAppearanceModel = patchNotesItemCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                }
+                else if (position == dataList.count() - 1) {
+                    patchNotesItemCardView.shapeAppearanceModel = patchNotesItemCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+                }
+            }
         }
     }
 
