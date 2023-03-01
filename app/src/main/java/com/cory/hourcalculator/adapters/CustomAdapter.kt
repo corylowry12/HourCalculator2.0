@@ -239,8 +239,15 @@ class CustomAdapter(
             //val week = "${sortedList.first()}-${sortedList.last()}"
 
             val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            val firstDateString = formatter.format(sortedList.first().toString().toLong())
-            val lastDateString = formatter.format(sortedList.last().toString().toLong())
+            var firstDateString = ""
+            var lastDateString = ""
+            if (sortedList.count() > 1) {
+                firstDateString = formatter.format(sortedList.first().toString().toLong())
+                lastDateString = formatter.format(sortedList.last().toString().toLong())
+            } else {
+                firstDateString = "${formatter.format(sortedList.elementAt(0).toString().toLong())}"
+                lastDateString = "${formatter.format(sortedList.elementAt(0).toString().toLong())}"
+        }
             //Toast.makeText(context, "$firstDateString-$lastDateString", Toast.LENGTH_LONG).show()
 
             timeCardDBHandler.insertRow("$firstDateString-$lastDateString", totalHours.toString())
@@ -251,7 +258,6 @@ class CustomAdapter(
             val timeCardLatestRowCursor = timeCardDBHandler.getLatestRowID()
             timeCardLatestRowCursor?.moveToFirst()
             for (i in 0 until inTimeArray.count()) {
-                Toast.makeText(context, timeCardLatestRowCursor?.getString(timeCardLatestRowCursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID)), Toast.LENGTH_SHORT).show()
                 timeCardItemDBHandler.insertRow(timeCardLatestRowCursor?.getString(timeCardLatestRowCursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))!!, inTimeArray.elementAt(i),
                 outTimeArray.elementAt(i), totalHoursArray.elementAt(i), dateArray.elementAt(i), breakTimeArray.elementAt(i))
             }
@@ -414,12 +420,7 @@ class CustomAdapter(
 
             selectedItemsList.clear()
 
-            notifyDataSetChanged()
-
-            //val cardView : MaterialCardView = itemView.findViewById(R.id.cardViewHistory)
-
-            /*for (i in 0 until dataList.count()) {
-                Toast.makeText(context, "Called", Toast.LENGTH_SHORT).show()
+            for (i in 0 until dataList.count()) {
                 if (dataList.count() == 1) {
                     historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
                         .toBuilder()
@@ -457,8 +458,9 @@ class CustomAdapter(
                             .setBottomLeftCornerSize(28f)
                             .build()
                     }
+                    notifyItemChanged(i)
                 }
-            }*/
+            }
 
             val restoreState = Runnable {
                 (context as MainActivity).restoreState()
