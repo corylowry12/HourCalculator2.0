@@ -10,10 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.Toast
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
@@ -21,6 +18,7 @@ import com.cory.hourcalculator.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -142,6 +140,48 @@ class BackgroundColorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBarBackgroundColorFragment = view.findViewById<MaterialToolbar>(R.id.materialToolBarBackgroundColorFragment)
+        topAppBarBackgroundColorFragment?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBarBackgroundColorFragment.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.reset -> {
+                    Vibrate().vibration(requireContext())
+                    val dialog = BottomSheetDialog(requireContext())
+                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    dialog.setContentView(resetSettingsLayout)
+                    dialog.setCancelable(false)
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Background Color Settings?"
+                    /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    yesResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        reset()
+                        dialog.dismiss()
+                    }
+                    cancelResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    true
+                }
+                else -> false
+            }
+        }
 
         val lightThemeCardView = view.findViewById<MaterialCardView>(R.id.lightThemeCardViewBackgroundColor)
         val darkThemeCardView = view.findViewById<MaterialCardView>(R.id.darkThemeCardViewBackgroundColor)
@@ -474,6 +514,18 @@ class BackgroundColorFragment : Fragment() {
         //)
     }
 
+    fun reset() {
+        val lightThemeRadioButton = view?.findViewById<RadioButton>(R.id.lightTheme)
+        val darkThemeRadioButton = view?.findViewById<RadioButton>(R.id.blackTheme)
+        val followSystemRadioButton = view?.findViewById<RadioButton>(R.id.followSystem)
+
+        lightThemeRadioButton?.isChecked = false
+        darkThemeRadioButton?.isChecked = false
+        followSystemRadioButton?.isChecked = true
+
+        DarkThemeData(requireContext()).setDarkModeState(3)
+        restartThemeChange()
+    }
     private fun restartApplication() {
         Handler(Looper.getMainLooper()).postDelayed({
             val intent =
