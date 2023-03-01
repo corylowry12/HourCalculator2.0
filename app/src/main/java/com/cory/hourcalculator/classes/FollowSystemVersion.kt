@@ -15,7 +15,7 @@ class FollowSystemVersion(context: Context) {
     }
 
     fun loadSystemColor(): Boolean {
-        val state = sharedPreferences.getBoolean("systemThemeVersion", false)
+        val state = sharedPreferences.getBoolean("systemThemeVersion", true)
         return (state)
     }
 }
