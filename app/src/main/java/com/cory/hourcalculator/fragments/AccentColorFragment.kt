@@ -13,14 +13,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -173,6 +171,48 @@ class AccentColorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBarAccent = view.findViewById<MaterialToolbar>(R.id.materialToolBarAccentColorFragment)
+        topAppBarAccent?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBarAccent.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.reset -> {
+                    Vibrate().vibration(requireContext())
+                    val dialog = BottomSheetDialog(requireContext())
+                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    dialog.setContentView(resetSettingsLayout)
+                    dialog.setCancelable(false)
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Accent Color Settings?"
+                    /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    yesResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        reset()
+                        dialog.dismiss()
+                    }
+                    cancelResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    true
+                }
+                else -> false
+            }
+        }
 
         val tealCardView = view.findViewById<MaterialCardView>(R.id.tealCardViewAccentColor)
         val pinkCardView = view.findViewById<MaterialCardView>(R.id.pinkCardViewAccentColor)
@@ -675,6 +715,125 @@ class AccentColorFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    fun reset() {
+        val tealRadioButton = view?.findViewById<RadioButton>(R.id.tealAccent)
+        val pinkRadioButton = view?.findViewById<RadioButton>(R.id.pinkAccent)
+        val orangeRadioButton = view?.findViewById<RadioButton>(R.id.orangeAccent)
+        val redRadioButton = view?.findViewById<RadioButton>(R.id.redAccent)
+        val materialYouRadioButton = view?.findViewById<RadioButton>(R.id.materialYouAccent)
+
+        FollowSystemVersion(requireContext()).setSystemColor(false)
+
+        view?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.isChecked = FollowSystemVersion(requireContext()).loadSystemColor()
+
+        if (Build.VERSION.SDK_INT >= 31) {
+            tealRadioButton?.isChecked = false
+            pinkRadioButton?.isChecked = false
+            orangeRadioButton?.isChecked = false
+            redRadioButton?.isChecked = false
+            materialYouRadioButton?.isChecked = true
+
+            AccentColor(requireContext()).setAccentState(4)
+        }
+        else {
+            tealRadioButton?.isChecked = true
+            pinkRadioButton?.isChecked = false
+            orangeRadioButton?.isChecked = false
+            redRadioButton?.isChecked = false
+            materialYouRadioButton?.isChecked = false
+
+            AccentColor(requireContext()).setAccentState(0)
+        }
+
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+            if (Build.VERSION.SDK_INT >= 33) {
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashOrange"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashRed"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashPink"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashScreenNoIcon"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.MaterialYou"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
+            else {
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashOrange"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashRed"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashPink"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.SplashScreenNoIcon"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.MaterialYou"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
+            restartApplication()
         }
     }
     private fun restartApplication() {
