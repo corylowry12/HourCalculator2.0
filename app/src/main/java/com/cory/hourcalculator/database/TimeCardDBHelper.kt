@@ -17,7 +17,7 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
 
         db.execSQL(
             "CREATE TABLE $TABLE_NAME " +
-                    "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_NAME TEXT, $COLUMN_TOTAL TEXT, $COLUMN_WEEK TEXT)"
+                    "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_NAME TEXT DEFAULT \"\" NOT NULL, $COLUMN_TOTAL TEXT, $COLUMN_WEEK TEXT)"
         )
     }
 
@@ -66,6 +66,15 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         val sortType = sortData.loadSortState()
 
         return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    }
+
+    fun updateName(name: String, id: String) {
+        val values = ContentValues()
+        values.put(COLUMN_NAME, name)
+
+        val db = this.writableDatabase
+
+        db.update(TABLE_NAME, values, "$COLUMN_ID=?", arrayOf(id))
     }
 
     fun getLastRow(context: Context): Cursor? {
