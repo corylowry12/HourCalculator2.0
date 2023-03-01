@@ -42,13 +42,14 @@ class PatchNotesFragment : Fragment() {
                                             "App will now show \"Error\" if there was a problem calculating wages", "App will now calculate hours via the info dialog in the history view to show HOURS:MINUTES if there is no decimal time stored",
                                             "Optimizations when launching the app", "Optimizations in switching tabs", "Improved the quality of the app icon logos in the Appearance Settings view", "Status bar will now match the color of the theme and will change color based on scroll position",
                                             "App icon radio buttons will no be checked if you click the icon but not the radio button", "App will no longer let you go to another tab when edit view is visible to prevent accidentally leaving and losing edited data",
-                                            "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item")
+                                            "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item",
+                                            "Updated themed icon to match the other regular icons")
 
-    private var bugFixesArrayInternal = arrayOf("No new bug fixes yet")
+    private var bugFixesArrayInternal = arrayOf("No new features")
 
-    private var newFeaturesArrayInternal = arrayOf("No new features yet")
+    private var newFeaturesArrayInternal = arrayOf("No new features")
 
-    private var enhancementsArrayInternal = arrayOf("No new enhancements yet")
+    private var enhancementsArrayInternal = arrayOf("Updated themed icon to match the other regular icons")
 
     var themeSelection = false
 
