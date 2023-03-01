@@ -8,14 +8,13 @@
     android:animateLayoutChanges="true">
 
     <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
+        android:id="@+id/patchNotesItemCardView"
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="?attr/patchNotesCardBackground"
-        app:cardCornerRadius="28dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        android:layout_marginTop="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
