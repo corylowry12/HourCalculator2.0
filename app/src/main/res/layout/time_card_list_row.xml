@@ -64,6 +64,24 @@
                 app:layout_constraintTop_toBottomOf="@id/row_week"
                 tools:ignore="HardcodedText" />
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/timeCardItemInfoCountChip"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:chipStrokeWidth="0dp"
+                android:layout_width="wrap_content"
+                app:closeIconVisible="true"
+                app:chipCornerRadius="28dp"
+                android:layout_height="wrap_content"
+                app:closeIcon="@drawable/ic_baseline_chevron_right_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="1"
+                android:clickable="false"
+                android:textColor="@color/white"
+                app:closeIconTint="@color/white"
+                app:chipBackgroundColor="@color/patchNotesBadgeColor"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
