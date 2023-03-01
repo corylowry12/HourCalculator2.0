@@ -12,6 +12,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.CornerFamily
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +33,7 @@ class TimeCardItemCustomAdapter(
         fun bind(position: Int) {
 
             val dataItem = dataList[position]
+            val timeCardItemCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCardItem)
 
             val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
             val dateString = formatter.format(dataItem["day"]!!.toLong())
@@ -41,6 +43,45 @@ class TimeCardItemCustomAdapter(
             breakTime.text = "Break Time: ${dataItem["breakTime"]}"
             totalHours.text = "Total: ${dataItem["totalHours"]}"
             day.text = "Date: ${dateString}"
+
+            if (dataList.count() == 1) {
+                timeCardItemCardView.shapeAppearanceModel = timeCardItemCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+            }
+            else if (dataList.count() > 1) {
+                if (position == 0) {
+                    timeCardItemCardView.shapeAppearanceModel = timeCardItemCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                }
+                else if (position > 0 && position < dataList.count() - 1) {
+                    timeCardItemCardView.shapeAppearanceModel = timeCardItemCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                }
+                else if (position == dataList.count() - 1) {
+                    timeCardItemCardView.shapeAppearanceModel = timeCardItemCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+                }
+            }
 
         }
     }
