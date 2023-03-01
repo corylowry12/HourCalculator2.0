@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="10dp"
+    android:paddingBottom="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <View
@@ -29,6 +29,25 @@
         android:textColor="?attr/textColor"
         style="@style/TextAppearance.Material3.DisplaySmall"/>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bodyCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/headingTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="15dp"
+        app:cardCornerRadius="14dp"
+        app:cardBackgroundColor="?attr/cardBackground"
+        style="@style/Widget.Material3.CardView.Filled">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
     <TextView
         android:id="@+id/bodyTextView"
         android:layout_width="0dp"
@@ -36,22 +55,21 @@
         app:layout_constraintTop_toBottomOf="@id/headingTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="5dp"
         android:text="Would you like to reset settings?"
-        android:textColor="?attr/textColor"
+        android:textColor="?attr/settingsTextColor"
         style="@style/TextAppearance.Material3.BodyLarge"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <Button
         android:id="@+id/yesResetButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Yes"
-        app:layout_constraintTop_toBottomOf="@id/bodyTextView"
+        app:layout_constraintTop_toBottomOf="@id/bodyCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         style="@style/Widget.Material3.Button" />
