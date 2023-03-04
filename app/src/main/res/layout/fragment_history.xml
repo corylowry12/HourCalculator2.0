@@ -40,7 +40,7 @@
                 app:titleCentered="true"
                 app:menu="@menu/menu_history"
                 app:navigationIcon="@drawable/ic_baseline_close_24"
-                app:navigationIconTint="?attr/historyActionBarIconTint"
+                app:navigationIconTint="?attr/textColor"
                 app:buttonGravity="center_vertical"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
