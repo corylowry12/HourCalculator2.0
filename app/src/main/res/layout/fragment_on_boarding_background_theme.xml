@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
+    android:fitsSystemWindows="true"
     tools:context=".fragments.AppearanceFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,7 +14,6 @@
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
         android:foreground="?attr/selectableItemBackground"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/appearance_settings"
+                app:title="Background Color"
                 app:titleCentered="true" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -71,17 +71,6 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <RadioButton
-                            android:id="@+id/darkThemeOnBoarding"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:minHeight="48dp"
-                            android:text="@string/dark_theme"
-                            android:textColor="?attr/settingsTextColor"
-                            android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/lightThemeOnBoarding" />
-
-                        <RadioButton
                             android:id="@+id/blackThemeOnBoarding"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -90,7 +79,7 @@
                             android:text="@string/black_theme"
                             android:textColor="?attr/settingsTextColor"
                             android:theme="?attr/radioButtonTheme"
-                            app:layout_constraintTop_toBottomOf="@id/darkThemeOnBoarding" />
+                            app:layout_constraintTop_toBottomOf="@id/lightThemeOnBoarding" />
 
                         <RadioButton
                             android:id="@+id/followSystemOnBoarding"
