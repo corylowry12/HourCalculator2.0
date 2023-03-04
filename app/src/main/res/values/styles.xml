@@ -15,6 +15,7 @@
         <item name="historyItemMenuTint">#000000</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="Theme.DarkTheme" parent="ThemeOverlay.MaterialComponents.Dark">
