@@ -326,7 +326,7 @@ class BackgroundColorFragment : Fragment() {
                 val warningLayout =
                     layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
                 dialog.setContentView(warningLayout)
-                dialog.setCancelable(true)
+                dialog.setCancelable(false)
                 val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
                 val noButton = warningLayout.findViewById<Button>(R.id.noButton)
                 yesButton.setOnClickListener {
@@ -394,7 +394,7 @@ class BackgroundColorFragment : Fragment() {
                 val warningLayout =
                     layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
                 dialog.setContentView(warningLayout)
-                dialog.setCancelable(true)
+                dialog.setCancelable(false)
                 val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
                 val noButton = warningLayout.findViewById<Button>(R.id.noButton)
                 yesButton.setOnClickListener {
@@ -463,7 +463,7 @@ class BackgroundColorFragment : Fragment() {
                 val warningLayout =
                     layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
                 dialog.setContentView(warningLayout)
-                dialog.setCancelable(true)
+                dialog.setCancelable(false)
                 val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
                 val noButton = warningLayout.findViewById<Button>(R.id.noButton)
                 yesButton.setOnClickListener {
