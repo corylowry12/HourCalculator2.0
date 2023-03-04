@@ -6,12 +6,15 @@ package com.cory.hourcalculator.fragments
 import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,15 +23,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.FAQCustomAdapter
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
-import com.cory.hourcalculator.classes.FollowSystemVersion
-import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -251,6 +252,22 @@ class FAQFragment : Fragment() {
 
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarFAQ)
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
