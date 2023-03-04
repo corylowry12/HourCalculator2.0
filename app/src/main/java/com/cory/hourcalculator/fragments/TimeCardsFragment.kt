@@ -10,21 +10,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.DarkThemeData
 import com.cory.hourcalculator.classes.FollowSystemVersion
-import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.math.RoundingMode
+import com.google.android.material.snackbar.Snackbar
 
 class TimeCardsFragment : Fragment() {
 
@@ -110,12 +115,138 @@ class TimeCardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val recyclerViewTimeCards = view.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
+
+        val animation =
+            AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
+        recyclerViewTimeCards?.layoutAnimation = animation
+
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 2
+            (activity as MainActivity).setActiveTab(2)
+        }
+
+        MainActivity().runOnUiThread(runnable)
+
         timeCardCustomAdapter = TimeCardCustomAdapter(requireContext(), dataList)
         linearLayoutManager = LinearLayoutManager(requireContext())
 
         activity?.window?.setBackgroundDrawable(null)
 
         loadIntoList()
+
+        val floatingActionButtonTimeCards = view.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
+        val accentColor = AccentColor(requireContext())
+        when {
+
+            accentColor.loadAccent() == 0 -> {
+                floatingActionButtonTimeCards?.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
+            }
+            accentColor.loadAccent() == 1 -> {
+                floatingActionButtonTimeCards?.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.pinkAccent)
+            }
+            accentColor.loadAccent() == 2 -> {
+                floatingActionButtonTimeCards?.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.orangeAccent)
+            }
+            accentColor.loadAccent() == 3 -> {
+                floatingActionButtonTimeCards?.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.redAccent)
+            }
+            accentColor.loadAccent() == 4 -> {
+                val followSystemVersion = FollowSystemVersion(requireContext())
+                if (!followSystemVersion.loadSystemColor()) {
+                    floatingActionButtonTimeCards?.backgroundTintList =
+                        ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
+                } else {
+                    if (themeSelection) {
+                        floatingActionButtonTimeCards?.backgroundTintList =
+                            ContextCompat.getColorStateList(
+                                requireContext(),
+                                R.color.systemAccentGoogleDark
+                            )
+                    } else {
+                        floatingActionButtonTimeCards?.backgroundTintList =
+                            ContextCompat.getColorStateList(
+                                requireContext(),
+                                R.color.systemAccentGoogleDark_light
+                            )
+                    }
+                }
+            }
+        }
+
+        recyclerViewTimeCards?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                if (pastVisibleItems > 0) {
+                    floatingActionButtonTimeCards?.show()
+                } else {
+                    floatingActionButtonTimeCards?.hide()
+                }
+            }
+        })
+
+        floatingActionButtonTimeCards?.setOnClickListener {
+            scrollToTop()
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            })
+    }
+
+    fun scrollToTop() {
+        val listView = view?.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
+        Vibrate().vibration(requireContext())
+
+        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
+
+            val savedState = listView?.layoutManager?.onSaveInstanceState()
+            listView?.scrollToPosition(0)
+            val collapsingToolbarLayout =
+                requireView().findViewById<AppBarLayout>(R.id.appBarLayoutTimeCards)
+            collapsingToolbarLayout.setExpanded(true, true)
+            val snackbar =
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.restore_position),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setDuration(5000)
+
+            snackbar.setAction(getString(R.string.restore)) {
+                Vibrate().vibration(requireContext())
+
+                listView?.layoutManager?.onRestoreInstanceState(savedState)
+                collapsingToolbarLayout.setExpanded(false, false)
+
+            }
+            snackbar.setActionTextColor(
+                ContextCompat.getColorStateList(
+                    requireContext(),
+                    AccentColor(requireContext()).snackbarActionTextColor()
+                )
+            )
+            snackbar.apply {
+                snackbar.view.background = ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.snackbar_corners,
+                    context.theme
+                )
+            }
+            snackbar.show()
+        }
     }
 
     private fun loadIntoList() {
@@ -147,6 +278,20 @@ class TimeCardsFragment : Fragment() {
             map["totalHours"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
             map["week"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_WEEK))
             map["count"] = TimeCardsItemDBHelper(requireActivity().applicationContext, null).getCountForItemID(map["id"].toString().toInt()).toString()
+
+            if (map["week"]!!.contains("-") && !map["week"]!!.contains(" - ")) {
+                TimeCardDBHelper(requireContext(), null).updateWeek(map["week"]!!.replace("-", " - "), map["id"]!!)
+                map["week"] = map["week"]!!.replace("-", " - ")
+            }
+
+            if (map["count"]!!.toInt() == 1) {
+                if (map["week"]!!.contains("-")) {
+                    val (first, last) = map["week"]!!.split("-")
+                    TimeCardDBHelper(requireContext(), null).updateWeek(first, map["id"]!!)
+                    map["week"] = first
+                }
+            }
+
             dataList.add(map)
 
             cursor.moveToNext()
@@ -163,10 +308,10 @@ class TimeCardsFragment : Fragment() {
         val animation = AlphaAnimation(1f, 0f)
         animation.duration = 500
         val listView = view?.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
-        //val floatingActionButtonHistory =
-            //view?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
+        val floatingActionButtonHistory =
+            view?.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
 
-        //floatingActionButtonHistory?.visibility = View.INVISIBLE
+        floatingActionButtonHistory?.visibility = View.INVISIBLE
 
         listView?.startAnimation(animation)
 
