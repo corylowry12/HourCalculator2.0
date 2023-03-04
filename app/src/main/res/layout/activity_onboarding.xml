@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:id="@+id/layout1"
-    tools:context=".OnboardingActivity">
+    tools:context=".intents.OnboardingActivity">
 
     <FrameLayout
         android:id="@+id/fragment_container_onboarding"
