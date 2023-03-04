@@ -7,12 +7,11 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
-import com.cory.hourcalculator.MainActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
@@ -22,7 +21,6 @@ import com.cory.hourcalculator.fragments.EditHours
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -31,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -221,7 +220,17 @@ class CustomAdapter(
                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                 weekArray.add(map["date"].toString())
-                totalHours += map["totalHours"]!!.toDouble()
+                if (!map["totalHours"]!!.contains(":")) {
+                    totalHours += map["totalHours"]!!.toDouble()
+                }
+                else {
+                    val (hours, minutes) = map["totalHours"]!!.split(":")
+                    val decimal =
+                        (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                            .toString().drop(2)
+                    val decimalTime = "$hours.$decimal".toDouble()
+                    totalHours += decimalTime
+                }
 
                 inTimeArray.add(map["inTime"]!!)
                 outTimeArray.add(map["outTime"]!!)
@@ -241,19 +250,14 @@ class CustomAdapter(
             val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             var firstDateString = ""
             var lastDateString = ""
-            if (sortedList.count() > 1) {
+            //if (sortedList.count() > 1) {
                 firstDateString = formatter.format(sortedList.first().toString().toLong())
                 lastDateString = formatter.format(sortedList.last().toString().toLong())
-            } else {
-                firstDateString = "${formatter.format(sortedList.elementAt(0).toString().toLong())}"
-                lastDateString = "${formatter.format(sortedList.elementAt(0).toString().toLong())}"
-        }
-            //Toast.makeText(context, "$firstDateString-$lastDateString", Toast.LENGTH_LONG).show()
-
-            timeCardDBHandler.insertRow("$firstDateString-$lastDateString", totalHours.toString())
-
-            //timeCardCursor?.moveToLast()
-            //val latestID = timeCardCursor?.getString(timeCardCursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))
+                timeCardDBHandler.insertRow("$firstDateString-$lastDateString", totalHours.toString())
+            //} //else {
+                //firstDateString = "${formatter.format(sortedList.elementAt(0).toString().toLong())}"
+                //timeCardDBHandler.insertRow("$firstDateString", totalHours.toString())
+        //}
 
             val timeCardLatestRowCursor = timeCardDBHandler.getLatestRowID()
             timeCardLatestRowCursor?.moveToFirst()
@@ -286,11 +290,7 @@ class CustomAdapter(
         }
         snackBar.show()
 
-        val handler = android.os.Handler(Looper.getMainLooper())
-        val runnable = Runnable {
-            selectedItemsList.clear()
-        }
-        handler.postDelayed(runnable, 5000)
+        selectedItemsList.clear()
     }
 
     fun deleteSelected() {
