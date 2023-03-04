@@ -8,9 +8,7 @@ import android.graphics.*
 import android.media.ExifInterface
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -33,6 +31,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -62,7 +61,7 @@ class TimeCardItemInfoFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var timeCardItemCustomAdapter: TimeCardItemCustomAdapter
 
-    private lateinit var editable : Editable
+    private lateinit var editable: Editable
 
     var themeSelection = false
     private lateinit var id: String
@@ -168,11 +167,12 @@ class TimeCardItemInfoFragment : Fragment() {
             }
 
             MainActivity().runOnUiThread(runnable)
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        val topAppBarTimeCardItem = view.findViewById<MaterialToolbar>(R.id.materialToolBarTimeCardItemInfo)
+        val topAppBarTimeCardItem =
+            view.findViewById<MaterialToolbar>(R.id.materialToolBarTimeCardItemInfo)
         topAppBarTimeCardItem?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
@@ -188,15 +188,26 @@ class TimeCardItemInfoFragment : Fragment() {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
             val id = typedValue.resourceId
-            addDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
-        else {
+            addDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            addDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            addDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
 
         topAppBarTimeCardItem.setOnMenuItemClickListener {
@@ -210,43 +221,50 @@ class TimeCardItemInfoFragment : Fragment() {
                         ContextCompat.getColor(requireContext(), R.color.black)
                     dialog.setContentView(addAPhotoLayout)
 
-                    val selectAPhotoCardView = addAPhotoLayout.findViewById<MaterialCardView>(R.id.selectAPhotoCardView)
-                    val takeAPhotoCardView = addAPhotoLayout.findViewById<MaterialCardView>(R.id.addAPhotoCardView)
+                    val selectAPhotoCardView =
+                        addAPhotoLayout.findViewById<MaterialCardView>(R.id.selectAPhotoCardView)
+                    val takeAPhotoCardView =
+                        addAPhotoLayout.findViewById<MaterialCardView>(R.id.addAPhotoCardView)
 
-                    selectAPhotoCardView.shapeAppearanceModel = selectAPhotoCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                    takeAPhotoCardView.shapeAppearanceModel = takeAPhotoCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                        .setBottomRightCornerSize(28f)
-                        .setBottomLeftCornerSize(28f)
-                        .build()
+                    selectAPhotoCardView.shapeAppearanceModel =
+                        selectAPhotoCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
+                            .build()
+                    takeAPhotoCardView.shapeAppearanceModel =
+                        takeAPhotoCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(28f)
+                            .setBottomLeftCornerSize(28f)
+                            .build()
 
-                    val selectAPhoto = addAPhotoLayout.findViewById<ConstraintLayout>(R.id.selectAPhotoConstraint)
-                    val takeAPhoto = addAPhotoLayout.findViewById<ConstraintLayout>(R.id.takeAPhotoConstraint)
+                    val selectAPhoto =
+                        addAPhotoLayout.findViewById<ConstraintLayout>(R.id.selectAPhotoConstraint)
+                    val takeAPhoto =
+                        addAPhotoLayout.findViewById<ConstraintLayout>(R.id.takeAPhotoConstraint)
 
                     selectAPhoto.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         val pickerIntent = Intent(Intent.ACTION_PICK)
                         pickerIntent.type = "image/*"
 
-                            showImagePickerAndroid13.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        showImagePickerAndroid13.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
                             )
+                        )
                         dialog.dismiss()
                     }
                     takeAPhoto.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         list = listOf(
-                                android.Manifest.permission.CAMERA
-                            )
+                            android.Manifest.permission.CAMERA
+                        )
 
                         managePermissions =
                             ManagePermissions(
@@ -278,8 +296,7 @@ class TimeCardItemInfoFragment : Fragment() {
                                 }
                             }
                             dialog.dismiss()
-                        }
-                        else {
+                        } else {
                             managePermissions.showAlert(requireContext())
                         }
                     }
@@ -290,7 +307,8 @@ class TimeCardItemInfoFragment : Fragment() {
             }
         }
 
-        timeCardItemCustomAdapter = TimeCardItemCustomAdapter(requireContext(), timeCardItemInfoDataList)
+        timeCardItemCustomAdapter =
+            TimeCardItemCustomAdapter(requireContext(), timeCardItemInfoDataList)
         linearLayoutManager = LinearLayoutManager(requireContext())
 
         activity?.window?.setBackgroundDrawable(null)
@@ -300,7 +318,8 @@ class TimeCardItemInfoFragment : Fragment() {
 
         loadIntoList(id)
 
-        val timeCardInfoNameTextInput = activity?.findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
+        val timeCardInfoNameTextInput =
+            activity?.findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
 
         editable = if (name != null) {
             Editable.Factory.getInstance().newEditable(name)
@@ -315,7 +334,10 @@ class TimeCardItemInfoFragment : Fragment() {
                 return@OnKeyListener true
             }
             if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                TimeCardDBHelper(requireContext(), null).updateName(timeCardInfoNameTextInput.text.toString(), id)
+                TimeCardDBHelper(
+                    requireContext(),
+                    null
+                ).updateName(timeCardInfoNameTextInput.text.toString(), id)
                 hideKeyboard(timeCardInfoNameTextInput)
                 return@OnKeyListener true
             }
@@ -324,7 +346,7 @@ class TimeCardItemInfoFragment : Fragment() {
 
         timeCardInfoNameTextInput?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                    TimeCardDBHelper(requireContext(), null).updateName(s.toString(), id)
+                TimeCardDBHelper(requireContext(), null).updateName(s.toString(), id)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -347,10 +369,10 @@ class TimeCardItemInfoFragment : Fragment() {
                 "transition_image"
             )
             startActivity(intent, options.toBundle())
-
         }
 
-        val timeCardItemInfoRecyclerView = activity?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
+        val timeCardItemInfoRecyclerView =
+            activity?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
         val animation =
             AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
         timeCardItemInfoRecyclerView?.layoutAnimation = animation
@@ -369,7 +391,7 @@ class TimeCardItemInfoFragment : Fragment() {
         loadIntoList(id)
     }
 
-    private fun loadIntoList(id : String) {
+    private fun loadIntoList(id: String) {
 
         val dbHandler = TimeCardsItemDBHelper(requireActivity().applicationContext, null)
 
@@ -382,9 +404,12 @@ class TimeCardItemInfoFragment : Fragment() {
             val map = HashMap<String, String>()
             map["id"] = cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_ID))
             map["inTime"] = cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_IN))
-            map["outTime"] = cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_OUT))
-            map["totalHours"] = cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_TOTAL))
-            map["breakTime"] = cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_BREAK))
+            map["outTime"] =
+                cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_OUT))
+            map["totalHours"] =
+                cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_TOTAL))
+            map["breakTime"] =
+                cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_BREAK))
             map["day"] = cursor.getString(cursor.getColumnIndex(TimeCardsItemDBHelper.COLUMN_DAY))
             timeCardItemInfoDataList.add(map)
 
@@ -392,7 +417,8 @@ class TimeCardItemInfoFragment : Fragment() {
         }
 
 
-        val timeCardRecyclerView = activity?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
+        val timeCardRecyclerView =
+            activity?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
         timeCardRecyclerView?.layoutManager = linearLayoutManager
         timeCardRecyclerView?.adapter = timeCardItemCustomAdapter
 
@@ -408,49 +434,46 @@ class TimeCardItemInfoFragment : Fragment() {
                     .load(imagePath)
                     .into(imageView)
                 imageView.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 imageView.visibility = View.GONE
             }
-        }
-        else {
+        } else {
             imageView.visibility = View.GONE
         }
     }
 
-    val showImagePickerAndroid13 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    val showImagePickerAndroid13 =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 
-        var imageStream: InputStream? = null
-        try {
-            imageStream =
-                activity?.contentResolver?.openInputStream(
-                    uri!!
-                )
-            val imageBitmap = BitmapFactory.decodeStream(imageStream)
-            val stream = ByteArrayOutputStream()
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            // val byteArray = stream.toByteArray()
-            val selectedFile = File(getRealPathFromURI(uri!!))
-            this.image = selectedFile.toString()
-            val readUriPermission = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            activity?.contentResolver?.takePersistableUriPermission(uri, readUriPermission)
-            Toast.makeText(requireContext(), "Image selected", Toast.LENGTH_SHORT).show()
-            TimeCardDBHelper(requireContext(),null).addImage(id, image)
-            loadIntoList(id)
+            var imageStream: InputStream? = null
+            try {
+                imageStream =
+                    activity?.contentResolver?.openInputStream(
+                        uri!!
+                    )
+                val imageBitmap = BitmapFactory.decodeStream(imageStream)
+                val stream = ByteArrayOutputStream()
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                // val byteArray = stream.toByteArray()
+                val selectedFile = File(getRealPathFromURI(uri!!))
+                this.image = selectedFile.toString()
+                val readUriPermission = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                activity?.contentResolver?.takePersistableUriPermission(uri, readUriPermission)
+                Toast.makeText(requireContext(), "Image selected", Toast.LENGTH_SHORT).show()
+                TimeCardDBHelper(requireContext(), null).addImage(id, image)
+                loadIntoList(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "Adding image failed", Toast.LENGTH_SHORT).show()
+            }
         }
-        catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(requireContext(), "Adding image failed", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    fun getRealPathFromURI(contentURI: Uri) : String {
+    fun getRealPathFromURI(contentURI: Uri): String {
         var result = ""
         val cursor = requireActivity().contentResolver?.query(contentURI, null, null, null, null)
         if (cursor == null) {
             result = contentURI.path.toString()
-        }
-        else {
+        } else {
             cursor.moveToFirst()
             val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
             result = cursor.getString(idx)
@@ -465,7 +488,10 @@ class TimeCardItemInfoFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
 
             val ei = ExifInterface(currentPhotoPath)
-            val orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            val orientation = ei.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
 
             val m = Matrix()
             when (orientation) {
@@ -486,7 +512,9 @@ class TimeCardItemInfoFragment : Fragment() {
                 .format(System.currentTimeMillis())
             val storageDir = File(
                 Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + "/HourCalculator/")
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                    .toString() + "/HourCalculator/"
+            )
 
             if (!storageDir.exists()) {
                 storageDir.mkdirs()
@@ -495,17 +523,24 @@ class TimeCardItemInfoFragment : Fragment() {
 
             val f = File(image.toString())
             val fileOutputStream = FileOutputStream(f)
-            val rotatedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, originalBitmap.width, originalBitmap.height, m, true)
+            val rotatedBitmap = Bitmap.createBitmap(
+                originalBitmap,
+                0,
+                0,
+                originalBitmap.width,
+                originalBitmap.height,
+                m,
+                true
+            )
             val bitmap = rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
             MediaScannerConnection.scanFile(requireContext(), arrayOf(image.toString()), null, null)
 
             this.image = image.toString()
 
             Toast.makeText(requireContext(), "Picture taken and added", Toast.LENGTH_SHORT).show()
-            TimeCardDBHelper(requireContext(),null).addImage(id, image.toString())
+            TimeCardDBHelper(requireContext(), null).addImage(id, image.toString())
             loadIntoList(id)
-        }
-        else {
+        } else {
             Toast.makeText(requireContext(), "Adding image failed", Toast.LENGTH_SHORT).show()
         }
     }
@@ -515,7 +550,8 @@ class TimeCardItemInfoFragment : Fragment() {
     private fun createImageFile(): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
-        val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        val storageDir: File =
+            requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
         return File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
             ".png", /* suffix */
@@ -525,6 +561,7 @@ class TimeCardItemInfoFragment : Fragment() {
             currentPhotoPath = absolutePath
         }
     }
+
     private fun hideKeyboard(nameEditText: TextInputEditText) {
         val inputManager: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
