@@ -42,6 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="always"
+        android:paddingBottom="10dp"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -216,7 +218,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
-                        android:src="@drawable/ic_auto_delete_black_24dp"
+                        android:src="@drawable/ic_work_history_black_24dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -254,6 +256,79 @@
 
                     <ImageView
                         android:id="@+id/automaticChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/timeCardSettingsCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="?attr/cardBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintTimeCardSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:id="@+id/timeCardSettingsImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/ic_baseline_view_timeline_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/timeCardSettingsHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="5dp"
+                        android:text="Time Card Settings"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/timeCardSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/timeCardSettingsImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/timeCardSettingsHeading"
+                        android:layout_alignStart="@id/timeCardSettingsHeading"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="4dp"
+                        android:text="Customize the way Time Card Behaves"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/timeCardSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/timeCardSettingsImage"
+                        app:layout_constraintTop_toBottomOf="@id/timeCardSettingsHeading" />
+
+                    <ImageView
+                        android:id="@+id/timeCardSettingsChevron"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
