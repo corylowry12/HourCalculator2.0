@@ -299,21 +299,7 @@ class AppearanceFragment : Fragment() {
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
 
-        val navigationDrawable = topAppBar?.navigationIcon
-        navigationDrawable?.mutate()
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
+        setColoredMenuItemTint(topAppBar)
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -1148,11 +1134,12 @@ class AppearanceFragment : Fragment() {
 
         if (coloredMenuTintData.loadMenuTint()) {
             coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!coloredNavBarData.loadNavBar()) {
+        } else {
             coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
         coloredMenuTintConstraintLayout.setOnClickListener {
+            Vibrate().vibration(requireContext())
             coloredMenuTintSwitch.isChecked = !coloredMenuTintSwitch.isChecked
             coloredMenuTintData.setColoredMenuTint(coloredMenuTintSwitch.isChecked)
             if (coloredMenuTintSwitch.isChecked) {
@@ -1161,9 +1148,11 @@ class AppearanceFragment : Fragment() {
             else {
                 coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+            setColoredMenuItemTint(topAppBar)
         }
 
         coloredMenuTintSwitch.setOnClickListener {
+            Vibrate().vibration(requireContext())
             coloredMenuTintData.setColoredMenuTint(coloredMenuTintSwitch.isChecked)
             if (coloredMenuTintSwitch.isChecked) {
                 coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
@@ -1171,6 +1160,7 @@ class AppearanceFragment : Fragment() {
             else {
                 coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+            setColoredMenuItemTint(topAppBar)
         }
 
         /*enableColoredNavBar.setOnClickListener {
@@ -1433,6 +1423,29 @@ class AppearanceFragment : Fragment() {
                     activity?.supportFragmentManager?.popBackStack()
                 }
             })
+    }
+
+    private fun setColoredMenuItemTint(topAppBar: MaterialToolbar?) {
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+        }
     }
 
     private fun toggleColoredNavBar(
