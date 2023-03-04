@@ -7,25 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet.Constraint
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
-import com.cory.hourcalculator.MainActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
-import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -53,8 +51,22 @@ class TimeCardCustomAdapter(
             val totalHoursRounded =
                 dataItem["totalHours"].toString().toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
 
-            totalHours.text = "Total: ${totalHoursRounded}"
-            week.text = "Week: ${dataItem["week"]}"
+            val (wholeNumber, decimal) = dataItem["totalHours"]!!.split(".")
+            var minute = (".$decimal".toDouble() * 60).toInt().toString()
+            if (minute.length == 1) {
+                minute = "0$minute"
+            }
+
+            //outputColon = "$wholeNumber" + ":$minute"
+
+            totalHours.text = "Total: $totalHoursRounded/$wholeNumber:$minute"
+
+            if (dataItem["count"]!!.toInt() > 1) {
+                week.text = "Week: ${dataItem["week"]}"
+            }
+            else {
+                week.text = "Day: ${dataItem["week"]}"
+            }
             countChip.text = dataItem["count"]
 
             val timeCardCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
@@ -160,15 +172,35 @@ class TimeCardCustomAdapter(
 
                 deleteConstraint.setOnClickListener {
                     dialog.dismiss()
-                    TimeCardDBHelper(context, null).deleteRow(dataList[position]["id"].toString())
-                    TimeCardsItemDBHelper(context, null).deleteAllItemRow(context, dataList[position]["id"].toString())
-                    dataList.removeAt(holder.adapterPosition)
-                    notifyItemRemoved(holder.adapterPosition)
+                    val dialog = BottomSheetDialog(context)
+                    val deleteEntryLayout =
+                        LayoutInflater.from(context).inflate(R.layout.delete_single_time_card_entry_bottom_sheet, null)
+                    dialog.window?.navigationBarColor =
+                        ContextCompat.getColor(context, R.color.black)
+                    dialog.setContentView(deleteEntryLayout)
+                    dialog.setCancelable(true)
+                    val yesButton = deleteEntryLayout.findViewById<Button>(R.id.yesButton)
+                    val noButton = deleteEntryLayout.findViewById<Button>(R.id.noButton)
 
-                    val runnable = Runnable {
-                        (context as MainActivity).saveTimeCardState()
+                    yesButton.setOnClickListener {
+                        Vibrate().vibration(context)
+                        TimeCardDBHelper(context, null).deleteRow(dataList[position]["id"].toString())
+                        TimeCardsItemDBHelper(context, null).deleteAllItemRow(context, dataList[position]["id"].toString())
+                        dataList.removeAt(holder.adapterPosition)
+                        notifyItemRemoved(holder.adapterPosition)
+
+                        val runnable = Runnable {
+                            (context as MainActivity).saveTimeCardState()
+                        }
+                        MainActivity().runOnUiThread(runnable)
+                        dialog.dismiss()
                     }
-                    MainActivity().runOnUiThread(runnable)
+                    noButton.setOnClickListener {
+                        Vibrate().vibration(context)
+                        dialog.dismiss()
+                    }
+
+                    dialog.show()
                 }
                 deleteAllConstraint.setOnClickListener {
                     dialog.dismiss()
