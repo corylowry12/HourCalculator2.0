@@ -84,6 +84,13 @@
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageView
+            android:id="@+id/timeCardImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:transitionName="transition_image"
+            android:layout_marginBottom="6dp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timeCardItemInfoRecyclerView"
