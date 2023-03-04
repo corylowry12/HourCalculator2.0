@@ -241,14 +241,14 @@ class HistoryFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.options -> {
                     Vibrate().vibration(requireContext())
-                    val dialog = BottomSheetDialog(requireContext())
+                    val historyOptionsDialog = BottomSheetDialog(requireContext())
                     val historyOptions =
                         layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
-                    dialog.window?.navigationBarColor =
+                    historyOptionsDialog.window?.navigationBarColor =
                         ContextCompat.getColor(requireContext(), R.color.black)
-                    dialog.setContentView(historyOptions)
-                    val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
-                    val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
+                    historyOptionsDialog.setContentView(historyOptions)
+                    //val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
+                    //val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
 
                     val exportCardView = historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
                     val deleteSelectedCardView = historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
@@ -268,7 +268,7 @@ class HistoryFragment : Fragment() {
                         .setBottomLeftCornerSize(28f)
                         .build()
 
-                    exportSelected.setOnClickListener {
+                    exportCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         //Toast.makeText(requireContext(), "Cant do this right now", Toast.LENGTH_SHORT).show()
                         if (HistoryToggleData(requireContext()).loadHistoryState()) {
@@ -276,11 +276,11 @@ class HistoryFragment : Fragment() {
                             customAdapter.snackbarDeleteSelected.dismiss()
                             customAdapter.snackbarDismissCheckBox.dismiss()
                             customAdapter.exportSelected()
-                            dialog.dismiss()
+                            historyOptionsDialog.dismiss()
                         }
                     }
 
-                    deleteSelected.setOnClickListener {
+                    deleteSelectedCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         customAdapter.checkBoxVisible = false
                         try {
@@ -288,13 +288,13 @@ class HistoryFragment : Fragment() {
                             customAdapter.snackbarDeleteSelected.dismiss()
                             customAdapter.snackbarDismissCheckBox.dismiss()
                             customAdapter.deleteSelected()
-                            dialog.dismiss()
+                            historyOptionsDialog.dismiss()
                         } catch (e: UninitializedPropertyAccessException) {
                             e.printStackTrace()
                         }
                     }
                     if (customAdapter.getSelectedCount() > 0) {
-                        dialog.show()
+                        historyOptionsDialog.show()
                     }
                     else {
                         Toast.makeText(requireContext(), "There is nothing selected", Toast.LENGTH_SHORT).show()
