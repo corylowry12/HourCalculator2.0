@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -13,11 +12,10 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.cory.hourcalculator.MainActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
@@ -161,7 +159,8 @@ class HomeFragment : Fragment() {
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         val runnable = Runnable {
-            (activity as MainActivity).setActiveTab()
+            (activity as MainActivity).currentTab = 0
+            (activity as MainActivity).setActiveTab(0)
         }
 
         MainActivity().runOnUiThread(runnable)
@@ -219,7 +218,6 @@ class HomeFragment : Fragment() {
             dateData.setMinutes2(minute.toString())
             dateData.setHours2(hourOfDay.toString())
         }
-
 
         val constraintLayout = activity?.findViewById<CoordinatorLayout>(R.id.homeConstraintLayout)
 
