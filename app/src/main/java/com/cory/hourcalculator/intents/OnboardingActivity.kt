@@ -1,28 +1,23 @@
-package com.cory.hourcalculator
+package com.cory.hourcalculator.intents
 
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.cory.hourcalculator.BuildConfig
+import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.ChosenAppIconData
 import com.cory.hourcalculator.classes.DialogData
 import com.cory.hourcalculator.fragments.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class OnboardingActivity : AppCompatActivity() {
 

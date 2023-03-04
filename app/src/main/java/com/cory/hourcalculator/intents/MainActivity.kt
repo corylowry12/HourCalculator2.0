@@ -1,19 +1,19 @@
-package com.cory.hourcalculator
+package com.cory.hourcalculator.intents
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import com.cory.hourcalculator.BuildConfig
+import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.fragments.*
@@ -21,6 +21,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView.OnItemSelectedListener
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -64,9 +65,13 @@ class MainActivity : AppCompatActivity() {
                     window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccent)
                 } else {
                     if (themeSelection) {
-                        window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentGoogleDark)
+                        window.statusBarColor = ContextCompat.getColor(this,
+                            R.color.systemAccentGoogleDark
+                        )
                     } else {
-                        window.statusBarColor = ContextCompat.getColor(this, R.color.systemAccentGoogleDark_light)
+                        window.statusBarColor = ContextCompat.getColor(this,
+                            R.color.systemAccentGoogleDark_light
+                        )
                         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     }
                 }
@@ -141,6 +146,10 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
+        replaceFragment(homeFragment, 0)
+
+        //setActiveTab()
+
         //setStatusBarColor()
 
         window.decorView.systemUiVisibility =
@@ -148,12 +157,12 @@ class MainActivity : AppCompatActivity() {
 
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     }
                 }
             }
@@ -161,8 +170,6 @@ class MainActivity : AppCompatActivity() {
 
         //val intent = Intent(this, OnboardingActivity::class.java)
         //startActivity(intent)
-
-        replaceFragment(homeFragment, 0)
         
         val context = this
         GlobalScope.launch(Dispatchers.Main) {
@@ -204,12 +211,15 @@ class MainActivity : AppCompatActivity() {
 
                         if (currentFragment.toString().startsWith("EditHours", true)) {
                             editHours.historyTabClicked(this)
-                        } else if (currentFragment.toString().startsWith("History", true)) {
+                            return@setOnItemSelectedListener false
+                        } else if (currentFragment.toString().startsWith("History", true) && !currentFragment.toString().contains("Settings", true)) {
                             historyFragment.scrollToTop()
+                            return@setOnItemSelectedListener true
                         }
                         else {
                             replaceFragment(historyFragment, 1)
                             currentTab = 1
+                            return@setOnItemSelectedListener true
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -222,6 +232,10 @@ class MainActivity : AppCompatActivity() {
                         bottomNav.menu.findItem(R.id.history).isChecked = true
                         Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
                         return@setOnItemSelectedListener false
+                    }
+                    else if (currentFragment.toString().startsWith("Time", true)) {
+                        timeCards.scrollToTop()
+                        return@setOnItemSelectedListener true
                     }
                     else {
                         replaceFragment(timeCards, 2)
@@ -475,10 +489,21 @@ class MainActivity : AppCompatActivity() {
             historyToggleData.loadHistoryState()
     }
 
-    fun setActiveTab() {
-
+    fun setActiveTab(view: Int) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+
+        if (view == 0) {
+            bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+        }
+        else if (view == 1) {
+            bottomNav.menu.findItem(R.id.history).isChecked = true
+        }
+        else if (view == 2) {
+            bottomNav.menu.findItem(R.id.timeCards).isChecked = true
+        }
+        else if (view == 3) {
+            bottomNav.menu.findItem(R.id.settings).isChecked = true
+        }
     }
 
     @SuppressLint("CutPasteId")
@@ -537,7 +562,9 @@ class MainActivity : AppCompatActivity() {
                                     R.color.darkThemeBackground
                                 )
                             )
-                            badge.badgeTextColor = ContextCompat.getColor(this, R.color.darkThemeBackground)
+                            badge.badgeTextColor = ContextCompat.getColor(this,
+                                R.color.darkThemeBackground
+                            )
                         }
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -555,15 +582,15 @@ class MainActivity : AppCompatActivity() {
 
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 if (window.decorView.systemUiVisibility == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) {
-                    var flags: Int = this.getWindow().getDecorView()
-                        .getSystemUiVisibility() // get current flag
+                    var flags: Int = this.window.decorView
+                        .systemUiVisibility // get current flag
 
                     flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    this.getWindow().getDecorView().setSystemUiVisibility(flags);
+                    this.window.decorView.systemUiVisibility = flags;
                 }
             }
             darkThemeData.loadDarkModeState() == 3 -> {
@@ -599,22 +626,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    override fun onBackPressed() {
+    /*override fun onBackPressed() {
         super.onBackPressed()
 
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        Toast.makeText(this, "called", Toast.LENGTH_SHORT).show()
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (homeFragment.isVisible) {
-                bottomNav.menu.findItem(R.id.ic_home).isChecked = true
-            }
-            else if (historyFragment.isVisible) {
-                bottomNav.menu.findItem(R.id.history).isChecked = true
-            }
-            else if (settingsFragment.isVisible) {
-                bottomNav.menu.findItem(R.id.settings).isChecked = true
-            }
-        }, 200)
-    }
+
+    }*/
 }
