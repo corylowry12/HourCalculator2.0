@@ -2,19 +2,20 @@ package com.cory.hourcalculator.fragments
 
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.os.Bundle
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.cory.hourcalculator.MainActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
@@ -105,6 +106,27 @@ class AppSettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
+
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+            val id = typedValue.resourceId
+            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
