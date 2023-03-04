@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:divider="@null"
-        android:paddingBottom="55dp"
+        android:paddingBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,8 +75,6 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:contentDescription="scroll to top"
-        app:fabSize="mini"
-        app:fabCustomSize="44dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +84,7 @@
         app:srcCompat="@drawable/ic_arrow_upward_24px"
         tools:ignore="HardcodedText"
         android:layout_gravity="bottom|center"
-        tools:visibility="visible"/>
+        tools:visibility="visible"
+        style="?attr/floatingActionButtonSmallStyle"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
