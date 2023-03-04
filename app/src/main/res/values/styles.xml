@@ -263,13 +263,6 @@
         <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_300</item>
     </style>
 
-    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen" >
-        <item name="windowSplashScreenBackground">#555353</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
-        <item name="windowSplashScreenAnimationDuration">2000</item>
-    </style>
-
     <style name="RadioButtonTeal" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">@android:color/transparent</item>
         <item name="colorAccent">@color/darkTeal</item>
