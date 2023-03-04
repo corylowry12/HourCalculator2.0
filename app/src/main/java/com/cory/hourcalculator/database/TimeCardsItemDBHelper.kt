@@ -78,7 +78,7 @@ class TimeCardsItemDBHelper(context: Context, factory: SQLiteDatabase.CursorFact
         val sortData = SortData(context)
         val sortType = sortData.loadSortState()
 
-        return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ITEM_ID=$id", null)
+        return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ITEM_ID=$id ORDER BY date asc", null)
     }
 
     fun deleteAllItemRow(context: Context, id: String) {
