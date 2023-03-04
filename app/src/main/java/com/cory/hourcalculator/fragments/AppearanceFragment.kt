@@ -5,11 +5,13 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
-import com.cory.hourcalculator.MainActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.AppBarLayout
@@ -297,6 +299,22 @@ class AppearanceFragment : Fragment() {
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
 
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
@@ -365,8 +383,8 @@ class AppearanceFragment : Fragment() {
 
         val themeCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardViewAppearance)
         val followSystemCardView = requireActivity().findViewById<MaterialCardView>(R.id.followSystemChoiceCardView)
-        //val accentCardView = requireActivity().findViewById<MaterialCardView>(R.id.accentCardView)
         val coloredNavigationBarCardView = requireActivity().findViewById<MaterialCardView>(R.id.navbarCardView)
+        val coloredMenuTintCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredMenuTintCardView)
 
         //val radius = resources.getDimension(R.dimen.my_corner_radius)
         themeCardView.shapeAppearanceModel = themeCardView.shapeAppearanceModel
@@ -391,6 +409,13 @@ class AppearanceFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()*/
         coloredNavigationBarCardView.shapeAppearanceModel = coloredNavigationBarCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        coloredMenuTintCardView.shapeAppearanceModel = coloredNavigationBarCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -1115,6 +1140,39 @@ class AppearanceFragment : Fragment() {
             toggleColoredNavBar(isChecked, coloredNavBarData, accentColor)
         }
 
+        val coloredMenuTintSwitch = view.findViewById<MaterialSwitch>(R.id.coloredMenuTintSwitch)
+        val coloredMenuTintData = MenuTintData(requireContext())
+        val coloredMenuTintConstraintLayout = view.findViewById<ConstraintLayout>(R.id.coloredMenuTintConstraintLayout)
+
+        coloredMenuTintSwitch.isChecked = coloredMenuTintData.loadMenuTint()
+
+        if (coloredMenuTintData.loadMenuTint()) {
+            coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!coloredNavBarData.loadNavBar()) {
+            coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        coloredMenuTintConstraintLayout.setOnClickListener {
+            coloredMenuTintSwitch.isChecked = !coloredMenuTintSwitch.isChecked
+            coloredMenuTintData.setColoredMenuTint(coloredMenuTintSwitch.isChecked)
+            if (coloredMenuTintSwitch.isChecked) {
+                coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            }
+            else {
+                coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
+        coloredMenuTintSwitch.setOnClickListener {
+            coloredMenuTintData.setColoredMenuTint(coloredMenuTintSwitch.isChecked)
+            if (coloredMenuTintSwitch.isChecked) {
+                coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            }
+            else {
+                coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
         /*enableColoredNavBar.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (coloredNavBarData.loadNavBar()) {
@@ -1491,6 +1549,14 @@ class AppearanceFragment : Fragment() {
                     ),
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
                 )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.MaterialYou"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
                 restartApplication()
             }
             alert.setNegativeButton(getString(R.string.no)) { _, _ ->
@@ -1550,6 +1616,14 @@ class AppearanceFragment : Fragment() {
                     ComponentName(
                         BuildConfig.APPLICATION_ID,
                         "com.cory.hourcalculator.SplashScreenNoIcon"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.MaterialYou"
                     ),
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
@@ -1617,6 +1691,14 @@ class AppearanceFragment : Fragment() {
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
                 )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.MaterialYou"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
                 restartApplication()
             }
             alert.setNegativeButton(getString(R.string.no)) { _, _ ->
@@ -1676,6 +1758,14 @@ class AppearanceFragment : Fragment() {
                     ComponentName(
                         BuildConfig.APPLICATION_ID,
                         "com.cory.hourcalculator.SplashScreenNoIcon"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                activity?.packageManager?.setComponentEnabledSetting(
+                    ComponentName(
+                        BuildConfig.APPLICATION_ID,
+                        "com.cory.hourcalculator.MaterialYou"
                     ),
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
@@ -1746,6 +1836,14 @@ class AppearanceFragment : Fragment() {
                         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                         PackageManager.DONT_KILL_APP
                     )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.MaterialYou"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                     restartApplication()
                 } else if (accentColor.loadAccent() == 1) {
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -1776,6 +1874,14 @@ class AppearanceFragment : Fragment() {
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
                             "com.cory.hourcalculator.SplashScreenNoIcon"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.MaterialYou"
                         ),
                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP
@@ -1814,6 +1920,14 @@ class AppearanceFragment : Fragment() {
                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP
                     )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.MaterialYou"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                     restartApplication()
                 } else if (accentColor.loadAccent() == 3) {
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -1848,6 +1962,14 @@ class AppearanceFragment : Fragment() {
                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP
                     )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.MaterialYou"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                     restartApplication()
                 } else if (accentColor.loadAccent() == 4) {
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -1878,6 +2000,14 @@ class AppearanceFragment : Fragment() {
                         ComponentName(
                             BuildConfig.APPLICATION_ID,
                             "com.cory.hourcalculator.SplashScreenNoIcon"
+                        ),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                    activity?.packageManager?.setComponentEnabledSetting(
+                        ComponentName(
+                            BuildConfig.APPLICATION_ID,
+                            "com.cory.hourcalculator.MaterialYou"
                         ),
                         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                         PackageManager.DONT_KILL_APP
