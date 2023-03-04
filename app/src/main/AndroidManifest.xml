@@ -39,7 +39,7 @@
             android:name=".intents.OnboardingActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.SplashScreen"
+            android:theme="@style/Theme.AppSplash"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity" >
             <meta-data
