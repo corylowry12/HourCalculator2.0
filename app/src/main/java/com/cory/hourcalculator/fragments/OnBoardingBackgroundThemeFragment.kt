@@ -31,15 +31,11 @@ class OnBoardingBackgroundThemeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val lightThemeRadioButton = view.findViewById<RadioButton>(R.id.lightThemeOnBoarding)
-        val darkThemeRadioButton = view.findViewById<RadioButton>(R.id.darkThemeOnBoarding)
         val blackThemeRadioButton = view.findViewById<RadioButton>(R.id.blackThemeOnBoarding)
         val followSystemRadioButton = view.findViewById<RadioButton>(R.id.followSystemOnBoarding)
 
         if (DarkThemeData(requireContext()).loadDarkModeState() == 0) {
             lightThemeRadioButton.isChecked = true
-        }
-        else if (DarkThemeData(requireContext()).loadDarkModeState() == 1) {
-            darkThemeRadioButton.isChecked = true
         }
         else if (DarkThemeData(requireContext()).loadDarkModeState() == 2) {
             blackThemeRadioButton.isChecked = true
@@ -50,9 +46,6 @@ class OnBoardingBackgroundThemeFragment : Fragment() {
 
         lightThemeRadioButton.setOnClickListener {
             DarkThemeData(requireContext()).setDarkModeState(0)
-        }
-        darkThemeRadioButton.setOnClickListener {
-            DarkThemeData(requireContext()).setDarkModeState(1)
         }
         blackThemeRadioButton.setOnClickListener {
             DarkThemeData(requireContext()).setDarkModeState(2)
