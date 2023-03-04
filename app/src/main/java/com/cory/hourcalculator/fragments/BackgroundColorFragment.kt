@@ -2,10 +2,13 @@ package com.cory.hourcalculator.fragments
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +16,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
-import com.cory.hourcalculator.MainActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -145,6 +146,18 @@ class BackgroundColorFragment : Fragment() {
         topAppBarBackgroundColorFragment?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        val resetDrawable = topAppBarBackgroundColorFragment?.menu?.findItem(R.id.reset)?.icon
+        val navigationDrawable = topAppBarBackgroundColorFragment?.navigationIcon
+        resetDrawable?.mutate()
+        navigationDrawable?.mutate()
+        val typedValue = TypedValue()
+        activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+        val id = typedValue.resourceId
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
 
         topAppBarBackgroundColorFragment.setOnMenuItemClickListener {
