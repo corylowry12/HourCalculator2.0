@@ -3,6 +3,7 @@ package com.cory.hourcalculator.intents
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -32,18 +33,19 @@ class OnboardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_MyApplication)
         theme!!.applyStyle(R.style.teal_accent, true)
         setContentView(R.layout.activity_onboarding)
 
-        //if (DialogData(this).loadOnboardingComplete()) {
+        if (DialogData(this).loadOnboardingComplete()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-       // }
-
-        //val transaction = supportFragmentManager.beginTransaction()
-        //transaction.replace(R.id.fragment_container_onboarding, fragment1).addToBackStack(null)
-        //transaction.commit()
+        } else {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container_onboarding, fragment1).addToBackStack(null)
+            transaction.commit()
+        }
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         /*val relativeLayout = findViewById<RelativeLayout>(R.id.layout1)
         val dotsIndicator = findViewById<DotsIndicator>(R.id.dotsIndicator)
@@ -153,6 +155,14 @@ class OnboardingActivity : AppCompatActivity() {
                                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                                 PackageManager.DONT_KILL_APP
                             )
+                            this.packageManager?.setComponentEnabledSetting(
+                                ComponentName(
+                                    BuildConfig.APPLICATION_ID,
+                                    "com.cory.hourcalculator.MaterialYou"
+                                ),
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 1) {
@@ -185,6 +195,14 @@ class OnboardingActivity : AppCompatActivity() {
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
                                     "com.cory.hourcalculator.SplashScreenNoIcon"
+                                ),
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
+                            this.packageManager?.setComponentEnabledSetting(
+                                ComponentName(
+                                    BuildConfig.APPLICATION_ID,
+                                    "com.cory.hourcalculator.MaterialYou"
                                 ),
                                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP
@@ -225,6 +243,14 @@ class OnboardingActivity : AppCompatActivity() {
                                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP
                             )
+                            this.packageManager?.setComponentEnabledSetting(
+                                ComponentName(
+                                    BuildConfig.APPLICATION_ID,
+                                    "com.cory.hourcalculator.MaterialYou"
+                                ),
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 3) {
@@ -261,6 +287,14 @@ class OnboardingActivity : AppCompatActivity() {
                                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP
                             )
+                            this.packageManager?.setComponentEnabledSetting(
+                                ComponentName(
+                                    BuildConfig.APPLICATION_ID,
+                                    "com.cory.hourcalculator.MaterialYou"
+                                ),
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 4) {
@@ -293,6 +327,14 @@ class OnboardingActivity : AppCompatActivity() {
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
                                     "com.cory.hourcalculator.SplashScreenNoIcon"
+                                ),
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
+                            this.packageManager?.setComponentEnabledSetting(
+                                ComponentName(
+                                    BuildConfig.APPLICATION_ID,
+                                    "com.cory.hourcalculator.MaterialYou"
                                 ),
                                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                                 PackageManager.DONT_KILL_APP
