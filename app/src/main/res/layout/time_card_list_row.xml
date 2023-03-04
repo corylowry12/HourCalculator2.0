@@ -31,37 +31,41 @@
 
             <TextView
                 android:id="@+id/row_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Name"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_week"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/row_in"
+                android:layout_below="@id/row_name"
                 android:text="Week"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/row_name"
                 tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/row_total_hours"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_out"
                 android:text="Total Hours"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
+                android:lineBreakStyle="strict"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/row_week"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.chip.Chip
@@ -78,9 +82,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="1"
                 android:clickable="false"
-                android:textColor="@color/white"
-                app:closeIconTint="@color/white"
-                app:chipBackgroundColor="@color/patchNotesBadgeColor"/>
+                android:textColor="?attr/bottomNavTextColor"
+                app:closeIconTint="?attr/bottomNavTextColor"
+                app:chipBackgroundColor="?attr/colorPrimary"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
