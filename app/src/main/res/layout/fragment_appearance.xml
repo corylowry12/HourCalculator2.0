@@ -395,6 +395,41 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/coloredMenuTintCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/navbarCardView"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_marginTop="1dp"
+                style="@style/Widget.Material3.CardView.Filled">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/coloredMenuTintConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/coloredMenuTintSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="?attr/settingsTextColor"
+                        android:text="Toggle Colored Menu Items"
+                        app:thumbIconTint="?attr/colorPrimary"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <TextView
                 android:id="@+id/appIconsTextView"
                 android:layout_width="match_parent"
@@ -406,7 +441,7 @@
                 android:text="App Icons"
                 android:textColor="?attr/textColor"
                 android:textSize="14sp"
-                android:layout_below="@id/navbarCardView"
+                android:layout_below="@id/coloredMenuTintCardView"
                 android:layout_marginStart="10dp" />
 
             <HorizontalScrollView
