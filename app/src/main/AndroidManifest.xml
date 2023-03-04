@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.cory.hourcalculator">
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,6 +14,9 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <supports-screens
         android:largeScreens="true"
@@ -18,64 +26,35 @@
 
     <application
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:enableOnBackInvokedCallback="true">
+        android:supportsRtl="true" >
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".intents.ImageViewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyApplication"/>
+        <activity
+            android:name=".intents.OnboardingActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SplashScreen"
             android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="LockedOrientationActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/Theme.MyApplication"/>
 
         <activity-alias
-            android:name=".SplashScreenNoIcon"
-            android:enabled="true"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:targetActivity=".OnboardingActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashPink"
+            android:name=".MaterialYou"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_pink"
+            android:icon="@mipmap/ic_material_you_icon"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_pink_round"
-            android:targetActivity=".OnboardingActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashOrange"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_orange"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_orange_round"
-            android:targetActivity=".OnboardingActivity">
+            android:roundIcon="@mipmap/ic_material_you_icon_round"
+            android:targetActivity=".intents.OnboardingActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,7 +68,7 @@
             android:icon="@mipmap/ic_launcher_red"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_red_round"
-            android:targetActivity=".OnboardingActivity">
+            android:targetActivity=".intents.OnboardingActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -97,13 +76,39 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".MaterialYou"
+            android:name=".SplashOrange"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_material_you_icon"
+            android:icon="@mipmap/ic_launcher_orange"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_material_you_icon_round"
-            android:targetActivity=".OnboardingActivity">
+            android:roundIcon="@mipmap/ic_launcher_orange_round"
+            android:targetActivity=".intents.OnboardingActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".SplashPink"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_pink"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_pink_round"
+            android:targetActivity=".intents.OnboardingActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".SplashScreenNoIcon"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:targetActivity=".intents.OnboardingActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -111,9 +116,27 @@
             </intent-filter>
         </activity-alias>
 
+        <activity
+            android:name=".intents.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyApplication"
+            android:windowSoftInputMode="adjustPan"
+            tools:ignore="LockedOrientationActivity" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4546055219731501~9110514822" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.cory.hourcalculator.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
