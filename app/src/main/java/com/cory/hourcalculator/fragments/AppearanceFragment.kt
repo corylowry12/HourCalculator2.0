@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -27,6 +29,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -289,6 +292,9 @@ class AppearanceFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
         return inflater.inflate(R.layout.fragment_appearance, container, false)
     }
@@ -300,6 +306,10 @@ class AppearanceFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
 
         setColoredMenuItemTint(topAppBar)
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColorChange()
+        }
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -359,20 +369,12 @@ class AppearanceFragment : Fragment() {
             }
         }
 
-        /*val followSystemImageView = activity?.findViewById<ImageView>(R.id.followSystemImageView)
-        followSystemImageView?.setImageDrawable(followSystemImageViewDrawable)*/
-
-       // val materialYouImageView = activity?.findViewById<ImageView>(R.id.systemAccentImageView)
-        //materialYouImageView?.setImageDrawable(materialYouDrawable)
-
-        val darkThemeData = DarkThemeData(requireContext())
-
         val themeCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardViewAppearance)
-        val followSystemCardView = requireActivity().findViewById<MaterialCardView>(R.id.followSystemChoiceCardView)
+        val accentColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.accentColorCardView)
+        val appIconCardView = requireActivity().findViewById<MaterialCardView>(R.id.appIconCardView)
         val coloredNavigationBarCardView = requireActivity().findViewById<MaterialCardView>(R.id.navbarCardView)
         val coloredMenuTintCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredMenuTintCardView)
 
-        //val radius = resources.getDimension(R.dimen.my_corner_radius)
         themeCardView.shapeAppearanceModel = themeCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
@@ -380,20 +382,20 @@ class AppearanceFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        followSystemCardView.shapeAppearanceModel = followSystemCardView.shapeAppearanceModel
+        accentColorCardView.shapeAppearanceModel = accentColorCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        /*accentCardView.shapeAppearanceModel = accentCardView.shapeAppearanceModel
+        appIconCardView.shapeAppearanceModel = appIconCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
-            .build()*/
+            .build()
         coloredNavigationBarCardView.shapeAppearanceModel = coloredNavigationBarCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -411,701 +413,54 @@ class AppearanceFragment : Fragment() {
 
         val currentBackgroundColorImageView = activity?.findViewById<ImageView>(R.id.currentSelectedTheme)
         currentBackgroundColorImageView?.setImageDrawable(setDrawable())
-        val backgroundThemeConstraint = activity?.findViewById<ConstraintLayout>(R.id.backgroundThemeConstraintLayout)
-        backgroundThemeConstraint?.setOnClickListener {
+
+        themeCardView?.setOnClickListener {
             openFragment(BackgroundColorFragment())
         }
 
-        val accentColorConstraintLayout = activity?.findViewById<ConstraintLayout>(R.id.accentColorConstraintLayout)
-        accentColorConstraintLayout?.setOnClickListener {
+        accentColorCardView?.setOnClickListener {
             openFragment(AccentColorFragment())
         }
 
-        /*val lightThemeButton = activity?.findViewById<RadioButton>(R.id.lightTheme)
-        val darkThemeButton = activity?.findViewById<RadioButton>(R.id.darkTheme)
-        val amoledThemeButton = activity?.findViewById<RadioButton>(R.id.blackTheme)
-        val followSystemThemeButton = activity?.findViewById<RadioButton>(R.id.followSystem)
+        val appIconImageTextView = activity?.findViewById<TextView>(R.id.appIconImageTextView)
+        val appIconImageView = activity?.findViewById<ImageView>(R.id.currentSelectedAppIconImageView)
 
-        when {
-            darkThemeData.loadDarkModeState() == 1 -> {
-                darkThemeButton?.isChecked = true
-            }
-            darkThemeData.loadDarkModeState() == 0 -> {
-                lightThemeButton?.isChecked = true
-            }
-            darkThemeData.loadDarkModeState() == 2 -> {
-                amoledThemeButton?.isChecked = true
-            }
-            darkThemeData.loadDarkModeState() == 3 -> {
-                followSystemThemeButton?.isChecked = true
-            }
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
+            appIconImageTextView?.text = "App Icon (*)"
+            appIconImageView?.setImageResource(R.drawable.hourcalclogoteal)
         }
-
-        lightThemeButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (darkThemeData.loadDarkModeState() == 0) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.light_theme_is_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
-                    /*val alert =
-                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
-
-                    val dialog = BottomSheetDialog(requireContext())
-                    val warningLayout =
-                        layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
-                    dialog.setContentView(warningLayout)
-                    dialog.setCancelable(true)
-                    val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
-                    val noButton = warningLayout.findViewById<Button>(R.id.noButton)
-                    yesButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        darkThemeData.setDarkModeState(0)
-                        darkThemeButton?.isChecked = false
-                        amoledThemeButton?.isChecked = false
-                        followSystemThemeButton?.isChecked = false
-                        dialog.dismiss()
-                        restartApplication()
-                    }
-                    //alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    noButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        when {
-                            darkThemeData.loadDarkModeState() == 1 -> {
-                                darkThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 2 -> {
-                                amoledThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 3 -> {
-                                followSystemThemeButton?.isChecked = true
-                            }
-                        }
-                        lightThemeButton.isChecked = false
-                        dialog.dismiss()
-                    }
-                    //alert.show()
-                    dialog.show()
-                }
-                else {
-                    darkThemeData.setDarkModeState(0)
-                    darkThemeButton?.isChecked = false
-                    amoledThemeButton?.isChecked = false
-                    followSystemThemeButton?.isChecked = false
-                    restartThemeChange()
-                }
-            }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "teal") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogoteal)
         }
-        darkThemeButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (darkThemeData.loadDarkModeState() == 1) {
-                Toast.makeText(requireContext(), getString(R.string.dark_theme_already_enabled), Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
-                    /*val alert =
-                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
-                    val dialog = BottomSheetDialog(requireContext())
-                    val warningLayout =
-                        layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
-                    dialog.setContentView(warningLayout)
-                    dialog.setCancelable(true)
-                    val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
-                    val noButton = warningLayout.findViewById<Button>(R.id.noButton)
-                    yesButton.setOnClickListener {
-                    Vibrate().vibration(requireContext())
-                        darkThemeData.setDarkModeState(1)
-                        lightThemeButton?.isChecked = false
-                        amoledThemeButton?.isChecked = false
-                        followSystemThemeButton?.isChecked = false
-                        dialog.dismiss()
-                        restartApplication()
-                    }
-                    //alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    noButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        when {
-                            darkThemeData.loadDarkModeState() == 0 -> {
-                                lightThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 2 -> {
-                                amoledThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 3 -> {
-                                followSystemThemeButton?.isChecked = true
-                            }
-                        }
-                        darkThemeButton.isChecked = false
-                        dialog.dismiss()
-                    }
-                    dialog.show()
-                    //alert.show()
-                }
-                else {
-                    darkThemeData.setDarkModeState(1)
-                    lightThemeButton?.isChecked = false
-                    amoledThemeButton?.isChecked = false
-                    followSystemThemeButton?.isChecked = false
-                    restartThemeChange()
-                }
-            }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "pink") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogopink)
         }
-        amoledThemeButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (darkThemeData.loadDarkModeState() == 2) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.black_theme_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
-                    /*val alert =
-                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
-                    val dialog = BottomSheetDialog(requireContext())
-                    val warningLayout =
-                        layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
-                    dialog.setContentView(warningLayout)
-                    dialog.setCancelable(true)
-                    val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
-                    val noButton = warningLayout.findViewById<Button>(R.id.noButton)
-                    yesButton.setOnClickListener {
-                    Vibrate().vibration(requireContext())
-                        darkThemeData.setDarkModeState(2)
-                        lightThemeButton?.isChecked = false
-                        darkThemeButton?.isChecked = false
-                        followSystemThemeButton?.isChecked = false
-                        dialog.dismiss()
-                        restartApplication()
-                    }
-                    //alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    noButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        when {
-                            darkThemeData.loadDarkModeState() == 0 -> {
-                                lightThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 1 -> {
-                                darkThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 3 -> {
-                                followSystemThemeButton?.isChecked = true
-                            }
-                        }
-                        amoledThemeButton.isChecked = false
-                        dialog.dismiss()
-                    }
-                    //alert.show()
-                    dialog.show()
-                }
-                else {
-                    darkThemeData.setDarkModeState(2)
-                    lightThemeButton?.isChecked = false
-                    darkThemeButton?.isChecked = false
-                    followSystemThemeButton?.isChecked = false
-                    restartThemeChange()
-                }
-            }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "orange") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogoorange)
         }
-        followSystemThemeButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (darkThemeData.loadDarkModeState() == 3) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.system_theme_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
-                    /*val alert =
-                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
-                    val dialog = BottomSheetDialog(requireContext())
-                    val warningLayout =
-                        layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
-                    dialog.setContentView(warningLayout)
-                    dialog.setCancelable(true)
-                    val yesButton = warningLayout.findViewById<Button>(R.id.yesButton)
-                    val noButton = warningLayout.findViewById<Button>(R.id.noButton)
-                    yesButton.setOnClickListener {
-                    Vibrate().vibration(requireContext())
-                        darkThemeData.setDarkModeState(3)
-                        lightThemeButton?.isChecked = false
-                        darkThemeButton?.isChecked = false
-                        amoledThemeButton?.isChecked = false
-                        dialog.dismiss()
-                        restartThemeChange()
-                    }
-                   // alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    noButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        when {
-                            darkThemeData.loadDarkModeState() == 0 -> {
-                                lightThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 1 -> {
-                                darkThemeButton?.isChecked = true
-                            }
-                            darkThemeData.loadDarkModeState() == 2 -> {
-                                amoledThemeButton?.isChecked = true
-                            }
-                        }
-                        followSystemThemeButton.isChecked = false
-                        dialog.dismiss()
-                    }
-                    //alert.show()
-                    dialog.show()
-                }
-                else {
-                    darkThemeData.setDarkModeState(3)
-                    lightThemeButton?.isChecked = false
-                    darkThemeButton?.isChecked = false
-                    amoledThemeButton?.isChecked = false
-                    restartThemeChange()
-                }
-
-            }
-        }*/
-
-        val followSystemThemeChoice = FollowSystemThemeChoice(requireContext())
-
-       /* val blackTheme = activity?.findViewById<RadioButton>(R.id.amoledSystemTheme)
-        val darkTheme = activity?.findViewById<RadioButton>(R.id.darkThemeSystem)
-
-        if (followSystemThemeChoice.loadFollowSystemThemePreference() == 0) {
-            blackTheme?.isChecked = true
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "red") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogored)
         }
-        else {
-            darkTheme?.isChecked = true
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "blue") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogoblue)
         }
-
-        blackTheme?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (followSystemThemeChoice.loadFollowSystemThemePreference() == 0) {
-                Toast.makeText(requireContext(), getString(R.string.follow_system_already_set_to_black_theme), Toast.LENGTH_SHORT).show()
-            }
-            else {
-                if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
-                    val alert =
-                        MaterialAlertDialogBuilder(
-                            requireContext(),
-                            AccentColor(requireContext()).alertTheme()
-                        )
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        Vibrate().vibration(requireContext())
-                        followSystemThemeChoice.setFollowSystemThemePreference(0)
-                        darkTheme?.isChecked = false
-
-                        if (darkThemeData.loadDarkModeState() == 3) {
-                            if (getCurrentNightTheme()) {
-                                restartThemeChange()
-                            }
-                        }
-                    }
-                    alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                        Vibrate().vibration(requireContext())
-                        blackTheme.isChecked = false
-                    }
-                alert.show()
-                }
-                else {
-                    followSystemThemeChoice.setFollowSystemThemePreference(0)
-                    darkTheme?.isChecked = false
-
-                    if (darkThemeData.loadDarkModeState() == 3) {
-                        if (getCurrentNightTheme()) {
-                            restartThemeChange()
-                        }
-                    }
-                }
-            }
-
-            //followSystemImageView?.setImageDrawable(setDrawable())
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "og") {
+            appIconImageView?.setImageResource(R.drawable.hourcalculatorlogoyellowgradient)
         }
-
-        darkTheme?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (FollowSystemVersion(requireContext()).loadSystemColor() && AccentColor(requireContext()).loadAccent() == 4) {
-                val alert =
-                    MaterialAlertDialogBuilder(
-                        requireContext(),
-                        AccentColor(requireContext()).alertTheme()
-                    )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    followSystemThemeChoice.setFollowSystemThemePreference(1)
-                    blackTheme?.isChecked = false
-
-                    if (darkThemeData.loadDarkModeState() == 3) {
-                        if (getCurrentNightTheme()) {
-                            restartThemeChange()
-                        }
-                    }
-                }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    darkTheme.isChecked = false
-                }
-                alert.show()
-            }
-            else {
-                followSystemThemeChoice.setFollowSystemThemePreference(1)
-                blackTheme?.isChecked = false
-
-                if (darkThemeData.loadDarkModeState() == 3) {
-                    if (getCurrentNightTheme()) {
-                        restartThemeChange()
-                    }
-                }
-            }
-            //followSystemImageView?.setImageDrawable(setDrawable())
-        }*/
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "snow falling") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogo_christmas)
+        }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "material you") {
+            appIconImageView?.setImageResource(R.drawable.hourcalclogoteal)
+        }
+        appIconCardView?.setOnClickListener {
+            openFragment(ChooseAppIconFragment())
+        }
 
         val accentColor = AccentColor(requireContext())
 
-        /*val tealAccentButton = activity?.findViewById<RadioButton>(R.id.Teal)
-        val pinkAccentButton = activity?.findViewById<RadioButton>(R.id.Pink)
-        val orangeAccentButton = activity?.findViewById<RadioButton>(R.id.Orange)
-        val redAccentButton = activity?.findViewById<RadioButton>(R.id.Red)
-        val systemAccentButton = activity?.findViewById<RadioButton>(R.id.systemAccent)
-
-        val systemAccentImage = activity?.findViewById<ImageView>(R.id.systemAccentImageView)
-
-        if (Build.VERSION.SDK_INT < 31) {
-            systemAccentButton?.visibility = View.GONE
-            systemAccentImage?.visibility = View.GONE
-        }
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                tealAccentButton?.isChecked = true
-            }
-            accentColor.loadAccent() == 1 -> {
-                pinkAccentButton?.isChecked = true
-            }
-            accentColor.loadAccent() == 2 -> {
-                orangeAccentButton?.isChecked = true
-            }
-            accentColor.loadAccent() == 3 -> {
-                redAccentButton?.isChecked = true
-            }
-            accentColor.loadAccent() == 4 -> {
-                systemAccentButton?.isChecked = true
-            }
-        }
-
-        tealAccentButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (accentColor.loadAccent() == 0) {
-                Toast.makeText(requireContext(), getString(R.string.teal_is_already_chosen), Toast.LENGTH_SHORT).show()
-            } else {
-                val dialog = BottomSheetDialog(requireContext())
-                val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
-                dialog.setContentView(restartAppLayout)
-                dialog.setCancelable(false)
-                restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
-                    Vibrate().vibration(requireContext())
-
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashOrange"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashRed"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashPink"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashScreenNoIcon"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                    }
-                    dialog.dismiss()
-                    accentColor.setAccentState(0)
-                    restartApplication()
-                }
-                restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
-                Vibrate().vibration(requireContext())
-                    tealAccentButton.isChecked = false
-                    dialog.dismiss()
-                }
-                dialog.show()
-            }
-        }
-        pinkAccentButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (accentColor.loadAccent() == 1) {
-                Toast.makeText(requireContext(), getString(R.string.pink_is_already_chosen), Toast.LENGTH_SHORT).show()
-            } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.restart_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                   if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
-                       activity?.packageManager?.setComponentEnabledSetting(
-                           ComponentName(
-                               BuildConfig.APPLICATION_ID,
-                               "com.cory.hourcalculator.SplashOrange"
-                           ),
-                           PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                           PackageManager.DONT_KILL_APP
-                       )
-                       activity?.packageManager?.setComponentEnabledSetting(
-                           ComponentName(
-                               BuildConfig.APPLICATION_ID,
-                               "com.cory.hourcalculator.SplashRed"
-                           ),
-                           PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                           PackageManager.DONT_KILL_APP
-                       )
-                       activity?.packageManager?.setComponentEnabledSetting(
-                           ComponentName(
-                               BuildConfig.APPLICATION_ID,
-                               "com.cory.hourcalculator.SplashPink"
-                           ),
-                           PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                           PackageManager.DONT_KILL_APP
-                       )
-                       activity?.packageManager?.setComponentEnabledSetting(
-                           ComponentName(
-                               BuildConfig.APPLICATION_ID,
-                               "com.cory.hourcalculator.SplashScreenNoIcon"
-                           ),
-                           PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                           PackageManager.DONT_KILL_APP
-                       )
-                   }
-                    accentColor.setAccentState(1)
-                    restartApplication()
-                }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    pinkAccentButton.isChecked = false
-                }
-                alert.show()
-            }
-        }
-        orangeAccentButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (accentColor.loadAccent() == 2) {
-                Toast.makeText(requireContext(), getString(R.string.orange_is_already_chosen), Toast.LENGTH_SHORT).show()
-            } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.restart_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashOrange"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashRed"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashPink"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashScreenNoIcon"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                    }
-                    accentColor.setAccentState(2)
-                    restartApplication()
-                }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    orangeAccentButton.isChecked = false
-                }
-                alert.show()
-            }
-        }
-        redAccentButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (accentColor.loadAccent() == 3) {
-                Toast.makeText(requireContext(), getString(R.string.red_already_chosen), Toast.LENGTH_SHORT).show()
-            } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.restart_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashOrange"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashRed"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashPink"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashScreenNoIcon"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                    }
-                    accentColor.setAccentState(3)
-                    restartApplication()
-                }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    redAccentButton.isChecked = false
-                }
-                alert.show()
-            }
-        }
-        systemAccentButton?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (accentColor.loadAccent() == 4) {
-                Toast.makeText(requireContext(), getString(R.string.system_accent_color_is_already_enabled), Toast.LENGTH_SHORT).show()
-            } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning_experimental))
-                alert.setMessage(getString(R.string.system_accent_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashOrange"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashRed"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashPink"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                        activity?.packageManager?.setComponentEnabledSetting(
-                            ComponentName(
-                                BuildConfig.APPLICATION_ID,
-                                "com.cory.hourcalculator.SplashScreenNoIcon"
-                            ),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                    }
-                    accentColor.setAccentState(4)
-                    restartApplication()
-                }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    systemAccentButton.isChecked = false
-                }
-                alert.show()
-            }
-        }*/
-
         val coloredNavBarSwitch = view.findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)
         val coloredNavBarData = ColoredNavBarData(requireContext())
-        val coloredNavBarConstraintLayout = view.findViewById<ConstraintLayout>(R.id.coloredNavBarConstraintLayout)
 
         coloredNavBarSwitch.isChecked = coloredNavBarData.loadNavBar()
 
@@ -1117,7 +472,7 @@ class AppearanceFragment : Fragment() {
             coloredNavBarSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        coloredNavBarConstraintLayout.setOnClickListener {
+        coloredNavigationBarCardView.setOnClickListener {
             coloredNavBarSwitch.isChecked = !coloredNavBarSwitch.isChecked
             toggleColoredNavBar(coloredNavBarSwitch.isChecked, coloredNavBarData, accentColor)
         }
@@ -1128,7 +483,6 @@ class AppearanceFragment : Fragment() {
 
         val coloredMenuTintSwitch = view.findViewById<MaterialSwitch>(R.id.coloredMenuTintSwitch)
         val coloredMenuTintData = MenuTintData(requireContext())
-        val coloredMenuTintConstraintLayout = view.findViewById<ConstraintLayout>(R.id.coloredMenuTintConstraintLayout)
 
         coloredMenuTintSwitch.isChecked = coloredMenuTintData.loadMenuTint()
 
@@ -1138,7 +492,7 @@ class AppearanceFragment : Fragment() {
             coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        coloredMenuTintConstraintLayout.setOnClickListener {
+        coloredMenuTintCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             coloredMenuTintSwitch.isChecked = !coloredMenuTintSwitch.isChecked
             coloredMenuTintData.setColoredMenuTint(coloredMenuTintSwitch.isChecked)
@@ -1226,196 +580,6 @@ class AppearanceFragment : Fragment() {
             }
         }*/
 
-        val autoIconCheckBox = view.findViewById<RadioButton>(R.id.autoIconRadioButton)
-        val tealIconCheckBox = view.findViewById<RadioButton>(R.id.tealIconRadioButton)
-        val pinkIconCheckBox = view.findViewById<RadioButton>(R.id.pinkIconRadioButton)
-        val orangeIconCheckBox = view.findViewById<RadioButton>(R.id.orangeIconRadioButton)
-        val redIconCheckBox = view.findViewById<RadioButton>(R.id.redIconRadioButton)
-
-        val autoIconCardView = view.findViewById<CardView>(R.id.autoCardView)
-        val tealIconCardView = view.findViewById<CardView>(R.id.tealCardView)
-        val pinkIconCardView = view.findViewById<CardView>(R.id.pinkCardView)
-        val orangeIconCardView = view.findViewById<CardView>(R.id.orangeCardView)
-        val redIconCardView = view.findViewById<CardView>(R.id.redCardView)
-
-        val autoIcon = view.findViewById<ImageView>(R.id.autoIconImageView)
-
-        if (accentColor.loadAccent() == 0 || accentColor.loadAccent() == 4) {
-            autoIcon.setImageResource(R.drawable.hourcalclogoteal)
-        }
-        else if (accentColor.loadAccent() == 1) {
-            autoIcon.setImageResource(R.drawable.hourcalclogopink)
-        }
-        else if (accentColor.loadAccent() == 2) {
-            autoIcon.setImageResource(R.drawable.hourcalclogoorange)
-        }
-        else if (accentColor.loadAccent() == 3) {
-            autoIcon.setImageResource(R.drawable.hourcalclogored)
-        }
-
-        val chosenAppIcon = ChosenAppIconData(requireContext())
-
-        if (chosenAppIcon.loadChosenAppIcon() == 0) {
-            autoIconCheckBox.isChecked = true
-        }
-        else if (chosenAppIcon.loadChosenAppIcon() == 1) {
-            tealIconCheckBox.isChecked = true
-        }
-        else if (chosenAppIcon.loadChosenAppIcon() == 2) {
-            pinkIconCheckBox.isChecked = true
-        }
-        else if (chosenAppIcon.loadChosenAppIcon() == 3) {
-            orangeIconCheckBox.isChecked = true
-        }
-        else if (chosenAppIcon.loadChosenAppIcon() == 4) {
-            redIconCheckBox.isChecked = true
-        }
-
-        autoIconCheckBox.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleAutomaticIcon(chosenAppIcon, accentColor, autoIconCheckBox)
-        }
-
-        autoIconCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleAutomaticIcon(chosenAppIcon, accentColor, autoIconCheckBox)
-        }
-
-        tealIconCheckBox.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleTealIcon(chosenAppIcon, tealIconCheckBox)
-        }
-
-        tealIconCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleTealIcon(chosenAppIcon, tealIconCheckBox)
-        }
-
-        pinkIconCheckBox.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            togglePinkIcon(chosenAppIcon, pinkIconCheckBox)
-        }
-
-        pinkIconCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            togglePinkIcon(chosenAppIcon, pinkIconCheckBox)
-        }
-
-        orangeIconCheckBox.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleOrangeIcon(chosenAppIcon, orangeIconCheckBox)
-        }
-
-        orangeIconCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleOrangeIcon(chosenAppIcon, orangeIconCheckBox)
-        }
-
-        redIconCheckBox.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleRedIcon(chosenAppIcon, redIconCheckBox)
-        }
-
-        redIconCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleRedIcon(chosenAppIcon, redIconCheckBox)
-        }
-
-        /*val normalStyle = view.findViewById<RadioButton>(R.id.normalSystemTheme)
-        val googleStyle = view.findViewById<RadioButton>(R.id.googleSystemTheme)
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        val followSystemVersionCardView = view.findViewById<CardView>(R.id.followSystemVersionCardView)
-        val followSystemVersionTextView = view.findViewById<TextView>(R.id.followSystemVersionTextView)
-
-        if (Build.VERSION.SDK_INT < 31) {
-            followSystemVersionCardView?.visibility = View.GONE
-            followSystemVersionTextView?.visibility = View.GONE
-        }
-
-        if (!followSystemVersion.loadSystemColor()) {
-            normalStyle.isChecked = true
-        } else {
-            googleStyle.isChecked = true
-        }
-
-        normalStyle.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (followSystemVersion.loadSystemColor()) {
-                if (accentColor.loadAccent() == 4) {
-                    val alert = MaterialAlertDialogBuilder(
-                        requireContext(),
-                        AccentColor(requireContext()).alertTheme()
-                    )
-                    alert.setTitle(requireContext().getString(R.string.warning_experimental))
-                    alert.setMessage(getString(R.string.may_produce_unwanted_results))
-                    alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
-                        Vibrate().vibration(requireContext())
-                        followSystemVersion.setSystemColor(false)
-                        restartApplication()
-                    }
-                    alert.setNegativeButton(requireContext().getString(R.string.no)) { _, _ ->
-                        Vibrate().vibration(requireContext())
-                        normalStyle.isChecked = false
-                    }
-                    alert.show()
-                } else {
-                    googleStyle.isChecked = false
-                    followSystemVersion.setSystemColor(false)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.app_theme_will_now_match_wallpaper),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.follow_app_theming_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-        googleStyle.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (!followSystemVersion.loadSystemColor()) {
-                if (accentColor.loadAccent() == 4) {
-                    val alert = MaterialAlertDialogBuilder(
-                        requireContext(),
-                        AccentColor(requireContext()).alertTheme()
-                    )
-                    alert.setTitle(requireContext().getString(R.string.warning_experimental))
-                    alert.setMessage(getString(R.string.this_option_may_require_the_app_to_restart_desc))
-                    alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
-                        Vibrate().vibration(requireContext())
-                        followSystemVersion.setSystemColor(true)
-                        restartApplication()
-                    }
-                    alert.setNegativeButton(requireContext().getString(R.string.no)) { _, _ ->
-                        Vibrate().vibration(requireContext())
-                        googleStyle.isChecked = false
-                    }
-                    alert.show()
-                } else {
-                    normalStyle.isChecked = false
-                    followSystemVersion.setSystemColor(true)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.app_will_now_match_google_apps),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.follow_google_apps_already_enabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }*/
-
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -1430,13 +594,22 @@ class AppearanceFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
         } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
@@ -1489,6 +662,10 @@ class AppearanceFragment : Fragment() {
                         }
                     }
                 }
+                accentColor.loadAccent() == 5 -> {
+                    activity?.window?.navigationBarColor =
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                }
             }
 
             Toast.makeText(
@@ -1514,7 +691,7 @@ class AppearanceFragment : Fragment() {
         chosenAppIcon: ChosenAppIconData,
         tealIconCheckBox: RadioButton
     ) {
-        if (chosenAppIcon.loadChosenAppIcon() == 1) {
+        if (chosenAppIcon.loadChosenAppIcon() == "teal") {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.teal_icon_already_enabled),
@@ -1530,7 +707,7 @@ class AppearanceFragment : Fragment() {
             alert.setMessage(getString(R.string.change_app_icon_warning))
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                chosenAppIcon.setChosenAppIcon(1)
+                chosenAppIcon.setChosenAppIcon("teal")
                 activity?.packageManager?.setComponentEnabledSetting(
                     ComponentName(
                         BuildConfig.APPLICATION_ID,
@@ -1584,7 +761,7 @@ class AppearanceFragment : Fragment() {
         chosenAppIcon: ChosenAppIconData,
         pinkIconCheckBox: RadioButton
     ) {
-        if (chosenAppIcon.loadChosenAppIcon() == 2) {
+        if (chosenAppIcon.loadChosenAppIcon() == "pink") {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.pink_icon_already_enabled),
@@ -1600,7 +777,7 @@ class AppearanceFragment : Fragment() {
             alert.setMessage(getString(R.string.change_app_icon_warning))
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                chosenAppIcon.setChosenAppIcon(2)
+                chosenAppIcon.setChosenAppIcon("pink")
                 activity?.packageManager?.setComponentEnabledSetting(
                     ComponentName(
                         BuildConfig.APPLICATION_ID,
@@ -1655,7 +832,7 @@ class AppearanceFragment : Fragment() {
         chosenAppIcon: ChosenAppIconData,
         orangeIconCheckBox: RadioButton
     ) {
-        if (chosenAppIcon.loadChosenAppIcon() == 3) {
+        if (chosenAppIcon.loadChosenAppIcon() == "orange") {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.orange_icon_already_enabled),
@@ -1671,7 +848,7 @@ class AppearanceFragment : Fragment() {
             alert.setMessage(getString(R.string.change_app_icon_warning))
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                chosenAppIcon.setChosenAppIcon(3)
+                chosenAppIcon.setChosenAppIcon("orange")
                 activity?.packageManager?.setComponentEnabledSetting(
                     ComponentName(
                         BuildConfig.APPLICATION_ID,
@@ -1726,7 +903,7 @@ class AppearanceFragment : Fragment() {
         chosenAppIcon: ChosenAppIconData,
         redIconCheckBox: RadioButton
     ) {
-        if (chosenAppIcon.loadChosenAppIcon() == 4) {
+        if (chosenAppIcon.loadChosenAppIcon() == "red") {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.red_icon_already_enabled),
@@ -1742,7 +919,7 @@ class AppearanceFragment : Fragment() {
             alert.setMessage(getString(R.string.change_app_icon_warning))
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                chosenAppIcon.setChosenAppIcon(4)
+                chosenAppIcon.setChosenAppIcon("red")
                 activity?.packageManager?.setComponentEnabledSetting(
                     ComponentName(
                         BuildConfig.APPLICATION_ID,
@@ -1798,7 +975,7 @@ class AppearanceFragment : Fragment() {
         accentColor: AccentColor,
         autoIconCheckBox: RadioButton
     ) {
-        if (chosenAppIcon.loadChosenAppIcon() == 0) {
+        if (chosenAppIcon.loadChosenAppIcon() == "auto") {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.automatic_icon_already_enabled),
@@ -1814,7 +991,7 @@ class AppearanceFragment : Fragment() {
             alert.setMessage(getString(R.string.change_app_icon_warning))
             alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                chosenAppIcon.setChosenAppIcon(0)
+                chosenAppIcon.setChosenAppIcon("auto")
 
                 if (accentColor.loadAccent() == 0) {
                     activity?.packageManager?.setComponentEnabledSetting(
@@ -2085,7 +1262,7 @@ class AppearanceFragment : Fragment() {
                     DarkThemeData(requireContext()).setDarkModeState(3)
                 }
             }
-            ChosenAppIconData(requireContext()).setChosenAppIcon(0)
+            ChosenAppIconData(requireContext()).setChosenAppIcon("auto")
             activity?.packageManager?.setComponentEnabledSetting(
                 ComponentName(
                     BuildConfig.APPLICATION_ID,
@@ -2211,5 +1388,74 @@ class AppearanceFragment : Fragment() {
             startActivity(intent)
             activity?.finish()
         }, 1000)
+    }
+
+    fun updateCustomColorChange() {
+        val customColorGenerator = CustomColorGenerator(requireContext())
+
+        val backgroundColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardViewAppearance)
+        val accentColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.accentColorCardView)
+        val appIconCardView = requireActivity().findViewById<MaterialCardView>(R.id.appIconCardView)
+        val coloredNavBarCardView = requireActivity().findViewById<MaterialCardView>(R.id.navbarCardView)
+        val coloredMenuItemsCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredMenuTintCardView)
+
+        backgroundColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        accentColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        appIconCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        coloredNavBarCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        coloredMenuItemsCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setContentScrimColor(
+            Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setStatusBarScrimColor(
+            Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+        val colors = intArrayOf(
+            Color.parseColor("#e7dfec"),
+            Color.parseColor(customColorGenerator.generateCustomColorPrimary())
+        )
+
+        val toggleColoredNavBarSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)
+        val toggleColoredMenuItemsSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredMenuTintSwitch)
+
+        toggleColoredNavBarSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
+        toggleColoredNavBarSwitch.trackTintList = ColorStateList(states, colors)
+        toggleColoredMenuItemsSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
+        toggleColoredMenuItemsSwitch.trackTintList = ColorStateList(states, colors)
+
+        val topAppBarAppearance = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
+
+        val navigationDrawable = topAppBarAppearance?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(customColorGenerator.generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    id,
+                    BlendMode.SRC_ATOP
+                )
+            }
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
     }
 }
