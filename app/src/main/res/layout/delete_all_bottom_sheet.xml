@@ -29,7 +29,8 @@
         android:textColor="?attr/textColor"
         style="@style/TextAppearance.Material3.DisplaySmall"/>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Filled"
         android:id="@+id/infoCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,16 +61,16 @@
                 style="@style/TextAppearance.Material3.BodyLarge"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
     <Button
         android:id="@+id/yesButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/yes"
         app:layout_constraintTop_toBottomOf="@id/infoCardView"
-        app:layout_constraintStart_toEndOf="@id/noButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         style="@style/Widget.Material3.Button" />
@@ -79,10 +80,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/no"
-        app:layout_constraintTop_toBottomOf="@id/infoCardView"
+        app:layout_constraintTop_toBottomOf="@id/yesButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/yesButton"
-        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         style="@style/Widget.Material3.Button.OutlinedButton" />
