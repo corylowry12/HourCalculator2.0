@@ -97,6 +97,9 @@ class AboutAppFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
         return inflater.inflate(R.layout.fragment_about_app, container, false)
     }
@@ -131,7 +134,7 @@ class AboutAppFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
+        /*val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
         val appIconCardView = view.findViewById<CardView>(R.id.appIconCardView)
         if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
             if (accentColor.loadAccent() == 0 || accentColor.loadAccent() == 4) {
@@ -166,7 +169,7 @@ class AboutAppFragment : Fragment() {
         else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 4) {
             appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.redIcon))
             autoIcon.setImageResource(R.drawable.hourcalclogored)
-        }
+        }*/
 
         val patchNotesTextView = activity?.findViewById<TextView>(R.id.patchNotes)
         val rateOnPlayStore = activity?.findViewById<TextView>(R.id.rate)
