@@ -1,6 +1,8 @@
 package com.cory.hourcalculator.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
@@ -39,6 +43,14 @@ class TimeCardCustomAdapter(
         var countChip : Chip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
 
         fun bind(position: Int) {
+
+            if (AccentColor(context).loadAccent() == 5) {
+                itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
+                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
+                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+            }
 
             val dataItem = dataList[position]
 
