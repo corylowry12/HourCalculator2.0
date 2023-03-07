@@ -3,30 +3,38 @@ package com.cory.hourcalculator.fragments
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.*
+import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.intents.MainActivity
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.slider.Slider
+import kotlin.math.max
+import kotlin.math.min
 
 class AccentColorFragment : Fragment() {
 
@@ -168,6 +176,9 @@ class AccentColorFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
         return inflater.inflate(R.layout.fragment_accent_color, container, false)
     }
@@ -203,12 +214,23 @@ class AccentColorFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColorChange()
+        }
+
         topAppBarAccent.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.reset -> {
                     Vibrate().vibration(requireContext())
                     val dialog = BottomSheetDialog(requireContext())
                     val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    if (AccentColor(requireContext()).loadAccent() == 5) {
+                        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                        yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    }
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Accent Color Settings?"
@@ -221,8 +243,6 @@ class AccentColorFragment : Fragment() {
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
                     }*/
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -243,6 +263,7 @@ class AccentColorFragment : Fragment() {
         val pinkCardView = view.findViewById<MaterialCardView>(R.id.pinkCardViewAccentColor)
         val orangeCardView = view.findViewById<MaterialCardView>(R.id.orangeCardViewAccentColor)
         val redCardView = view.findViewById<MaterialCardView>(R.id.redCardViewAccentColor)
+        val customCardView = view.findViewById<MaterialCardView>(R.id.customCardViewAccentColor)
         val materialYouCardView = view.findViewById<MaterialCardView>(R.id.materialYouCardViewAccentColor)
         val materialYouImageView = view.findViewById<ImageView>(R.id.materialYouImageView)
 
@@ -276,6 +297,13 @@ class AccentColorFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
+        customCardView.shapeAppearanceModel = customCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
         materialYouCardView.shapeAppearanceModel = materialYouCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -288,6 +316,7 @@ class AccentColorFragment : Fragment() {
         val pinkRadioButton = view.findViewById<RadioButton>(R.id.pinkAccent)
         val orangeRadioButton = view.findViewById<RadioButton>(R.id.orangeAccent)
         val redRadioButton = view.findViewById<RadioButton>(R.id.redAccent)
+        val customRadioButton = view.findViewById<RadioButton>(R.id.customAccent)
         val materialYouRadioButton = view.findViewById<RadioButton>(R.id.materialYouAccent)
 
         val accentColor = AccentColor(requireContext())
@@ -308,6 +337,9 @@ class AccentColorFragment : Fragment() {
             accentColor.loadAccent() == 4 -> {
                 materialYouRadioButton.isChecked = true
             }
+            accentColor.loadAccent() == 5 -> {
+                customRadioButton.isChecked = true
+            }
         }
 
         tealRadioButton.setOnClickListener {
@@ -322,7 +354,7 @@ class AccentColorFragment : Fragment() {
                 restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
 
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
                             ComponentName(
                                 BuildConfig.APPLICATION_ID,
@@ -390,7 +422,7 @@ class AccentColorFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
                             ComponentName(
                                 BuildConfig.APPLICATION_ID,
@@ -456,7 +488,7 @@ class AccentColorFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
                             ComponentName(
                                 BuildConfig.APPLICATION_ID,
@@ -522,7 +554,7 @@ class AccentColorFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
                             ComponentName(
                                 BuildConfig.APPLICATION_ID,
@@ -574,6 +606,104 @@ class AccentColorFragment : Fragment() {
                 alert.show()
             }
         }
+        customRadioButton.setOnClickListener {
+            val customColorPickerDialog = BottomSheetDialog(requireContext())
+            val customColorPickerLayout = layoutInflater.inflate(R.layout.custom_color_bottom_sheet, null)
+            customColorPickerDialog.setContentView(customColorPickerLayout)
+
+            val customColor = Color.parseColor(CustomColorGenerator(requireContext()).loadCustomHex())
+            var redValue = customColor.red
+            var greenValue = customColor.green
+            var blueValue = customColor.blue
+
+            val coloredCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.coloredCardView)
+            val redSlider = customColorPickerLayout.findViewById<Slider>(R.id.redSlider)
+            val greenSlider = customColorPickerLayout.findViewById<Slider>(R.id.greenSlider)
+            val blueSlider = customColorPickerLayout.findViewById<Slider>(R.id.blueSlider)
+            val hashtagTextView = customColorPickerLayout.findViewById<TextView>(R.id.hashtagTextView)
+            val hexadecimalTextView = customColorPickerLayout.findViewById<TextView>(R.id.hexadecimalTextView)
+
+            val selectButton = customColorPickerLayout.findViewById<Button>(R.id.selectColorButton)
+
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                selectButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            }
+
+            var hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+            coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+            hexadecimalTextView.text = hex
+
+            redSlider.value = redValue.toFloat()
+            greenSlider.value = greenValue.toFloat()
+            blueSlider.value = blueValue.toFloat()
+
+            if (redValue < 100 || greenValue < 100 || blueValue < 100) {
+                hashtagTextView.setTextColor(Color.parseColor("#ffffff"))
+                hexadecimalTextView.setTextColor(Color.parseColor("#ffffff"))
+            }
+            else {
+                hashtagTextView.setTextColor(Color.parseColor("#000000"))
+                hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
+            }
+
+            redSlider.addOnChangeListener { slider, value, fromUser ->
+                redValue = slider.value.toInt()
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                hexadecimalTextView.text = hex
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                if (redValue < 100 || greenValue < 100 || blueValue < 100) {
+                    hashtagTextView.setTextColor(Color.parseColor("#ffffff"))
+                    hexadecimalTextView.setTextColor(Color.parseColor("#ffffff"))
+                }
+                else {
+                    hashtagTextView.setTextColor(Color.parseColor("#000000"))
+                    hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
+                }
+            }
+            greenSlider.addOnChangeListener { slider, value, fromUser ->
+                greenValue = slider.value.toInt()
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                hexadecimalTextView.text = hex
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                if (redValue < 100 || greenValue < 100 || blueValue < 100) {
+                    hashtagTextView.setTextColor(Color.parseColor("#ffffff"))
+                    hexadecimalTextView.setTextColor(Color.parseColor("#ffffff"))
+                }
+                else {
+                    hashtagTextView.setTextColor(Color.parseColor("#000000"))
+                    hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
+                }
+            }
+            blueSlider.addOnChangeListener { slider, value, fromUser ->
+                blueValue = slider.value.toInt()
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                hexadecimalTextView.text = hex
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                if (redValue < 100 || greenValue < 100 || blueValue < 100) {
+                    hashtagTextView.setTextColor(Color.parseColor("#ffffff"))
+                    hexadecimalTextView.setTextColor(Color.parseColor("#ffffff"))
+                }
+                else {
+                    hashtagTextView.setTextColor(Color.parseColor("#000000"))
+                    hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
+                }
+            }
+
+            selectButton.setOnClickListener {
+                customColorPickerDialog.dismiss()
+                CustomColorGenerator(requireContext()).setCustomHex("#$hex")
+                AccentColor(requireContext()).setAccentState(5)
+                updateCustomColorChange()
+
+                tealRadioButton.isChecked = false
+                pinkRadioButton.isChecked = false
+                orangeRadioButton.isChecked = false
+                redRadioButton.isChecked = false
+                materialYouRadioButton.isChecked = false
+            }
+
+            customColorPickerDialog.show()
+        }
         materialYouRadioButton.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (accentColor.loadAccent() == 4) {
@@ -588,7 +718,7 @@ class AccentColorFragment : Fragment() {
                 alert.setCancelable(false)
                 alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     Vibrate().vibration(requireContext())
-                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+                    if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
                             ComponentName(
                                 BuildConfig.APPLICATION_ID,
@@ -648,7 +778,7 @@ class AccentColorFragment : Fragment() {
         if (Build.VERSION.SDK_INT < 31) {
             materialYouCardView?.visibility = View.GONE
             followGoogleAppsCardView?.visibility = View.GONE
-            redCardView.shapeAppearanceModel = redCardView.shapeAppearanceModel
+            customCardView.shapeAppearanceModel = customCardView.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -773,7 +903,7 @@ class AccentColorFragment : Fragment() {
             AccentColor(requireContext()).setAccentState(0)
         }
 
-        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
             if (Build.VERSION.SDK_INT >= 33) {
                 activity?.packageManager?.setComponentEnabledSetting(
                     ComponentName(
@@ -870,5 +1000,115 @@ class AccentColorFragment : Fragment() {
             startActivity(intent)
             activity?.finish()
         }, 1000)
+    }
+
+    fun updateCustomColorChange() {
+        val customColorGenerator = CustomColorGenerator(requireContext())
+
+        val tealRadioButton = requireActivity().findViewById<RadioButton>(R.id.tealAccent)
+        val pinkRadioButton = requireActivity().findViewById<RadioButton>(R.id.pinkAccent)
+        val orangeRadioButton = requireActivity().findViewById<RadioButton>(R.id.orangeAccent)
+        val redRadioButton = requireActivity().findViewById<RadioButton>(R.id.redAccent)
+        val customRadioButton = requireActivity().findViewById<RadioButton>(R.id.customAccent)
+        val materialYouRadioButton = requireActivity().findViewById<RadioButton>(R.id.materialYouAccent)
+
+        val statesRadio = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+
+        val colorsRadio = intArrayOf(
+            Color.parseColor("#000000"),
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        )
+
+        tealRadioButton.buttonTintList = ColorStateList(statesRadio, colorsRadio)
+        pinkRadioButton.buttonTintList = ColorStateList(statesRadio, colorsRadio)
+        orangeRadioButton.buttonTintList = ColorStateList(statesRadio, colorsRadio)
+        redRadioButton.buttonTintList = ColorStateList(statesRadio, colorsRadio)
+        customRadioButton.buttonTintList = ColorStateList(statesRadio, colorsRadio)
+        materialYouRadioButton.buttonTintList = ColorStateList(statesRadio, colorsRadio)
+
+        val tealCardView = requireActivity().findViewById<MaterialCardView>(R.id.tealCardViewAccentColor)
+        val pinkCardView = requireActivity().findViewById<MaterialCardView>(R.id.pinkCardViewAccentColor)
+        val orangeCardView = requireActivity().findViewById<MaterialCardView>(R.id.orangeCardViewAccentColor)
+        val redCardView = requireActivity().findViewById<MaterialCardView>(R.id.redCardViewAccentColor)
+        val customCardView = requireActivity().findViewById<MaterialCardView>(R.id.customCardViewAccentColor)
+        val materialYouCardView = requireActivity().findViewById<MaterialCardView>(R.id.materialYouCardViewAccentColor)
+        val materialYouSwitchCardView = requireActivity().findViewById<MaterialCardView>(R.id.followGoogleAppsCardView)
+        val material2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
+
+        tealCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        pinkCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        orangeCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        redCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        customCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        materialYouCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        materialYouSwitchCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+        val colors = intArrayOf(
+            Color.parseColor("#e7dfec"),
+            Color.parseColor(customColorGenerator.generateCustomColorPrimary())
+        )
+
+        material2Switch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
+        material2Switch.trackTintList = ColorStateList(states, colors)
+
+        val topAppBarAccent = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarAccentColorFragment)
+
+        val resetDrawable = topAppBarAccent?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
+        val navigationDrawable = topAppBarAccent?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(customColorGenerator.generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(customColorGenerator.generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    id,
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    id,
+                    BlendMode.SRC_ATOP
+                )
+            }
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+
+        val runnable = Runnable {
+            (context as MainActivity).updateBottomNavCustomColor()
+        }
+        MainActivity().runOnUiThread(runnable)
+
+        if (ColoredNavBarData(requireContext()).loadNavBar()) {
+            activity?.window?.navigationBarColor =
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        }
     }
 }
