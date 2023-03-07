@@ -7,14 +7,14 @@ class ChosenAppIconData(context: Context) {
 
     private var sharedPreferences: SharedPreferences = context.getSharedPreferences("file", Context.MODE_PRIVATE)
 
-    fun setChosenAppIcon(state: Int) {
+    fun setChosenAppIcon(state: String) {
         val editor = sharedPreferences.edit()
-        editor.putInt("chosenAppIcon", state!!)
+        editor.putString("chosenIcon", state)
         editor.apply()
     }
 
-    fun loadChosenAppIcon(): Int? {
-        val state = sharedPreferences.getInt("chosenAppIcon", 0)
+    fun loadChosenAppIcon(): String? {
+        val state = sharedPreferences.getString("chosenIcon", "auto")
         return (state)
     }
 }
