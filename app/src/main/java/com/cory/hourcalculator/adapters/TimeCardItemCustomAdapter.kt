@@ -1,6 +1,7 @@
 package com.cory.hourcalculator.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.google.android.material.card.MaterialCardView
@@ -34,6 +37,10 @@ class TimeCardItemCustomAdapter(
 
             val dataItem = dataList[position]
             val timeCardItemCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCardItem)
+
+            if (AccentColor(context).loadAccent() == 5) {
+                timeCardItemCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+            }
 
             val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
             val dateString = formatter.format(dataItem["day"]!!.toLong())
