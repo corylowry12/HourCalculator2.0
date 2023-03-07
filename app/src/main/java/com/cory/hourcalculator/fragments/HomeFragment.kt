@@ -1,7 +1,9 @@
 package com.cory.hourcalculator.fragments
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,6 +21,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
@@ -93,6 +96,9 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
 
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -110,6 +116,23 @@ class HomeFragment : Fragment() {
         val breakTextBox = view.findViewById<TextInputEditText>(R.id.breakTime)
 
         activity?.window?.setBackgroundDrawable(null)
+
+        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
+        val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
+        val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTime)
+        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTime)
+
+        if (AccentColor(requireActivity()).loadAccent() == 5) {
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            calculateButton?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            breakTextViewInput?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            breakTextViewInput?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            breakTextBox.textCursorDrawable = null
+            breakTextBox.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            breakTextBox.setTextIsSelectable(false)
+        }
+        breakTextBox.isLongClickable = false
+
 
         val coloredNavBarData = ColoredNavBarData(requireContext())
 
@@ -148,6 +171,10 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
+                accentColor.loadAccent() == 5 -> {
+                    activity?.window?.navigationBarColor =
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                }
             }
         } else {
             activity?.window?.navigationBarColor =
@@ -166,7 +193,6 @@ class HomeFragment : Fragment() {
         MainActivity().runOnUiThread(runnable)
 
         val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
-        val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
@@ -178,9 +204,6 @@ class HomeFragment : Fragment() {
             breakTextView?.visibility = View.VISIBLE
             breakTextViewInput?.visibility = View.VISIBLE
         }
-
-        val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTime)
-        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTime)
 
         val dateData = DateData(requireContext())
         if (dateData.loadMinutes1() != "") {
@@ -252,8 +275,6 @@ class HomeFragment : Fragment() {
             }
             alert.show()
         }*/
-
-        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
 
         calculateButton?.setOnClickListener {
 

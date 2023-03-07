@@ -3,6 +3,7 @@ package com.cory.hourcalculator.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
 import android.media.ExifInterface
@@ -47,6 +48,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -185,17 +187,29 @@ class TimeCardItemInfoFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            addDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                addDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                addDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
         } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
@@ -225,6 +239,11 @@ class TimeCardItemInfoFragment : Fragment() {
                         addAPhotoLayout.findViewById<MaterialCardView>(R.id.selectAPhotoCardView)
                     val takeAPhotoCardView =
                         addAPhotoLayout.findViewById<MaterialCardView>(R.id.addAPhotoCardView)
+
+                    if (AccentColor(requireContext()).loadAccent() == 5) {
+                        selectAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                        takeAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    }
 
                     selectAPhotoCardView.shapeAppearanceModel =
                         selectAPhotoCardView.shapeAppearanceModel
@@ -319,7 +338,18 @@ class TimeCardItemInfoFragment : Fragment() {
         loadIntoList(id)
 
         val timeCardInfoNameTextInput =
-            activity?.findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
+            requireActivity().findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
+        val textInputLayoutName = requireActivity().findViewById<TextInputLayout>(R.id.textInputLayoutName)
+
+        if (AccentColor(requireActivity()).loadAccent() == 5) {
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            textInputLayoutName?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            textInputLayoutName?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            timeCardInfoNameTextInput.textCursorDrawable = null
+            timeCardInfoNameTextInput.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            timeCardInfoNameTextInput.setTextIsSelectable(false)
+        }
+        timeCardInfoNameTextInput.isLongClickable = false
 
         editable = if (name != null) {
             Editable.Factory.getInstance().newEditable(name)

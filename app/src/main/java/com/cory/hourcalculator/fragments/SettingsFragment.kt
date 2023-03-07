@@ -3,6 +3,7 @@ package com.cory.hourcalculator.fragments
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,6 +23,8 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
@@ -114,6 +117,10 @@ class SettingsFragment : Fragment() {
         MainActivity().runOnUiThread(runnable)
 
         activity?.window?.setBackgroundDrawable(null)
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColor()
+        }
 
         val inputManager: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -349,4 +356,27 @@ class SettingsFragment : Fragment() {
         alert.show()
     }
 
+    fun updateCustomColor() {
+        val appearanceCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardView)
+        val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
+        val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
+        val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
+        val faqCardView = requireActivity().findViewById<MaterialCardView>(R.id.FAQCardView)
+        val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
+        val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
+
+        appearanceCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        appSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        historySettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        timeCardSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        patchNotesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        faqCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        aboutCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        deleteAppDataCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutSettings)
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+    }
 }

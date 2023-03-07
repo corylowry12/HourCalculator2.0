@@ -3,9 +3,11 @@ package com.cory.hourcalculator.fragments
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -28,9 +30,11 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -126,6 +130,9 @@ class EditHours : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
         return inflater.inflate(R.layout.fragment_edit_hours, container, false)
     }
@@ -133,6 +140,23 @@ class EditHours : Fragment() {
     @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.window?.decorView?.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+        when {
+            DarkThemeData(requireContext()).loadDarkModeState() == 0 -> {
+                activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+            DarkThemeData(requireContext()).loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    }
+                }
+            }
+        }
+
         undoHoursData = UndoHoursData(requireContext())
         val materialToolbarEdit =
             activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
@@ -158,6 +182,10 @@ class EditHours : Fragment() {
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
 
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColor()
+        }
+
         materialToolbarEdit?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             exit()
@@ -169,10 +197,18 @@ class EditHours : Fragment() {
                     Vibrate().vibration(requireContext())
                     val dialog = BottomSheetDialog(requireContext())
                     val deleteAllLayout = layoutInflater.inflate(R.layout.delete_entry_bottom_sheet, null)
-                    dialog.setContentView(deleteAllLayout)
-                    dialog.setCancelable(true)
+
                     val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+                    val infoCardView = deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+
+                    if (AccentColor(requireContext()).loadAccent() == 5) {
+                        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    }
+                    dialog.setContentView(deleteAllLayout)
+                    dialog.setCancelable(true)
                     /*val alert = MaterialAlertDialogBuilder(
                         requireContext(),
                         AccentColor(requireContext()).alertTheme()
@@ -285,6 +321,14 @@ class EditHours : Fragment() {
                     timeEditHourData.setDateBool(false)
                     datePicker.dismiss()
                 }
+                /*val datePickerDialog = BottomSheetDialog(requireContext())
+                val datePickerLayout =
+                    layoutInflater.inflate(R.layout.date_picker_bottom_sheet, null)
+                val datePicker = datePickerLayout.findViewById<DatePicker>(R.id.datePicker)
+                //datePicker.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+                datePickerDialog.setContentView(datePickerLayout)
+                datePickerDialog.show()*/
             }
 
             val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
@@ -954,6 +998,65 @@ class EditHours : Fragment() {
             true
         } catch (e: NumberFormatException) {
             false
+        }
+    }
+
+    fun updateCustomColor() {
+        val materialToolbarEdit = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
+        materialToolbarEdit.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        val saveButton = requireActivity().findViewById<Button>(R.id.saveButton)
+        saveButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+        val dateChip = requireActivity().findViewById<Chip>(R.id.dateChip)
+        dateChip.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+        val deleteDrawable = materialToolbarEdit?.menu?.findItem(R.id.delete)?.icon
+        deleteDrawable?.mutate()
+
+        val navigationDrawable = materialToolbarEdit?.navigationIcon
+        navigationDrawable?.mutate()
+
+        val breakTextInputEditText = requireActivity().findViewById<TextInputLayout>(R.id.outlinedTextField)
+        val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEdit)
+
+        breakTextInputEditText?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        breakTextInputEditText?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        breakTextBox.textCursorDrawable = null
+        breakTextBox.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        breakTextBox.setTextIsSelectable(false)
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                deleteDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                deleteDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            deleteDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
     }
 

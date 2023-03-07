@@ -1,6 +1,8 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,13 +23,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.DarkThemeData
-import com.cory.hourcalculator.classes.FollowSystemVersion
-import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -115,6 +115,13 @@ class TimeCardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val collapsingToolbarLayout = activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        }
+
         val recyclerViewTimeCards = view.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
 
         val animation =
@@ -176,6 +183,11 @@ class TimeCardsFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                floatingActionButtonTimeCards?.backgroundTintList =
+                    ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                floatingActionButtonTimeCards?.imageTintList =  ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
+            }
         }
 
         recyclerViewTimeCards?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -232,12 +244,19 @@ class TimeCardsFragment : Fragment() {
                 collapsingToolbarLayout.setExpanded(false, false)
 
             }
-            snackbar.setActionTextColor(
-                ContextCompat.getColorStateList(
-                    requireContext(),
-                    AccentColor(requireContext()).snackbarActionTextColor()
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                snackbar.setActionTextColor(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
                 )
-            )
+            }
+            else {
+                snackbar.setActionTextColor(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        AccentColor(requireContext()).snackbarActionTextColor()
+                    )
+                )
+            }
             snackbar.apply {
                 snackbar.view.background = ResourcesCompat.getDrawable(
                     context.resources,

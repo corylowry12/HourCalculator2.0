@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -20,8 +21,10 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -103,6 +106,10 @@ class HistorySettingsFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
+                color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
+            }
             }
         return inflater.inflate(R.layout.fragment_history_settings, container, false)
     }
@@ -122,11 +129,29 @@ class HistorySettingsFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
         }
         else {
             val typedValue = TypedValue()
@@ -134,6 +159,10 @@ class HistorySettingsFragment : Fragment() {
             val id = typedValue.resourceId
             resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColor()
         }
 
         topAppBar?.setNavigationOnClickListener {
@@ -149,6 +178,14 @@ class HistorySettingsFragment : Fragment() {
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset History Settings?"
+                    val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    if (AccentColor(requireContext()).loadAccent() == 5) {
+                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                        yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    }
                     /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
@@ -158,8 +195,7 @@ class HistorySettingsFragment : Fragment() {
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
                     }*/
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -604,6 +640,86 @@ class HistorySettingsFragment : Fragment() {
         }
         else {
             Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun updateCustomColor() {
+        val historyDeletionCardView = requireView().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
+        historyDeletionCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val daysWorkedCardView = requireView().findViewById<MaterialCardView>(R.id.daysWorkedCardView)
+        daysWorkedCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val one = requireActivity().findViewById<RadioButton>(R.id.one)
+        val two = requireActivity().findViewById<RadioButton>(R.id.two)
+        val three = requireActivity().findViewById<RadioButton>(R.id.three)
+        val four = requireActivity().findViewById<RadioButton>(R.id.four)
+        val five = requireActivity().findViewById<RadioButton>(R.id.five)
+        val six = requireActivity().findViewById<RadioButton>(R.id.six)
+        val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+
+        val colors = intArrayOf(
+            Color.parseColor("#000000"),
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        )
+
+        one.buttonTintList = ColorStateList(states, colors)
+        two.buttonTintList = ColorStateList(states, colors)
+        three.buttonTintList = ColorStateList(states, colors)
+        four.buttonTintList = ColorStateList(states, colors)
+        five.buttonTintList = ColorStateList(states, colors)
+        six.buttonTintList = ColorStateList(states, colors)
+        seven.buttonTintList = ColorStateList(states, colors)
+
+        val collapsingToolbarHistorySettings = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)
+        collapsingToolbarHistorySettings.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        collapsingToolbarHistorySettings.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        val topAppBar =
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
+
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
     }
 }

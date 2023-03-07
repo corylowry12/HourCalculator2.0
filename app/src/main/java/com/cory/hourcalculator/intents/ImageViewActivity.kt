@@ -87,6 +87,9 @@ class ImageViewActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_image_view)
 
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
         val imageView = findViewById<TouchImageView>(R.id.touchImageView)
 
         val id = intent.getStringExtra("id")
@@ -100,10 +103,28 @@ class ImageViewActivity : AppCompatActivity() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(this).loadMenuTint()) {
-            val typedValue = TypedValue()
-            this.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            deleteImageDrawable.colorFilter = BlendModeColorFilter(ContextCompat.getColor(this, typedValue.resourceId), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(this, typedValue.resourceId), BlendMode.SRC_ATOP)
+            if (AccentColor(this).loadAccent() == 5) {
+                deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                this.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(this, typedValue.resourceId),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(this, typedValue.resourceId),
+                    BlendMode.SRC_ATOP
+                )
+            }
         }
         else {
             val typedValue = TypedValue()
