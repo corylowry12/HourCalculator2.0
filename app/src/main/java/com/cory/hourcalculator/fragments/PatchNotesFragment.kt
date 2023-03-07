@@ -46,14 +46,12 @@ class PatchNotesFragment : Fragment() {
                                             "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item",
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue with there being no icon on the colored menu item tint switch if it was disabled when launching appearance view", "Fixed issue with there being no vibration when clicking colored menu tint switch",
-                                                "Fixed issue where if you selected light, dark, or follow system in the background color view and had Match Google apps theming enabled, you could click outside of the restart app bottom sheet",
-                                                "Fixed issue where if you toggled the colored menu item switch in the appearance view, it wouldn't change the color of the navigation arrow without reloading the view", "Fixed issue where if you hit the history options menu icon twice quickly, two bottom sheets would show up",
-                                                "Fixed issue where highlight color showing click in the history options bottom sheet wouldn't matched the curved corners of the export and delete selected cards")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue where certain icons wouldn't be disabled when enabling the material you icon", "Fixed issue where the bottom card in the app icon view wasnt curved if the material you icon wasn't an option",
+                                                "Fixed issue with status bar text color when editing an entry")
 
-    private var newFeaturesArrayInternal = arrayOf("No new features")
+    private var newFeaturesArrayInternal = arrayOf("Added the ability to set a CUSTOM color in Settings->Appearance->Accent Color")
 
-    private var enhancementsArrayInternal = arrayOf("Splash screen that shows on app launch will now match device theme", "Tweaked the design of the match google apps bottom sheet")
+    private var enhancementsArrayInternal = arrayOf("Tweaked the color of the bottom sheets throughout the app when in dark theme", "The primary colors of the date picker dialog in the edit view is now gray")
 
     var themeSelection = false
 
@@ -97,7 +95,7 @@ class PatchNotesFragment : Fragment() {
         val followSystemVersion = FollowSystemVersion(requireContext())
 
         when {
-            accentColor.loadAccent() == 0 -> {
+            accentColor.loadAccent() == 0 || accentColor.loadAccent() == 5 -> {
                 activity?.theme?.applyStyle(R.style.teal_accent, true)
             }
             accentColor.loadAccent() == 1 -> {
