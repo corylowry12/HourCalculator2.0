@@ -2,7 +2,10 @@ package com.cory.hourcalculator.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Looper
+import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -80,7 +83,21 @@ class CustomAdapter(
         fun bind(position: Int) {
             historyCardView = itemView.findViewById(R.id.cardViewHistory)
 
-            //Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+            if (AccentColor(context).loadAccent() == 5) {
+                historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+
+                val states = arrayOf(
+                    intArrayOf(-android.R.attr.state_checked), // unchecked
+                    intArrayOf(android.R.attr.state_checked)  // checked
+                )
+
+                val colors = intArrayOf(
+                    Color.parseColor("#000000"),
+                    Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                )
+
+                itemView.findViewById<CheckBox>(R.id.checkbox).buttonTintList = ColorStateList(states, colors)
+            }
 
             if (dataList.count() == 1) {
                 historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
@@ -369,12 +386,22 @@ class CustomAdapter(
         )
             .setDuration(5000)
 
-        snackBar.setActionTextColor(
-            ContextCompat.getColorStateList(
-                context,
-                AccentColor(context).snackbarActionTextColor()
+        if (AccentColor(context).loadAccent() == 5) {
+            snackBar.setActionTextColor(
+                ContextCompat.getColorStateList(
+                    context,
+                    Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                )
             )
-        )
+        }
+        else {
+            snackBar.setActionTextColor(
+                ContextCompat.getColorStateList(
+                    context,
+                    AccentColor(context).snackbarActionTextColor()
+                )
+            )
+        }
         snackBar.setAction(context.getString(R.string.undo)) {
             Vibrate().vibration(context)
 
@@ -535,12 +562,20 @@ class CustomAdapter(
                         "Items selected",
                         Snackbar.LENGTH_INDEFINITE
                     )
-                snackbarDeleteSelected.setActionTextColor(
-                    ContextCompat.getColorStateList(
-                        context,
-                        AccentColor(context).snackbarActionTextColor()
+                if (AccentColor(context).loadAccent() == 5) {
+                    snackbarDeleteSelected.setActionTextColor(
+                        Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()
+                        )
                     )
-                )
+                }
+                else {
+                    snackbarDeleteSelected.setActionTextColor(
+                        ContextCompat.getColorStateList(
+                            context,
+                            AccentColor(context).snackbarActionTextColor()
+                        )
+                    )
+                }
                 snackbarDeleteSelected.apply {
                     snackbarDeleteSelected.view.background = ResourcesCompat.getDrawable(
                         context.resources,
@@ -699,9 +734,9 @@ class CustomAdapter(
                 true
             }
 
+            if (ClickableHistoryEntry(context).loadHistoryItemClickable()) {
             holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).setOnClickListener {
                 //Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show()
-                if (ClickableHistoryEntry(context).loadHistoryItemClickable()) {
                     Vibrate().vibration(context)
                     val itemPosition = holder.adapterPosition
                     val map = HashMap<String, String>()
@@ -962,12 +997,22 @@ class CustomAdapter(
                             context.theme
                         )
                     }
-                    snackbarDismissCheckBox.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            context,
-                            AccentColor(context).snackbarActionTextColor()
+                    if (AccentColor(context).loadAccent() == 5) {
+                        snackbarDismissCheckBox.setActionTextColor(
+                            ContextCompat.getColorStateList(
+                                context,
+                                Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                            )
                         )
-                    )
+                    }
+                    else {
+                        snackbarDismissCheckBox.setActionTextColor(
+                            ContextCompat.getColorStateList(
+                                context,
+                                AccentColor(context).snackbarActionTextColor()
+                            )
+                        )
+                    }
                     snackbarDismissCheckBox.show()
                 }
 
@@ -1171,12 +1216,19 @@ class CustomAdapter(
                             context.theme
                         )
                     }
-                    snackbarDismissCheckBox.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            context,
-                            AccentColor(context).snackbarActionTextColor()
+                    if (AccentColor(context).loadAccent() == 5) {
+                        snackbarDismissCheckBox.setActionTextColor(
+                                Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
                         )
-                    )
+                    }
+                    else {
+                        snackbarDismissCheckBox.setActionTextColor(
+                            ContextCompat.getColorStateList(
+                                context,
+                                AccentColor(context).snackbarActionTextColor()
+                            )
+                        )
+                    }
                     snackbarDismissCheckBox.show()
                 }
             }
@@ -1380,12 +1432,22 @@ class CustomAdapter(
                             context.theme
                         )
                     }
-                    snackbarDismissCheckBox.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            context,
-                            AccentColor(context).snackbarActionTextColor()
+                    if (AccentColor(context).loadAccent() == 5) {
+                        snackbarDismissCheckBox.setActionTextColor(
+                            ContextCompat.getColorStateList(
+                                context,
+                                Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                            )
                         )
-                    )
+                    }
+                    else {
+                        snackbarDismissCheckBox.setActionTextColor(
+                            ContextCompat.getColorStateList(
+                                context,
+                                AccentColor(context).snackbarActionTextColor()
+                            )
+                        )
+                    }
                     snackbarDismissCheckBox.show()
                 }
 
@@ -1581,12 +1643,19 @@ class CustomAdapter(
                             context.theme
                         )
                     }
-                    snackbarDismissCheckBox.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            context,
-                            AccentColor(context).snackbarActionTextColor()
+                    if (AccentColor(context).loadAccent() == 5) {
+                        snackbarDismissCheckBox.setActionTextColor(
+                                Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
                         )
-                    )
+                    }
+                    else {
+                        snackbarDismissCheckBox.setActionTextColor(
+                            ContextCompat.getColorStateList(
+                                context,
+                                AccentColor(context).snackbarActionTextColor()
+                            )
+                        )
+                    }
                     snackbarDismissCheckBox.show()
                 }
         }
@@ -1821,12 +1890,20 @@ class CustomAdapter(
                                 MainActivity().runOnUiThread(restoreState)
 
                             }
-                            snackbar.setActionTextColor(
-                                ContextCompat.getColorStateList(
-                                    context,
-                                    AccentColor(context).snackbarActionTextColor()
+                            if (AccentColor(context).loadAccent() == 5) {
+                                snackbar.setActionTextColor(
+                                        Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+
                                 )
-                            )
+                            }
+                            else {
+                                snackbar.setActionTextColor(
+                                    ContextCompat.getColorStateList(
+                                        context,
+                                        AccentColor(context).snackbarActionTextColor()
+                                    )
+                                )
+                            }
                             snackbar.apply {
                                 snackbar.view.background = ResourcesCompat.getDrawable(
                                     context.resources,
@@ -1861,12 +1938,16 @@ class CustomAdapter(
                         val deleteAllLayout = LayoutInflater.from(context).inflate(R.layout.delete_all_bottom_sheet, null)
                         dialog.setContentView(deleteAllLayout)
                         dialog.setCancelable(true)
+
+                        val infoCardView = deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
                         val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
                         val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
-                        //alertDialog.setTitle(context.getString(R.string.warning))
-                        //alertDialog.setMessage(context.getString(R.string.would_you_like_to_delete_all))
-                        //alertDialog.setCancelable(false)
-                        //alertDialog.setPositiveButton(context.getString(R.string.yes)) { _, _ ->
+
+                        if (AccentColor(context).loadAccent() == 5) {
+                            infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                            noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                        }
                         yesButton.setOnClickListener {
                             Vibrate().vibration(context)
 
@@ -1903,12 +1984,19 @@ class CustomAdapter(
                             )
                                 .setDuration(5000)
 
-                            snackBar.setActionTextColor(
-                                ContextCompat.getColorStateList(
-                                    context,
-                                    AccentColor(context).snackbarActionTextColor()
+                            if (AccentColor(context).loadAccent() == 5) {
+                                snackBar.setActionTextColor(
+                                        Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
                                 )
-                            )
+                            }
+                            else {
+                                snackBar.setActionTextColor(
+                                    ContextCompat.getColorStateList(
+                                        context,
+                                        AccentColor(context).snackbarActionTextColor()
+                                    )
+                                )
+                            }
                             snackBar.setAction(context.getString(R.string.undo)) {
                                 Vibrate().vibration(context)
                                 GlobalScope.launch(Dispatchers.Main) {
