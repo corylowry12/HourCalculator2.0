@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
-    tools:context=".fragments.AppearanceFragment">
+    tools:context=".fragments.AppearanceFragment"
+    android:id="@+id/coordinatorLayoutAppearance">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAppearance"
@@ -116,6 +117,15 @@
                     android:layout_height="wrap_content"
                     android:padding="20dp">
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/currentSelectedAccentColorImageViewCardView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:cardCornerRadius="9dp"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        app:strokeColor="#000000"
+                        app:strokeWidth="1dp">
+
                     <ImageView
                         android:id="@+id/currentSelectedAccentColorImageView"
                         android:layout_width="18dp"
@@ -127,12 +137,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/currentSelectedAccentColorImageView"
+                        app:layout_constraintStart_toEndOf="@id/currentSelectedAccentColorImageViewCardView"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:textColor="?attr/settingsTextColor"
