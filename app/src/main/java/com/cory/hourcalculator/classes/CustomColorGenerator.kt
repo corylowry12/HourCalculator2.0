@@ -2,12 +2,16 @@ package com.cory.hourcalculator.classes
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import com.cory.hourcalculator.R
 
 class CustomColorGenerator(context: Context) {
+
+    val insideContext = context
 
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences("file", Context.MODE_PRIVATE)
@@ -23,6 +27,77 @@ class CustomColorGenerator(context: Context) {
         return (state!!)
     }
 
+    fun generateBottomNavBackgroundColor() : String {
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
+        return generateCustomColorPrimary()
+    }
+
+    fun generateNavBarColor() : String {
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
+        return generateCustomColorPrimary()
+    }
     fun generateCardColor() : String {
         return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.5).toString()}"
     }
@@ -32,18 +107,184 @@ class CustomColorGenerator(context: Context) {
     }
 
     fun generateBottomNavIconTintColor() : String {
-        return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.7).toString()}"
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
+    return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.7).toString()}"
     }
 
     fun generateBottomNavIconIndicatorColor(): String {
-        return "#${lighten(Color.parseColor(loadCustomHex()), 0.5)}"
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.05).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.05).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                        }"
+                    }
+                }
+            }
+        }
+        return "#${
+            this.darken(Color.parseColor(this.loadCustomHex()), 0.05).toString()
+        }"
     }
 
     fun generateBottomNavTextColor() : String {
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
         return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.7).toString()}"
     }
 
+    fun generateCollapsedToolBarTextColor() : String {
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
+        return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()}"
+    }
+
     fun generateMenuTintColor() : String {
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
         return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()}"
     }
 
@@ -52,7 +293,75 @@ class CustomColorGenerator(context: Context) {
     }
 
     fun generateTopAppBarColor() : String {
-        return loadCustomHex()
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
+        return generateCustomColorPrimary()
+    }
+
+    fun generateChipBackgroundColor() : String {
+        val darkThemeData = DarkThemeData(insideContext)
+        when {
+            darkThemeData.loadDarkModeState() == 0 -> {
+                return "#${
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.05).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                return "#${
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                }"
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        return "#${
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                        }"
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                        }"
+                    }
+                }
+            }
+        }
+        return "#${lighten(Color.parseColor(loadCustomHex()), 0.5)}"
     }
 
     fun lighten(color: Int, fraction: Double): String {
