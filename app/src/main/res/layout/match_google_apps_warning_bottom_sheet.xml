@@ -41,9 +41,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
         app:cardBackgroundColor="?attr/cardBackground"
-        app:cardCornerRadius="14dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true">
+        app:cardCornerRadius="18dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
