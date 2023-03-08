@@ -29,7 +29,7 @@
         android:textColor="?attr/textColor"
         style="@style/TextAppearance.Material3.DisplaySmall"/>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/bodyTextCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,9 +40,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
         app:cardBackgroundColor="@color/cardTeal"
-        app:cardCornerRadius="14dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true">
+        app:cardCornerRadius="18dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -61,7 +59,7 @@
         android:textColor="@color/black"
         style="@style/TextAppearance.Material3.BodyLarge"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
     <Button
         android:id="@+id/restartButton"
         android:layout_width="wrap_content"
