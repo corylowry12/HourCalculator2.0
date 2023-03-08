@@ -351,6 +351,11 @@ class AccentColorFragment : Fragment() {
                 val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
                 dialog.setContentView(restartAppLayout)
                 dialog.setCancelable(false)
+                if (AccentColor(requireContext()).loadAccent() == 5) {
+                    restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                }
                 restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
 
@@ -413,14 +418,16 @@ class AccentColorFragment : Fragment() {
             if (accentColor.loadAccent() == 1) {
                 Toast.makeText(requireContext(), getString(R.string.pink_is_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.restart_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                val dialog = BottomSheetDialog(requireContext())
+                val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
+                dialog.setContentView(restartAppLayout)
+                dialog.setCancelable(false)
+                if (AccentColor(requireContext()).loadAccent() == 5) {
+                    restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                }
+                restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
@@ -464,14 +471,16 @@ class AccentColorFragment : Fragment() {
                             PackageManager.DONT_KILL_APP
                         )
                     }
+                    dialog.dismiss()
                     accentColor.setAccentState(1)
                     restartApplication()
                 }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     pinkRadioButton.isChecked = false
+                    dialog.dismiss()
                 }
-                alert.show()
+                dialog.show()
             }
         }
         orangeRadioButton.setOnClickListener {
@@ -479,14 +488,16 @@ class AccentColorFragment : Fragment() {
             if (accentColor.loadAccent() == 2) {
                 Toast.makeText(requireContext(), getString(R.string.orange_is_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.restart_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                val dialog = BottomSheetDialog(requireContext())
+                val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
+                dialog.setContentView(restartAppLayout)
+                dialog.setCancelable(false)
+                if (AccentColor(requireContext()).loadAccent() == 5) {
+                    restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                }
+                restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
@@ -530,14 +541,16 @@ class AccentColorFragment : Fragment() {
                             PackageManager.DONT_KILL_APP
                         )
                     }
+                    dialog.dismiss()
                     accentColor.setAccentState(2)
                     restartApplication()
                 }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     orangeRadioButton.isChecked = false
+                    dialog.dismiss()
                 }
-                alert.show()
+                dialog.show()
             }
         }
         redRadioButton.setOnClickListener {
@@ -545,14 +558,16 @@ class AccentColorFragment : Fragment() {
             if (accentColor.loadAccent() == 3) {
                 Toast.makeText(requireContext(), getString(R.string.red_already_chosen), Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning))
-                alert.setMessage(getString(R.string.restart_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                val dialog = BottomSheetDialog(requireContext())
+                val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
+                dialog.setContentView(restartAppLayout)
+                dialog.setCancelable(false)
+                if (AccentColor(requireContext()).loadAccent() == 5) {
+                    restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                }
+                restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
@@ -596,20 +611,24 @@ class AccentColorFragment : Fragment() {
                             PackageManager.DONT_KILL_APP
                         )
                     }
+                    dialog.dismiss()
                     accentColor.setAccentState(3)
                     restartApplication()
                 }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     redRadioButton.isChecked = false
+                    dialog.dismiss()
                 }
-                alert.show()
+                dialog.show()
             }
         }
         customRadioButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
             val customColorPickerDialog = BottomSheetDialog(requireContext())
             val customColorPickerLayout = layoutInflater.inflate(R.layout.custom_color_bottom_sheet, null)
             customColorPickerDialog.setContentView(customColorPickerLayout)
+            customColorPickerDialog.setCancelable(false)
 
             val customColor = Color.parseColor(CustomColorGenerator(requireContext()).loadCustomHex())
             var redValue = customColor.red
@@ -624,9 +643,11 @@ class AccentColorFragment : Fragment() {
             val hexadecimalTextView = customColorPickerLayout.findViewById<TextView>(R.id.hexadecimalTextView)
 
             val selectButton = customColorPickerLayout.findViewById<Button>(R.id.selectColorButton)
+            val cancelSelectButton = customColorPickerLayout.findViewById<Button>(R.id.cancelSelectColorButton)
 
             if (AccentColor(requireContext()).loadAccent() == 5) {
                 selectButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                cancelSelectButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
             }
 
             var hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
@@ -690,6 +711,7 @@ class AccentColorFragment : Fragment() {
             }
 
             selectButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
                 customColorPickerDialog.dismiss()
                 CustomColorGenerator(requireContext()).setCustomHex("#$hex")
                 AccentColor(requireContext()).setAccentState(5)
@@ -701,6 +723,13 @@ class AccentColorFragment : Fragment() {
                 redRadioButton.isChecked = false
                 materialYouRadioButton.isChecked = false
             }
+            cancelSelectButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                if (AccentColor(requireContext()).loadAccent() != 5) {
+                    customRadioButton.isChecked = false
+                }
+                customColorPickerDialog.dismiss()
+            }
 
             customColorPickerDialog.show()
         }
@@ -709,14 +738,16 @@ class AccentColorFragment : Fragment() {
             if (accentColor.loadAccent() == 4) {
                 Toast.makeText(requireContext(), getString(R.string.system_accent_color_is_already_enabled), Toast.LENGTH_SHORT).show()
             } else {
-                val alert = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alert.setTitle(getString(R.string.warning_experimental))
-                alert.setMessage(getString(R.string.system_accent_warning))
-                alert.setCancelable(false)
-                alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                val dialog = BottomSheetDialog(requireContext())
+                val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
+                dialog.setContentView(restartAppLayout)
+                dialog.setCancelable(false)
+                if (AccentColor(requireContext()).loadAccent() == 5) {
+                    restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                }
+                restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
                         activity?.packageManager?.setComponentEnabledSetting(
@@ -760,14 +791,16 @@ class AccentColorFragment : Fragment() {
                             PackageManager.DONT_KILL_APP
                         )
                     }
+                    dialog.dismiss()
                     accentColor.setAccentState(4)
                     restartApplication()
                 }
-                alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
                     Vibrate().vibration(requireContext())
                     materialYouRadioButton.isChecked = false
+                    dialog.dismiss()
                 }
-                alert.show()
+                dialog.show()
             }
         }
 
@@ -803,24 +836,29 @@ class AccentColorFragment : Fragment() {
                 Vibrate().vibration(requireContext())
                 if (followSystemVersion.loadSystemColor()) {
                     if (accentColor.loadAccent() == 4) {
-                        val alert = MaterialAlertDialogBuilder(
-                            requireContext(),
-                            AccentColor(requireContext()).alertTheme()
-                        )
-                        alert.setTitle(requireContext().getString(R.string.warning_experimental))
-                        alert.setMessage(getString(R.string.may_produce_unwanted_results))
-                        alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                        val dialog = BottomSheetDialog(requireContext())
+                        val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
+                        dialog.setContentView(restartAppLayout)
+                        dialog.setCancelable(false)
+                        if (AccentColor(requireContext()).loadAccent() == 5) {
+                            restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                            restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                            restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        }
+                        restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                             Vibrate().vibration(requireContext())
                             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                             followSystemVersion.setSystemColor(false)
                             restartApplication()
+                            dialog.dismiss()
                         }
-                        alert.setNegativeButton(requireContext().getString(R.string.no)) { _, _ ->
+                        restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
                             Vibrate().vibration(requireContext())
                             materialYouStyle2Switch.isChecked = true
                             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                            dialog.dismiss()
                         }
-                        alert.show()
+                        dialog.show()
                     } else {
                         materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                         materialYouStyle2Switch.isChecked = false
@@ -839,24 +877,29 @@ class AccentColorFragment : Fragment() {
                 materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                 if (!followSystemVersion.loadSystemColor()) {
                     if (accentColor.loadAccent() == 4) {
-                        val alert = MaterialAlertDialogBuilder(
-                            requireContext(),
-                            AccentColor(requireContext()).alertTheme()
-                        )
-                        alert.setTitle(requireContext().getString(R.string.warning_experimental))
-                        alert.setMessage(getString(R.string.this_option_may_require_the_app_to_restart_desc))
-                        alert.setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
+                        val dialog = BottomSheetDialog(requireContext())
+                        val restartAppLayout = layoutInflater.inflate(R.layout.restart_app_warning_bottom_sheet, null)
+                        dialog.setContentView(restartAppLayout)
+                        dialog.setCancelable(false)
+                        if (AccentColor(requireContext()).loadAccent() == 5) {
+                            restartAppLayout.findViewById<MaterialCardView>(R.id.bodyTextCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                            restartAppLayout.findViewById<Button>(R.id.yesButton).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                            restartAppLayout.findViewById<Button>(R.id.noButton).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        }
+                        restartAppLayout.findViewById<Button>(R.id.yesButton).setOnClickListener {
                             Vibrate().vibration(requireContext())
                             followSystemVersion.setSystemColor(true)
                             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                             restartApplication()
+                            dialog.dismiss()
                         }
-                        alert.setNegativeButton(requireContext().getString(R.string.no)) { _, _ ->
+                        restartAppLayout.findViewById<Button>(R.id.noButton).setOnClickListener {
                             Vibrate().vibration(requireContext())
                             materialYouStyle2Switch.isChecked = false
                             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                            dialog.dismiss()
                         }
-                        alert.show()
+                        dialog.show()
                     } else {
                         materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                         materialYouStyle2Switch.isChecked = true

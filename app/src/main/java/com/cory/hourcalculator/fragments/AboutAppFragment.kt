@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
@@ -22,8 +23,10 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.play.core.review.ReviewManagerFactory
 
 class AboutAppFragment : Fragment() {
@@ -109,7 +112,10 @@ class AboutAppFragment : Fragment() {
 
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
         versionNumberTextView.text = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-        val accentColor = AccentColor(requireContext())
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColor()
+        }
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAboutApp)
 
@@ -117,11 +123,22 @@ class AboutAppFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            }
         else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
@@ -255,6 +272,20 @@ class AboutAppFragment : Fragment() {
         )
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
+    }
+
+    fun updateCustomColor() {
+        val cardView1 = requireActivity().findViewById<MaterialCardView>(R.id.cardView1)
+        val cardView2 = requireActivity().findViewById<MaterialCardView>(R.id.cardView2)
+        val cardView3 = requireActivity().findViewById<MaterialCardView>(R.id.cardView3)
+
+        cardView1.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        cardView2.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        cardView3.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAbout)
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
     }
 
     fun isPackageInstalled(packageName: String): Boolean {

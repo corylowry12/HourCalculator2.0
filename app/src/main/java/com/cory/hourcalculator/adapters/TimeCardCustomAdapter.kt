@@ -157,15 +157,15 @@ class TimeCardCustomAdapter(
                     .inflate(R.layout.time_card_options_bottom_sheet, null)
                 dialog.setContentView(timeCardOptionsLayout)
 
-                val deleteConstraint =
-                    timeCardOptionsLayout.findViewById<ConstraintLayout>(R.id.deleteConstraint)
-                val deleteAllConstraint =
-                    timeCardOptionsLayout.findViewById<ConstraintLayout>(R.id.deleteAllConstraint)
-
                 val deleteCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteCardView)
                 val deleteAllCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteAllCardView)
+
+                if (AccentColor(context).loadAccent() == 5) {
+                    deleteCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                    deleteAllCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                }
 
                 deleteCardView.shapeAppearanceModel = deleteCardView.shapeAppearanceModel
                     .toBuilder()
@@ -182,7 +182,7 @@ class TimeCardCustomAdapter(
                     .setBottomLeftCornerSize(28f)
                     .build()
 
-                deleteConstraint.setOnClickListener {
+                deleteCardView.setOnClickListener {
                     dialog.dismiss()
                     val dialog = BottomSheetDialog(context)
                     val deleteEntryLayout =
@@ -214,7 +214,7 @@ class TimeCardCustomAdapter(
 
                     dialog.show()
                 }
-                deleteAllConstraint.setOnClickListener {
+                deleteAllCardView.setOnClickListener {
                     dialog.dismiss()
                     val deleteAllDialog = BottomSheetDialog(context)
                     val deleteAllLayout =

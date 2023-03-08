@@ -650,6 +650,9 @@ class HistorySettingsFragment : Fragment() {
         val daysWorkedCardView = requireView().findViewById<MaterialCardView>(R.id.daysWorkedCardView)
         daysWorkedCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
+        val enableHistoryDeletion = requireActivity().findViewById<RadioButton>(R.id.enableHistoryDeletion)
+        val disableHistoryDeletion = requireActivity().findViewById<RadioButton>(R.id.disableHistoryDeletion)
+
         val one = requireActivity().findViewById<RadioButton>(R.id.one)
         val two = requireActivity().findViewById<RadioButton>(R.id.two)
         val three = requireActivity().findViewById<RadioButton>(R.id.three)
@@ -667,6 +670,9 @@ class HistorySettingsFragment : Fragment() {
             Color.parseColor("#000000"),
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         )
+
+        enableHistoryDeletion.buttonTintList = ColorStateList(states, colors)
+        disableHistoryDeletion.buttonTintList = ColorStateList(states, colors)
 
         one.buttonTintList = ColorStateList(states, colors)
         two.buttonTintList = ColorStateList(states, colors)

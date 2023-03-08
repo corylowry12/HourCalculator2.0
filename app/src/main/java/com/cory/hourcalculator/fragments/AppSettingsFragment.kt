@@ -1,9 +1,11 @@
 package com.cory.hourcalculator.fragments
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +21,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -26,6 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
@@ -98,12 +102,19 @@ class AppSettingsFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
         return inflater.inflate(R.layout.fragment_app_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColor()
+        }
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
 
@@ -114,11 +125,29 @@ class AppSettingsFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
         }
         else {
             val typedValue = TypedValue()
@@ -374,7 +403,7 @@ class AppSettingsFragment : Fragment() {
             toggleHistory?.isChecked = true
             toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         } else if (!historyToggleData.loadHistoryState()) {
-            toggleHistory?.isChecked = true
+            toggleHistory?.isChecked = false
             toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
@@ -535,6 +564,71 @@ class AppSettingsFragment : Fragment() {
 
         Toast.makeText(requireContext(), getString(R.string.app_settings_reset_to_default), Toast.LENGTH_LONG)
             .show()
+    }
+
+    fun updateCustomColor() {
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
+        val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
+        val longClickEnabledCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
+        val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
+        val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
+        val historyCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
+        val breakTextBoxCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
+        val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
+
+        outTimeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        calculationTypeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        longClickEnabledCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        clickableHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        vibrationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        breakTextBoxCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        wagesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val outTimeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
+        val setCalculationTypeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
+        val toggleLongPressingCalculateSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
+        val clickableHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
+        val vibrationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+        val historySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
+        val breakTextBoxSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+        val colors = intArrayOf(
+            Color.parseColor("#e7dfec"),
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        )
+
+        outTimeSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        outTimeSwitch.trackTintList = ColorStateList(states, colors)
+        setCalculationTypeSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        setCalculationTypeSwitch.trackTintList = ColorStateList(states, colors)
+        toggleLongPressingCalculateSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        toggleLongPressingCalculateSwitch.trackTintList = ColorStateList(states, colors)
+        clickableHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        clickableHistorySwitch.trackTintList = ColorStateList(states, colors)
+        vibrationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        vibrationSwitch.trackTintList = ColorStateList(states, colors)
+        historySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        historySwitch.trackTintList = ColorStateList(states, colors)
+        breakTextBoxSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        breakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
+
+        val wagesEditText = requireActivity().findViewById<TextInputEditText>(R.id.Wages)
+        val wagesTextInputEditText = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
+
+        wagesTextInputEditText?.boxStrokeColor = Color.parseColor("#000000")
+        wagesTextInputEditText?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        wagesEditText.textCursorDrawable = null
+        wagesTextInputEditText?.defaultHintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        wagesEditText.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        wagesEditText.setTextIsSelectable(false)
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {

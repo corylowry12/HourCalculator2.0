@@ -21,6 +21,7 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -302,6 +303,11 @@ class AppearanceFragment : Fragment() {
     @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val accentColorImageView = activity?.findViewById<ImageView>(R.id.currentSelectedAccentColorImageView)
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            accentColorImageView?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        }
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
 

@@ -243,6 +243,10 @@ class SettingsFragment : Fragment() {
             openFragment(HistorySettingsFragment())
         }
 
+        timeCardSettingsCardView.setOnClickListener {
+            openFragment(TimeCardSettingsFragment())
+        }
+
         val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
 
         val patchNotesConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintPatchNotes)

@@ -43,6 +43,7 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.ImageViewActivity
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -185,6 +186,13 @@ class TimeCardItemInfoFragment : Fragment() {
 
         val navigationDrawable = topAppBarTimeCardItem?.navigationIcon
         navigationDrawable?.mutate()
+
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        }
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
             if (AccentColor(requireContext()).loadAccent() == 5) {

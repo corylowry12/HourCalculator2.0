@@ -2,6 +2,7 @@ package com.cory.hourcalculator.adapters
 
 import android.animation.LayoutTransition
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.classes.AccentColor
+import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 
@@ -26,6 +29,10 @@ class PatchNotesNewFeaturesAdapter(
             title.text = dataList.elementAt(position).toString()
 
             val patchNotesItemCardView = itemView.findViewById<MaterialCardView>(R.id.patchNotesItemCardView)
+
+            if (AccentColor(context).loadAccent() == 5) {
+                patchNotesItemCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generatePatchNotesCardColor()))
+            }
 
             if (dataList.count() == 1) {
                 patchNotesItemCardView.shapeAppearanceModel = patchNotesItemCardView.shapeAppearanceModel

@@ -1,9 +1,11 @@
 package com.cory.hourcalculator.fragments
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -19,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -135,6 +138,9 @@ class BackgroundColorFragment : Fragment() {
                     }
                 }
             }
+            accentColor.loadAccent() == 5 -> {
+                activity?.theme?.applyStyle(R.style.transparent_accent, true)
+            }
         }
         return inflater.inflate(R.layout.fragment_background_color, container, false)
     }
@@ -148,16 +154,52 @@ class BackgroundColorFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        if (AccentColor(requireContext()).loadAccent() == 5) {
+            updateCustomColorChange()
+        }
+
         val resetDrawable = topAppBarBackgroundColorFragment?.menu?.findItem(R.id.reset)?.icon
         val navigationDrawable = topAppBarBackgroundColorFragment?.navigationIcon
         resetDrawable?.mutate()
         navigationDrawable?.mutate()
-        val typedValue = TypedValue()
-        activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-        val id = typedValue.resourceId
+
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            if (AccentColor(requireContext()).loadAccent() == 5) {
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+                val id = typedValue.resourceId
+                resetDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
 
         topAppBarBackgroundColorFragment.setOnMenuItemClickListener {
@@ -166,6 +208,13 @@ class BackgroundColorFragment : Fragment() {
                     Vibrate().vibration(requireContext())
                     val dialog = BottomSheetDialog(requireContext())
                     val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    if (AccentColor(requireContext()).loadAccent() == 5) {
+                        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                        yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    }
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Background Color Settings?"
@@ -178,8 +227,6 @@ class BackgroundColorFragment : Fragment() {
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
                     }*/
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -538,6 +585,37 @@ class BackgroundColorFragment : Fragment() {
 
         DarkThemeData(requireContext()).setDarkModeState(3)
         restartThemeChange()
+    }
+
+    fun updateCustomColorChange() {
+        val lightThemeCardView = requireActivity().findViewById<MaterialCardView>(R.id.lightThemeCardViewBackgroundColor)
+        val darkThemeCardView = requireActivity().findViewById<MaterialCardView>(R.id.darkThemeCardViewBackgroundColor)
+        val followSystemThemeCardView = requireActivity().findViewById<MaterialCardView>(R.id.followSystemThemeCardViewBackgroundColor)
+
+        lightThemeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        darkThemeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        followSystemThemeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarBackgroundColorFragment)
+        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        val lightThemeButton = requireActivity().findViewById<RadioButton>(R.id.lightTheme)
+        val blackThemeButton = requireActivity().findViewById<RadioButton>(R.id.blackTheme)
+        val followSystemThemeButton = requireActivity().findViewById<RadioButton>(R.id.followSystem)
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+
+        val colors = intArrayOf(
+            Color.parseColor("#000000"),
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        )
+        lightThemeButton.buttonTintList = ColorStateList(states, colors)
+        blackThemeButton.buttonTintList = ColorStateList(states, colors)
+        followSystemThemeButton.buttonTintList = ColorStateList(states, colors)
     }
     private fun restartApplication() {
         Handler(Looper.getMainLooper()).postDelayed({
