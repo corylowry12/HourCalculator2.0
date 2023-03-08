@@ -286,6 +286,16 @@ class AboutAppFragment : Fragment() {
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAbout)
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            collapsingToolbarLayout?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            collapsingToolbarLayout?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
     }
 
     fun isPackageInstalled(packageName: String): Boolean {
