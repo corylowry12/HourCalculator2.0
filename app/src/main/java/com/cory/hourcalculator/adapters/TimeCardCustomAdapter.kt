@@ -48,7 +48,7 @@ class TimeCardCustomAdapter(
                 itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
                 itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
                 itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavBackgroundColor()))
 
             }
 
