@@ -24,6 +24,10 @@ class CustomColorGenerator(context: Context) {
     }
 
     fun generateCardColor() : String {
+        return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.5).toString()}"
+    }
+
+    fun generatePatchNotesCardColor() : String {
         return "#${lighten(Color.parseColor(this.loadCustomHex()), 0.7).toString()}"
     }
 
