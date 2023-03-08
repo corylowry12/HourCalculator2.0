@@ -9,12 +9,12 @@ class DarkThemeData(context: Context) {
 
     fun setDarkModeState(state: Int) {
         val editor = sharedPreferences.edit()
-        editor.putInt("DarkTheme", state)
+        editor.putInt("backgroundTheme", state)
         editor.apply()
     }
 
     fun loadDarkModeState(): Int {
-        val state = sharedPreferences.getInt("DarkTheme", 3)
+        val state = sharedPreferences.getInt("backgroundTheme", 3)
         return (state)
     }
 }
