@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarTimeCards"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
