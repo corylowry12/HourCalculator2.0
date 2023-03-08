@@ -36,14 +36,14 @@ class OnboardingActivity : AppCompatActivity() {
         theme!!.applyStyle(R.style.teal_accent, true)
         setContentView(R.layout.activity_onboarding)
 
-        if (DialogData(this).loadOnboardingComplete()) {
+        //if (DialogData(this).loadOnboardingComplete()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        } else {
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container_onboarding, fragment1).addToBackStack(null)
-            transaction.commit()
-        }
+        //} else {
+           // val transaction = supportFragmentManager.beginTransaction()
+           // transaction.replace(R.id.fragment_container_onboarding, fragment1).addToBackStack(null)
+            //transaction.commit()
+       // }
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
@@ -122,7 +122,7 @@ class OnboardingActivity : AppCompatActivity() {
 
                 restartAppLayout.findViewById<Button>(R.id.restartButton).setOnClickListener {
                     if (AccentColor(this).loadAccent() == 0) {
-                        if (ChosenAppIconData(this).loadChosenAppIcon() == 0) {
+                        if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
                             this.packageManager?.setComponentEnabledSetting(
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
@@ -166,7 +166,7 @@ class OnboardingActivity : AppCompatActivity() {
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 1) {
-                        if (ChosenAppIconData(this).loadChosenAppIcon() == 0) {
+                        if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
                             this.packageManager?.setComponentEnabledSetting(
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
@@ -210,7 +210,7 @@ class OnboardingActivity : AppCompatActivity() {
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 2) {
-                        if (ChosenAppIconData(this).loadChosenAppIcon() == 0) {
+                        if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
                             this.packageManager?.setComponentEnabledSetting(
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
@@ -254,7 +254,7 @@ class OnboardingActivity : AppCompatActivity() {
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 3) {
-                        if (ChosenAppIconData(this).loadChosenAppIcon() == 0) {
+                        if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
                             this.packageManager?.setComponentEnabledSetting(
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
@@ -298,7 +298,7 @@ class OnboardingActivity : AppCompatActivity() {
                         }
                     }
                     else if (AccentColor(this).loadAccent() == 4) {
-                        if (ChosenAppIconData(this).loadChosenAppIcon() == 0) {
+                        if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
                             this.packageManager?.setComponentEnabledSetting(
                                 ComponentName(
                                     BuildConfig.APPLICATION_ID,
