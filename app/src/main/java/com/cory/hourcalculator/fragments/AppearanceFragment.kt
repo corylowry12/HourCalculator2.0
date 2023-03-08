@@ -380,6 +380,7 @@ class AppearanceFragment : Fragment() {
         val appIconCardView = requireActivity().findViewById<MaterialCardView>(R.id.appIconCardView)
         val coloredNavigationBarCardView = requireActivity().findViewById<MaterialCardView>(R.id.navbarCardView)
         val coloredMenuTintCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredMenuTintCardView)
+        val coloredTitleBarTextCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredTitleBarTextCardView)
 
         themeCardView.shapeAppearanceModel = themeCardView.shapeAppearanceModel
             .toBuilder()
@@ -410,6 +411,13 @@ class AppearanceFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         coloredMenuTintCardView.shapeAppearanceModel = coloredNavigationBarCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        coloredTitleBarTextCardView.shapeAppearanceModel = coloredTitleBarTextCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -521,6 +529,31 @@ class AppearanceFragment : Fragment() {
                 coloredMenuTintSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
             setColoredMenuItemTint(topAppBar)
+        }
+
+        val coloredTitleBarTextSwitch = view.findViewById<MaterialSwitch>(R.id.coloredTitleBarTextSwitch)
+        val coloredTitleBarData = ColoredTitleBarTextData(requireContext())
+        coloredTitleBarTextSwitch.isChecked = coloredMenuTintData.loadMenuTint()
+
+        if (coloredTitleBarData.loadTitleBarTextState()) {
+            coloredTitleBarTextSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else {
+            coloredTitleBarTextSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        coloredTitleBarTextSwitch.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            coloredTitleBarData.setTitleBarTextState(coloredTitleBarTextSwitch.isChecked)
+            val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)
+            if (coloredTitleBarTextSwitch.isChecked) {
+                collapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
 
         /*enableColoredNavBar.setOnClickListener {
@@ -1404,12 +1437,14 @@ class AppearanceFragment : Fragment() {
         val appIconCardView = requireActivity().findViewById<MaterialCardView>(R.id.appIconCardView)
         val coloredNavBarCardView = requireActivity().findViewById<MaterialCardView>(R.id.navbarCardView)
         val coloredMenuItemsCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredMenuTintCardView)
+        val coloredTitleBarTextCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredTitleBarTextCardView)
 
         backgroundColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         accentColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         appIconCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         coloredNavBarCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         coloredMenuItemsCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        coloredTitleBarTextCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setContentScrimColor(
             Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
@@ -1427,11 +1462,14 @@ class AppearanceFragment : Fragment() {
 
         val toggleColoredNavBarSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)
         val toggleColoredMenuItemsSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredMenuTintSwitch)
+        val toggleColoredTitleBarTextSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredTitleBarTextSwitch)
 
         toggleColoredNavBarSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
         toggleColoredNavBarSwitch.trackTintList = ColorStateList(states, colors)
         toggleColoredMenuItemsSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
         toggleColoredMenuItemsSwitch.trackTintList = ColorStateList(states, colors)
+        toggleColoredTitleBarTextSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
+        toggleColoredTitleBarTextSwitch.trackTintList = ColorStateList(states, colors)
 
         val topAppBarAppearance = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarAppearance)
 
@@ -1462,6 +1500,16 @@ class AppearanceFragment : Fragment() {
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 }
