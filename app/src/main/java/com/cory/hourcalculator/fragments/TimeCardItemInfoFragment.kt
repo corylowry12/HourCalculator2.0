@@ -197,11 +197,11 @@ class TimeCardItemInfoFragment : Fragment() {
         if (MenuTintData(requireContext()).loadMenuTint()) {
             if (AccentColor(requireContext()).loadAccent() == 5) {
                 addDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()),
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
                 )
                 navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()),
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
                 )
             }
