@@ -16,6 +16,7 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLayoutHistorySettings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
@@ -66,7 +67,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/historyDeletionCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +79,8 @@
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/historyDeletionTextView">
+                app:layout_constraintTop_toBottomOf="@id/historyDeletionTextView"
+                style="@style/Widget.Material3.CardView.Filled">
 
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -106,7 +108,7 @@
                         android:minHeight="48dp"
                         android:theme="?attr/radioButtonTheme"/>
                 </RadioGroup>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/daysWorkedTextView"
@@ -122,7 +124,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/historyDeletionCardView" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/daysWorkedCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,7 +136,8 @@
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/daysWorkedTextView">
+                app:layout_constraintTop_toBottomOf="@id/daysWorkedTextView"
+                style="@style/Widget.Material3.CardView.Filled">
 
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -217,7 +220,7 @@
                         android:minHeight="48dp"
                         android:theme="?attr/radioButtonTheme"/>
                 </RadioGroup>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="match_parent"
