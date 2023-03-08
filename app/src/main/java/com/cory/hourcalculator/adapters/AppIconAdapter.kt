@@ -112,7 +112,7 @@ class AppIconAdapter(val context: Context,
             }
 
             if (ChosenAppIconData(context).loadChosenAppIcon().toString().lowercase() == iconNameTextView.text.toString().lowercase()) {
-                iconCardView.strokeWidth = 10
+                iconCardView.strokeWidth = 7
             }
         }
     }
@@ -133,11 +133,17 @@ class AppIconAdapter(val context: Context,
                     .inflate(R.layout.restart_app_icon_warning_bottom_sheet, null)
                 dialog.setContentView(changeAppIconBottomSheet)
                 dialog.setCancelable(true)
-                dialog.window?.navigationBarColor =
-                    ContextCompat.getColor(context, R.color.black)
+
+                val infoCardView = changeAppIconBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
                 val yesButton = changeAppIconBottomSheet.findViewById<Button>(R.id.yesAppIconButton)
                 val noButton =
                     changeAppIconBottomSheet.findViewById<Button>(R.id.cancelAppIconButton)
+
+                if (AccentColor(context).loadAccent() == 5) {
+                    infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                    yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                }
                 yesButton.setOnClickListener {
                     Vibrate().vibration(context)
                     /*if (position == 0) {
