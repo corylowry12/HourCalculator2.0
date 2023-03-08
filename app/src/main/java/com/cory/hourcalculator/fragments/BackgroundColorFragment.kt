@@ -364,11 +364,6 @@ class BackgroundColorFragment : Fragment() {
                     requireContext()
                 ).loadAccent() == 4
             ) {
-                /*val alert =
-                        MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
-                    alert.setTitle(getString(R.string.warning))
-                    alert.setMessage(getString(R.string.followSystemGoogleDialogWarning))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
                 val dialog = BottomSheetDialog(requireContext())
                 val warningLayout =
                     layoutInflater.inflate(R.layout.match_google_apps_warning_bottom_sheet, null)
@@ -616,6 +611,16 @@ class BackgroundColorFragment : Fragment() {
         lightThemeButton.buttonTintList = ColorStateList(states, colors)
         blackThemeButton.buttonTintList = ColorStateList(states, colors)
         followSystemThemeButton.buttonTintList = ColorStateList(states, colors)
+
+        val runnable = Runnable {
+            (context as MainActivity).updateBottomNavCustomColor()
+        }
+        MainActivity().runOnUiThread(runnable)
+
+        if (ColoredNavBarData(requireContext()).loadNavBar()) {
+            activity?.window?.navigationBarColor =
+                Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
+        }
     }
     private fun restartApplication() {
         Handler(Looper.getMainLooper()).postDelayed({
