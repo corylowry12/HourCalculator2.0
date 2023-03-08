@@ -223,7 +223,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialYouCardViewAccentColor"
+                android:id="@+id/customCardViewAccentColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -231,6 +231,37 @@
                 android:layout_marginTop="1dp"
                 app:cardBackgroundColor="?attr/cardBackground"
                 android:layout_below="@id/redCardViewAccentColor"
+                style="@style/Widget.Material3.CardView.Filled"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/customConstraintLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/customAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Custom"
+                        android:textColor="?attr/settingsTextColor"
+                        android:theme="?attr/radioButtonTheme" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialYouCardViewAccentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_below="@id/customCardViewAccentColor"
                 style="@style/Widget.Material3.CardView.Filled"
                 >
 
