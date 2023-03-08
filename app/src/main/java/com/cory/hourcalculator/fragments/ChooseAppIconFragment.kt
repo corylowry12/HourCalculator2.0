@@ -51,8 +51,8 @@ class ChooseAppIconFragment : Fragment() {
 
         val collapsingToolbarLayout = activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppIconFragment)
         if (AccentColor(requireContext()).loadAccent() == 5) {
-            collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         }
 
         val navigationDrawable = appIconToolBar?.navigationIcon
