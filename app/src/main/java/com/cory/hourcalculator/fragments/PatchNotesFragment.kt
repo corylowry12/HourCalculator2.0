@@ -51,22 +51,11 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue with app crashing when trying to view image in time card info view", "Fixed issue with date picker dialog in the edit hours view being the wrong theme", "Fixed issue with radio buttons in the background color view not matching the custom color",
-                                                "Fixed issue with the sort bottom sheet in the history view not matching the custom color", "Fixed issue with the info bottom sheet in the history view not matching the custom color", "Fixed issue with the history options button sheet not matching the custom color",
-                                                "Fixed issue with the outline of the radio buttons in the history view being the wrong color when not selected", "Fixed issue with the delete entry bottom sheet in the edit hour view not matching the custom theme", "Fixed issue with the restore scroll position button not matching " +
-                                                "the custom color theme in history view", "Fixed issue with the restore scroll position button not matching the custom color theme in the time card view", "Fixed issue with the time card info view not matching the custom theme",
-                                                "Fixed issue with background color view always setting to the custom color theme when another theme was selected", "Reset background theme setting, resulting in broken themes for some ui elements",
-                                                "Fixed issue with the accent color circle in the appearance view being transparent when a custom theme was enabled", "Fixed issue where if you disabled the history in the app settings view and left the view and came back, the switch would be checked even tho it was disabled",
-                                                "Fixed issue where if you cancelled the custom color picker dialog, the custom radio button would still be checked", "Fixed issue with there being no vibration when clicking the custom radio button", "Fixed issue with there being no vibration when click the select custom color button",
-                                                "Fixed issue with restart app bottom sheet not matching custom theme when clicking the teal accent color button", "Fixed issue with switches being slightly purple if you long pressed on them", "Fixed issue with the About app view not matching custom theme",
-                                                "Fixed issue with card views in the time card options (accessed by long pressing on a time card entry) not matching the custom theme", "Fixed issue with highlight color in the time card options bottom sheet not matching the curves of the card views",
-                                                "Fixed issue with bottom sheet when changing app icon not matching the custom color")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue with crashing when opening the about view if you had custom color theming enabled")
 
     private var newFeaturesArrayInternal = arrayOf("No new features")
 
-    private var enhancementsArrayInternal = arrayOf("Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Made stroke around the enabled app icon slightly smaller", "Added a cancel button to the custom color bottom sheet",
-                                                    "Adjusted margin for the buttons in the custom color picker bottom sheet", "Converted the pink, orange, red, and material you accent color buttons to use a restart bottom sheet warning", "Converted the different material you theming switch to use a bottom sheet",
-                                                    "Added icons to items in the Appearance view to let you know the item is clickable", "Tweaked design of the restart app warning bottom sheet view")
+    private var enhancementsArrayInternal = arrayOf("App will now generate a different color scheme based on if you chosen theme is light or dark mode")
 
     var themeSelection = false
 
@@ -150,15 +139,15 @@ class PatchNotesFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.bugFixesOuterCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
             requireActivity().findViewById<MaterialCardView>(R.id.newFeaturesOuterCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
             requireActivity().findViewById<MaterialCardView>(R.id.enhancementsOuterCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.bugFixesChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.bugFixesChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.bugFixesChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            requireActivity().findViewById<Chip>(R.id.enhancementsChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.enhancementsChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            requireActivity().findViewById<Chip>(R.id.bugFixesChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            requireActivity().findViewById<Chip>(R.id.bugFixesChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            requireActivity().findViewById<Chip>(R.id.bugFixesChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+            requireActivity().findViewById<Chip>(R.id.enhancementsChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            requireActivity().findViewById<Chip>(R.id.enhancementsChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
         }
 
         val navigationDrawable = topAppBar?.navigationIcon
