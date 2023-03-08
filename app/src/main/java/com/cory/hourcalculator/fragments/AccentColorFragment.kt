@@ -19,7 +19,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.*
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
@@ -29,12 +31,9 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.slider.Slider
-import kotlin.math.max
-import kotlin.math.min
 
 class AccentColorFragment : Fragment() {
 
@@ -650,6 +649,12 @@ class AccentColorFragment : Fragment() {
                 cancelSelectButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
             }
 
+            val materialColor = Integer.toHexString(
+                ContextCompat.getColor(
+                    requireContext(), android.R.color.system_accent2_1000
+                ) and 0x00ffffff
+            )
+            Toast.makeText(requireContext(), materialColor.toString(), Toast.LENGTH_SHORT).show()
             var hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
             coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
             hexadecimalTextView.text = hex
@@ -1151,7 +1156,7 @@ class AccentColorFragment : Fragment() {
 
         if (ColoredNavBarData(requireContext()).loadNavBar()) {
             activity?.window?.navigationBarColor =
-                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
         }
     }
 }
