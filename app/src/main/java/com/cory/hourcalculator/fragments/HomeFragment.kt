@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
         val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTime)
 
         if (AccentColor(requireActivity()).loadAccent() == 5) {
-            activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
             calculateButton?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
             breakTextViewInput?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
             breakTextViewInput?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
@@ -173,7 +173,7 @@ class HomeFragment : Fragment() {
                 }
                 accentColor.loadAccent() == 5 -> {
                     activity?.window?.navigationBarColor =
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
                 }
             }
         } else {
