@@ -151,42 +151,29 @@ class AboutAppFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        /*val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
-        val appIconCardView = view.findViewById<CardView>(R.id.appIconCardView)
-        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 0) {
-            if (accentColor.loadAccent() == 0 || accentColor.loadAccent() == 4) {
-                autoIcon.setImageResource(R.drawable.hourcalclogoteal)
-                appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-            }
-            else if (accentColor.loadAccent() == 1) {
-                appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pinkAccent))
-                autoIcon.setImageResource(R.drawable.hourcalclogopink)
-            }
-            else if (accentColor.loadAccent() == 2) {
-                appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.orangeAccent))
-                autoIcon.setImageResource(R.drawable.hourcalclogoorange)
-            }
-            else if (accentColor.loadAccent() == 3) {
-                appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.redAccent))
-                autoIcon.setImageResource(R.drawable.hourcalclogored)
-            }
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 1) {
+        val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
+
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "teal" || ChosenAppIconData(requireContext()).loadChosenAppIcon() == "material you") {
             autoIcon.setImageResource(R.drawable.hourcalclogoteal)
-            appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 2) {
-            appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pinkIcon))
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "pink") {
             autoIcon.setImageResource(R.drawable.hourcalclogopink)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 3) {
-            appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.orangeAccent))
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "orange") {
             autoIcon.setImageResource(R.drawable.hourcalclogoorange)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == 4) {
-            appIconCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.redIcon))
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "red") {
             autoIcon.setImageResource(R.drawable.hourcalclogored)
-        }*/
+        }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "blue") {
+            autoIcon.setImageResource(R.drawable.hourcalclogoblue)
+        }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "og") {
+            autoIcon.setImageResource(R.drawable.hourcalculatorlogoyellowgradient)
+        }
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "snow falling") {
+            autoIcon.setImageResource(R.drawable.hourcalclogo_christmas)
+        }
 
         val patchNotesTextView = activity?.findViewById<TextView>(R.id.patchNotes)
         val rateOnPlayStore = activity?.findViewById<TextView>(R.id.rate)
