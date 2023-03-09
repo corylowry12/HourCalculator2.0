@@ -52,15 +52,11 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue with crashing when opening the about view if you had custom color theming enabled", "Fixed issue with the delete entry bottom sheet not matching the custom theme in the time card view",
-                                                "Fixed issue with the delete all bottom sheet not matching the custom theme in the time card view", "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11",
-                                                "Fixed some issues with crashing when deleting entries in the history view with custom theming enabled", "Fixed issue with about app view back arrow in the title bar not being centered properly")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time")
 
-    private var newFeaturesArrayInternal = arrayOf("Added the ability to change the title bar text color (custom theme only)", "Added a badge to the bottom navigation view to show time card count", "App will now deselect all entries if you long click on an entry if all entries are already selected")
+    private var newFeaturesArrayInternal = arrayOf("No new features")
 
-    private var enhancementsArrayInternal = arrayOf("App will now generate a different color scheme based on if you chosen theme is light or dark mode", "Redesigned the bottom sheet prompting for confirmation when deletion an entry in the edit view",
-                                                    "Redesigned the bottom sheet prompting for confirmation when deletion an entry in the time card", "Major refactor of code to optimize the history view", "Added a toast message when deleting time card entries",
-                                                    "Added a dialog confirming image deletion when viewing an image")
+    private var enhancementsArrayInternal = arrayOf("No new enhancements")
 
     var themeSelection = false
 
