@@ -48,7 +48,7 @@ class TimeCardCustomAdapter(
                 itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
                 itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
                 itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavBackgroundColor()))
+                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateChipBackgroundColor()))
 
             }
 
@@ -191,8 +191,15 @@ class TimeCardCustomAdapter(
                         ContextCompat.getColor(context, R.color.black)
                     dialog.setContentView(deleteEntryLayout)
                     dialog.setCancelable(true)
+
                     val yesButton = deleteEntryLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteEntryLayout.findViewById<Button>(R.id.noButton)
+                    val infoCardView = deleteEntryLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                    if (AccentColor(context).loadAccent() == 5) {
+                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    }
 
                     yesButton.setOnClickListener {
                         Vibrate().vibration(context)
@@ -206,6 +213,7 @@ class TimeCardCustomAdapter(
                         }
                         MainActivity().runOnUiThread(runnable)
                         dialog.dismiss()
+                        Toast.makeText(context, "Entry Deleted", Toast.LENGTH_SHORT).show()
                     }
                     noButton.setOnClickListener {
                         Vibrate().vibration(context)
@@ -221,8 +229,15 @@ class TimeCardCustomAdapter(
                         LayoutInflater.from(context).inflate(R.layout.delete_all_bottom_sheet, null)
                     deleteAllDialog.setContentView(deleteAllLayout)
                     deleteAllDialog.setCancelable(true)
+
+                    val infoCardView = deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
                     val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+                    if (AccentColor(context).loadAccent() == 5) {
+                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    }
 
                     yesButton.setOnClickListener {
                         TimeCardDBHelper(context, null).deleteAll()
@@ -235,6 +250,7 @@ class TimeCardCustomAdapter(
                         MainActivity().runOnUiThread(runnable)
 
                         deleteAllDialog.dismiss()
+                        Toast.makeText(context, "All time card entries deleted", Toast.LENGTH_SHORT).show()
                     }
                     noButton.setOnClickListener {
                         deleteAllDialog.dismiss()
