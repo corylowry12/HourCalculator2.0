@@ -546,9 +546,11 @@ class AppearanceFragment : Fragment() {
             coloredTitleBarData.setTitleBarTextState(coloredTitleBarTextSwitch.isChecked)
             val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)
             if (coloredTitleBarTextSwitch.isChecked) {
+                coloredTitleBarTextSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                 collapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
             }
             else {
+                coloredTitleBarTextSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
@@ -703,7 +705,7 @@ class AppearanceFragment : Fragment() {
                 }
                 accentColor.loadAccent() == 5 -> {
                     activity?.window?.navigationBarColor =
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
                 }
             }
 
