@@ -26,6 +26,7 @@ android {
         }
     }
     compileSdk 33
+    compileSdkVersion "android-UpsideDownCake"
 
     defaultConfig {
         applicationId "com.cory.hourcalculator"
@@ -42,8 +43,8 @@ android {
         Internal {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 140
-            versionName "10.0.0-internal-alpha07"
+            versionCode 141
+            versionName "10.0.0-internal-alpha08"
         }
 
         Production {
