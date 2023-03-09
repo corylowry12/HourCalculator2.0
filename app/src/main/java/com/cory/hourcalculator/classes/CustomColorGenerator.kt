@@ -37,7 +37,7 @@ class CustomColorGenerator(context: Context) {
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 return "#${
-                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
                 }"
             }
             darkThemeData.loadDarkModeState() == 3 -> {
@@ -73,7 +73,7 @@ class CustomColorGenerator(context: Context) {
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 return "#${
-                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
                 }"
             }
             darkThemeData.loadDarkModeState() == 3 -> {
@@ -302,7 +302,7 @@ class CustomColorGenerator(context: Context) {
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 return "#${
-                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
                 }"
             }
             darkThemeData.loadDarkModeState() == 3 -> {
@@ -333,24 +333,24 @@ class CustomColorGenerator(context: Context) {
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
                 return "#${
-                    this.darken(Color.parseColor(this.loadCustomHex()), 0.05).toString()
+                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
                 }"
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 return "#${
-                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8).toString()
                 }"
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         return "#${
-                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.6).toString()
                         }"
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         return "#${
-                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.1).toString()
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6).toString()
                         }"
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -361,7 +361,7 @@ class CustomColorGenerator(context: Context) {
                 }
             }
         }
-        return "#${lighten(Color.parseColor(loadCustomHex()), 0.5)}"
+        return generateCustomColorPrimary()
     }
 
     fun lighten(color: Int, fraction: Double): String {
