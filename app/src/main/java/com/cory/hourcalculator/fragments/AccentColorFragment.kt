@@ -654,7 +654,7 @@ class AccentColorFragment : Fragment() {
                     requireContext(), android.R.color.system_accent2_1000
                 ) and 0x00ffffff
             )
-            Toast.makeText(requireContext(), materialColor.toString(), Toast.LENGTH_SHORT).show()
+
             var hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
             coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
             hexadecimalTextView.text = hex
@@ -1157,6 +1157,16 @@ class AccentColorFragment : Fragment() {
         if (ColoredNavBarData(requireContext()).loadNavBar()) {
             activity?.window?.navigationBarColor =
                 Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
+        }
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 }
