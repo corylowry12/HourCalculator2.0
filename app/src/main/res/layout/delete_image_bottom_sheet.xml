@@ -30,7 +30,7 @@
         style="@style/TextAppearance.Material3.DisplaySmall"/>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bodyCardView"
+        android:id="@+id/infoCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/headingTextView"
@@ -40,7 +40,8 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
         app:cardBackgroundColor="?attr/cardBackground"
-        app:cardCornerRadius="18dp">
+        app:cardCornerRadius="18dp"
+        style="@style/Widget.Material3.CardView.Filled">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -53,19 +54,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Would you like to delete this entry? This CAN NOT be undone!"
+                android:text="Would you like to delete this image? This CAN NOT be undone!"
                 android:textColor="?attr/settingsTextColor"
                 style="@style/TextAppearance.Material3.BodyLarge"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-
     <Button
         android:id="@+id/yesButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/yes"
-        app:layout_constraintTop_toBottomOf="@id/bodyCardView"
+        app:layout_constraintTop_toBottomOf="@id/infoCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
@@ -84,6 +84,6 @@
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

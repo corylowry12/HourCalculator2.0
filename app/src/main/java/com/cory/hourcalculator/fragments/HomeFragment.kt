@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -21,6 +22,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -130,6 +132,16 @@ class HomeFragment : Fragment() {
             breakTextBox.textCursorDrawable = null
             breakTextBox.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
             breakTextBox.setTextIsSelectable(false)
+
+            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+                activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
         breakTextBox.isLongClickable = false
 

@@ -37,7 +37,8 @@ class PatchNotesFragment : Fragment() {
     private var bugFixesArray = arrayOf("Fixed issue where when resetting \'App Settings\' to default it would uncheck the Vibration switch even though vibration is enabled after resetting", "Fixed issue with there being no vibration when long clicking items in history view",
                                         "Fixed issue with there being no vibration when clicking \"Hide\" to hide checkboxes", "Fixed issue with there being no vibration when clicking \"Report A Bug\" in the about app view", "Fixed issue with the shape of the floating action button in the history view",
                                         "Fixed crashing when trying to leave the edit hour view if there were pending changes and you clicked yes to save them", "Fixed issue with title and menu buttons not being centered properly in title bars",
-                                        "Fixed issue with github button in about view still using built in web view instead of custom tab", "Fixed issue when hitting back button and the bottom nav bar wouldn't change selected tab")
+                                        "Fixed issue with github button in about view still using built in web view instead of custom tab", "Fixed issue when hitting back button and the bottom nav bar wouldn't change selected tab",
+                                        "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11")
 
     private var newFeaturesArray = arrayOf("Added the ability to click on the history tab when the history view is active and scroll to the top", "Added the ability to calculate in time or decimal format depending on which is enabled by long pressing the calculate button (eg. if decimal format is enabled, long pressing will calculate in time format)",
                                             "Added the ability to click on an hour entry and open it to edit it (disabled by default, to enable go to Settings->App Settings->Open hour for editing on history item click)", "Added a toggle to change menu item tint to match the theme")
@@ -49,13 +50,17 @@ class PatchNotesFragment : Fragment() {
                                             "App icon radio buttons will no be checked if you click the icon but not the radio button", "App will no longer let you go to another tab when edit view is visible to prevent accidentally leaving and losing edited data",
                                             "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item",
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
-                                            "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme")
+                                            "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue with crashing when opening the about view if you had custom color theming enabled")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue with crashing when opening the about view if you had custom color theming enabled", "Fixed issue with the delete entry bottom sheet not matching the custom theme in the time card view",
+                                                "Fixed issue with the delete all bottom sheet not matching the custom theme in the time card view", "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11",
+                                                "Fixed some issues with crashing when deleting entries in the history view with custom theming enabled", "Fixed issue with about app view back arrow in the title bar not being centered properly")
 
-    private var newFeaturesArrayInternal = arrayOf("No new features")
+    private var newFeaturesArrayInternal = arrayOf("Added the ability to change the title bar text color (custom theme only)", "Added a badge to the bottom navigation view to show time card count", "App will now deselect all entries if you long click on an entry if all entries are already selected")
 
-    private var enhancementsArrayInternal = arrayOf("App will now generate a different color scheme based on if you chosen theme is light or dark mode")
+    private var enhancementsArrayInternal = arrayOf("App will now generate a different color scheme based on if you chosen theme is light or dark mode", "Redesigned the bottom sheet prompting for confirmation when deletion an entry in the edit view",
+                                                    "Redesigned the bottom sheet prompting for confirmation when deletion an entry in the time card", "Major refactor of code to optimize the history view", "Added a toast message when deleting time card entries",
+                                                    "Added a dialog confirming image deletion when viewing an image")
 
     var themeSelection = false
 
@@ -148,6 +153,15 @@ class PatchNotesFragment : Fragment() {
             requireActivity().findViewById<Chip>(R.id.enhancementsChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
             requireActivity().findViewById<Chip>(R.id.enhancementsChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
             requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
 
         val navigationDrawable = topAppBar?.navigationIcon

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.FAQCustomAdapter
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -339,6 +341,19 @@ class FAQFragment : Fragment() {
                 }
             }
         })
+    }
+
+    fun updateCustomColors() {
+        /*if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarF)?.setCollapsedTitleTextColor(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }*/
     }
 
     private fun hideKeyboard() {

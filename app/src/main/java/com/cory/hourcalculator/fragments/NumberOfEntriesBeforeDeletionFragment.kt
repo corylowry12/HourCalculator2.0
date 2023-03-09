@@ -7,36 +7,29 @@ import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.RadioButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
-class HistorySettingsFragment : Fragment() {
+class NumberOfEntriesBeforeDeletionFragment : Fragment() {
 
     private var color: Int = 0
     var themeSelection = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -112,190 +105,39 @@ class HistorySettingsFragment : Fragment() {
                 activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
                 color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
             }
-            }
-        return inflater.inflate(R.layout.fragment_history_settings, container, false)
+        }
+        return inflater.inflate(
+            R.layout.fragment_number_of_entries_before_deletion,
+            container,
+            false
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val historyDeletionCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
-        val numberOfDaysCardView = requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
-
-        historyDeletionCardView.shapeAppearanceModel = historyDeletionCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        numberOfDaysCardView.shapeAppearanceModel = numberOfDaysCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(28f)
-            .setBottomLeftCornerSize(28f)
-            .build()
-
-        val dialog = BottomSheetDialog(requireContext())
-
-        val topAppBar =
-            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
-
-        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
-        resetDrawable?.mutate()
-
-        val navigationDrawable = topAppBar?.navigationIcon
-        navigationDrawable?.mutate()
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
-        }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarNumberOfDaysBeforeDeletion)
+        topAppBar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
         }
 
         if (AccentColor(requireContext()).loadAccent() == 5) {
             updateCustomColor()
         }
 
-        topAppBar?.setNavigationOnClickListener {
-            Vibrate().vibration(requireContext())
-            activity?.supportFragmentManager?.popBackStack()
-        }
-
-        topAppBar?.setOnMenuItemClickListener {
-            Vibrate().vibration(requireContext())
-            when (it.itemId) {
-                R.id.reset -> {
-                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
-                    dialog.setContentView(resetSettingsLayout)
-                    dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset History Settings?"
-                    val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
-                    if (AccentColor(requireContext()).loadAccent() == 5) {
-                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                        yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                        cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                    }
-                    /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
-
-                    yesResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        reset()
-                        dialog.dismiss()
-                    }
-                    cancelResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        dialog.dismiss()
-                    }
-                    dialog.show()
-                    true
-                }
-                else -> true
-            }
-        }
-
-        val toggleHistoryAutomaticDeletion =
-            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
-        //val disableHistoryAutomaticDeletion =
-            //activity?.findViewById<RadioButton>(R.id.disableHistoryDeletion)
-
-       /* val one = activity?.findViewById<RadioButton>(R.id.one)
+        val one = activity?.findViewById<RadioButton>(R.id.one)
         val two = activity?.findViewById<RadioButton>(R.id.two)
         val three = activity?.findViewById<RadioButton>(R.id.three)
         val four = activity?.findViewById<RadioButton>(R.id.four)
         val five = activity?.findViewById<RadioButton>(R.id.five)
         val six = activity?.findViewById<RadioButton>(R.id.six)
-        val seven = activity?.findViewById<RadioButton>(R.id.seven)*/
+        val seven = activity?.findViewById<RadioButton>(R.id.seven)
 
         val historyDeletion = HistoryAutomaticDeletion(requireContext())
         val daysWorked = DaysWorkedPerWeek(requireContext())
 
-        if (historyDeletion.loadHistoryDeletionState()) {
-            toggleHistoryAutomaticDeletion?.isChecked = true
-            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-            //one?.isEnabled = true
-            //two?.isEnabled = true
-            //three?.isEnabled = true
-            //four?.isEnabled = true
-            //five?.isEnabled = true
-            //six?.isEnabled = true
-            //seven?.isEnabled = true
-
-            /*one?.setTextColor(
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
-                )
-            )
-            two?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-            three?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-            four?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-            five?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-            six?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-            seven?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))*/
-        } else {
-            toggleHistoryAutomaticDeletion?.isChecked = false
-            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-            /*one?.isEnabled = false
-            two?.isEnabled = false
-            three?.isEnabled = false
-            four?.isEnabled = false
-            five?.isEnabled = false
-            six?.isEnabled = false
-            seven?.isEnabled = false
-
-            one?.setTextColor(color)
-            two?.setTextColor(color)
-            three?.setTextColor(color)
-            four?.setTextColor(color)
-            five?.setTextColor(color)
-            six?.setTextColor(color)
-            seven?.setTextColor(color)*/
-        }
-
-        requireActivity().findViewById<TextView>(R.id.numberOfEntriesTextView).text = daysWorked.loadDaysWorked().toString()
-
-        /*when {
+        when {
             daysWorked.loadDaysWorked() == 1 -> {
                 one?.isChecked = true
             }
@@ -317,82 +159,9 @@ class HistorySettingsFragment : Fragment() {
             daysWorked.loadDaysWorked() == 7 -> {
                 seven?.isChecked = true
             }
-        }*/
-
-        toggleHistoryAutomaticDeletion?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (toggleHistoryAutomaticDeletion.isChecked) {
-                activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                historyDeletion.setHistoryDeletionState(true)
-
-                /*one?.isEnabled = true
-                two?.isEnabled = true
-                three?.isEnabled = true
-                four?.isEnabled = true
-                five?.isEnabled = true
-                six?.isEnabled = true
-                seven?.isEnabled = true
-
-                one?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-                two?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-                three?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-                four?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-                five?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-                six?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))
-                seven?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)))*/
-                greaterThan()
-            }
-            else {
-                activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                historyDeletion.setHistoryDeletionState(false)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.history_automatic_deletion_disabled),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                /*one?.isEnabled = false
-                two?.isEnabled = false
-                three?.isEnabled = false
-                four?.isEnabled = false
-                five?.isEnabled = false
-                six?.isEnabled = false
-                seven?.isEnabled = false
-
-                one?.setTextColor(color)
-                two?.setTextColor(color)
-                three?.setTextColor(color)
-                four?.setTextColor(color)
-                five?.setTextColor(color)
-                six?.setTextColor(color)
-                seven?.setTextColor(color)*/
-            }
         }
 
-        val daysWorkedCardView = requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
-        daysWorkedCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (!historyDeletion.loadHistoryDeletionState()) {
-                Toast.makeText(requireContext(), "History deletion must be enabled to change these settings", Toast.LENGTH_SHORT).show()
-            }
-            else {
-
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.setCustomAnimations(
-                    R.anim.enter_from_right,
-                    R.anim.exit_to_left,
-                    R.anim.enter_from_left,
-                    R.anim.exit_to_right
-                )
-                transaction?.replace(
-                    R.id.fragment_container,
-                    NumberOfEntriesBeforeDeletionFragment()
-                )?.addToBackStack(null)
-                transaction?.commit()
-            }
-        }
-
-       /* one?.setOnClickListener {
+        one?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 1) {
                 Toast.makeText(requireContext(), getString(R.string.one_entry_already_enabled), Toast.LENGTH_SHORT)
@@ -487,7 +256,7 @@ class HistorySettingsFragment : Fragment() {
                     .show()
                 greaterThan()
             }
-        }*/
+        }
     }
 
     private fun greaterThan() {
@@ -592,7 +361,6 @@ class HistorySettingsFragment : Fragment() {
                 ).show()
 
                 toggleHistoryAutomaticDeletion?.isChecked = false
-                activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
 
                 one?.isEnabled = false
                 two?.isEnabled = false
@@ -614,72 +382,21 @@ class HistorySettingsFragment : Fragment() {
         }
     }
 
-    private fun reset() {
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
-        val daysWorked = DaysWorkedPerWeek(requireContext())
-
-        if (historyDeletion.loadHistoryDeletionState() || daysWorked.loadDaysWorked() != 7) {
-                Vibrate().vibration(requireContext())
-                val toggleHistoryAutomaticDeletion =
-                    activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
-
-                val one = activity?.findViewById<RadioButton>(R.id.one)
-                val two = activity?.findViewById<RadioButton>(R.id.two)
-                val three = activity?.findViewById<RadioButton>(R.id.three)
-                val four = activity?.findViewById<RadioButton>(R.id.four)
-                val five = activity?.findViewById<RadioButton>(R.id.five)
-                val six = activity?.findViewById<RadioButton>(R.id.six)
-                val seven = activity?.findViewById<RadioButton>(R.id.seven)
-
-                historyDeletion.setHistoryDeletionState(false)
-                daysWorked.setDaysWorked(7)
-
-                toggleHistoryAutomaticDeletion?.isChecked = false
-
-                one?.isEnabled = false
-                two?.isEnabled = false
-                three?.isEnabled = false
-                four?.isEnabled = false
-                five?.isEnabled = false
-                six?.isEnabled = false
-                seven?.isEnabled = false
-
-                one?.isChecked = false
-                two?.isChecked = false
-                three?.isChecked = false
-                four?.isChecked = false
-                five?.isChecked = false
-                six?.isChecked = false
-                seven?.isChecked = true
-
-                one?.setTextColor(color)
-                two?.setTextColor(color)
-                three?.setTextColor(color)
-                four?.setTextColor(color)
-                five?.setTextColor(color)
-                six?.setTextColor(color)
-                seven?.setTextColor(color)
-        }
-        else {
-            Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()
-        }
-    }
-
     fun updateCustomColor() {
-        val historyDeletionCardView = requireView().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
-        val numberOfDaysCardView = requireView().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
-        historyDeletionCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        numberOfDaysCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val daysWorkedCardView = requireView().findViewById<MaterialCardView>(R.id.daysWorkedCardView)
+        daysWorkedCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
-        val toggleHistoryDeletion = requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
-        /*val one = requireActivity().findViewById<RadioButton>(R.id.one)
-        val two = requireActivity().findViewById<RadioButton>(R.id.two)
-        val three = requireActivity().findViewById<RadioButton>(R.id.three)
-        val four = requireActivity().findViewById<RadioButton>(R.id.four)
-        val five = requireActivity().findViewById<RadioButton>(R.id.five)
-        val six = requireActivity().findViewById<RadioButton>(R.id.six)
-        val seven = requireActivity().findViewById<RadioButton>(R.id.seven)*/
+        val one = requireActivity().findViewById<RadioButton>(R.id.one)
+       val two = requireActivity().findViewById<RadioButton>(R.id.two)
+       val three = requireActivity().findViewById<RadioButton>(R.id.three)
+       val four = requireActivity().findViewById<RadioButton>(R.id.four)
+       val five = requireActivity().findViewById<RadioButton>(R.id.five)
+       val six = requireActivity().findViewById<RadioButton>(R.id.six)
+       val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -687,27 +404,20 @@ class HistorySettingsFragment : Fragment() {
         )
 
         val colors = intArrayOf(
-            Color.parseColor("#e7dfec"),
+            Color.parseColor("#000000"),
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         )
 
-        toggleHistoryDeletion.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        toggleHistoryDeletion.trackTintList = ColorStateList(states, colors)
-
-        /*one.buttonTintList = ColorStateList(states, colors)
+        one.buttonTintList = ColorStateList(states, colors)
         two.buttonTintList = ColorStateList(states, colors)
         three.buttonTintList = ColorStateList(states, colors)
         four.buttonTintList = ColorStateList(states, colors)
         five.buttonTintList = ColorStateList(states, colors)
         six.buttonTintList = ColorStateList(states, colors)
-        seven.buttonTintList = ColorStateList(states, colors)*/
-
-        val collapsingToolbarHistorySettings = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)
-        collapsingToolbarHistorySettings.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-        collapsingToolbarHistorySettings.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        seven.buttonTintList = ColorStateList(states, colors)
 
         val topAppBar =
-            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarNumberOfDaysBeforeDeletion)
 
         val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
         resetDrawable?.mutate()
@@ -749,13 +459,13 @@ class HistorySettingsFragment : Fragment() {
         }
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
         }
         else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 }

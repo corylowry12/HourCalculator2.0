@@ -22,6 +22,7 @@ import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.fragments.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -185,23 +186,18 @@ class MainActivity : AppCompatActivity() {
         if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
             if (isComponentEnabled("com.cory.hourcalculator.SplashScreenNoIcon") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("teal")
-                Toast.makeText(this, "teal", Toast.LENGTH_SHORT).show()
             }
             else if (isComponentEnabled("com.cory.hourcalculator.SplashPink") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("pink")
-                Toast.makeText(this, "pink", Toast.LENGTH_SHORT).show()
             }
             else if (isComponentEnabled("com.cory.hourcalculator.SplashOrange") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("orange")
-                Toast.makeText(this, "orange", Toast.LENGTH_SHORT).show()
             }
             else if (isComponentEnabled("com.cory.hourcalculator.SplashRed") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("red")
-                Toast.makeText(this, "red", Toast.LENGTH_SHORT).show()
             }
             else if (isComponentEnabled("com.cory.hourcalculator.MaterialYou") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("material you")
-                Toast.makeText(this, "material you", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -490,7 +486,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun saveTimeCardState() {
-
+        changeBadgeNumber()
         timeCards.saveState()
     }
 
@@ -506,7 +502,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun deleteAllTimeCards() {
-
+        update()
         timeCards.deleteAll()
     }
 
@@ -525,14 +521,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeBadgeNumber() {
-        val badge =
+        val historyBadge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
-        badge.isVisible = true
-        badge.number = dbHandler.getCount()
+        val timeCardBadge =
+            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+        historyBadge.isVisible = true
+        timeCardBadge.isVisible = true
+        historyBadge.number = dbHandler.getCount()
+        timeCardBadge.number = TimeCardDBHelper(this, null).getCount()
         if (AccentColor(this).loadAccent() != 3) {
-            badge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
+            historyBadge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
+            timeCardBadge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
         } else {
-            badge.backgroundColor = ContextCompat.getColor(this, R.color.lightRedBadgeColor)
+            timeCardBadge.backgroundColor = ContextCompat.getColor(this, R.color.lightRedBadgeColor)
         }
     }
 
@@ -581,6 +582,8 @@ class MainActivity : AppCompatActivity() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
         val badge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+        val timeCardBadge =
+            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -595,14 +598,17 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+                timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
                 badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
@@ -614,6 +620,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
+                        timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         if (FollowSystemThemeChoice(this).loadFollowSystemThemePreference() == 0) {
@@ -624,6 +631,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                             badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                            timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
                         }
                         else {
                             mainConstraint.setBackgroundColor(
@@ -645,6 +653,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                         badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
+                        timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
                     }
                 }
             }

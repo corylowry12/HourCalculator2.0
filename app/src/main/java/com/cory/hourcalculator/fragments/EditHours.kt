@@ -28,6 +28,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -643,7 +644,9 @@ class EditHours : Fragment() {
 
         if (map["inTime"].toString().contains(getString(R.string.PM))) {
             inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
-            inTimeHoursInteger += 12
+            if (inTimeHoursInteger != 12) {
+                inTimeHoursInteger += 12
+            }
         } else {
             inTimeMinutesNumbers = inTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
             if (inTimeHours.toInt() == 12) {
@@ -654,7 +657,9 @@ class EditHours : Fragment() {
         if (map["outTime"].toString().contains(getString(R.string.PM))) {
             outTimeMinutesNumbers =
                 outTimeMinutes.replace(getString(R.string.PM), "").trim().toInt()
-            outTimeHoursInteger += 12
+            if (outTimeHoursInteger != 12) {
+                outTimeHoursInteger += 12
+            }
         } else {
             outTimeMinutesNumbers =
                 outTimeMinutes.replace(getString(R.string.AM), "").trim().toInt()
@@ -1058,6 +1063,16 @@ class EditHours : Fragment() {
             deleteDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)?.setTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)?.setTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+
     }
 
     private fun hideKeyboard(breakEditText: TextInputEditText?) {

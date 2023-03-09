@@ -53,20 +53,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/historyDeletionTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/toggle_automatic_deletion"
-                android:textColor="?attr/textColor"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/historyDeletionCardView"
                 android:layout_width="match_parent"
@@ -74,165 +60,99 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
+                android:layout_marginTop="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/historyDeletionTextView"
+                app:layout_constraintTop_toTopOf="parent"
                 style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/toggleHistoryAutomaticDeletionConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <RadioButton
-                        android:id="@+id/enableHistoryDeletion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/enable_history_automatic_deletion"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-
-                    <RadioButton
-                        android:id="@+id/disableHistoryDeletion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/disable_history_automatic_deletion"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-                </RadioGroup>
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/toggleHistoryAutomaticDeletionSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="?attr/settingsTextColor"
+                    android:text="Toggle History Automatic Deletion"
+                    app:thumbIconTint="?attr/colorPrimary" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/daysWorkedTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/number_of_entries_stored_before_deletion"
-                android:textColor="?attr/textColor"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/historyDeletionCardView" />
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/daysWorkedCardView"
+                android:id="@+id/numberOfDaysCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/historyDeletionCardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="?attr/cardBackground"
-                app:cardCornerRadius="28dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/daysWorkedTextView"
+                android:layout_marginTop="1dp"
                 style="@style/Widget.Material3.CardView.Filled">
 
-                <RadioGroup
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/numberOfDaysConstraint"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp">
 
-                    <RadioButton
-                        android:id="@+id/one"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/textViewWrapperCardView"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/one_entry"
+                        app:cardCornerRadius="8dp"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        app:cardBackgroundColor="#808080">
+                        <TextView
+                            android:id="@+id/numberOfEntriesTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:text="7"
+                            android:padding="10dp"/>
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Number of entries stored before deletion"
+                        app:layout_constraintStart_toEndOf="@id/textViewWrapperCardView"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
+                        android:layout_marginStart="5dp"/>
 
-                    <RadioButton
-                        android:id="@+id/two"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/two_entries"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
+                    <ImageView
+                        android:id="@+id/chevronImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <RadioButton
-                        android:id="@+id/three"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/three_entries"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-
-                    <RadioButton
-                        android:id="@+id/four"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/four_entries"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-
-                    <RadioButton
-                        android:id="@+id/five"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/five_entries"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-
-                    <RadioButton
-                        android:id="@+id/six"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/six_entries"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-
-                    <RadioButton
-                        android:id="@+id/seven"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/seven_entries"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        android:minHeight="48dp"
-                        android:theme="?attr/radioButtonTheme"/>
-                </RadioGroup>
             </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:text="@string/changing_these_settings_will_change_whether_or_not_hours_are_automatically_deleted"
-                android:textAlignment="center"
-                android:textColor="?attr/textColor"
-                android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@id/daysWorkedCardView" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

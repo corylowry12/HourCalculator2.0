@@ -16,10 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.AppIconAdapter
 import com.cory.hourcalculator.adapters.CustomAdapter
-import com.cory.hourcalculator.classes.AccentColor
-import com.cory.hourcalculator.classes.CustomColorGenerator
-import com.cory.hourcalculator.classes.MenuTintData
-import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -53,6 +50,15 @@ class ChooseAppIconFragment : Fragment() {
         if (AccentColor(requireContext()).loadAccent() == 5) {
             collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
             collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppIconFragment)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppIconFragment)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
 
         val navigationDrawable = appIconToolBar?.navigationIcon

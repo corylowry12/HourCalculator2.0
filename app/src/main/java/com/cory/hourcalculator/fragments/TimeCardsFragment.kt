@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -120,6 +121,16 @@ class TimeCardsFragment : Fragment() {
         if (AccentColor(requireContext()).loadAccent() == 5) {
             collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
             collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
 
         val recyclerViewTimeCards = view.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)

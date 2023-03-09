@@ -221,6 +221,15 @@ class HistoryFragment : Fragment() {
         if (accentColor.loadAccent() == 5) {
             collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
             collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
 
 
@@ -348,7 +357,7 @@ class HistoryFragment : Fragment() {
                             topAppBar.navigationIcon = null
                             customAdapter.snackbarDeleteSelected.dismiss()
                             customAdapter.snackbarDismissCheckBox.dismiss()
-                            customAdapter.deleteSelected()
+                            customAdapter.deleteSelected(requireView())
                             historyOptionsDialog.dismiss()
                         } catch (e: UninitializedPropertyAccessException) {
                             e.printStackTrace()

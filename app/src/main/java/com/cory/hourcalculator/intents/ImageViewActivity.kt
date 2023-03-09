@@ -1,5 +1,6 @@
 package com.cory.hourcalculator.intents
 
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
 import android.media.ExifInterface
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
@@ -15,6 +17,8 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.ortiz.touchview.TouchImageView
 import java.io.File
 
@@ -74,15 +78,16 @@ class ImageViewActivity : AppCompatActivity() {
             accentColor.loadAccent() == 4 -> {
                 if (!followSystemVersion.loadSystemColor()) {
                     theme!!.applyStyle(R.style.system_accent, true)
-                }
-                else {
+                } else {
                     if (themeSelection) {
                         theme!!.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
+                    } else {
                         theme?.applyStyle(R.style.system_accent_google_light, true)
                     }
                 }
+            }
+            accentColor.loadAccent() == 5 -> {
+                theme!!.applyStyle(R.style.transparent_accent, true)
             }
         }
         setContentView(R.layout.activity_image_view)
@@ -142,9 +147,34 @@ class ImageViewActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.deleteImage -> {
                     Vibrate().vibration(this)
-                    TimeCardDBHelper(this, null).addImage(id!!, "")
-                    finish()
-                    Toast.makeText(this, "Image Deleted", Toast.LENGTH_SHORT).show()
+                    val deleteImageDialog = BottomSheetDialog(this)
+                    val deleteImageDialogLayout =
+                        layoutInflater.inflate(R.layout.delete_image_bottom_sheet, null)
+
+                    deleteImageDialog.setContentView(deleteImageDialogLayout)
+
+                    val infoCardView = deleteImageDialogLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+                    val yesButton = deleteImageDialogLayout.findViewById<Button>(R.id.yesButton)
+                    val noButton = deleteImageDialogLayout.findViewById<Button>(R.id.noButton)
+
+                    if (AccentColor(this).loadAccent() == 5) {
+                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateCardColor()))
+                       yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateCustomColorPrimary()))
+                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(this).generateCustomColorPrimary()))
+                    }
+                    yesButton.setOnClickListener {
+                        Vibrate().vibration(this)
+                        deleteImageDialog.dismiss()
+                        TimeCardDBHelper(this, null).addImage(id!!, "")
+                        finish()
+                        Toast.makeText(this, "Image Deleted", Toast.LENGTH_SHORT).show()
+                    }
+                    noButton.setOnClickListener {
+                        Vibrate().vibration(this)
+                        deleteImageDialog.dismiss()
+                        finishAfterTransition()
+                    }
+                    deleteImageDialog.show()
                     return@setOnMenuItemClickListener true
                 }
                 else -> false

@@ -356,6 +356,16 @@ class TimeCardItemInfoFragment : Fragment() {
             timeCardInfoNameTextInput.textCursorDrawable = null
             timeCardInfoNameTextInput.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
             timeCardInfoNameTextInput.setTextIsSelectable(false)
+
+            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+            }
+            else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            }
         }
         timeCardInfoNameTextInput.isLongClickable = false
 

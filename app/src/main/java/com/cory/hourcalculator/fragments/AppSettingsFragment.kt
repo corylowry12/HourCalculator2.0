@@ -629,6 +629,16 @@ class AppSettingsFragment : Fragment() {
         wagesTextInputEditText?.defaultHintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         wagesEditText.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         wagesEditText.setTextIsSelectable(false)
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {

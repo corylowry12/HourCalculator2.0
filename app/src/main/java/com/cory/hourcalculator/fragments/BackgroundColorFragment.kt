@@ -621,6 +621,16 @@ class BackgroundColorFragment : Fragment() {
             activity?.window?.navigationBarColor =
                 Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
         }
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarBackgroundColorFragment)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarBackgroundColorFragment)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
     }
     private fun restartApplication() {
         Handler(Looper.getMainLooper()).postDelayed({
