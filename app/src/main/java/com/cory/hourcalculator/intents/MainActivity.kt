@@ -216,15 +216,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        //val intent = Intent(this, OnboardingActivity::class.java)
-        //startActivity(intent)
         
         val context = this
         GlobalScope.launch(Dispatchers.Main) {
             MobileAds.initialize(context)
             val adView = AdView(context)
-            adView.adUnitId = "ca-app-pub-4546055219731501/5171269817"
+            adView.adUnitId = GoogleAdsKey().API_KEY
             val mAdView = findViewById<AdView>(R.id.adView)
             val adRequest = AdRequest.Builder().build()
             mAdView.loadAd(adRequest)
