@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <queries>
         <intent>
@@ -30,101 +30,19 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true" >
+        android:supportsRtl="true">
+
         <activity
             android:name=".intents.ImageViewActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApplication"/>
-        <activity
-            android:name=".intents.OnboardingActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppSplash"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity" >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:theme="@style/Theme.MyApplication" />
 
         <activity-alias
-            android:name=".MaterialYou"
-            android:enabled="false"
+            android:name=".SplashScreenNoIcon"
+            android:enabled="true"
             android:exported="true"
-            android:icon="@mipmap/ic_material_you_icon"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_material_you_icon_round"
-            android:targetActivity=".intents.OnboardingActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashRed"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_red"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_red_round"
-            android:targetActivity=".intents.OnboardingActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashOrange"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_orange"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_orange_round"
-            android:targetActivity=".intents.OnboardingActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashPink"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_pink"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_pink_round"
-            android:targetActivity=".intents.OnboardingActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashBlue"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_blue"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_blue_round"
-            android:targetActivity=".intents.OnboardingActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".SplashOG"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_og"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_og_round"
-            android:targetActivity=".intents.OnboardingActivity" >
+            android:targetActivity=".intents.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -138,7 +56,7 @@
             android:icon="@mipmap/ic_launcher_christmas"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_christmas_round"
-            android:targetActivity=".intents.OnboardingActivity" >
+            android:targetActivity=".intents.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -146,11 +64,83 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".SplashScreenNoIcon"
-            android:enabled="true"
+            android:name=".SplashOG"
+            android:enabled="false"
             android:exported="true"
+            android:icon="@mipmap/ic_launcher_og"
             android:label="@string/app_name"
-            android:targetActivity=".intents.OnboardingActivity" >
+            android:roundIcon="@mipmap/ic_launcher_og_round"
+            android:targetActivity=".intents.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".SplashBlue"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_blue"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_blue_round"
+            android:targetActivity=".intents.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".SplashPink"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_pink"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_pink_round"
+            android:targetActivity=".intents.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".SplashOrange"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_orange"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_orange_round"
+            android:targetActivity=".intents.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".SplashRed"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_red"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_red_round"
+            android:targetActivity=".intents.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MaterialYou"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_material_you_icon"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_material_you_icon_round"
+            android:targetActivity=".intents.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -162,7 +152,7 @@
             android:name=".intents.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MyApplication"
+            android:theme="@style/Theme.AppSplash"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity" />
 
@@ -174,7 +164,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.cory.hourcalculator.FileProvider"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
