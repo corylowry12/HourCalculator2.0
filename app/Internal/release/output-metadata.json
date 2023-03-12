@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.cory.hourcalculator",
+  "variantName": "InternalRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 141,
+      "versionName": "10.0.0-internal-alpha08",
+      "outputFile": "app-Internal-release.apk"
+    }
+  ],
+  "elementType": "File"
+}
