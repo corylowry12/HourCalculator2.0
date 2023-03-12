@@ -17,7 +17,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
@@ -70,40 +69,6 @@ class AboutAppFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.transparent_accent, true)
-            }
-        }
         return inflater.inflate(R.layout.fragment_about_app, container, false)
     }
 
@@ -113,9 +78,7 @@ class AboutAppFragment : Fragment() {
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
         versionNumberTextView.text = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            updateCustomColor()
-        }
+        updateCustomColor()
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAboutApp)
 
@@ -123,21 +86,11 @@ class AboutAppFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
+
                 navigationDrawable?.colorFilter = BlendModeColorFilter(
                     Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
                 )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
             }
         else {
             val typedValue = TypedValue()
@@ -200,16 +153,17 @@ class AboutAppFragment : Fragment() {
 
         val githubLogoButton = activity?.findViewById<MaterialButton>(R.id.githubLogoButton)
         githubLogoButton?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             LinkClass(requireContext()).setLink("https://github.com/corylowry12/")
             openCustomTab()
         }
     }
 
-    fun openCustomTab() {
+    private fun openCustomTab() {
         val builder = CustomTabsIntent.Builder()
         val params = CustomTabColorSchemeParams.Builder()
         val typedValue = TypedValue()
-        (context as Activity).getTheme()
+        (context as Activity).theme
             .resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
         params.setToolbarColor(ContextCompat.getColor(requireContext(), typedValue.resourceId))
         builder.setDefaultColorSchemeParams(params.build())
@@ -261,7 +215,7 @@ class AboutAppFragment : Fragment() {
         transaction?.commit()
     }
 
-    fun updateCustomColor() {
+    private fun updateCustomColor() {
         val cardView1 = requireActivity().findViewById<MaterialCardView>(R.id.cardView1)
         val cardView2 = requireActivity().findViewById<MaterialCardView>(R.id.cardView2)
         val cardView3 = requireActivity().findViewById<MaterialCardView>(R.id.cardView3)
@@ -285,7 +239,7 @@ class AboutAppFragment : Fragment() {
         }
     }
 
-    fun isPackageInstalled(packageName: String): Boolean {
+    private fun isPackageInstalled(packageName: String): Boolean {
         // check if chrome is installed or not
         return try {
             activity?.packageManager?.getPackageInfo(packageName, 0)

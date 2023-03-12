@@ -72,49 +72,14 @@ class AppSettingsFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.transparent_accent, true)
-            }
-        }
         return inflater.inflate(R.layout.fragment_app_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            updateCustomColor()
-        }
+        updateCustomColor()
+
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
 
@@ -125,7 +90,7 @@ class AppSettingsFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
+
                 resetDrawable?.colorFilter = BlendModeColorFilter(
                     Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
@@ -134,20 +99,6 @@ class AppSettingsFragment : Fragment() {
                     Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
                 )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
         }
         else {
             val typedValue = TypedValue()
@@ -566,7 +517,7 @@ class AppSettingsFragment : Fragment() {
             .show()
     }
 
-    fun updateCustomColor() {
+    private fun updateCustomColor() {
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
@@ -621,7 +572,7 @@ class AppSettingsFragment : Fragment() {
         breakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
 
         val wagesEditText = requireActivity().findViewById<TextInputEditText>(R.id.Wages)
-        val wagesTextInputEditText = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
+        val wagesTextInputEditText = activity?.findViewById<TextInputLayout>(R.id.outlinedTextFieldWages)
 
         wagesTextInputEditText?.boxStrokeColor = Color.parseColor("#000000")
         wagesTextInputEditText?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))

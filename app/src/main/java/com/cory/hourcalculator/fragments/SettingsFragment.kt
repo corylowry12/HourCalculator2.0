@@ -20,12 +20,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
@@ -73,37 +72,6 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-        }
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
@@ -112,16 +80,14 @@ class SettingsFragment : Fragment() {
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 3
-            (activity as MainActivity).setActiveTab(3)
+            //(activity as MainActivity).setActiveTab(3)
         }
 
         MainActivity().runOnUiThread(runnable)
 
         activity?.window?.setBackgroundDrawable(null)
 
-        if (AccentColor(requireContext()).loadAccent() == 5) {
             updateCustomColor()
-        }
 
         val inputManager: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -159,8 +125,8 @@ class SettingsFragment : Fragment() {
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardGalleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
-        val faqCardView = requireActivity().findViewById<MaterialCardView>(R.id.FAQCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
         val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
 
@@ -192,14 +158,14 @@ class SettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        patchNotesCardView.shapeAppearanceModel = patchNotesCardView.shapeAppearanceModel
+        timeCardGalleryCardView.shapeAppearanceModel = timeCardGalleryCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        faqCardView.shapeAppearanceModel = faqCardView.shapeAppearanceModel
+        patchNotesCardView.shapeAppearanceModel = patchNotesCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -221,25 +187,17 @@ class SettingsFragment : Fragment() {
             .setBottomLeftCornerSize(28f)
             .build()
 
-        val appearanceConstraintLayout =
-            view?.findViewById<ConstraintLayout>(R.id.constraintAppearance)
-
-        appearanceConstraintLayout?.setOnClickListener {
+        appearanceCardView?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 0
             openFragment(AppearanceFragment())
         }
 
-        val appSettingsConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintAppSettings)
-
-        appSettingsConstraint?.setOnClickListener {
+        appSettingsCardView?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 1
             openFragment(AppSettingsFragment())
         }
 
-        val constraintHistorySettings =
-            view?.findViewById<ConstraintLayout>(R.id.constraintHistorySettings)
-
-        constraintHistorySettings?.setOnClickListener {
+        historySettingsCardView?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 2
             openFragment(HistorySettingsFragment())
         }
@@ -250,9 +208,7 @@ class SettingsFragment : Fragment() {
 
         val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
 
-        val patchNotesConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintPatchNotes)
-
-        patchNotesConstraint?.setOnClickListener {
+        patchNotesCardView?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 3
             openFragment(PatchNotesFragment())
         }
@@ -267,24 +223,12 @@ class SettingsFragment : Fragment() {
             )
         }
 
-        val faqConstraint = view?.findViewById<ConstraintLayout>(R.id.constraintFAQ)
-
-        faqConstraint?.setOnClickListener {
-            (context as MainActivity).currentSettingsItem = 5
-            openFragment(FAQFragment())
-        }
-
-        val constraintAboutApp = view?.findViewById<ConstraintLayout>(R.id.constraintAboutApp)
-
-        constraintAboutApp?.setOnClickListener {
+        aboutCardView?.setOnClickListener {
             (context as MainActivity).currentSettingsItem = 6
             openFragment(AboutAppFragment())
         }
 
-        val deleteAppDataConstraint =
-            view?.findViewById<ConstraintLayout>(R.id.constraintDeleteAppData)
-
-        deleteAppDataConstraint?.setOnClickListener {
+        deleteAppDataCardView?.setOnClickListener {
             showDeleteDataAlert()
         }
 
@@ -309,27 +253,6 @@ class SettingsFragment : Fragment() {
         )
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
-    }
-
-    private fun leaveAReview() {
-        Vibrate().vibration(requireContext())
-        val reviewManager = ReviewManagerFactory.create(requireContext())
-        val requestReviewFlow = reviewManager.requestReviewFlow()
-        requestReviewFlow.addOnCompleteListener { request ->
-            if (request.isSuccessful) {
-                val reviewInfo = request.result
-                val flow = reviewManager.launchReviewFlow(requireActivity(), reviewInfo)
-                flow.addOnCompleteListener {
-
-                }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.there_was_an_error_please_try_again),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     private fun showDeleteDataAlert() {
@@ -361,13 +284,13 @@ class SettingsFragment : Fragment() {
         alert.show()
     }
 
-    fun updateCustomColor() {
+    private fun updateCustomColor() {
         val appearanceCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardView)
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardGalleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
-        val faqCardView = requireActivity().findViewById<MaterialCardView>(R.id.FAQCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
         val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
 
@@ -375,8 +298,8 @@ class SettingsFragment : Fragment() {
         appSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historySettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        timeCardGalleryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         patchNotesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        faqCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         aboutCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         deleteAppDataCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 

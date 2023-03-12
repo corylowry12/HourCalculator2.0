@@ -14,7 +14,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="1dp"
-        app:cardBackgroundColor="?attr/cardBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="PrivateResource"
@@ -58,7 +57,6 @@
                 android:id="@+id/row_total_hours"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/row_out"
                 android:text="Total Hours"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
@@ -81,10 +79,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="1"
-                android:clickable="false"
-                android:textColor="?attr/bottomNavTextColor"
-                app:closeIconTint="?attr/bottomNavTextColor"
-                app:chipBackgroundColor="?attr/colorPrimary"/>
+                android:clickable="false" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

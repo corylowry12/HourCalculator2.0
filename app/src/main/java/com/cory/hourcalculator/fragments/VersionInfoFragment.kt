@@ -67,37 +67,6 @@ class VersionInfoFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-        }
         return inflater.inflate(R.layout.fragment_version_info, container, false)
     }
 
@@ -191,11 +160,11 @@ class VersionInfoFragment : Fragment() {
         }
     }
 
-    fun openCustomTab() {
+    private fun openCustomTab() {
         val builder = CustomTabsIntent.Builder()
         val params = CustomTabColorSchemeParams.Builder()
         val typedValue = TypedValue()
-        (context as Activity).getTheme()
+        (context as Activity).theme
             .resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
         params.setToolbarColor(ContextCompat.getColor(requireContext(), typedValue.resourceId))
         builder.setDefaultColorSchemeParams(params.build())
@@ -213,7 +182,7 @@ class VersionInfoFragment : Fragment() {
         }
     }
 
-    fun isPackageInstalled(packageName: String): Boolean {
+    private fun isPackageInstalled(packageName: String): Boolean {
         // check if chrome is installed or not
         return try {
             activity?.packageManager?.getPackageInfo(packageName, 0)

@@ -8,25 +8,24 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -81,56 +80,39 @@ class TimeCardsFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                } else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    } else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-        }
         return inflater.inflate(R.layout.fragment_time_cards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val collapsingToolbarLayout = activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+        val collapsingToolbarLayout =
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
 
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-            collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        collapsingToolbarLayout?.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout?.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
 
-            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-            }
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
 
         val recyclerViewTimeCards = view.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
@@ -141,7 +123,7 @@ class TimeCardsFragment : Fragment() {
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 2
-            (activity as MainActivity).setActiveTab(2)
+            //(activity as MainActivity).setActiveTab(2)
         }
 
         MainActivity().runOnUiThread(runnable)
@@ -153,53 +135,12 @@ class TimeCardsFragment : Fragment() {
 
         loadIntoList()
 
-        val floatingActionButtonTimeCards = view.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
-        val accentColor = AccentColor(requireContext())
-        when {
-
-            accentColor.loadAccent() == 0 -> {
-                floatingActionButtonTimeCards?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
-            }
-            accentColor.loadAccent() == 1 -> {
-                floatingActionButtonTimeCards?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.pinkAccent)
-            }
-            accentColor.loadAccent() == 2 -> {
-                floatingActionButtonTimeCards?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.orangeAccent)
-            }
-            accentColor.loadAccent() == 3 -> {
-                floatingActionButtonTimeCards?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.redAccent)
-            }
-            accentColor.loadAccent() == 4 -> {
-                val followSystemVersion = FollowSystemVersion(requireContext())
-                if (!followSystemVersion.loadSystemColor()) {
-                    floatingActionButtonTimeCards?.backgroundTintList =
-                        ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
-                } else {
-                    if (themeSelection) {
-                        floatingActionButtonTimeCards?.backgroundTintList =
-                            ContextCompat.getColorStateList(
-                                requireContext(),
-                                R.color.systemAccentGoogleDark
-                            )
-                    } else {
-                        floatingActionButtonTimeCards?.backgroundTintList =
-                            ContextCompat.getColorStateList(
-                                requireContext(),
-                                R.color.systemAccentGoogleDark_light
-                            )
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                floatingActionButtonTimeCards?.backgroundTintList =
-                    ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                floatingActionButtonTimeCards?.imageTintList =  ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
-            }
-        }
+        val floatingActionButtonTimeCards =
+            view.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
+        floatingActionButtonTimeCards?.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavBackgroundColor()))
+        floatingActionButtonTimeCards?.imageTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
 
         recyclerViewTimeCards?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -255,19 +196,11 @@ class TimeCardsFragment : Fragment() {
                 collapsingToolbarLayout.setExpanded(false, false)
 
             }
-            if (AccentColor(requireContext()).loadAccent() == 5) {
+
                 snackbar.setActionTextColor(
                     Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
                 )
-            }
-            else {
-                snackbar.setActionTextColor(
-                    ContextCompat.getColorStateList(
-                        requireContext(),
-                        AccentColor(requireContext()).snackbarActionTextColor()
-                    )
-                )
-            }
+
             snackbar.apply {
                 snackbar.view.background = ResourcesCompat.getDrawable(
                     context.resources,
@@ -287,12 +220,12 @@ class TimeCardsFragment : Fragment() {
         val cursor = dbHandler.getAllRow(requireContext())
         cursor!!.moveToFirst()
 
-        val noEntriesStoredTextView = view?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
+        val noEntriesStoredTextView =
+            view?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
 
         if (cursor.count > 0) {
             noEntriesStoredTextView?.visibility = View.GONE
-        }
-        else {
+        } else {
             noEntriesStoredTextView?.visibility = View.VISIBLE
         }
 
@@ -301,16 +234,25 @@ class TimeCardsFragment : Fragment() {
             map["id"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))
             try {
                 map["name"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_NAME))
-            } catch (e : java.lang.NullPointerException) {
+            } catch (e: java.lang.NullPointerException) {
                 e.printStackTrace()
                 map["name"] = ""
             }
-            map["totalHours"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
+            map["totalHours"] =
+                cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
             map["week"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_WEEK))
-            map["count"] = TimeCardsItemDBHelper(requireActivity().applicationContext, null).getCountForItemID(map["id"].toString().toInt()).toString()
+            map["count"] =
+                TimeCardsItemDBHelper(requireActivity().applicationContext, null).getCountForItemID(
+                    map["id"].toString().toInt()
+                ).toString()
 
             if (map["week"]!!.contains("-") && !map["week"]!!.contains(" - ")) {
-                TimeCardDBHelper(requireContext(), null).updateWeek(map["week"]!!.replace("-", " - "), map["id"]!!)
+                TimeCardDBHelper(requireContext(), null).updateWeek(
+                    map["week"]!!.replace(
+                        "-",
+                        " - "
+                    ), map["id"]!!
+                )
                 map["week"] = map["week"]!!.replace("-", " - ")
             }
 
@@ -366,10 +308,12 @@ class TimeCardsFragment : Fragment() {
         val dbHandler = TimeCardDBHelper(requireActivity().applicationContext, null)
 
         if (dbHandler.getCount() > 0) {
-            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
+            val noHoursStoredTextView =
+                activity?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
             noHoursStoredTextView?.visibility = View.GONE
         } else {
-            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
+            val noHoursStoredTextView =
+                activity?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
             noHoursStoredTextView?.visibility = View.VISIBLE
         }
     }

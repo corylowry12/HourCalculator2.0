@@ -9,13 +9,14 @@ import android.graphics.*
 import android.media.ExifInterface
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,22 +28,21 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.TimeCardItemCustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.ImageViewActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -53,8 +53,6 @@ import com.google.android.material.textfield.TextInputLayout
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class TimeCardItemInfoFragment : Fragment() {
 
@@ -69,7 +67,7 @@ class TimeCardItemInfoFragment : Fragment() {
     var themeSelection = false
     private lateinit var id: String
 
-    lateinit var image: String
+    private lateinit var image: String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -109,35 +107,6 @@ class TimeCardItemInfoFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                } else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    } else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-        }
         return inflater.inflate(R.layout.fragment_time_card_item_info, container, false)
     }
 
@@ -166,7 +135,7 @@ class TimeCardItemInfoFragment : Fragment() {
 
         try {
             val runnable = Runnable {
-                (activity as MainActivity).setActiveTab(2)
+                //(activity as MainActivity).setActiveTab(2)
             }
 
             MainActivity().runOnUiThread(runnable)
@@ -187,37 +156,34 @@ class TimeCardItemInfoFragment : Fragment() {
         val navigationDrawable = topAppBarTimeCardItem?.navigationIcon
         navigationDrawable?.mutate()
 
-        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+        val collapsingToolbarLayout =
+            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
 
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-            collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-        }
+        collapsingToolbarLayout.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
-                addDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                addDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
+
+            addDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
         } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
@@ -248,10 +214,8 @@ class TimeCardItemInfoFragment : Fragment() {
                     val takeAPhotoCardView =
                         addAPhotoLayout.findViewById<MaterialCardView>(R.id.addAPhotoCardView)
 
-                    if (AccentColor(requireContext()).loadAccent() == 5) {
-                        selectAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                        takeAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                    }
+                    selectAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    takeAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
                     selectAPhotoCardView.shapeAppearanceModel =
                         selectAPhotoCardView.shapeAppearanceModel
@@ -270,12 +234,7 @@ class TimeCardItemInfoFragment : Fragment() {
                             .setBottomLeftCornerSize(28f)
                             .build()
 
-                    val selectAPhoto =
-                        addAPhotoLayout.findViewById<ConstraintLayout>(R.id.selectAPhotoConstraint)
-                    val takeAPhoto =
-                        addAPhotoLayout.findViewById<ConstraintLayout>(R.id.takeAPhotoConstraint)
-
-                    selectAPhoto.setOnClickListener {
+                    selectAPhotoCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         val pickerIntent = Intent(Intent.ACTION_PICK)
                         pickerIntent.type = "image/*"
@@ -287,7 +246,7 @@ class TimeCardItemInfoFragment : Fragment() {
                         )
                         dialog.dismiss()
                     }
-                    takeAPhoto.setOnClickListener {
+                    takeAPhotoCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         list = listOf(
                             android.Manifest.permission.CAMERA
@@ -347,27 +306,28 @@ class TimeCardItemInfoFragment : Fragment() {
 
         val timeCardInfoNameTextInput =
             requireActivity().findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
-        val textInputLayoutName = requireActivity().findViewById<TextInputLayout>(R.id.textInputLayoutName)
+        val textInputLayoutName =
+            requireActivity().findViewById<TextInputLayout>(R.id.textInputLayoutName)
 
-        if (AccentColor(requireActivity()).loadAccent() == 5) {
-            activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            textInputLayoutName?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-            textInputLayoutName?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            timeCardInfoNameTextInput.textCursorDrawable = null
-            timeCardInfoNameTextInput.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-            timeCardInfoNameTextInput.setTextIsSelectable(false)
+        textInputLayoutName?.boxStrokeColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        textInputLayoutName?.hintTextColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        timeCardInfoNameTextInput.textCursorDrawable = null
+        timeCardInfoNameTextInput.highlightColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        timeCardInfoNameTextInput.setTextIsSelectable(false)
 
-            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-            }
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
-        timeCardInfoNameTextInput.isLongClickable = false
 
         editable = if (name != null) {
             Editable.Factory.getInstance().newEditable(name)
@@ -490,7 +450,7 @@ class TimeCardItemInfoFragment : Fragment() {
         }
     }
 
-    val showImagePickerAndroid13 =
+    private val showImagePickerAndroid13 =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 
             var imageStream: InputStream? = null
@@ -516,7 +476,7 @@ class TimeCardItemInfoFragment : Fragment() {
             }
         }
 
-    fun getRealPathFromURI(contentURI: Uri): String {
+    private fun getRealPathFromURI(contentURI: Uri): String {
         var result = ""
         val cursor = requireActivity().contentResolver?.query(contentURI, null, null, null, null)
         if (cursor == null) {
@@ -530,7 +490,7 @@ class TimeCardItemInfoFragment : Fragment() {
         return result
     }
 
-    val showCamera = registerForActivityResult(
+    private val showCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -593,7 +553,7 @@ class TimeCardItemInfoFragment : Fragment() {
         }
     }
 
-    var currentPhotoPath = ""
+    private var currentPhotoPath = ""
 
     private fun createImageFile(): File {
         // Create an image file name

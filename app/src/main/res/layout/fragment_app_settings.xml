@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
+    android:fitsSystemWindows="true"
     tools:context=".fragments.AppSettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="?attr/backgroundColor"
-        android:foreground="?attr/selectableItemBackground"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -20,10 +19,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
-            app:titleCollapseMode="scale"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:statusBarScrim="?attr/colorPrimary"
+            app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBarAppSettings"
@@ -32,13 +31,13 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
+                app:buttonGravity="center_vertical"
                 app:layout_collapseMode="pin"
                 app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
                 app:title="App Settings"
-                app:titleCentered="true"
-                app:buttonGravity="center_vertical"/>
+                app:titleCentered="true" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -56,245 +55,240 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewSetOutTime"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/setOutTimeSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Set out time to current time"
-                    android:textSize="14sp"
-                    android:textColor="?attr/settingsTextColor"
-                    app:thumbIconTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/setOutTimeSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Set out time to current time"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewCalculation"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewSetOutTime"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/setCalculationTypeSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Calculate time in Time Format"
-                    android:textSize="14sp"
-                    android:textColor="?attr/settingsTextColor"
-                    app:thumbIconTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/setCalculationTypeSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Calculate time in Time Format"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewDisableLongPress"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewCalculation"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/toggleLongPressingCalculateSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Toggle Long Pressing Calculate Button"
-                        android:textSize="14sp"
                         android:textColor="?attr/settingsTextColor"
-                        app:thumbIconTint="?attr/colorPrimary"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                         />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewHistoryClickable"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewDisableLongPress"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/clickableHistorySwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Open hour for editing on history item click"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                         />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewVibration"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewHistoryClickable"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/vibrationSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/toggle_vibration"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewHistoryClickable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewDisableLongPress"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/clickableHistorySwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Open hour for editing on history item click"
-                    android:textSize="14sp"
-                    android:textColor="?attr/settingsTextColor"
-                    app:thumbIconTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewVibration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewHistoryClickable"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/vibrationSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/toggle_vibration"
-                    android:textSize="14sp"
-                    android:textColor="?attr/settingsTextColor"
-                    app:thumbIconTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewHistory"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewVibration"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/historySwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/toggle_history"
-                    android:textSize="14sp"
-                    android:textColor="?attr/settingsTextColor"
-                    app:thumbIconTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/historySwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/toggle_history"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewBreakTextBox"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewHistory"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/breakTextBoxSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/toggle_break_text_box"
-                    android:textSize="14sp"
-                    android:textColor="?attr/settingsTextColor"
-                    app:thumbIconTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/breakTextBoxSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/toggle_break_text_box"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewWages"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardViewBreakTextBox"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+
+                android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedTextFieldWages"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -303,6 +297,7 @@
                     android:paddingEnd="12dp"
                     android:paddingBottom="12dp"
                     android:textColorHint="#939090"
+                    app:boxStrokeColor="#000000"
                     app:boxCornerRadiusBottomEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
                     app:boxCornerRadiusTopEnd="0dp"

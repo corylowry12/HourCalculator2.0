@@ -4,16 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
 
 class ManagePermissions(private val activity: Activity, private val list: List<String>, private val code:Int) {
@@ -54,6 +52,9 @@ class ManagePermissions(private val activity: Activity, private val list: List<S
         val okCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.okCardView)
         val cancelCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.cancelCardView)
 
+        okCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+        cancelCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+
         okCardView.shapeAppearanceModel = okCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
@@ -69,14 +70,12 @@ class ManagePermissions(private val activity: Activity, private val list: List<S
             .setBottomLeftCornerSize(28f)
             .build()
 
-        val okConstraint = askPermissionsLayout.findViewById<ConstraintLayout>(R.id.okConstraint)
-        val cancelConstraint = askPermissionsLayout.findViewById<ConstraintLayout>(R.id.cancelConstraint)
-        okConstraint.setOnClickListener {
+        okCardView.setOnClickListener {
             Vibrate().vibration(context)
             bottomSheetDialog.dismiss()
             requestPermissions(context)
         }
-        cancelConstraint.setOnClickListener {
+        cancelCardView.setOnClickListener {
             Vibrate().vibration(context)
             bottomSheetDialog.dismiss()
         }

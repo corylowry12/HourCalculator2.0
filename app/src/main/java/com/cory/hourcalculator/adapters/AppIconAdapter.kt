@@ -32,8 +32,8 @@ class AppIconAdapter(val context: Context,
                      private val dataList:  ArrayList<HashMap<String, String>>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val iconDisableArray = arrayListOf<String>()
-    var iconEnableID = ""
+    private val iconDisableArray = arrayListOf<String>()
+    private var iconEnableID = ""
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -42,9 +42,7 @@ class AppIconAdapter(val context: Context,
             val iconNameTextView = itemView.findViewById<TextView>(R.id.icon_name)
             val iconCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewAppIcon)
 
-            if (AccentColor(context).loadAccent() == 5) {
-                iconCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-            }
+            iconCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
 
             if (position == 0) {
                 iconCardView.shapeAppearanceModel = iconCardView.shapeAppearanceModel
@@ -139,11 +137,10 @@ class AppIconAdapter(val context: Context,
                 val noButton =
                     changeAppIconBottomSheet.findViewById<Button>(R.id.cancelAppIconButton)
 
-                if (AccentColor(context).loadAccent() == 5) {
-                    infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-                    yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                    noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                }
+                infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
                 yesButton.setOnClickListener {
                     Vibrate().vibration(context)
                     /*if (position == 0) {
@@ -322,7 +319,7 @@ class AppIconAdapter(val context: Context,
         return dataList.size
     }
 
-    fun changeIcons() {
+    private fun changeIcons() {
         for (i in 0 until iconDisableArray.count()) {
             context.packageManager?.setComponentEnabledSetting(
                 ComponentName(

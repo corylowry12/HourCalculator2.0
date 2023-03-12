@@ -38,7 +38,8 @@ class PatchNotesFragment : Fragment() {
                                         "Fixed issue with there being no vibration when clicking \"Hide\" to hide checkboxes", "Fixed issue with there being no vibration when clicking \"Report A Bug\" in the about app view", "Fixed issue with the shape of the floating action button in the history view",
                                         "Fixed crashing when trying to leave the edit hour view if there were pending changes and you clicked yes to save them", "Fixed issue with title and menu buttons not being centered properly in title bars",
                                         "Fixed issue with github button in about view still using built in web view instead of custom tab", "Fixed issue when hitting back button and the bottom nav bar wouldn't change selected tab",
-                                        "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11", "Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time")
+                                        "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11", "Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time",
+                                        "Fixed some issues with weird splash screen logos on certain devices")
 
     private var newFeaturesArray = arrayOf("Added the ability to click on the history tab when the history view is active and scroll to the top", "Added the ability to calculate in time or decimal format depending on which is enabled by long pressing the calculate button (eg. if decimal format is enabled, long pressing will calculate in time format)",
                                             "Added the ability to click on an hour entry and open it to edit it (disabled by default, to enable go to Settings->App Settings->Open hour for editing on history item click)", "Added a toggle to change menu item tint to match the theme")
@@ -52,11 +53,16 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue if you had colored menu items disabled and changed the background color it wouldnt change the icon color", "Fixed issue where title bar switch in the appearance view wasn't showing the proper setting and was always matching the colored menu item switch",
+                                                "Fixed issue with the need permissions bottom sheet not matching the custom theme", "Fixed issue with the highlight color on the need permissions bottom sheet not matching the curves on each corner", "Fixed issue with highlight color not matching the corners when clicking the appearance item in the settings view",
+                                                "Fixed issue with highlight color not matching the corners when clicking the delete app data item in the settings view", "Fixed issue where if went to background color view and changed the theme and hit the reset icon, the bottom sheet wouldn't match the new theme",
+                                                "Fixed issue with crashing if you long pressed a time card entry to delete it", "Fixed crashing if you had a custom icon set", "Fixed issue with crashing when opening the number of days worked view", "Fixed issues with crashing when changing settings in the number of days view",
+                                                "Fixed issues when resetting history settings", "Fixed issue where clicking the reset menu item in the number of days view didn't do anything")
 
-    private var newFeaturesArrayInternal = arrayOf("No new features")
+    private var newFeaturesArrayInternal = arrayOf("Added ability to set a default name when adding a time card entry")
 
-    private var enhancementsArrayInternal = arrayOf("No new enhancements")
+    private var enhancementsArrayInternal = arrayOf("Adjusted patch notes card view color when material you theming is enabled", "Removed the FAQ section", "Redesigned the Number of Days view to match the rest of the app", "Tweaked the background color of the number indicators in the time cards view and the patch notes view",
+                                                    "Tweaked the colors for snackbar text colors as they weren't legible in some cases")
 
     var themeSelection = false
 
@@ -95,90 +101,23 @@ class PatchNotesFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 || accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-        }
         return inflater.inflate(R.layout.fragment_patch_notes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
-
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes).setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes).setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-            requireActivity().findViewById<MaterialCardView>(R.id.bugFixesOuterCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<MaterialCardView>(R.id.newFeaturesOuterCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<MaterialCardView>(R.id.enhancementsOuterCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            requireActivity().findViewById<Chip>(R.id.bugFixesChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
-            requireActivity().findViewById<Chip>(R.id.bugFixesChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
-            requireActivity().findViewById<Chip>(R.id.bugFixesChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
-            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
-            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
-            requireActivity().findViewById<Chip>(R.id.newFeaturesChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
-            requireActivity().findViewById<Chip>(R.id.enhancementsChip).setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
-            requireActivity().findViewById<Chip>(R.id.enhancementsChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
-            requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
-            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-            }
-        }
+        updateCustomTheme()
+        val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
                 navigationDrawable?.colorFilter = BlendModeColorFilter(
                     Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
                 )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
         }
         else {
             val typedValue = TypedValue()
@@ -335,5 +274,49 @@ class PatchNotesFragment : Fragment() {
             (context as MainActivity).changeSettingsBadge()
         }
         MainActivity().runOnUiThread(runnable)
+    }
+
+    private fun updateCustomTheme(): MaterialToolbar? {
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
+
+        requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
+            .setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
+            .setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        requireActivity().findViewById<MaterialCardView>(R.id.bugFixesOuterCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        requireActivity().findViewById<MaterialCardView>(R.id.newFeaturesOuterCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        requireActivity().findViewById<MaterialCardView>(R.id.enhancementsOuterCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        requireActivity().findViewById<Chip>(R.id.bugFixesChip)
+            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.bugFixesChip).closeIconTint =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.bugFixesChip).chipBackgroundColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+        requireActivity().findViewById<Chip>(R.id.newFeaturesChip)
+            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.newFeaturesChip).closeIconTint =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.newFeaturesChip).chipBackgroundColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+        requireActivity().findViewById<Chip>(R.id.enhancementsChip)
+            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.enhancementsChip).closeIconTint =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+        return topAppBar
     }
 }

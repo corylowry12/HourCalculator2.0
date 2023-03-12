@@ -101,40 +101,6 @@ class EditHours : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.transparent_accent, true)
-            }
-        }
         return inflater.inflate(R.layout.fragment_edit_hours, container, false)
     }
 
@@ -162,30 +128,7 @@ class EditHours : Fragment() {
         val materialToolbarEdit =
             activity?.findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
 
-        val deleteDrawable = materialToolbarEdit?.menu?.findItem(R.id.delete)?.icon
-        deleteDrawable?.mutate()
-
-        val navigationDrawable = materialToolbarEdit?.navigationIcon
-        navigationDrawable?.mutate()
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
-            deleteDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            deleteDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
-
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            updateCustomColor()
-        }
+        updateCustomColor()
 
         materialToolbarEdit?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -203,11 +146,10 @@ class EditHours : Fragment() {
                     val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
                     val infoCardView = deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
 
-                    if (AccentColor(requireContext()).loadAccent() == 5) {
                         yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
                         noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
                         infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                    }
+
                     dialog.setContentView(deleteAllLayout)
                     dialog.setCancelable(true)
                     /*val alert = MaterialAlertDialogBuilder(
@@ -248,7 +190,7 @@ class EditHours : Fragment() {
         timePickerInTime = view.findViewById(R.id.timePickerInTimeEdit)
         timePickerOutTime =
             view.findViewById(R.id.timePickerOutTimeEdit)
-        infoTextView1 = view.findViewById(R.id.infoTextView1)
+        infoTextView1 = view.findViewById(R.id.outputTextViewEdit)
 
         val timeEditHourData = TimeEditHourData(requireContext())
         timeEditHourData.setInTimeBool(false)
@@ -259,7 +201,7 @@ class EditHours : Fragment() {
         try {
             main()
 
-            val dateChip = activity?.findViewById<Chip>(R.id.dateChip)
+            val dateChip = activity?.findViewById<Chip>(R.id.dateChipEdit)
 
             dateChip?.setOnClickListener {
                 Vibrate().vibration(requireContext())
@@ -600,7 +542,7 @@ class EditHours : Fragment() {
         val timePickerOutTime = activity?.findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
         val breakTimeEditText = activity?.findViewById<EditText>(R.id.breakTimeEdit)
         val saveButton = activity?.findViewById<Button>(R.id.saveButton)
-        val dateChip = activity?.findViewById<Chip>(R.id.dateChip)
+        val dateChip = activity?.findViewById<Chip>(R.id.dateChipEdit)
 
         val id = IdData(requireContext()).loadID()
 
@@ -1006,14 +948,14 @@ class EditHours : Fragment() {
         }
     }
 
-    fun updateCustomColor() {
+    private fun updateCustomColor() {
         val materialToolbarEdit = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
         materialToolbarEdit.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
         val saveButton = requireActivity().findViewById<Button>(R.id.saveButton)
         saveButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
 
-        val dateChip = requireActivity().findViewById<Chip>(R.id.dateChip)
+        val dateChip = requireActivity().findViewById<Chip>(R.id.dateChipEdit)
         dateChip.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
 
         val deleteDrawable = materialToolbarEdit?.menu?.findItem(R.id.delete)?.icon
@@ -1022,7 +964,7 @@ class EditHours : Fragment() {
         val navigationDrawable = materialToolbarEdit?.navigationIcon
         navigationDrawable?.mutate()
 
-        val breakTextInputEditText = requireActivity().findViewById<TextInputLayout>(R.id.outlinedTextField)
+        val breakTextInputEditText = requireActivity().findViewById<TextInputLayout>(R.id.outlinedTextFieldEdit)
         val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEdit)
 
         breakTextInputEditText?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
@@ -1032,29 +974,14 @@ class EditHours : Fragment() {
         breakTextBox.setTextIsSelectable(false)
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
-                deleteDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                deleteDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
+            deleteDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
         }
         else {
             val typedValue = TypedValue()

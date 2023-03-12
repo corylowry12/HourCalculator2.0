@@ -56,7 +56,7 @@ class CustomAdapter(
     lateinit var snackbarDeleteSelected: Snackbar
     lateinit var snackbarDismissCheckBox: Snackbar
 
-    lateinit var items: RecyclerView.ViewHolder
+    private lateinit var items: RecyclerView.ViewHolder
 
     lateinit var historyCardView: MaterialCardView
 
@@ -84,8 +84,7 @@ class CustomAdapter(
         fun bind(position: Int) {
             historyCardView = itemView.findViewById(R.id.cardViewHistory)
 
-            if (AccentColor(context).loadAccent() == 5) {
-                historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+            historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
 
                 val states = arrayOf(
                     intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -99,7 +98,6 @@ class CustomAdapter(
 
                 itemView.findViewById<CheckBox>(R.id.checkbox).buttonTintList =
                     ColorStateList(states, colors)
-            }
 
             if (dataList.count() == 1) {
                 historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
@@ -235,15 +233,15 @@ class CustomAdapter(
                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                 weekArray.add(map["date"].toString())
-                if (!map["totalHours"]!!.contains(":")) {
-                    totalHours += map["totalHours"]!!.toDouble()
+                totalHours += if (!map["totalHours"]!!.contains(":")) {
+                    map["totalHours"]!!.toDouble()
                 } else {
                     val (hours, minutes) = map["totalHours"]!!.split(":")
                     val decimal =
                         (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
                             .toString().drop(2)
                     val decimalTime = "$hours.$decimal".toDouble()
-                    totalHours += decimalTime
+                    decimalTime
                 }
 
                 inTimeArray.add(map["inTime"]!!)
@@ -258,7 +256,7 @@ class CustomAdapter(
                 checkBoxVisible = false
                 //checkBox.isChecked = false
             }
-            var sortedList = weekArray.sortedWith(compareBy { it })
+            val sortedList = weekArray.sortedWith(compareBy { it })
             //val week = "${sortedList.first()}-${sortedList.last()}"
 
             val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
@@ -268,12 +266,13 @@ class CustomAdapter(
                 firstDateString = formatter.format(sortedList.first().toString().toLong())
                 lastDateString = formatter.format(sortedList.last().toString().toLong())
                 timeCardDBHandler.insertRow(
+                    DefaultTimeCardName(context).loadDefaultName(),
                     "$firstDateString - $lastDateString",
                     totalHours.toString()
                 )
             } else {
-                firstDateString = "${formatter.format(sortedList.elementAt(0).toString().toLong())}"
-                timeCardDBHandler.insertRow("$firstDateString", totalHours.toString())
+                firstDateString = formatter.format(sortedList.elementAt(0).toString().toLong())
+                timeCardDBHandler.insertRow(DefaultTimeCardName(context).loadDefaultName(), firstDateString, totalHours.toString())
             }
 
             val timeCardLatestRowCursor = timeCardDBHandler.getLatestRowID()
@@ -396,18 +395,11 @@ class CustomAdapter(
         )
             .setDuration(5000)
 
-        if (AccentColor(context).loadAccent() == 5) {
+
             snackBar.setActionTextColor(
-                Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
             )
-        } else {
-            snackBar.setActionTextColor(
-                ContextCompat.getColorStateList(
-                    context,
-                    AccentColor(context).snackbarActionTextColor()
-                )
-            )
-        }
+
         snackBar.setAction(context.getString(R.string.undo)) {
             Vibrate().vibration(context)
 
@@ -753,18 +745,11 @@ class CustomAdapter(
                                 MainActivity().runOnUiThread(restoreState)
 
                             }
-                            if (AccentColor(context).loadAccent() == 5) {
+
                                 snackbar.setActionTextColor(
-                                    Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
                                 )
-                            } else {
-                                snackbar.setActionTextColor(
-                                    ContextCompat.getColorStateList(
-                                        context,
-                                        AccentColor(context).snackbarActionTextColor()
-                                    )
-                                )
-                            }
+
                             snackbar.apply {
                                 snackbar.view.background = ResourcesCompat.getDrawable(
                                     context.resources,
@@ -802,7 +787,7 @@ class CustomAdapter(
                         val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
                         val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
 
-                        if (AccentColor(context).loadAccent() == 5) {
+
                             infoCardView.setCardBackgroundColor(
                                 Color.parseColor(
                                     CustomColorGenerator(context).generateCardColor()
@@ -816,7 +801,7 @@ class CustomAdapter(
                                 )
                             )
                             noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                        }
+
                         yesButton.setOnClickListener {
                             Vibrate().vibration(context)
 
@@ -853,18 +838,10 @@ class CustomAdapter(
                             )
                                 .setDuration(5000)
 
-                            if (AccentColor(context).loadAccent() == 5) {
                                 snackBar.setActionTextColor(
-                                    Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
                                 )
-                            } else {
-                                snackBar.setActionTextColor(
-                                    ContextCompat.getColorStateList(
-                                        context,
-                                        AccentColor(context).snackbarActionTextColor()
-                                    )
-                                )
-                            }
+
                             snackBar.setAction(context.getString(R.string.undo)) {
                                 Vibrate().vibration(context)
                                 GlobalScope.launch(Dispatchers.Main) {
@@ -981,18 +958,11 @@ class CustomAdapter(
                         context.theme
                     )
                 }
-                if (AccentColor(context).loadAccent() == 5) {
+
                     snackbarDismissCheckBox.setActionTextColor(
-                        Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                        Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
                     )
-                } else {
-                    snackbarDismissCheckBox.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            context,
-                            AccentColor(context).snackbarActionTextColor()
-                        )
-                    )
-                }
+
                 snackbarDismissCheckBox.show()
             }
         }
@@ -1024,18 +994,11 @@ class CustomAdapter(
                     context.theme
                 )
             }
-            if (AccentColor(context).loadAccent() == 5) {
+
                 snackbarDismissCheckBox.setActionTextColor(
-                    Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
                 )
-            } else {
-                snackbarDismissCheckBox.setActionTextColor(
-                    ContextCompat.getColorStateList(
-                        context,
-                        AccentColor(context).snackbarActionTextColor()
-                    )
-                )
-            }
+
             snackbarDismissCheckBox.show()
         } else {
             selectedItemsList.clear()
@@ -1094,18 +1057,11 @@ class CustomAdapter(
                         context.theme
                     )
                 }
-                if (AccentColor(context).loadAccent() == 5) {
+
                     snackbarDismissCheckBox.setActionTextColor(
-                        Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+                        Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
                     )
-                } else {
-                    snackbarDismissCheckBox.setActionTextColor(
-                        ContextCompat.getColorStateList(
-                            context,
-                            AccentColor(context).snackbarActionTextColor()
-                        )
-                    )
-                }
+
                 snackbarDismissCheckBox.show()
             }
         }
@@ -1216,20 +1172,11 @@ class CustomAdapter(
                 "Items selected",
                 Snackbar.LENGTH_INDEFINITE
             )
-        if (AccentColor(context).loadAccent() == 5) {
+
             snackbarDeleteSelected.setActionTextColor(
-                Color.parseColor(
-                    CustomColorGenerator(context).generateCustomColorPrimary()
-                )
+                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
             )
-        } else {
-            snackbarDeleteSelected.setActionTextColor(
-                ContextCompat.getColorStateList(
-                    context,
-                    AccentColor(context).snackbarActionTextColor()
-                )
-            )
-        }
+
         snackbarDeleteSelected.apply {
             snackbarDeleteSelected.view.background = ResourcesCompat.getDrawable(
                 context.resources,

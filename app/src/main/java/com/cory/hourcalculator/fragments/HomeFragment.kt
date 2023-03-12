@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -22,7 +23,6 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -30,181 +30,75 @@ import java.math.RoundingMode
 
 
 class HomeFragment : Fragment() {
-
-    var themeSelection = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val darkThemeData = DarkThemeData(requireContext())
+       val darkThemeData = DarkThemeData(requireContext())
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
+                requireActivity().setTheme(R.style.Theme_DarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
-                activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
+                requireActivity().setTheme(R.style.Theme_MyApplication)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
-                activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
+                requireActivity().setTheme(R.style.Theme_AMOLED)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
-                        activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
+                        requireActivity().setTheme(R.style.Theme_MyApplication)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
-                        themeSelection = true
+                        requireActivity().setTheme(R.style.Theme_AMOLED)
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                        activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
+                        requireActivity().setTheme(R.style.Theme_AMOLED)
                     }
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.transparent_accent, true)
-            }
-        }
-
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val typedValue = TypedValue()
-        //activity?.theme?.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-        //val color = typedValue.resourceId
-
-        //activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), color)
-
-        val breakTextBox = view.findViewById<TextInputEditText>(R.id.breakTime)
-
-        activity?.window?.setBackgroundDrawable(null)
-
-        val calculateButton = activity?.findViewById<Button>(R.id.calculateButton1)
-        val breakTextViewInput = activity?.findViewById<TextInputLayout>(R.id.outlinedTextField)
-        val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTime)
-        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTime)
-
-        if (AccentColor(requireActivity()).loadAccent() == 5) {
-            activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-            calculateButton?.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            breakTextViewInput?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-            breakTextViewInput?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            breakTextBox.textCursorDrawable = null
-            breakTextBox.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-            breakTextBox.setTextIsSelectable(false)
-
-            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-                activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        try {
+            val runnable = Runnable {
+                (activity as MainActivity).currentTab = 0
+                (activity as MainActivity).setActiveTab(0)
             }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                activity?.findViewById<MaterialToolbar>(R.id.materialToolBar)?.setTitleTextColor(ContextCompat.getColor(requireContext(), id))
-            }
+
+            MainActivity().runOnUiThread(runnable)
+        } catch (e : Exception) {
+            e.printStackTrace()
         }
-        breakTextBox.isLongClickable = false
+        main()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        main()
+    }
 
-        val coloredNavBarData = ColoredNavBarData(requireContext())
-
-        if (coloredNavBarData.loadNavBar()) {
-            val accentColor = AccentColor(requireContext())
-            when {
-                accentColor.loadAccent() == 0 -> {
-                    activity?.window?.navigationBarColor =
-                        ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-                }
-                accentColor.loadAccent() == 1 -> {
-                    activity?.window?.navigationBarColor =
-                        ContextCompat.getColor(requireContext(), R.color.pinkAccent)
-                }
-                accentColor.loadAccent() == 2 -> {
-                    activity?.window?.navigationBarColor =
-                        ContextCompat.getColor(requireContext(), R.color.orangeAccent)
-                }
-                accentColor.loadAccent() == 3 -> {
-                    activity?.window?.navigationBarColor =
-                        ContextCompat.getColor(requireContext(), R.color.redAccent)
-                }
-                accentColor.loadAccent() == 4 -> {
-                    if (!FollowSystemVersion(requireContext()).loadSystemColor()) {
-                        activity?.window?.navigationBarColor =
-                            ContextCompat.getColor(requireContext(), R.color.systemAccent)
-                    }
-                    else {
-                        if (themeSelection) {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.navBarGoogle)
-                        }
-                        else {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.navBarGoogleLight)
-                        }
-                    }
-                }
-                accentColor.loadAccent() == 5 -> {
-                    activity?.window?.navigationBarColor =
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
-                }
-            }
-        } else {
-            activity?.window?.navigationBarColor =
-                ContextCompat.getColor(requireContext(), R.color.black)
-        }
+    private fun main() {
+        val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment)
+        val calculateButton =
+            requireActivity().findViewById<Button>(R.id.calculateButtonHomeFragment)
+        val breakTextViewInput =
+            requireActivity().findViewById<TextInputLayout>(R.id.outlinedTextFieldBreakTime)
+        val timePickerInTime =
+            requireActivity().findViewById<TimePicker>(R.id.timePickerInTimeHomeFragment)
+        val timePickerOutTime =
+            requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeHomeFragment)
 
         val inputManager: InputMethodManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(requireView().windowToken, 0)
 
-        val runnable = Runnable {
-            (activity as MainActivity).currentTab = 0
-            (activity as MainActivity).setActiveTab(0)
-        }
 
-        MainActivity().runOnUiThread(runnable)
-
-        val breakTextView = activity?.findViewById<TextView>(R.id.textViewBreak)
+        val breakTextView = requireActivity().findViewById<TextView>(R.id.textViewBreakHomeFragment)
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
@@ -254,43 +148,24 @@ class HomeFragment : Fragment() {
             dateData.setHours2(hourOfDay.toString())
         }
 
-        val constraintLayout = activity?.findViewById<CoordinatorLayout>(R.id.homeConstraintLayout)
+        val constraintLayout =
+            requireActivity().findViewById<CoordinatorLayout>(R.id.homeFragmentConstraintLayout)
 
         constraintLayout?.setOnClickListener {
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             if (imm.isAcceptingText) {
                 imm.hideSoftInputFromWindow(constraintLayout.windowToken, 0)
                 breakTextBox?.clearFocus()
             }
         }
 
-        val dialogData = DialogData(requireContext())
         val calculationType = CalculationType(requireContext())
-
-        /*if (!dialogData.loadDialogState()) {
-            val alert = MaterialAlertDialogBuilder(
-                requireContext(),
-                AccentColor(requireContext()).alertTheme()
-            )
-            alert.setCancelable(false)
-            alert.setTitle(getString(R.string.calculation_type))
-            alert.setMessage(getString(R.string.choose_the_calculation_method_you_would_prefer))
-            alert.setPositiveButton(getString(R.string.decimal)) { _, _ ->
-                Vibrate().vibration(requireContext())
-                calculationType.setCalculationState(true)
-                dialogData.setDialogState(true)
-            }
-            alert.setNeutralButton(getString(R.string.time)) { _, _ ->
-                Vibrate().vibration(requireContext())
-                calculationType.setCalculationState(false)
-                dialogData.setDialogState(true)
-            }
-            alert.show()
-        }*/
 
         calculateButton?.setOnClickListener {
 
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             if (imm.isAcceptingText) {
                 imm.hideSoftInputFromWindow(constraintLayout?.windowToken, 0)
                 breakTextBox?.clearFocus()
@@ -306,7 +181,7 @@ class HomeFragment : Fragment() {
         calculateButton?.setOnLongClickListener {
             if (LongPressCalculateButtonEnabled(requireContext()).loadLongClick()) {
                 val imm =
-                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 if (imm.isAcceptingText) {
                     imm.hideSoftInputFromWindow(constraintLayout?.windowToken, 0)
                     breakTextBox?.clearFocus()
@@ -317,8 +192,7 @@ class HomeFragment : Fragment() {
                     calculate(1)
                 }
                 return@setOnLongClickListener true
-            }
-            else {
+            } else {
                 return@setOnLongClickListener false
             }
         }
@@ -337,7 +211,7 @@ class HomeFragment : Fragment() {
 
         var doubleBackToExitPressedOnce = false
 
-        activity?.onBackPressedDispatcher?.addCallback(
+        requireActivity().onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -345,7 +219,7 @@ class HomeFragment : Fragment() {
                         breakTextBox.clearFocus()
                     } else {
                         if (doubleBackToExitPressedOnce) {
-                            activity?.finishAffinity()
+                            requireActivity().finishAffinity()
                         } else {
                             doubleBackToExitPressedOnce = true
                             Toast.makeText(
@@ -361,7 +235,50 @@ class HomeFragment : Fragment() {
                     }
                 }
             })
+        updateCustomTheme()
+    }
 
+    private fun updateCustomTheme() {
+
+        val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment)
+
+        val calculateButton = requireActivity().findViewById<Button>(R.id.calculateButtonHomeFragment)
+        val breakTextViewInput =
+            requireActivity().findViewById<TextInputLayout>(R.id.outlinedTextFieldBreakTime)
+
+        requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarHomeFragment)
+            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        calculateButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        breakTextViewInput.boxStrokeColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        breakTextViewInput.hintTextColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        breakTextBox.textCursorDrawable = null
+        breakTextBox.highlightColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        breakTextBox.setTextIsSelectable(false)
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarHomeFragment)
+                .setTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            requireActivity().theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarHomeFragment)
+                .setTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+
+        val coloredNavBarData = ColoredNavBarData(requireContext())
+
+        if (coloredNavBarData.loadNavBar()) {
+            requireActivity().window?.navigationBarColor =
+                Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
+        } else {
+            requireActivity().window?.navigationBarColor =
+                ContextCompat.getColor(requireContext(), R.color.black)
+        }
     }
 
     private fun calculateTime(method: Int) {
@@ -369,10 +286,10 @@ class HomeFragment : Fragment() {
         val inTimeTotal: String
         val outTimeTotal: String
 
-        val infoTextView = activity?.findViewById<TextView>(R.id.infoTextView1)
+        val infoTextView = requireActivity().findViewById<TextView>(R.id.outputTextViewHomeFragment)
 
-        val inTimePicker = view?.findViewById<TimePicker>(R.id.timePickerInTime)
-        val outTimePicker = view?.findViewById<TimePicker>(R.id.timePickerOutTime)
+        val inTimePicker = view?.findViewById<TimePicker>(R.id.timePickerInTimeHomeFragment)
+        val outTimePicker = view?.findViewById<TimePicker>(R.id.timePickerOutTimeHomeFragment)
 
         val inTimeHours = inTimePicker?.hour
         var inTimeMinutes = inTimePicker?.minute.toString()
@@ -439,13 +356,13 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTime)
+            val breakTime = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
                 if (!breakTimeNumeric(breakTime)) {
                     Vibrate().vibrateOnError(requireContext())
-                    infoTextView!!.text = getString(R.string.error_with_break_time_must_be_numbers_only)
-                }
-                else {
+                    infoTextView!!.text =
+                        getString(R.string.error_with_break_time_must_be_numbers_only)
+                } else {
                     var withBreak =
                         (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
                     var hoursWithBreak = diffHours
@@ -478,7 +395,11 @@ class HomeFragment : Fragment() {
                         )
 
                         if (method == 1) {
-                            Toast.makeText(requireContext(), getString(R.string.hour_calculated_in_time_format), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.hour_calculated_in_time_format),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -493,7 +414,11 @@ class HomeFragment : Fragment() {
                     getString(R.string.total_hours_time_format, diffHours, diffMinutes)
 
                 if (method == 1) {
-                    Toast.makeText(requireContext(), getString(R.string.hour_calculated_in_time_format), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.hour_calculated_in_time_format),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -518,9 +443,9 @@ class HomeFragment : Fragment() {
 
     private fun calculate(method: Int) {
 
-        val timePickerInTime = activity?.findViewById<TimePicker>(R.id.timePickerInTime)
-        val timePickerOutTime = activity?.findViewById<TimePicker>(R.id.timePickerOutTime)
-        val infoTextView1 = activity?.findViewById<TextView>(R.id.infoTextView1)
+        val timePickerInTime = requireActivity().findViewById<TimePicker>(R.id.timePickerInTimeHomeFragment)
+        val timePickerOutTime = requireActivity().findViewById<TimePicker>(R.id.timePickerOutTimeHomeFragment)
+        val infoTextView1 = requireActivity().findViewById<TextView>(R.id.outputTextViewHomeFragment)
 
         var inTimeMinutes = timePickerInTime?.minute.toString()
         val inTimeHours = timePickerInTime?.hour.toString()
@@ -606,13 +531,13 @@ class HomeFragment : Fragment() {
             val breakTimeNumber: Double
             val totalHours = "$hoursDifference.$minutesWithoutFirstDecimal".toDouble()
 
-            val breakTime = activity?.findViewById<TextInputEditText>(R.id.breakTime)
+            val breakTime = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment)
             if (breakTime?.text != null && breakTime.text.toString() != "") {
                 if (!breakTimeNumeric(breakTime)) {
                     Vibrate().vibrateOnError(requireContext())
-                    infoTextView1!!.text = getString(R.string.error_with_break_time_must_be_numbers_only)
-                }
-                else {
+                    infoTextView1!!.text =
+                        getString(R.string.error_with_break_time_must_be_numbers_only)
+                } else {
                     breakTimeNumber = breakTime.text.toString().toDouble() / 60
                     val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
                         .setScale(2, RoundingMode.HALF_EVEN)
@@ -635,7 +560,11 @@ class HomeFragment : Fragment() {
                             totalHoursWithBreak.toString()
                         )
                         if (method == 1) {
-                            Toast.makeText(requireContext(), getString(R.string.hour_calculated_in_decimal_format), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.hour_calculated_in_decimal_format),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -647,7 +576,11 @@ class HomeFragment : Fragment() {
                     minutesWithoutFirstDecimal
                 )
                 if (method == 1) {
-                    Toast.makeText(requireContext(), getString(R.string.hour_calculated_in_decimal_format), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.hour_calculated_in_decimal_format),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -685,7 +618,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun breakTimeNumeric(breakTime: TextInputEditText) : Boolean {
+    private fun breakTimeNumeric(breakTime: TextInputEditText): Boolean {
         return try {
             breakTime.text.toString().toInt()
             true
@@ -696,8 +629,8 @@ class HomeFragment : Fragment() {
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {
         val inputManager: InputMethodManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val focusedView = activity?.currentFocus
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusedView = requireActivity().currentFocus
 
         if (focusedView != null) {
             inputManager.hideSoftInputFromWindow(

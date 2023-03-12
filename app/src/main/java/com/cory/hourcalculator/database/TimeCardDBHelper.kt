@@ -9,7 +9,6 @@ import android.database.DatabaseUtils
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.cory.hourcalculator.classes.SortData
 
 class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -31,10 +30,12 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
     }
 
     fun insertRow(
+        name: String,
         week: String,
         total: String
     ) {
         val values = ContentValues()
+        values.put(COLUMN_NAME, name)
         values.put(COLUMN_WEEK, week)
         values.put(COLUMN_TOTAL, total)
 
@@ -69,14 +70,6 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         val db = this.writableDatabase
 
         return db.rawQuery("SELECT $COLUMN_IMAGE FROM $TABLE_NAME WHERE $COLUMN_ID=$id", null)
-    }
-
-    fun getRow(row_id: String): Cursor {
-
-        val db = this.writableDatabase
-
-        return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID=$row_id", null)
-
     }
 
     fun getAllRow(context: Context): Cursor? {

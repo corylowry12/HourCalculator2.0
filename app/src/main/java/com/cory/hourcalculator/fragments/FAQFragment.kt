@@ -3,12 +3,10 @@
 
 package com.cory.hourcalculator.fragments
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,7 +20,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -31,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.FAQCustomAdapter
 import com.cory.hourcalculator.classes.*
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -95,37 +91,6 @@ class FAQFragment : Fragment() {
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                         themeSelection = true
-                    }
-                }
-            }
-        }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                }
-                else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    }
-                    else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
                     }
                 }
             }
@@ -341,19 +306,6 @@ class FAQFragment : Fragment() {
                 }
             }
         })
-    }
-
-    fun updateCustomColors() {
-        /*if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarF)?.setCollapsedTitleTextColor(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-        }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-        }*/
     }
 
     private fun hideKeyboard() {

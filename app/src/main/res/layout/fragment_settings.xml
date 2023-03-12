@@ -2,11 +2,11 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingsCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
-    android:id="@+id/settingsCoordinatorLayout"
+    android:fitsSystemWindows="true"
     tools:context=".fragments.SettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,11 +20,9 @@
             android:id="@+id/collapsingToolbarLayoutSettings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
-            app:titleCollapseMode="scale"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -42,9 +40,9 @@
         android:id="@+id/nestedScrollViewSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:overScrollMode="always"
         android:paddingBottom="10dp"
-        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -59,14 +57,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground">
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintAppearance"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/appearanceImage"
@@ -129,17 +126,16 @@
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground">
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintAppSettings"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/appSettingsImage"
@@ -202,17 +198,16 @@
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground">
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintHistorySettings"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/deletionImage"
@@ -275,17 +270,16 @@
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground">
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintTimeCardSettings"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/timeCardSettingsImage"
@@ -344,21 +338,92 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/timeCardGalleryCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintTimeCardGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/timeCardGalleryImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/baseline_collections_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/timeCardGalleryHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="5dp"
+                        android:text="Gallery"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/timeCardGalleryChevron"
+                        app:layout_constraintStart_toEndOf="@id/timeCardGalleryImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/timeCardGalleryHeading"
+                        android:layout_alignStart="@id/timeCardGalleryHeading"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="4dp"
+                        android:text="View all time card images"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/timeCardGalleryChevron"
+                        app:layout_constraintStart_toEndOf="@id/timeCardGalleryImage"
+                        app:layout_constraintTop_toBottomOf="@id/timeCardGalleryHeading" />
+
+                    <ImageView
+                        android:id="@+id/timeCardGalleryChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/patchNotesCardView"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground">
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintPatchNotes"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/patchNotesImage"
@@ -417,96 +482,20 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/FAQCardView"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintFAQ"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/FAQDataImage"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:src="@drawable/ic_baseline_question_answer_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/FAQDataHeading"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="12dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="5dp"
-                        android:text="@string/frequently_asked_questions"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/FAQDataChevron"
-                        app:layout_constraintStart_toEndOf="@id/FAQDataImage"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="4dp"
-                        android:text="@string/view_frequently_asked_questions_about_the_app"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/FAQDataChevron"
-                        app:layout_constraintStart_toEndOf="@id/FAQDataImage"
-                        app:layout_constraintTop_toBottomOf="@+id/FAQDataHeading" />
-
-                    <ImageView
-                        android:id="@+id/FAQDataChevron"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_baseline_chevron_right_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?attr/settingsIconTint"
-                        tools:ignore="ContentDescription" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/aboutAppCardView"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintAboutApp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/aboutImage"
@@ -570,9 +559,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2">
@@ -581,8 +570,7 @@
                     android:id="@+id/constraintDeleteAppData"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/deleteDataImage"

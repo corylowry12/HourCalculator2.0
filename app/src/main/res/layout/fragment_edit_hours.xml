@@ -13,7 +13,6 @@
         android:id="@+id/materialToolBarEditFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/appBarBackground"
         app:layout_collapseMode="pin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/timePickerInTimeEdit" />
 
     <TextView
-        android:id="@+id/textViewBreak"
+        android:id="@+id/textViewBreakEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -74,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@+id/timePickerOutTimeEdit" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField"
+        android:id="@+id/outlinedTextFieldEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -86,7 +85,7 @@
         app:boxCornerRadiusTopEnd="14dp"
         app:boxCornerRadiusTopStart="14dp"
         app:endIconMode="clear_text"
-        app:layout_constraintTop_toBottomOf="@id/textViewBreak">
+        app:layout_constraintTop_toBottomOf="@id/textViewBreakEdit">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/breakTimeEdit"
@@ -99,7 +98,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/dateChip"
+        android:id="@+id/dateChipEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -107,12 +106,11 @@
         android:text="@string/click_on_me"
         android:textAlignment="center"
         android:textColor="@color/white"
-        app:chipBackgroundColor="?attr/colorPrimary"
         app:chipCornerRadius="28dp"
         app:chipStrokeWidth="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField" />
+        app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldEdit" />
 
     <Button
         android:id="@+id/saveButton"
@@ -127,10 +125,10 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dateChip" />
+        app:layout_constraintTop_toBottomOf="@id/dateChipEdit" />
 
     <TextView
-        android:id="@+id/infoTextView1"
+        android:id="@+id/outputTextViewEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -151,7 +149,7 @@
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

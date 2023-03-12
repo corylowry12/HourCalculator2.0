@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -21,9 +23,11 @@ import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 
 class NumberOfEntriesBeforeDeletionFragment : Fragment() {
@@ -65,47 +69,6 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-                color = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-                color = ContextCompat.getColor(requireContext(), R.color.pinkAccent)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-                color = ContextCompat.getColor(requireContext(), R.color.orangeAccent)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-                color = ContextCompat.getColor(requireContext(), R.color.redAccent)
-            }
-            accentColor.loadAccent() == 4 -> {
-                activity?.theme?.applyStyle(R.style.system_accent, true)
-                color = if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                    ContextCompat.getColor(requireContext(), R.color.systemAccent)
-                } else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                        ContextCompat.getColor(requireContext(), R.color.systemAccentGoogleDark)
-                    } else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                        ContextCompat.getColor(requireContext(), R.color.systemAccentGoogleDark_light)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
-            }
-        }
         return inflater.inflate(
             R.layout.fragment_number_of_entries_before_deletion,
             container,
@@ -122,19 +85,116 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        if (AccentColor(requireContext()).loadAccent() == 5) {
-            updateCustomColor()
+        topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.reset -> {
+                    val dialog = BottomSheetDialog(requireContext())
+                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    dialog.setContentView(resetSettingsLayout)
+                    dialog.setCancelable(false)
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Number of Days Worked Settings?"
+                    val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+
+                    infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+                    /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+
+                    yesResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        reset()
+                        dialog.dismiss()
+                    }
+                    cancelResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    true
+                }
+                else -> true
+            }
         }
 
-        val one = activity?.findViewById<RadioButton>(R.id.one)
-        val two = activity?.findViewById<RadioButton>(R.id.two)
-        val three = activity?.findViewById<RadioButton>(R.id.three)
-        val four = activity?.findViewById<RadioButton>(R.id.four)
-        val five = activity?.findViewById<RadioButton>(R.id.five)
-        val six = activity?.findViewById<RadioButton>(R.id.six)
-        val seven = activity?.findViewById<RadioButton>(R.id.seven)
+        updateCustomColor()
 
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
+        val oneCardView = requireActivity().findViewById<MaterialCardView>(R.id.oneCardView)
+        val twoCardView = requireActivity().findViewById<MaterialCardView>(R.id.twoCardView)
+        val threeCardView = requireActivity().findViewById<MaterialCardView>(R.id.threeCardView)
+        val fourCardView = requireActivity().findViewById<MaterialCardView>(R.id.fourCardView)
+        val fiveCardView = requireActivity().findViewById<MaterialCardView>(R.id.fiveCardView)
+        val sixCardView = requireActivity().findViewById<MaterialCardView>(R.id.sixCardView)
+        val sevenCardView = requireActivity().findViewById<MaterialCardView>(R.id.sevenCardView)
+
+        oneCardView.shapeAppearanceModel = oneCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        twoCardView.shapeAppearanceModel = twoCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        threeCardView.shapeAppearanceModel = threeCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        fourCardView.shapeAppearanceModel = fourCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        fiveCardView.shapeAppearanceModel = fiveCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        sixCardView.shapeAppearanceModel = sixCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        sevenCardView.shapeAppearanceModel = sevenCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
+        val one = requireActivity().findViewById<RadioButton>(R.id.one)
+        val two = requireActivity().findViewById<RadioButton>(R.id.two)
+        val three = requireActivity().findViewById<RadioButton>(R.id.three)
+        val four = requireActivity().findViewById<RadioButton>(R.id.four)
+        val five = requireActivity().findViewById<RadioButton>(R.id.five)
+        val six = requireActivity().findViewById<RadioButton>(R.id.six)
+        val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
+
         val daysWorked = DaysWorkedPerWeek(requireContext())
 
         when {
@@ -161,33 +221,27 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             }
         }
 
-        one?.setOnClickListener {
+        oneCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 1) {
                 Toast.makeText(requireContext(), getString(R.string.one_entry_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                daysWorked.setDaysWorked(1)
-                Toast.makeText(requireContext(), getString(R.string.one_entry_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(1)
             }
         }
 
-        two?.setOnClickListener {
+        twoCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 2) {
                 Toast.makeText(requireContext(), getString(R.string.two_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                daysWorked.setDaysWorked(2)
-                Toast.makeText(requireContext(), getString(R.string.two_entries_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(2)
             }
         }
 
-        three?.setOnClickListener {
+        threeCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 3) {
                 Toast.makeText(
@@ -196,53 +250,41 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                daysWorked.setDaysWorked(3)
-                Toast.makeText(requireContext(), getString(R.string.three_entries_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(3)
             }
         }
 
-        four?.setOnClickListener {
+        fourCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 4) {
                 Toast.makeText(requireContext(), getString(R.string.four_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                daysWorked.setDaysWorked(4)
-                Toast.makeText(requireContext(), getString(R.string.four_entries_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(4)
             }
         }
 
-        five?.setOnClickListener {
+        fiveCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 5) {
                 Toast.makeText(requireContext(), getString(R.string.five_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                daysWorked.setDaysWorked(5)
-                Toast.makeText(requireContext(), getString(R.string.five_entries_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(5)
             }
         }
 
-        six?.setOnClickListener {
+        sixCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 6) {
                 Toast.makeText(requireContext(), getString(R.string.six_entries_already_enabled), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                daysWorked.setDaysWorked(6)
-                Toast.makeText(requireContext(), getString(R.string.six_entries_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(6)
             }
         }
 
-        seven?.setOnClickListener {
+        sevenCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 7) {
                 Toast.makeText(
@@ -251,33 +293,26 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                daysWorked.setDaysWorked(7)
-                Toast.makeText(requireContext(), getString(R.string.seven_entries_enabled), Toast.LENGTH_SHORT)
-                    .show()
-                greaterThan()
+                greaterThan(7)
             }
         }
     }
 
-    private fun greaterThan() {
-        val toggleHistoryAutomaticDeletion =
-            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
+    private fun greaterThan (number: Int) {
 
-        val one = activity?.findViewById<RadioButton>(R.id.one)
-        val two = activity?.findViewById<RadioButton>(R.id.two)
-        val three = activity?.findViewById<RadioButton>(R.id.three)
-        val four = activity?.findViewById<RadioButton>(R.id.four)
-        val five = activity?.findViewById<RadioButton>(R.id.five)
-        val six = activity?.findViewById<RadioButton>(R.id.six)
-        val seven = activity?.findViewById<RadioButton>(R.id.seven)
+        val one = requireActivity().findViewById<RadioButton>(R.id.one)
+        val two = requireActivity().findViewById<RadioButton>(R.id.two)
+        val three = requireActivity().findViewById<RadioButton>(R.id.three)
+        val four = requireActivity().findViewById<RadioButton>(R.id.four)
+        val five = requireActivity().findViewById<RadioButton>(R.id.five)
+        val six = requireActivity().findViewById<RadioButton>(R.id.six)
+        val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
 
         val dbHandler = DBHelper(requireContext(), null)
 
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
-
         val greaterThan =
-            dbHandler.getCount() - DaysWorkedPerWeek(requireContext()).loadDaysWorked()
-        if (dbHandler.getCount() > DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
+            dbHandler.getCount() - number
+        if (dbHandler.getCount() > number) {
             val alert = MaterialAlertDialogBuilder(
                 requireContext(),
                 AccentColor(requireContext()).alertTheme()
@@ -290,22 +325,90 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                 alert.setMessage(getString(R.string.history_deletion_single, greaterThan))
             }
 
-            val historyDeletion2 = HistoryDeletion(requireContext())
+            val historyDeletion = HistoryDeletion(requireContext())
             alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Vibrate().vibration(requireContext())
+                DaysWorkedPerWeek(requireContext()).setDaysWorked(number)
 
-                val undoValues = historyDeletion2.deletion()
+                when (number) {
+                    1 -> {
+                        one.isChecked = true
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    2 -> {
+                        one.isChecked = false
+                        two.isChecked = true
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    3 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = true
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    4 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = true
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    5 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = true
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    6 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = true
+                        seven.isChecked = false
+                    }
+                    7 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = true
+                    }
+                }
+
+                val undoValues = historyDeletion.deletion()
                 val runnable = Runnable {
                     (context as MainActivity).changeBadgeNumber()
                 }
                 MainActivity().runOnUiThread(runnable)
 
-                val snackbar = Snackbar.make(requireView(), greaterThan.toString() + " Entries Deleted", Snackbar.LENGTH_LONG)
+                val snackbar = Snackbar.make(requireView(), "$greaterThan Entries Deleted", Snackbar.LENGTH_LONG)
                 snackbar.duration = 5000
 
                 snackbar.setAction(getString(R.string.undo)) {
-
-                    historyDeletion.setHistoryDeletionState(false)
+                    Vibrate().vibration(requireContext())
+                    HistoryAutomaticDeletion(requireContext()).setHistoryDeletionState(false)
+                    DaysWorkedPerWeek(requireContext()).setDaysWorked(7)
 
                     for (i in 1..undoValues["count"]!!.toInt()) {
                         dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["breakTime"].toString().toLong(), undoValues["breakTime"].toString())
@@ -313,38 +416,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
 
                     MainActivity().runOnUiThread(runnable)
 
-                    toggleHistoryAutomaticDeletion?.isChecked = false
-
-                    one?.isEnabled = false
-                    two?.isEnabled = false
-                    three?.isEnabled = false
-                    four?.isEnabled = false
-                    five?.isEnabled = false
-                    six?.isEnabled = false
-                    seven?.isEnabled = false
-
-                    one?.isChecked = false
-                    two?.isChecked = false
-                    three?.isChecked = false
-                    four?.isChecked = false
-                    five?.isChecked = false
-                    six?.isChecked = false
-                    seven?.isChecked = true
-
-                    one?.setTextColor(color)
-                    two?.setTextColor(color)
-                    three?.setTextColor(color)
-                    four?.setTextColor(color)
-                    five?.setTextColor(color)
-                    six?.setTextColor(color)
-                    seven?.setTextColor(color)
+                    activity?.supportFragmentManager?.popBackStack()
                 }
 
                 snackbar.setActionTextColor(
-                    ContextCompat.getColorStateList(
-                        requireContext(),
-                        AccentColor(requireContext()).snackbarActionTextColor()
-                    )
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
                 )
                 snackbar.apply {
                     snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
@@ -353,38 +429,100 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             }
             alert.setNegativeButton(getString(R.string.no)) { _, _ ->
                 Vibrate().vibration(requireContext())
-                historyDeletion.setHistoryDeletionState(false)
+                HistoryAutomaticDeletion(requireContext()).setHistoryDeletionState(false)
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.history_automatic_deletion_disabled),
                     Toast.LENGTH_SHORT
                 ).show()
 
-                toggleHistoryAutomaticDeletion?.isChecked = false
-
-                one?.isEnabled = false
-                two?.isEnabled = false
-                three?.isEnabled = false
-                four?.isEnabled = false
-                five?.isEnabled = false
-                six?.isEnabled = false
-                seven?.isEnabled = false
-
-                one?.setTextColor(color)
-                two?.setTextColor(color)
-                three?.setTextColor(color)
-                four?.setTextColor(color)
-                five?.setTextColor(color)
-                six?.setTextColor(color)
-                seven?.setTextColor(color)
+                activity?.supportFragmentManager?.popBackStack()
             }
             alert.show()
         }
+        else {
+            DaysWorkedPerWeek(requireContext()).setDaysWorked(number)
+            if (number == 1) {
+                one.isChecked = true
+                two.isChecked = false
+                three.isChecked = false
+                four.isChecked = false
+                five.isChecked = false
+                six.isChecked = false
+                seven.isChecked = false
+            }
+            else if (number == 2) {
+                one.isChecked = false
+                two.isChecked = true
+                three.isChecked = false
+                four.isChecked = false
+                five.isChecked = false
+                six.isChecked = false
+                seven.isChecked = false
+            }
+            else if (number == 3) {
+                one.isChecked = false
+                two.isChecked = false
+                three.isChecked = true
+                four.isChecked = false
+                five.isChecked = false
+                six.isChecked = false
+                seven.isChecked = false
+            }
+            else if (number == 4) {
+                one.isChecked = false
+                two.isChecked = false
+                three.isChecked = false
+                four.isChecked = true
+                five.isChecked = false
+                six.isChecked = false
+                seven.isChecked = false
+            }
+            else if (number == 5) {
+                one.isChecked = false
+                two.isChecked = false
+                three.isChecked = false
+                four.isChecked = false
+                five.isChecked = true
+                six.isChecked = false
+                seven.isChecked = false
+            }
+            else if (number == 6) {
+                one.isChecked = false
+                two.isChecked = false
+                three.isChecked = false
+                four.isChecked = false
+                five.isChecked = false
+                six.isChecked = true
+                seven.isChecked = false
+            }
+            else if (number == 7) {
+                one.isChecked = false
+                two.isChecked = false
+                three.isChecked = false
+                four.isChecked = false
+                five.isChecked = false
+                six.isChecked = false
+                seven.isChecked = true
+            }
+        }
     }
 
-    fun updateCustomColor() {
-        val daysWorkedCardView = requireView().findViewById<MaterialCardView>(R.id.daysWorkedCardView)
-        daysWorkedCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+    private fun updateCustomColor() {
+        val oneCardView = requireView().findViewById<MaterialCardView>(R.id.oneCardView)
+        oneCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val twoCardView = requireView().findViewById<MaterialCardView>(R.id.twoCardView)
+        twoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val threeCardView = requireView().findViewById<MaterialCardView>(R.id.threeCardView)
+        threeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val fourCardView = requireView().findViewById<MaterialCardView>(R.id.fourCardView)
+        fourCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val fiveCardView = requireView().findViewById<MaterialCardView>(R.id.fiveCardView)
+        fiveCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val sixCardView = requireView().findViewById<MaterialCardView>(R.id.sixCardView)
+        sixCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val sevenCardView = requireView().findViewById<MaterialCardView>(R.id.sevenCardView)
+        sevenCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
@@ -426,7 +564,6 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
                 resetDrawable?.colorFilter = BlendModeColorFilter(
                     Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
@@ -435,20 +572,6 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                     BlendMode.SRC_ATOP
                 )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
         }
         else {
             val typedValue = TypedValue()
@@ -466,6 +589,34 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+    }
+
+    private fun reset() {
+        val daysWorked = DaysWorkedPerWeek(requireContext())
+
+        if (daysWorked.loadDaysWorked() != 7) {
+            Vibrate().vibration(requireContext())
+            daysWorked.setDaysWorked(7)
+
+            val one = requireActivity().findViewById<RadioButton>(R.id.one)
+            val two = requireActivity().findViewById<RadioButton>(R.id.two)
+            val three = requireActivity().findViewById<RadioButton>(R.id.three)
+            val four = requireActivity().findViewById<RadioButton>(R.id.four)
+            val five = requireActivity().findViewById<RadioButton>(R.id.five)
+            val six = requireActivity().findViewById<RadioButton>(R.id.six)
+            val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
+
+            one.isChecked = false
+            two.isChecked = false
+            three.isChecked = false
+            four.isChecked = false
+            five.isChecked = false
+            six.isChecked = false
+            seven.isChecked = true
+        }
+        else {
+            Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()
         }
     }
 }

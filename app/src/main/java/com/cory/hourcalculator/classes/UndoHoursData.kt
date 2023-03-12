@@ -13,11 +13,6 @@ class UndoHoursData(context: Context) {
         editor.apply()
     }
 
-    fun loadID(): Int {
-        val state = sharedPreferences.getInt("id", 0)
-        return (state)
-    }
-
     fun setInTime(state: String) {
         val editor = sharedPreferences.edit()
         editor.putString("inTime", state)

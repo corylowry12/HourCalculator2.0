@@ -11,25 +11,21 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import java.math.RoundingMode
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class TimeCardCustomAdapter(
     private val context: Context,
@@ -40,17 +36,18 @@ class TimeCardCustomAdapter(
         var name: TextView = itemView.findViewById(R.id.row_name)
         var week: TextView = itemView.findViewById(R.id.row_week)
         var totalHours: TextView = itemView.findViewById(R.id.row_total_hours)
-        var countChip : Chip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
+        var countChip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
 
         fun bind(position: Int) {
 
-            if (AccentColor(context).loadAccent() == 5) {
-                itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-                itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateChipBackgroundColor()))
-
-            }
+            itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
+                .setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
+            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
+            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateChipBackgroundColor()))
 
             val dataItem = dataList[position]
 
@@ -61,7 +58,8 @@ class TimeCardCustomAdapter(
             }
 
             val totalHoursRounded =
-                dataItem["totalHours"].toString().toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                dataItem["totalHours"].toString().toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                    .toDouble()
 
             val (wholeNumber, decimal) = dataItem["totalHours"]!!.split(".")
             var minute = (".$decimal".toDouble() * 60).toInt().toString()
@@ -75,8 +73,7 @@ class TimeCardCustomAdapter(
 
             if (dataItem["count"]!!.toInt() > 1) {
                 week.text = "Week: ${dataItem["week"]}"
-            }
-            else {
+            } else {
                 week.text = "Day: ${dataItem["week"]}"
             }
             countChip.text = dataItem["count"]
@@ -162,10 +159,15 @@ class TimeCardCustomAdapter(
                 val deleteAllCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteAllCardView)
 
-                if (AccentColor(context).loadAccent() == 5) {
-                    deleteCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-                    deleteAllCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-                }
+                deleteCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+                deleteAllCardView.setCardBackgroundColor(
+                    Color.parseColor(
+                        CustomColorGenerator(
+                            context
+                        ).generateCardColor()
+                    )
+                )
+
 
                 deleteCardView.shapeAppearanceModel = deleteCardView.shapeAppearanceModel
                     .toBuilder()
@@ -186,7 +188,8 @@ class TimeCardCustomAdapter(
                     dialog.dismiss()
                     val dialog = BottomSheetDialog(context)
                     val deleteEntryLayout =
-                        LayoutInflater.from(context).inflate(R.layout.delete_single_time_card_entry_bottom_sheet, null)
+                        LayoutInflater.from(context)
+                            .inflate(R.layout.delete_single_time_card_entry_bottom_sheet, null)
                     dialog.window?.navigationBarColor =
                         ContextCompat.getColor(context, R.color.black)
                     dialog.setContentView(deleteEntryLayout)
@@ -194,17 +197,30 @@ class TimeCardCustomAdapter(
 
                     val yesButton = deleteEntryLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteEntryLayout.findViewById<Button>(R.id.noButton)
-                    val infoCardView = deleteEntryLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                    if (AccentColor(context).loadAccent() == 5) {
-                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-                        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                    }
+                    val infoCardView =
+                        deleteEntryLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+
+                    infoCardView.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                context
+                            ).generateCardColor()
+                        )
+                    )
+                    yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
 
                     yesButton.setOnClickListener {
                         Vibrate().vibration(context)
-                        TimeCardDBHelper(context, null).deleteRow(dataList[position]["id"].toString())
-                        TimeCardsItemDBHelper(context, null).deleteAllItemRow(context, dataList[position]["id"].toString())
+                        TimeCardDBHelper(
+                            context,
+                            null
+                        ).deleteRow(dataList[position]["id"].toString())
+                        TimeCardsItemDBHelper(context, null).deleteAllItemRow(
+                            context,
+                            dataList[position]["id"].toString()
+                        )
                         dataList.removeAt(holder.adapterPosition)
                         notifyItemRemoved(holder.adapterPosition)
 
@@ -230,14 +246,21 @@ class TimeCardCustomAdapter(
                     deleteAllDialog.setContentView(deleteAllLayout)
                     deleteAllDialog.setCancelable(true)
 
-                    val infoCardView = deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+                    val infoCardView =
+                        deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
                     val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
-                    if (AccentColor(context).loadAccent() == 5) {
-                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-                        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-                    }
+
+                    infoCardView.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                context
+                            ).generateCardColor()
+                        )
+                    )
+                    yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
 
                     yesButton.setOnClickListener {
                         TimeCardDBHelper(context, null).deleteAll()
@@ -250,7 +273,8 @@ class TimeCardCustomAdapter(
                         MainActivity().runOnUiThread(runnable)
 
                         deleteAllDialog.dismiss()
-                        Toast.makeText(context, "All time card entries deleted", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "All time card entries deleted", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     noButton.setOnClickListener {
                         deleteAllDialog.dismiss()

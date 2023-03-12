@@ -9,12 +9,12 @@ class ChosenAppIconData(context: Context) {
 
     fun setChosenAppIcon(state: String) {
         val editor = sharedPreferences.edit()
-        editor.putString("chosenIcon", state)
+        editor.putString("chosenAppIcon", state)
         editor.apply()
     }
 
     fun loadChosenAppIcon(): String? {
-        val state = sharedPreferences.getString("chosenIcon", "auto")
+        val state = sharedPreferences.getString("chosenAppIcon", "teal")
         return (state)
     }
 }

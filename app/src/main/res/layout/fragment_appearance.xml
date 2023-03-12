@@ -2,12 +2,12 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayoutAppearance"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor"
-    tools:context=".fragments.AppearanceFragment"
-    android:id="@+id/coordinatorLayoutAppearance">
+    android:fitsSystemWindows="true"
+    tools:context=".fragments.AppearanceFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAppearance"
@@ -21,8 +21,6 @@
             android:id="@+id/collapsingToolbarAppearance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleCollapseMode="scale">
@@ -34,11 +32,11 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
+                app:buttonGravity="center_vertical"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
-                app:title="@string/appearance_settings"
-                app:buttonGravity="center_vertical" />
+                app:title="@string/appearance_settings" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -57,263 +55,245 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/themeCardViewAppearance"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled"
-                >
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/backgroundThemeConstraintLayout"
-                    android:foreground="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp">
 
-                <ImageView
-                    android:id="@+id/currentSelectedTheme"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/followsystemcircleimageview"
-                    android:contentDescription="follow system image view"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="HardcodedText" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/currentSelectedThemeCardView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardCornerRadius="9dp"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        app:strokeColor="#000000"
+                        app:strokeWidth="1dp"
+                        android:contentDescription="follow system card view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/currentSelectedTheme"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="?attr/settingsTextColor"
+                        android:layout_marginStart="10dp"
                         android:text="Background Color"
-                        android:layout_marginStart="10dp"/>
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/currentSelectedThemeCardView"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/accentColorCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/themeCardViewAppearance"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/accentColorConstraintLayout"
-                    android:foreground="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
                     android:padding="20dp">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/currentSelectedAccentColorImageViewCardView"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        app:cardCornerRadius="9dp"
-                        style="@style/Widget.Material3.CardView.Filled"
-                        app:strokeColor="#000000"
-                        app:strokeWidth="1dp">
-
-                    <ImageView
-                        android:id="@+id/currentSelectedAccentColorImageView"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/currentaccentcolorimage"
-                        android:contentDescription="follow system image view"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText" />
-                    </com.google.android.material.card.MaterialCardView>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/currentSelectedAccentColorCardView"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginEnd="16dp"
+                            app:cardCornerRadius="9dp"
+                            style="@style/Widget.Material3.CardView.Filled"
+                            app:strokeColor="#000000"
+                            app:strokeWidth="1dp"
+                            android:contentDescription="follow system card view"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/currentSelectedAccentColorImageViewCardView"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="?attr/settingsTextColor"
+                        android:layout_marginStart="10dp"
                         android:text="Accent Color"
-                        android:layout_marginStart="10dp"/>
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/currentSelectedAccentColorCardView"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/appIconCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/accentColorCardView"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                app:cardBackgroundColor="?attr/cardBackground"
-                style="@style/Widget.Material3.CardView.Filled">
+
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/appIconConstraintLayout"
-                    android:foreground="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
                     android:padding="10dp">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/appIconWrapperImageViewAppearanceFragment"
+                        style="@style/Widget.Material3.CardView.Filled"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/accentColorCardView"
                         android:layout_marginEnd="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="?attr/cardBackground"
-                        style="@style/Widget.Material3.CardView.Filled">
-                    <ImageView
-                        android:id="@+id/currentSelectedAppIconImageView"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/hourcalclogoteal"
-                        android:contentDescription="app icon image view"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText" />
+
+                        app:cardCornerRadius="12dp">
+
+                        <ImageView
+                            android:id="@+id/currentSelectedAppIconImageView"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/hourcalclogoteal"
+                            android:contentDescription="app icon image view"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="HardcodedText" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
                         android:id="@+id/appIconImageTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="App Icon"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/appIconWrapperImageViewAppearanceFragment"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="?attr/settingsTextColor"
-                        android:text="App Icon"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/navbarCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/appIconCardView"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
-                style="@style/Widget.Material3.CardView.Filled">
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/coloredNavBarConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/coloredNavBarSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:text="Toggle Colored Navigation Bar"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="?attr/settingsTextColor"
-                        android:text="Toggle Colored Navigation Bar"
-                        app:thumbIconTint="?attr/colorPrimary"/>
+                        android:clickable="false" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/coloredMenuTintCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/navbarCardView"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
-                style="@style/Widget.Material3.CardView.Filled">
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/coloredMenuTintConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/coloredMenuTintSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:text="Toggle Colored Menu Items"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="?attr/settingsTextColor"
-                        android:text="Toggle Colored Menu Items"
-                        app:thumbIconTint="?attr/colorPrimary"/>
+                        android:clickable="false"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/coloredTitleBarTextCardView"
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/coloredMenuTintCardView"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
-                style="@style/Widget.Material3.CardView.Filled">
+                android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/coloredTitleBarTextConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:paddingStart="20dp"
+                    android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:paddingBottom="10dp">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/coloredTitleBarTextSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:text="Toggle Collapsed Title Bar Text to Match Theme"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="?attr/settingsTextColor"
-                        android:text="Toggle Collapsed Title Bar Text to Match Theme"
-                        app:thumbIconTint="?attr/colorPrimary"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/coloredTitleBarTextSwitch"
-                        android:text="Will only work with custom themes for now"
-                        style="@style/TextAppearance.MaterialComponents.Subtitle2"/>
+                        android:clickable="false"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>

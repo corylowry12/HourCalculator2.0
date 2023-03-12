@@ -21,8 +21,6 @@
             android:id="@+id/collapsingToolbarLayoutPatchNotes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:statusBarScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:titleCollapseMode="scale"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -66,7 +64,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="false"
@@ -110,10 +107,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="1"
                         android:layout_marginEnd="10dp"
-                        android:clickable="false"
-                        android:textColor="?attr/bottomNavTextColor"
-                        app:closeIconTint="?attr/bottomNavTextColor"
-                        app:chipBackgroundColor="?attr/colorPrimary"/>
+                        android:clickable="false" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -134,7 +128,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 android:layout_marginTop="10dp"
                 android:animateLayoutChanges="true"
@@ -179,10 +172,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="1"
                         android:layout_marginEnd="10dp"
-                        android:clickable="false"
-                        android:textColor="?attr/bottomNavTextColor"
-                        app:closeIconTint="?attr/bottomNavTextColor"
-                        app:chipBackgroundColor="?attr/colorPrimary"/>
+                        android:clickable="false" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -204,7 +194,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="28dp"
                 android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="false"
@@ -248,10 +237,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="1"
                         android:layout_marginEnd="10dp"
-                        android:clickable="false"
-                        android:textColor="?attr/bottomNavTextColor"
-                        app:closeIconTint="?attr/bottomNavTextColor"
-                        app:chipBackgroundColor="?attr/colorPrimary"/>
+                        android:clickable="false" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

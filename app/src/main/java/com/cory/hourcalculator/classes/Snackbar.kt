@@ -1,11 +1,11 @@
 package com.cory.hourcalculator.classes
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -37,10 +37,7 @@ class Snackbar {
             MainActivity().runOnUiThread(restoreState)
         }
         snackbar.setActionTextColor(
-            ContextCompat.getColorStateList(
-                context,
-                AccentColor(context).snackbarActionTextColor()
-            )
+            Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
         )
         snackbar.apply {
             snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)

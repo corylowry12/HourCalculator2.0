@@ -6,20 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.AccentColor
 import com.cory.hourcalculator.classes.CustomColorGenerator
-import com.cory.hourcalculator.fragments.EditHours
-import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class TimeCardItemCustomAdapter(
     private val context: Context,
@@ -38,9 +31,7 @@ class TimeCardItemCustomAdapter(
             val dataItem = dataList[position]
             val timeCardItemCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCardItem)
 
-            if (AccentColor(context).loadAccent() == 5) {
-                timeCardItemCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-            }
+            timeCardItemCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
 
             val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
             val dateString = formatter.format(dataItem["day"]!!.toLong())
@@ -49,7 +40,7 @@ class TimeCardItemCustomAdapter(
             outTime.text = "Out Time: ${dataItem["outTime"]}"
             breakTime.text = "Break Time: ${dataItem["breakTime"]}"
             totalHours.text = "Total: ${dataItem["totalHours"]}"
-            day.text = "Date: ${dateString}"
+            day.text = "Date: $dateString"
 
             if (dataList.count() == 1) {
                 timeCardItemCardView.shapeAppearanceModel = timeCardItemCardView.shapeAppearanceModel

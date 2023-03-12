@@ -3,33 +3,31 @@ package com.cory.hourcalculator.classes
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.os.Build
 import com.cory.hourcalculator.R
 
 class AccentColor(context: Context) {
 
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences("file", Context.MODE_PRIVATE)
-    val followSystemVersion = FollowSystemVersion(context)
 
-    fun setAccentState(state: Int) {
+    /*fun setAccentState(state: Int) {
         val editor = sharedPreferences.edit()
-        editor.putInt("Accent", state)
+        editor.putInt("accentColor", state)
         editor.apply()
     }
 
     fun loadAccent(): Int {
-        var state = sharedPreferences.getInt("Accent", 0)
-        if (Build.VERSION.SDK_INT >= 31) {
-            state = sharedPreferences.getInt("Accent", 4)
-        }
+        var state = sharedPreferences.getInt("accentColor", 5)
+        //if (Build.VERSION.SDK_INT >= 31) {
+            //state = sharedPreferences.getInt("Accent", 4)
+        //}
 
         return (state)
-    }
+    }*/
 
     fun alertTheme(): Int {
 
-        when (this.loadAccent()) {
+        /*when (this.loadAccent()) {
             0 -> {
                 return R.style.AlertDialogStyle
 
@@ -52,8 +50,8 @@ class AccentColor(context: Context) {
 
             }
             else -> return R.style.AlertDialogStyle
-        }
-
+        }*/
+        return R.style.AlertDialogStyle
     }
 
     fun followSystemTheme(context: Context): Int {
@@ -136,7 +134,7 @@ class AccentColor(context: Context) {
         return R.style.datePickerNew
     }
 
-    fun snackbarActionTextColor(): Int {
+    /*fun snackbarActionTextColor(): Int {
 
         when (this.loadAccent()) {
             0 -> {
@@ -161,5 +159,5 @@ class AccentColor(context: Context) {
             }
         }
         return R.color.colorPrimary
-    }
+    }*/
 }

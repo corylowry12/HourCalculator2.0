@@ -39,15 +39,14 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
-        app:cardBackgroundColor="?attr/cardBackground"
+        android:foreground="?attr/selectableItemBackground"
         style="@style/Widget.Material3.CardView.Filled">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/selectAPhotoConstraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="25dp"
-            android:foreground="?attr/selectableItemBackground">
+            android:padding="25dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -69,15 +68,14 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="1dp"
-        app:cardBackgroundColor="?attr/cardBackground"
+        android:foreground="?attr/selectableItemBackground"
         style="@style/Widget.Material3.CardView.Filled">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/takeAPhotoConstraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="25dp"
-            android:foreground="?attr/selectableItemBackground">
+            android:padding="25dp">
 
             <TextView
                 android:layout_width="match_parent"

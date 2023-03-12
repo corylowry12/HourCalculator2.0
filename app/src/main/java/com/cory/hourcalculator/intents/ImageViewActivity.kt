@@ -1,18 +1,16 @@
 package com.cory.hourcalculator.intents
 
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
 import android.media.ExifInterface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
@@ -20,7 +18,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.ortiz.touchview.TouchImageView
-import java.io.File
 
 class ImageViewActivity : AppCompatActivity() {
 
@@ -59,37 +56,6 @@ class ImageViewActivity : AppCompatActivity() {
                 }
             }
         }
-        val accentColor = AccentColor(this)
-        val followSystemVersion = FollowSystemVersion(this)
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                theme!!.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    theme!!.applyStyle(R.style.system_accent, true)
-                } else {
-                    if (themeSelection) {
-                        theme!!.applyStyle(R.style.system_accent_google, true)
-                    } else {
-                        theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                theme!!.applyStyle(R.style.transparent_accent, true)
-            }
-        }
         setContentView(R.layout.activity_image_view)
 
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
@@ -108,34 +74,25 @@ class ImageViewActivity : AppCompatActivity() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(this).loadMenuTint()) {
-            if (AccentColor(this).loadAccent() == 5) {
-                deleteImageDrawable.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            }
-            else {
-                val typedValue = TypedValue()
-                this.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                deleteImageDrawable.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(this, typedValue.resourceId),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(this, typedValue.resourceId),
-                    BlendMode.SRC_ATOP
-                )
-            }
-        }
-        else {
+            deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
             val typedValue = TypedValue()
             this.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            deleteImageDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(this, typedValue.resourceId), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(this, typedValue.resourceId), BlendMode.SRC_ATOP)
+            deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(this, typedValue.resourceId),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(this, typedValue.resourceId),
+                BlendMode.SRC_ATOP
+            )
         }
 
         viewImageMaterialToolbar.setNavigationOnClickListener {
@@ -153,15 +110,15 @@ class ImageViewActivity : AppCompatActivity() {
 
                     deleteImageDialog.setContentView(deleteImageDialogLayout)
 
-                    val infoCardView = deleteImageDialogLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+                    val infoCardView =
+                        deleteImageDialogLayout.findViewById<MaterialCardView>(R.id.infoCardView)
                     val yesButton = deleteImageDialogLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteImageDialogLayout.findViewById<Button>(R.id.noButton)
 
-                    if (AccentColor(this).loadAccent() == 5) {
-                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateCardColor()))
-                       yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateCustomColorPrimary()))
-                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(this).generateCustomColorPrimary()))
-                    }
+                    infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateCardColor()))
+                    yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateCustomColorPrimary()))
+                    noButton.setTextColor(Color.parseColor(CustomColorGenerator(this).generateCustomColorPrimary()))
+
                     yesButton.setOnClickListener {
                         Vibrate().vibration(this)
                         deleteImageDialog.dismiss()
@@ -211,7 +168,8 @@ class ImageViewActivity : AppCompatActivity() {
                     m.postRotate(270f)
                 }
             }
-            val bitmapScaled = Bitmap.createScaledBitmap(bitmapSrc, bitmapSrc.width, bitmapSrc.height, true)
+            val bitmapScaled =
+                Bitmap.createScaledBitmap(bitmapSrc, bitmapSrc.width, bitmapSrc.height, true)
             val bitmap =
                 Bitmap.createBitmap(
                     bitmapScaled,
@@ -224,13 +182,13 @@ class ImageViewActivity : AppCompatActivity() {
                 )
             imageView.setImageBitmap(bitmap)
 
-        } catch (e : java.lang.NullPointerException) {
+        } catch (e: java.lang.NullPointerException) {
             e.printStackTrace()
             Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
             finish()
         }
 
-        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 //imageView.setZoom(1f)
                 imageView.resetZoom()

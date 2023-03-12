@@ -57,7 +57,6 @@ class HistoryFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private var containsColon = false
-    var calculateTimeColon = false
 
     var themeSelection = false
 
@@ -102,38 +101,6 @@ class HistoryFragment : Fragment() {
                 }
             }
         }
-
-        val accentColor = AccentColor(requireContext())
-        val followSystemVersion = FollowSystemVersion(requireContext())
-
-        when {
-            accentColor.loadAccent() == 0 -> {
-                activity?.theme?.applyStyle(R.style.teal_accent, true)
-            }
-            accentColor.loadAccent() == 1 -> {
-                activity?.theme?.applyStyle(R.style.pink_accent, true)
-            }
-            accentColor.loadAccent() == 2 -> {
-                activity?.theme?.applyStyle(R.style.orange_accent, true)
-            }
-            accentColor.loadAccent() == 3 -> {
-                activity?.theme?.applyStyle(R.style.red_accent, true)
-            }
-            accentColor.loadAccent() == 4 -> {
-                if (!followSystemVersion.loadSystemColor()) {
-                    activity?.theme?.applyStyle(R.style.system_accent, true)
-                } else {
-                    if (themeSelection) {
-                        activity?.theme?.applyStyle(R.style.system_accent_google, true)
-                    } else {
-                        activity?.theme?.applyStyle(R.style.system_accent_google_light, true)
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                activity?.theme?.applyStyle(R.style.transparent_accent, true)
-            }
-        }
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
@@ -142,7 +109,7 @@ class HistoryFragment : Fragment() {
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 1
-            (activity as MainActivity).setActiveTab(1)
+            //(activity as MainActivity).setActiveTab(1)
         }
 
         MainActivity().runOnUiThread(runnable)
@@ -165,72 +132,48 @@ class HistoryFragment : Fragment() {
         val accentColor = AccentColor(requireContext())
         val floatingActionButtonHistory =
             activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
-        when {
 
-            accentColor.loadAccent() == 0 -> {
-                floatingActionButtonHistory?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
-            }
-            accentColor.loadAccent() == 1 -> {
-                floatingActionButtonHistory?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.pinkAccent)
-            }
-            accentColor.loadAccent() == 2 -> {
-                floatingActionButtonHistory?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.orangeAccent)
-            }
-            accentColor.loadAccent() == 3 -> {
-                floatingActionButtonHistory?.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.redAccent)
-            }
-            accentColor.loadAccent() == 4 -> {
-                val followSystemVersion = FollowSystemVersion(requireContext())
-                if (!followSystemVersion.loadSystemColor()) {
-                    floatingActionButtonHistory?.backgroundTintList =
-                        ContextCompat.getColorStateList(requireContext(), R.color.systemAccent)
-                } else {
-                    if (themeSelection) {
-                        floatingActionButtonHistory?.backgroundTintList =
-                            ContextCompat.getColorStateList(
-                                requireContext(),
-                                R.color.systemAccentGoogleDark
-                            )
-                    } else {
-                        floatingActionButtonHistory?.backgroundTintList =
-                            ContextCompat.getColorStateList(
-                                requireContext(),
-                                R.color.systemAccentGoogleDark_light
-                            )
-                    }
-                }
-            }
-            accentColor.loadAccent() == 5 -> {
-                floatingActionButtonHistory?.backgroundTintList =
-                    ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                floatingActionButtonHistory?.imageTintList =  ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
-            }
-        }
+        floatingActionButtonHistory?.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavBackgroundColor()))
+        floatingActionButtonHistory?.imageTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
 
         val sortData = SortData(requireContext())
         val dialog = BottomSheetDialog(requireContext())
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
 
-        val collapsingToolbarLayout = activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
+        val collapsingToolbarLayout =
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
 
-        if (accentColor.loadAccent() == 5) {
-            collapsingToolbarLayout?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-            collapsingToolbarLayout?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            collapsingToolbarLayout?.setContentScrimColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        requireContext()
+                    ).generateTopAppBarColor()
+                )
+            )
+            collapsingToolbarLayout?.setStatusBarScrimColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        requireContext()
+                    ).generateTopAppBarColor()
+                )
+            )
             if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-            }
-            else {
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
+                    ?.setCollapsedTitleTextColor(
+                        Color.parseColor(
+                            CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()
+                        )
+                    )
+            } else {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
+                    ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
             }
-        }
 
 
         val infoDrawable = topAppBar?.menu?.findItem(R.id.info)?.icon
@@ -244,54 +187,42 @@ class HistoryFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            if (AccentColor(requireContext()).loadAccent() == 5) {
-                infoDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                sortDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                optionsDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            }
-            else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-                val id = typedValue.resourceId
-                infoDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                sortDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                optionsDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
-        }
-        else {
+            infoDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            sortDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            optionsDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            infoDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            sortDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            optionsDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            infoDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            sortDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            optionsDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
 
         topAppBar?.setOnMenuItemClickListener { menuItem ->
@@ -307,10 +238,11 @@ class HistoryFragment : Fragment() {
                     //val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
                     //val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
 
-                    val exportCardView = historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
-                    val deleteSelectedCardView = historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
+                    val exportCardView =
+                        historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
+                    val deleteSelectedCardView =
+                        historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
 
-                    if (AccentColor(requireContext()).loadAccent() == 5) {
                         exportCardView.setCardBackgroundColor(
                             ColorStateList.valueOf(
                                 Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
@@ -321,7 +253,6 @@ class HistoryFragment : Fragment() {
                                 Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
                             )
                         )
-                    }
 
                     exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
                         .toBuilder()
@@ -330,13 +261,14 @@ class HistoryFragment : Fragment() {
                         .setBottomRightCornerSize(0f)
                         .setBottomLeftCornerSize(0f)
                         .build()
-                    deleteSelectedCardView.shapeAppearanceModel = deleteSelectedCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                        .setBottomRightCornerSize(28f)
-                        .setBottomLeftCornerSize(28f)
-                        .build()
+                    deleteSelectedCardView.shapeAppearanceModel =
+                        deleteSelectedCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(28f)
+                            .setBottomLeftCornerSize(28f)
+                            .build()
 
                     exportCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
@@ -365,9 +297,12 @@ class HistoryFragment : Fragment() {
                     }
                     if (customAdapter.getSelectedCount() > 0) {
                         historyOptionsDialog.show()
-                    }
-                    else {
-                        Toast.makeText(requireContext(), "There is nothing selected", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "There is nothing selected",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     true
                 }
@@ -388,11 +323,13 @@ class HistoryFragment : Fragment() {
                         val wagesTextView = infoLayout.findViewById<TextView>(R.id.body2TextView)
                         val okButton = infoLayout.findViewById<Button>(R.id.okButton)
 
-                        val totalHoursCardView = infoLayout.findViewById<MaterialCardView>(R.id.totalHoursCardView)
-                        val totalNumberOfEntriesCardView = infoLayout.findViewById<MaterialCardView>(R.id.totalNumberOfEntriesCardView)
-                        val wagesCardView = infoLayout.findViewById<MaterialCardView>(R.id.wagesCardView)
+                        val totalHoursCardView =
+                            infoLayout.findViewById<MaterialCardView>(R.id.totalHoursCardView)
+                        val totalNumberOfEntriesCardView =
+                            infoLayout.findViewById<MaterialCardView>(R.id.totalNumberOfEntriesCardView)
+                        val wagesCardView =
+                            infoLayout.findViewById<MaterialCardView>(R.id.wagesCardView)
 
-                        if (AccentColor(requireContext()).loadAccent() == 5) {
                             totalHoursCardView.setCardBackgroundColor(
                                 ColorStateList.valueOf(
                                     Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
@@ -410,22 +347,29 @@ class HistoryFragment : Fragment() {
                                     )
                                 )
                             )
-                            okButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                        }
-                        totalHoursCardView.shapeAppearanceModel = totalHoursCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                            .setBottomRightCornerSize(0f)
-                            .setBottomLeftCornerSize(0f)
-                            .build()
-                        totalNumberOfEntriesCardView.shapeAppearanceModel = totalNumberOfEntriesCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                            .setBottomRightCornerSize(0f)
-                            .setBottomLeftCornerSize(0f)
-                            .build()
+                            okButton.setBackgroundColor(
+                                Color.parseColor(
+                                    CustomColorGenerator(
+                                        requireContext()
+                                    ).generateCustomColorPrimary()
+                                )
+                            )
+                        totalHoursCardView.shapeAppearanceModel =
+                            totalHoursCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                        totalNumberOfEntriesCardView.shapeAppearanceModel =
+                            totalNumberOfEntriesCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
                         wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
                             .toBuilder()
                             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -453,13 +397,14 @@ class HistoryFragment : Fragment() {
                             totalHours.text = "Total Hours: $output/$outputColon"
                             numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
                             wagesCardView.visibility = View.GONE
-                            totalNumberOfEntriesCardView.shapeAppearanceModel = totalNumberOfEntriesCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(28f)
-                                .setBottomLeftCornerSize(28f)
-                                .build()
+                            totalNumberOfEntriesCardView.shapeAppearanceModel =
+                                totalNumberOfEntriesCardView.shapeAppearanceModel
+                                    .toBuilder()
+                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                    .setBottomRightCornerSize(28f)
+                                    .setBottomLeftCornerSize(28f)
+                                    .build()
                         }
                         /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
@@ -647,45 +592,49 @@ class HistoryFragment : Fragment() {
                         dialog.setContentView(sortingLayout)
                         dialog.setCancelable(true)
 
-                        val dateDescendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.dateDescendingCardView)
-                        val dateAscendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.dateAscendingCardView)
-                        val totalDescendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.totalDescendingCardView)
-                        val totalAscendingCardView = sortingLayout.findViewById<MaterialCardView>(R.id.totalAscendingCardView)
+                        val dateDescendingCardView =
+                            sortingLayout.findViewById<MaterialCardView>(R.id.dateDescendingCardView)
+                        val dateAscendingCardView =
+                            sortingLayout.findViewById<MaterialCardView>(R.id.dateAscendingCardView)
+                        val totalDescendingCardView =
+                            sortingLayout.findViewById<MaterialCardView>(R.id.totalDescendingCardView)
+                        val totalAscendingCardView =
+                            sortingLayout.findViewById<MaterialCardView>(R.id.totalAscendingCardView)
 
-                            totalAscendingCardView.visibility = View.VISIBLE
-                            totalDescendingCardView.visibility = View.VISIBLE
-                            dateDescendingCardView.shapeAppearanceModel =
-                                dateDescendingCardView.shapeAppearanceModel
-                                    .toBuilder()
-                                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                                    .setBottomRightCornerSize(0f)
-                                    .setBottomLeftCornerSize(0f)
-                                    .build()
-                            dateAscendingCardView.shapeAppearanceModel =
-                                dateAscendingCardView.shapeAppearanceModel
-                                    .toBuilder()
-                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                    .setBottomRightCornerSize(0f)
-                                    .setBottomLeftCornerSize(0f)
-                                    .build()
-                            totalDescendingCardView.shapeAppearanceModel =
-                                totalDescendingCardView.shapeAppearanceModel
-                                    .toBuilder()
-                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                    .setBottomRightCornerSize(0f)
-                                    .setBottomLeftCornerSize(0f)
-                                    .build()
-                            totalAscendingCardView.shapeAppearanceModel =
-                                totalAscendingCardView.shapeAppearanceModel
-                                    .toBuilder()
-                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                    .setBottomRightCornerSize(28f)
-                                    .setBottomLeftCornerSize(28f)
-                                    .build()
+                        totalAscendingCardView.visibility = View.VISIBLE
+                        totalDescendingCardView.visibility = View.VISIBLE
+                        dateDescendingCardView.shapeAppearanceModel =
+                            dateDescendingCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                        dateAscendingCardView.shapeAppearanceModel =
+                            dateAscendingCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                        totalDescendingCardView.shapeAppearanceModel =
+                            totalDescendingCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                        totalAscendingCardView.shapeAppearanceModel =
+                            totalAscendingCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(28f)
+                                .setBottomLeftCornerSize(28f)
+                                .build()
 
                         dialog.window?.navigationBarColor =
                             ContextCompat.getColor(requireContext(), R.color.black)
@@ -699,12 +648,15 @@ class HistoryFragment : Fragment() {
                         bottomSheetBehavior.isDraggable = false
                     }*/
 
-                        val dateDescending = sortingLayout.findViewById<RadioButton>(R.id.dateDescending)
-                        val dateAscending = sortingLayout.findViewById<RadioButton>(R.id.dateAscending)
-                        val totalDescending = sortingLayout.findViewById<RadioButton>(R.id.totalDescending)
-                        val totalAscending = sortingLayout.findViewById<RadioButton>(R.id.totalAscending)
+                        val dateDescending =
+                            sortingLayout.findViewById<RadioButton>(R.id.dateDescending)
+                        val dateAscending =
+                            sortingLayout.findViewById<RadioButton>(R.id.dateAscending)
+                        val totalDescending =
+                            sortingLayout.findViewById<RadioButton>(R.id.totalDescending)
+                        val totalAscending =
+                            sortingLayout.findViewById<RadioButton>(R.id.totalAscending)
 
-                        if (AccentColor(requireContext()).loadAccent() == 5) {
                             dateDescendingCardView.setCardBackgroundColor(
                                 ColorStateList.valueOf(
                                     Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
@@ -739,18 +691,14 @@ class HistoryFragment : Fragment() {
                             dateAscending.buttonTintList = ColorStateList(states, colors)
                             totalDescending.buttonTintList = ColorStateList(states, colors)
                             totalAscending.buttonTintList = ColorStateList(states, colors)
-                        }
 
                         if (selectedItem == 0) {
                             dateDescending.isChecked = true
-                        }
-                        else if (selectedItem == 1) {
+                        } else if (selectedItem == 1) {
                             dateAscending.isChecked = true
-                        }
-                        else if (selectedItem == 2) {
+                        } else if (selectedItem == 2) {
                             totalDescending.isChecked = true
-                        }
-                        else if (selectedItem == 3) {
+                        } else if (selectedItem == 3) {
                             totalAscending.isChecked = true
                         }
 
@@ -880,31 +828,18 @@ class HistoryFragment : Fragment() {
             xIconDrawable?.mutate()
 
             if (MenuTintData(requireContext()).loadMenuTint()) {
-                if (AccentColor(requireContext()).loadAccent() == 5) {
                     xIconDrawable?.colorFilter = BlendModeColorFilter(
                         Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                         BlendMode.SRC_ATOP
                     )
-                }
-                else {
-                    val typedValue = TypedValue()
-                    activity?.theme?.resolveAttribute(
-                        R.attr.historyActionBarIconTint,
-                        typedValue,
-                        true
-                    )
-                    val id = typedValue.resourceId
-                    xIconDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                }
-            }
-            else {
+            } else {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
-                xIconDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+                xIconDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
             }
         } else {
             topAppBar?.navigationIcon = null
@@ -971,7 +906,9 @@ class HistoryFragment : Fragment() {
             dataList.add(map)
 
             val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
-            containsColonArray.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString())
+            containsColonArray.add(
+                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
+            )
 
             var decimalTime: Double
             if (array.contains(":")) {
@@ -1014,7 +951,7 @@ class HistoryFragment : Fragment() {
                     minute = "0$minute"
                 }
 
-                outputColon = "$wholeNumber" + ":$minute"
+                outputColon = "$wholeNumber:$minute"
             }
         }
 
@@ -1160,6 +1097,7 @@ class HistoryFragment : Fragment() {
 
         calculateWages()
     }
+
     fun deleteAll() {
         val animation = AlphaAnimation(1f, 0f)
         animation.duration = 500
@@ -1193,31 +1131,18 @@ class HistoryFragment : Fragment() {
             xIconDrawable?.mutate()
 
             if (MenuTintData(requireContext()).loadMenuTint()) {
-                if (AccentColor(requireContext()).loadAccent() == 5) {
-                    xIconDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-                }
-                else {
-                    val typedValue = TypedValue()
-                    activity?.theme?.resolveAttribute(
-                        R.attr.historyActionBarIconTint,
-                        typedValue,
-                        true
-                    )
-                    val id = typedValue.resourceId
-                    xIconDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                }
-            }
-            else {
+                xIconDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            } else {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
-                xIconDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+                xIconDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
             }
             showOptionsIcon()
         } else {
@@ -1239,12 +1164,12 @@ class HistoryFragment : Fragment() {
         hideOptionsIcon()
     }
 
-    fun showOptionsIcon() {
+    private fun showOptionsIcon() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
         topAppBar?.menu?.findItem(R.id.options)?.isVisible = true
     }
 
-    fun hideOptionsIcon() {
+    private fun hideOptionsIcon() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
         topAppBar?.menu?.findItem(R.id.options)?.isVisible = false
     }
@@ -1275,19 +1200,11 @@ class HistoryFragment : Fragment() {
                 collapsingToolbarLayout.setExpanded(false, false)
 
             }
-            if (AccentColor(requireContext()).loadAccent() == 5) {
-                snackbar.setActionTextColor(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-                )
-            }
-            else {
-                snackbar.setActionTextColor(
-                    ContextCompat.getColorStateList(
-                        requireContext(),
-                        AccentColor(requireContext()).snackbarActionTextColor()
-                    )
-                )
-            }
+
+            snackbar.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            )
+
             snackbar.apply {
                 snackbar.view.background = ResourcesCompat.getDrawable(
                     context.resources,
@@ -1300,6 +1217,7 @@ class HistoryFragment : Fragment() {
             }
         }
     }
+
     fun undoDeleteAll() {
         val animation = AlphaAnimation(0f, 1f)
         animation.duration = 500
