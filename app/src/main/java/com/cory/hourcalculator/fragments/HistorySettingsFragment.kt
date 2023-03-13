@@ -78,17 +78,33 @@ class HistorySettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val toggleHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val historyDeletionCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
         val numberOfDaysCardView = requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
+        val openHoursForEditingCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
 
-        historyDeletionCardView.shapeAppearanceModel = historyDeletionCardView.shapeAppearanceModel
+        toggleHistoryCardView.shapeAppearanceModel = toggleHistoryCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
             .setTopRightCorner(CornerFamily.ROUNDED, 28f)
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
+        historyDeletionCardView.shapeAppearanceModel = historyDeletionCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
         numberOfDaysCardView.shapeAppearanceModel = numberOfDaysCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        openHoursForEditingCardView.shapeAppearanceModel = openHoursForEditingCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -184,6 +200,56 @@ class HistorySettingsFragment : Fragment() {
     }
 
     private fun main() {
+        val historyToggleData = HistoryToggleData(requireContext())
+        val toggleHistory = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
+
+        if (historyToggleData.loadHistoryState()) {
+            toggleHistory?.isChecked = true
+            toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!historyToggleData.loadHistoryState()) {
+            toggleHistory?.isChecked = false
+            toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        toggleHistory?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            if (toggleHistory.isChecked) {
+                toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                Toast.makeText(requireContext(), getString(R.string.history_is_enabled), Toast.LENGTH_SHORT).show()
+            } else {
+                val alertDialog = MaterialAlertDialogBuilder(
+                    requireContext(),
+                    AccentColor(requireContext()).alertTheme()
+                )
+                alertDialog.setCancelable(false)
+                alertDialog.setTitle(getString(R.string.history))
+                alertDialog.setMessage(getString(R.string.what_would_you_like_to_do_with_history))
+                alertDialog.setPositiveButton(getString(R.string.delete)) { _, _ ->
+                    Vibrate().vibration(requireContext())
+                    val dbHandler = DBHelper(requireContext(), null)
+                    dbHandler.deleteAll()
+                    Toast.makeText(requireContext(), getString(R.string.history_deleted), Toast.LENGTH_SHORT).show()
+                    val runnable = Runnable {
+                        (context as MainActivity).changeBadgeNumber()
+                    }
+
+                    MainActivity().runOnUiThread(runnable)
+                }
+                alertDialog.setNeutralButton(getString(R.string.nothing)) { _, _ ->
+                    Vibrate().vibration(requireContext())
+                }
+                alertDialog.create().show()
+                toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                Toast.makeText(requireContext(), getString(R.string.history_disabled), Toast.LENGTH_SHORT).show()
+            }
+            historyToggleData.setHistoryToggle(toggleHistory.isChecked)
+            val runnable = Runnable {
+                (context as MainActivity).toggleHistory()
+            }
+
+            MainActivity().runOnUiThread(runnable)
+        }
+
         val historyDeletion = HistoryAutomaticDeletion(requireContext())
         val daysWorked = DaysWorkedPerWeek(requireContext())
 
@@ -243,11 +309,35 @@ class HistorySettingsFragment : Fragment() {
                     R.anim.enter_from_left,
                     R.anim.exit_to_right
                 )
-                transaction?.replace(
+                transaction?.add(
                     R.id.fragment_container,
                     NumberOfEntriesBeforeDeletionFragment()
                 )?.addToBackStack(null)
                 transaction?.commit()
+            }
+        }
+
+        val historyClickable = ClickableHistoryEntry(requireContext())
+        val historyClickableSwitch = activity?.findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
+
+        if (historyClickable.loadHistoryItemClickable()) {
+            historyClickableSwitch?.isChecked = true
+            historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!historyClickable.loadHistoryItemClickable()) {
+            historyClickableSwitch?.isChecked = false
+            historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        historyClickableSwitch?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            historyClickable.setHistoryItemClickable(historyClickableSwitch.isChecked)
+            if (historyClickableSwitch.isChecked) {
+                historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                Toast.makeText(requireContext(), "History items are now clickable", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                Toast.makeText(requireContext(), "History items are not clickable", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -348,12 +438,19 @@ class HistorySettingsFragment : Fragment() {
     }
 
     private fun updateCustomColor() {
+        val toggleHistoryCardView = requireView().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val historyDeletionCardView = requireView().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
         val numberOfDaysCardView = requireView().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
+        val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
+
+        toggleHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historyDeletionCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         numberOfDaysCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        clickableHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
+        val toggleHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
         val toggleHistoryDeletion = requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
+        val clickableHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -365,8 +462,12 @@ class HistorySettingsFragment : Fragment() {
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         )
 
+        toggleHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        toggleHistorySwitch.trackTintList = ColorStateList(states, colors)
         toggleHistoryDeletion.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         toggleHistoryDeletion.trackTintList = ColorStateList(states, colors)
+        clickableHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        clickableHistorySwitch.trackTintList = ColorStateList(states, colors)
 
         val collapsingToolbarHistorySettings = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)
         collapsingToolbarHistorySettings.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
