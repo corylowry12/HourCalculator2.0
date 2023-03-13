@@ -171,7 +171,13 @@ class EditHours : Fragment() {
                         MainActivity().runOnUiThread(runnable)
                         activity?.supportFragmentManager?.popBackStack()
 
-                        Snackbar().snackbar(requireContext(), requireView())
+                        val showSnackbar = Runnable {
+                            (context as MainActivity).showSnackbar()
+
+                        }
+
+                        MainActivity().runOnUiThread(showSnackbar)
+
                         dialog.dismiss()
                     }
                     //alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
