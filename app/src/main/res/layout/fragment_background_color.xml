@@ -78,7 +78,8 @@
                         android:textColor="?attr/settingsTextColor"
                         android:theme="?attr/radioButtonTheme"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:clickable="false"/>
+                        android:clickable="false"
+                        android:background="@null"/>
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/lightThemeCardView"
@@ -122,7 +123,8 @@
                         android:textColor="?attr/settingsTextColor"
                         android:theme="?attr/radioButtonTheme"
                         android:clickable="false"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@null"/>
 
                     <com.google.android.material.card.MaterialCardView
                         style="@style/Widget.Material3.CardView.Filled"
@@ -165,7 +167,8 @@
                         android:text="@string/follow_system"
                         android:textColor="?attr/settingsTextColor"
                         android:clickable="false"
-                        android:theme="?attr/radioButtonTheme" />
+                        android:theme="?attr/radioButtonTheme"
+                        android:background="@null"/>
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/followSystemCardView"
