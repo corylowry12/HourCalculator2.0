@@ -73,7 +73,6 @@
                         android:layout_marginStart="10dp"
                         android:text="@string/one_entry"
                         android:textColor="?attr/settingsTextColor"
-                        android:padding="10dp"
                         android:minHeight="48dp"
                         android:theme="?attr/radioButtonTheme"
                         android:clickable="false" />
@@ -103,7 +102,6 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/two_entries"
                     android:textColor="?attr/settingsTextColor"
-                    android:textSize="12sp"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
                     android:clickable="false"/>
@@ -132,7 +130,6 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/three_entries"
                     android:textColor="?attr/settingsTextColor"
-                    android:textSize="12sp"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
                     android:clickable="false"/>
@@ -161,7 +158,6 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/four_entries"
                     android:textColor="?attr/settingsTextColor"
-                    android:textSize="12sp"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
                     android:clickable="false"/>
@@ -190,7 +186,6 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/five_entries"
                     android:textColor="?attr/settingsTextColor"
-                    android:textSize="12sp"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
                     android:clickable="false"/>
@@ -219,7 +214,6 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/six_entries"
                     android:textColor="?attr/settingsTextColor"
-                    android:textSize="12sp"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
                     android:clickable="false"/>
@@ -248,7 +242,6 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/seven_entries"
                     android:textColor="?attr/settingsTextColor"
-                    android:textSize="12sp"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
                     android:clickable="false"/>
