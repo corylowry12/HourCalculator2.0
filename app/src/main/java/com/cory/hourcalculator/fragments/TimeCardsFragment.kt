@@ -198,7 +198,7 @@ class TimeCardsFragment : Fragment() {
             }
 
                 snackbar.setActionTextColor(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
                 )
 
             snackbar.apply {
