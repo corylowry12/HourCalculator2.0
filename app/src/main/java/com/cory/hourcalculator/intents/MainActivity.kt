@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
@@ -26,6 +27,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -195,7 +197,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
                         return@setOnItemSelectedListener false
                     }
-                    else if (currentFragment.toString().startsWith("Time", true)) {
+                    else if (currentFragment.toString().startsWith("Time", true) && !currentFragment.toString().contains("Info")) {
                         timeCards.scrollToTop()
                         return@setOnItemSelectedListener true
                     }
@@ -354,6 +356,28 @@ class MainActivity : AppCompatActivity() {
     fun update() {
         Log.i("DEBUG", "changed badge number")
         changeBadgeNumber()
+    }
+
+    fun showSnackbar() {
+        val snackbar =
+            Snackbar.make(findViewById(R.id.bottom_nav), getString(R.string.entry_deleted), Snackbar.LENGTH_LONG)
+                .setDuration(5000)
+                .setAnchorView(findViewById(R.id.adView))
+
+        snackbar.setAction(getString(R.string.undo)) {
+            Vibrate().vibration(this)
+
+            undo()
+
+            restoreState()
+        }
+        snackbar.setActionTextColor(
+            Color.parseColor(CustomColorGenerator(this).generateSnackbarActionTextColor())
+        )
+        snackbar.apply {
+            snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
+        }
+        snackbar.show()
     }
 
     fun undo() {
