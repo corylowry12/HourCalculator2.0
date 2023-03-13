@@ -150,6 +150,8 @@ class TimeCardItemInfoFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        requireActivity().findViewById<MaterialCardView>(R.id.timeCardInfoImageViewWrapper).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generatePatchNotesCardColor()))
+
         val addDrawable = topAppBarTimeCardItem?.menu?.findItem(R.id.add)?.icon
         addDrawable?.mutate()
 
