@@ -124,6 +124,11 @@ class AppSettingsFragment : Fragment() {
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset App Settings?"
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
                     /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
@@ -133,8 +138,6 @@ class AppSettingsFragment : Fragment() {
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
                     }*/
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -154,9 +157,7 @@ class AppSettingsFragment : Fragment() {
         val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
         val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
         val longClickEnabledCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
-        val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
         val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
-        val historyCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val breakTextBoxCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
@@ -181,21 +182,7 @@ class AppSettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        clickableHistoryCardView.shapeAppearanceModel = clickableHistoryCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
         vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -299,30 +286,6 @@ class AppSettingsFragment : Fragment() {
             }
         }
 
-        val historyClickable = ClickableHistoryEntry(requireContext())
-        val historyClickableSwitch = activity?.findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
-
-        if (historyClickable.loadHistoryItemClickable()) {
-            historyClickableSwitch?.isChecked = true
-            historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!historyClickable.loadHistoryItemClickable()) {
-            historyClickableSwitch?.isChecked = false
-            historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-        }
-
-        historyClickableSwitch?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            historyClickable.setHistoryItemClickable(historyClickableSwitch.isChecked)
-            if (historyClickableSwitch.isChecked) {
-                historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), "History items are now clickable", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), "History items are not clickable", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         val vibrationData = VibrationData(requireContext())
         val toggleVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
 
@@ -345,56 +308,6 @@ class AppSettingsFragment : Fragment() {
                 toggleVibration.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 Toast.makeText(requireContext(), getString(R.string.vibration_disabled), Toast.LENGTH_SHORT).show()
             }
-        }
-
-        val historyToggleData = HistoryToggleData(requireContext())
-        val toggleHistory = activity?.findViewById<MaterialSwitch>(R.id.historySwitch)
-
-        if (historyToggleData.loadHistoryState()) {
-            toggleHistory?.isChecked = true
-            toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!historyToggleData.loadHistoryState()) {
-            toggleHistory?.isChecked = false
-            toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-        }
-
-        toggleHistory?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (toggleHistory.isChecked) {
-                toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), getString(R.string.history_is_enabled), Toast.LENGTH_SHORT).show()
-            } else {
-                val alertDialog = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alertDialog.setCancelable(false)
-                alertDialog.setTitle(getString(R.string.history))
-                alertDialog.setMessage(getString(R.string.what_would_you_like_to_do_with_history))
-                alertDialog.setPositiveButton(getString(R.string.delete)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                    val dbHandler = DBHelper(requireContext(), null)
-                    dbHandler.deleteAll()
-                    Toast.makeText(requireContext(), getString(R.string.history_deleted), Toast.LENGTH_SHORT).show()
-                    val runnable = Runnable {
-                        (context as MainActivity).changeBadgeNumber()
-                    }
-
-                    MainActivity().runOnUiThread(runnable)
-                }
-                alertDialog.setNeutralButton(getString(R.string.nothing)) { _, _ ->
-                    Vibrate().vibration(requireContext())
-                }
-                alertDialog.create().show()
-                toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), getString(R.string.history_disabled), Toast.LENGTH_SHORT).show()
-            }
-            historyToggleData.setHistoryToggle(toggleHistory.isChecked)
-            val runnable = Runnable {
-                (context as MainActivity).toggleHistory()
-            }
-
-            MainActivity().runOnUiThread(runnable)
         }
 
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
@@ -422,22 +335,6 @@ class AppSettingsFragment : Fragment() {
                     .show()
             }
         }
-
-        /*toggleBreakTextBox?.setOnCheckedChangeListener { buttonView, isChecked ->
-            Vibrate().vibration(requireContext())
-            if (isChecked) {
-                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                breakTextBoxVisiblityClass.setVisibility(0)
-                Toast.makeText(requireContext(), getString(R.string.break_text_box_enabled), Toast.LENGTH_SHORT)
-                    .show()
-            }
-            else {
-                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                breakTextBoxVisiblityClass.setVisibility(1)
-                Toast.makeText(requireContext(), getString(R.string.break_text_box_disabled), Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }*/
 
         val wagesData = WagesData(requireContext())
         val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
@@ -478,7 +375,6 @@ class AppSettingsFragment : Fragment() {
     private fun reset() {
         val setOutTimeSwitch = view?.findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
         val calculationTypeSwitch = view?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
-        val clickableHistorySwitch = view?.findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
         val vibrationSwitch= view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
         val toggleHistory = view?.findViewById<MaterialSwitch>(R.id.historySwitch)
         val toggleBreakTextBox = view?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
@@ -494,7 +390,6 @@ class AppSettingsFragment : Fragment() {
 
         setOutTimeSwitch?.isChecked = true
         calculationTypeSwitch?.isChecked = true
-        clickableHistorySwitch?.isChecked = true
         vibrationSwitch?.isChecked = true
         toggleHistory?.isChecked = true
         toggleBreakTextBox?.isChecked = true
@@ -502,7 +397,6 @@ class AppSettingsFragment : Fragment() {
 
         setOutTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        clickableHistorySwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         vibrationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
@@ -524,27 +418,21 @@ class AppSettingsFragment : Fragment() {
         val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
         val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
         val longClickEnabledCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
-        val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
         val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
-        val historyCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val breakTextBoxCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
         outTimeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         calculationTypeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         longClickEnabledCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        clickableHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         vibrationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         breakTextBoxCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         wagesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val outTimeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
         val setCalculationTypeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
         val toggleLongPressingCalculateSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
-        val clickableHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
         val vibrationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
-        val historySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
         val breakTextBoxSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
 
         val states = arrayOf(
@@ -562,12 +450,8 @@ class AppSettingsFragment : Fragment() {
         setCalculationTypeSwitch.trackTintList = ColorStateList(states, colors)
         toggleLongPressingCalculateSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         toggleLongPressingCalculateSwitch.trackTintList = ColorStateList(states, colors)
-        clickableHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        clickableHistorySwitch.trackTintList = ColorStateList(states, colors)
         vibrationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         vibrationSwitch.trackTintList = ColorStateList(states, colors)
-        historySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        historySwitch.trackTintList = ColorStateList(states, colors)
         breakTextBoxSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         breakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
 
