@@ -1021,6 +1021,8 @@ class HistoryFragment : Fragment() {
         }
 
         listView?.adapter?.notifyItemInserted(ItemPosition(requireContext()).loadPosition())
+        listView?.adapter?.notifyItemRangeChanged(0, dataList.count())
+        //customAdapter.updateCornerRadius()
     }
 
     private lateinit var recyclerViewState: Parcelable
@@ -1202,7 +1204,7 @@ class HistoryFragment : Fragment() {
             }
 
             snackbar.setActionTextColor(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+                Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
             )
 
             snackbar.apply {
