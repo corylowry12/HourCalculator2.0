@@ -4,23 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Looper
-import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.EditHours
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -31,16 +28,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.elementAt
-import kotlin.collections.indices
 import kotlin.collections.set
-import kotlin.collections.toMutableList
 
 @DelicateCoroutinesApi
 class CustomAdapter(
@@ -84,20 +75,28 @@ class CustomAdapter(
         fun bind(position: Int) {
             historyCardView = itemView.findViewById(R.id.cardViewHistory)
 
+            val imageViewOptions = itemView.findViewById<ImageButton>(R.id.imageViewOptions)
+            val imageViewOptionsCardView = itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView)
+
+            imageViewOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+            val color = Color.parseColor(CustomColorGenerator(context).generateMenuTintColor()) //The color u want
+            imageViewOptions.setColorFilter(color)
+
             historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
 
-                val states = arrayOf(
-                    intArrayOf(-android.R.attr.state_checked), // unchecked
-                    intArrayOf(android.R.attr.state_checked)  // checked
-                )
+            val states = arrayOf(
+                intArrayOf(-android.R.attr.state_checked), // unchecked
+                intArrayOf(android.R.attr.state_checked)  // checked
+            )
 
-                val colors = intArrayOf(
-                    Color.parseColor("#000000"),
-                    Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
-                )
+            val colors = intArrayOf(
+                Color.parseColor("#000000"),
+                Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary())
+            )
 
-                itemView.findViewById<CheckBox>(R.id.checkbox).buttonTintList =
-                    ColorStateList(states, colors)
+            itemView.findViewById<CheckBox>(R.id.checkbox).buttonTintList =
+                ColorStateList(states, colors)
 
             if (dataList.count() == 1) {
                 historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
@@ -272,7 +271,11 @@ class CustomAdapter(
                 )
             } else {
                 firstDateString = formatter.format(sortedList.elementAt(0).toString().toLong())
-                timeCardDBHandler.insertRow(DefaultTimeCardName(context).loadDefaultName(), firstDateString, totalHours.toString())
+                timeCardDBHandler.insertRow(
+                    DefaultTimeCardName(context).loadDefaultName(),
+                    firstDateString,
+                    totalHours.toString()
+                )
             }
 
             val timeCardLatestRowCursor = timeCardDBHandler.getLatestRowID()
@@ -396,9 +399,9 @@ class CustomAdapter(
             .setDuration(5000)
 
 
-            snackBar.setActionTextColor(
-                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-            )
+        snackBar.setActionTextColor(
+            Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+        )
 
         snackBar.setAction(context.getString(R.string.undo)) {
             Vibrate().vibration(context)
@@ -502,7 +505,7 @@ class CustomAdapter(
 
         //val handler = android.os.Handler(Looper.getMainLooper())
         //val runnable = Runnable {
-            selectedItemsList.clear()
+        selectedItemsList.clear()
         //}
         //handler.postDelayed(runnable, 5000)
     }
@@ -510,7 +513,7 @@ class CustomAdapter(
     @SuppressLint("Range")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         setAnimation(holder.itemView, position)
-        var isInflated = false
+
         val dbHandler = DBHelper(context, null)
         val listItems = arrayOf(
             context.getString(R.string.edit),
@@ -572,7 +575,7 @@ class CustomAdapter(
             clickEntryWhenCheckboxVisible(holder)
         }
 
-        imageView.setOnClickListener {
+        holder.itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView).setOnClickListener {
             Vibrate().vibration(context)
 
             val popupWindowAdapter =
@@ -580,20 +583,19 @@ class CustomAdapter(
             val listPopupWindow = ListPopupWindow(context)
             listPopupWindow.setAdapter(popupWindowAdapter)
             listPopupWindow.anchorView = imageView
-            listPopupWindow.width = holder.itemView.width / 2
+            listPopupWindow.width = (holder.itemView.width / 2)
             listPopupWindow.height = ListPopupWindow.WRAP_CONTENT
             listPopupWindow.setDropDownGravity(Gravity.NO_GRAVITY)
-            if (isInflated) {
-                listPopupWindow.dismiss()
-                isInflated = false
-            } else {
-                listPopupWindow.setOnItemClickListener { _, _, p2, _ ->
-                    val itemPosition = holder.adapterPosition
-                    if (p2 == 0) {
+
+            listPopupWindow.setOnItemClickListener { _, _, p2, _ ->
+                val itemPosition = holder.adapterPosition
+                when (p2) {
+                    0 -> {
                         Vibrate().vibration(context)
                         listPopupWindow.dismiss()
                         openHourForEditing(holder, dbHandler)
-                    } else if (p2 == 1) {
+                    }
+                    1 -> {
                         listPopupWindow.dismiss()
                         Vibrate().vibration(context)
                         try {
@@ -746,9 +748,9 @@ class CustomAdapter(
 
                             }
 
-                                snackbar.setActionTextColor(
-                                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                                )
+                            snackbar.setActionTextColor(
+                                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+                            )
 
                             snackbar.apply {
                                 snackbar.view.background = ResourcesCompat.getDrawable(
@@ -767,7 +769,8 @@ class CustomAdapter(
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                    } else if (p2 == 2) {
+                    }
+                    2 -> {
                         listPopupWindow.dismiss()
                         Vibrate().vibration(context)
                         val inTimeDelete = arrayOf<String>().toMutableList()
@@ -788,19 +791,19 @@ class CustomAdapter(
                         val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
 
 
-                            infoCardView.setCardBackgroundColor(
-                                Color.parseColor(
-                                    CustomColorGenerator(context).generateCardColor()
-                                )
+                        infoCardView.setCardBackgroundColor(
+                            Color.parseColor(
+                                CustomColorGenerator(context).generateCardColor()
                             )
-                            yesButton.setBackgroundColor(
-                                Color.parseColor(
-                                    CustomColorGenerator(
-                                        context
-                                    ).generateCustomColorPrimary()
-                                )
+                        )
+                        yesButton.setBackgroundColor(
+                            Color.parseColor(
+                                CustomColorGenerator(
+                                    context
+                                ).generateCustomColorPrimary()
                             )
-                            noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                        )
+                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
 
                         yesButton.setOnClickListener {
                             Vibrate().vibration(context)
@@ -838,9 +841,9 @@ class CustomAdapter(
                             )
                                 .setDuration(5000)
 
-                                snackBar.setActionTextColor(
-                                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                                )
+                            snackBar.setActionTextColor(
+                                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+                            )
 
                             snackBar.setAction(context.getString(R.string.undo)) {
                                 Vibrate().vibration(context)
@@ -876,16 +879,14 @@ class CustomAdapter(
                             Vibrate().vibration(context)
                             dialog.dismiss()
                         }
-                        //val alert = alertDialog.create()
-                        //alert.show()
+
                         dialog.show()
 
                         checkBoxVisible = false
                     }
                 }
-                listPopupWindow.show()
-                isInflated = true
             }
+            listPopupWindow.show()
         }
         (holder as ViewHolder).bind(position)
     }
@@ -959,9 +960,9 @@ class CustomAdapter(
                     )
                 }
 
-                    snackbarDismissCheckBox.setActionTextColor(
-                        Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                    )
+                snackbarDismissCheckBox.setActionTextColor(
+                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+                )
 
                 snackbarDismissCheckBox.show()
             }
@@ -995,9 +996,9 @@ class CustomAdapter(
                 )
             }
 
-                snackbarDismissCheckBox.setActionTextColor(
-                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                )
+            snackbarDismissCheckBox.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+            )
 
             snackbarDismissCheckBox.show()
         } else {
@@ -1058,9 +1059,9 @@ class CustomAdapter(
                     )
                 }
 
-                    snackbarDismissCheckBox.setActionTextColor(
-                        Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                    )
+                snackbarDismissCheckBox.setActionTextColor(
+                    Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+                )
 
                 snackbarDismissCheckBox.show()
             }
@@ -1173,9 +1174,9 @@ class CustomAdapter(
                 Snackbar.LENGTH_INDEFINITE
             )
 
-            snackbarDeleteSelected.setActionTextColor(
-                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-            )
+        snackbarDeleteSelected.setActionTextColor(
+            Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+        )
 
         snackbarDeleteSelected.apply {
             snackbarDeleteSelected.view.background = ResourcesCompat.getDrawable(
