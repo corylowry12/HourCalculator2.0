@@ -185,6 +185,7 @@ class TimeCardCustomAdapter(
                     .build()
 
                 deleteCardView.setOnClickListener {
+                    Vibrate().vibration(context)
                     dialog.dismiss()
                     val dialog = BottomSheetDialog(context)
                     val deleteEntryLayout =
@@ -239,6 +240,7 @@ class TimeCardCustomAdapter(
                     dialog.show()
                 }
                 deleteAllCardView.setOnClickListener {
+                    Vibrate().vibration(context)
                     dialog.dismiss()
                     val deleteAllDialog = BottomSheetDialog(context)
                     val deleteAllLayout =
