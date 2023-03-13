@@ -39,7 +39,7 @@ class PatchNotesFragment : Fragment() {
                                         "Fixed crashing when trying to leave the edit hour view if there were pending changes and you clicked yes to save them", "Fixed issue with title and menu buttons not being centered properly in title bars",
                                         "Fixed issue with github button in about view still using built in web view instead of custom tab", "Fixed issue when hitting back button and the bottom nav bar wouldn't change selected tab",
                                         "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11", "Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time",
-                                        "Fixed some issues with weird splash screen logos on certain devices")
+                                        "Fixed some issues with weird splash screen logos on certain devices", "Fixed issue with there being not vibration when clicking the view repo button in the about app view")
 
     private var newFeaturesArray = arrayOf("Added the ability to click on the history tab when the history view is active and scroll to the top", "Added the ability to calculate in time or decimal format depending on which is enabled by long pressing the calculate button (eg. if decimal format is enabled, long pressing will calculate in time format)",
                                             "Added the ability to click on an hour entry and open it to edit it (disabled by default, to enable go to Settings->App Settings->Open hour for editing on history item click)", "Added a toggle to change menu item tint to match the theme")
@@ -53,16 +53,14 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue if you had colored menu items disabled and changed the background color it wouldnt change the icon color", "Fixed issue where title bar switch in the appearance view wasn't showing the proper setting and was always matching the colored menu item switch",
-                                                "Fixed issue with the need permissions bottom sheet not matching the custom theme", "Fixed issue with the highlight color on the need permissions bottom sheet not matching the curves on each corner", "Fixed issue with highlight color not matching the corners when clicking the appearance item in the settings view",
-                                                "Fixed issue with highlight color not matching the corners when clicking the delete app data item in the settings view", "Fixed issue where if went to background color view and changed the theme and hit the reset icon, the bottom sheet wouldn't match the new theme",
-                                                "Fixed issue with crashing if you long pressed a time card entry to delete it", "Fixed crashing if you had a custom icon set", "Fixed issue with crashing when opening the number of days worked view", "Fixed issues with crashing when changing settings in the number of days view",
-                                                "Fixed issues when resetting history settings", "Fixed issue where clicking the reset menu item in the number of days view didn't do anything")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue where if you went to time card info view and scrolled and clicked the time card tab it would make the app crash", "Fixed crashing when opening the version info view", "Fixed issue with reset settings bottom sheet not matching the current theme",
+                                                "Fixed issue with there being no vibration when clicking the reset button in the number of days view", "Fixed issue with there being not vibration when clicking the view repo button in the about app view", "Fixed issue with layout not being positioned properly in the edit view",
+                                                "Fixed issue with there being no vibration when clicking the generate a random color button", "Fixed issue with crashing when deleting an entry in the edit view", "Fixed issue with cards in the history view not being curved properly when undoing the deletion of an hour in the edit view",
+                                                "Fixed issue with there being no vibration when clicking the delete or delete all buttons in the time cards view", "Fixed some issues with font size in the number of days view", "Fixed issue with the one entry button being offset in the number of days view")
 
-    private var newFeaturesArrayInternal = arrayOf("Added ability to set a default name when adding a time card entry")
+    private var newFeaturesArrayInternal = arrayOf("No new features")
 
-    private var enhancementsArrayInternal = arrayOf("Adjusted patch notes card view color when material you theming is enabled", "Removed the FAQ section", "Redesigned the Number of Days view to match the rest of the app", "Tweaked the background color of the number indicators in the time cards view and the patch notes view",
-                                                    "Tweaked the colors for snackbar text colors as they weren't legible in some cases")
+    private var enhancementsArrayInternal = arrayOf("Tweaked the design of the history item options menu (menu that contains edit, delete, and delete all)")
 
     var themeSelection = false
 
