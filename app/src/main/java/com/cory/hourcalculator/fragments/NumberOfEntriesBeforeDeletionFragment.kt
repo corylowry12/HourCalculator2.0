@@ -88,6 +88,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.reset -> {
+                    Vibrate().vibration(requireContext())
                     val dialog = BottomSheetDialog(requireContext())
                     val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
                     dialog.setContentView(resetSettingsLayout)
