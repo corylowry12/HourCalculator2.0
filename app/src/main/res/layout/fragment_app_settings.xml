@@ -149,43 +149,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewHistoryClickable"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewDisableLongPress"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:paddingStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/clickableHistorySwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Open hour for editing on history item click"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                         />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewVibration"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewHistoryClickable"
+                android:layout_below="@id/cardViewDisableLongPress"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp">
@@ -212,43 +180,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewHistory"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewVibration"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="1dp"
-
-                android:layout_marginEnd="10dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:paddingStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/historySwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/toggle_history"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewBreakTextBox"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewHistory"
+                android:layout_below="@id/cardViewVibration"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
 
