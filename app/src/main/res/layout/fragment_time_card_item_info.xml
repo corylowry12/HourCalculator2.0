@@ -85,12 +85,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/timeCardInfoImageViewWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="6dp"
-            app:cardBackgroundColor="@android:color/transparent">
+            app:cardCornerRadius="14dp"
+            style="@style/Widget.Material3.CardView.Filled">
         <ImageView
             android:id="@+id/timeCardImage"
             android:layout_width="match_parent"
