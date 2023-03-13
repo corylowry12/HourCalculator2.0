@@ -226,7 +226,6 @@ class AccentColorFragment : Fragment() {
             val color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()) //The color u want
             generateRandomButton.setColorFilter(color)
 
-
             var hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
             coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
             hexadecimalTextView.text = hex
@@ -245,6 +244,7 @@ class AccentColorFragment : Fragment() {
             }
 
             generateRandomButtonCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
                 val red = (50..200).random()
                 val green = (50..200).random()
                 val blue = (50..200).random()
