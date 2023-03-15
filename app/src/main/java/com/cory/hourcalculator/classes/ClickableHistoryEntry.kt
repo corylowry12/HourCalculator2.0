@@ -17,5 +17,4 @@ class ClickableHistoryEntry(context: Context) {
         val state = sharedPreferences.getBoolean("clickable", false)
         return (state)
     }
-
 }

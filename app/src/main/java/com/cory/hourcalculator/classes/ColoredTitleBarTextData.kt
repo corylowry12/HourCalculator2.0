@@ -17,5 +17,4 @@ class ColoredTitleBarTextData(context: Context) {
         val state = sharedPreferences.getBoolean("coloredTitleBarText", true)
         return (state)
     }
-
 }
