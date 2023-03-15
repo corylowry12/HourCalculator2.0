@@ -72,6 +72,12 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         return db.rawQuery("SELECT $COLUMN_IMAGE FROM $TABLE_NAME WHERE $COLUMN_ID=$id", null)
     }
 
+    fun getAllImages(context: Context) : Cursor {
+        val db = this.writableDatabase
+
+        return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_IMAGE IS NOT null AND TRIM($COLUMN_IMAGE) != ''", null)
+    }
+
     fun getAllRow(context: Context): Cursor? {
         val db = this.writableDatabase
 
