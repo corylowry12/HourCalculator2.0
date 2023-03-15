@@ -42,8 +42,8 @@ android {
         Internal {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 143
-            versionName "10.0.0-internal-alpha10"
+            versionCode 144
+            versionName "10.0.0-internal-alpha11"
         }
 
         Production {
