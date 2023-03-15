@@ -338,7 +338,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/timeCardGalleryCardView"
+                android:id="@+id/galleryCardView"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -348,13 +348,13 @@
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintTimeCardGallery"
+                    android:id="@+id/constraintGallery"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/timeCardGalleryImage"
+                        android:id="@+id/galleryImage"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
@@ -366,7 +366,7 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:id="@+id/timeCardGalleryHeading"
+                        android:id="@+id/galleryHeading"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
@@ -375,27 +375,27 @@
                         android:text="Gallery"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/timeCardGalleryChevron"
-                        app:layout_constraintStart_toEndOf="@id/timeCardGalleryImage"
+                        app:layout_constraintEnd_toStartOf="@id/galleryChevron"
+                        app:layout_constraintStart_toEndOf="@id/galleryImage"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/timeCardGalleryHeading"
-                        android:layout_alignStart="@id/timeCardGalleryHeading"
+                        android:layout_below="@id/galleryHeading"
+                        android:layout_alignStart="@id/galleryHeading"
                         android:paddingStart="12dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="4dp"
                         android:text="View all time card images"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/timeCardGalleryChevron"
-                        app:layout_constraintStart_toEndOf="@id/timeCardGalleryImage"
-                        app:layout_constraintTop_toBottomOf="@id/timeCardGalleryHeading" />
+                        app:layout_constraintEnd_toStartOf="@id/galleryChevron"
+                        app:layout_constraintStart_toEndOf="@id/galleryImage"
+                        app:layout_constraintTop_toBottomOf="@id/galleryHeading" />
 
                     <ImageView
-                        android:id="@+id/timeCardGalleryChevron"
+                        android:id="@+id/galleryChevron"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
