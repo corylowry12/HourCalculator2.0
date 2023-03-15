@@ -1216,7 +1216,6 @@ class CustomColorGenerator(context: Context) {
         val newRed: Float = color.red + ((255 - color.red) * fraction.toFloat())
         val newGreen: Float = color.green + ((255 - color.green) * fraction.toFloat())
         val newBlue: Float = color.blue + ((255 - color.blue) * fraction.toFloat())
-        val newColor = Color.rgb(newRed, newGreen, newBlue)
 
         return String.format("#%02X%02X%02X", newRed.toInt(), newGreen.toInt(), newBlue.toInt())
             .drop(1)
@@ -1227,7 +1226,6 @@ class CustomColorGenerator(context: Context) {
         val newRed: Float = color.red - ((0 + color.red) * fraction.toFloat())
         val newGreen: Float = color.green - ((0 + color.green) * fraction.toFloat())
         val newBlue: Float = color.blue - ((0 + color.blue) * fraction.toFloat())
-        val newColor = Color.rgb(newRed, newGreen, newBlue)
 
         return String.format("#%02X%02X%02X", newRed.toInt(), newGreen.toInt(), newBlue.toInt())
             .drop(1)
