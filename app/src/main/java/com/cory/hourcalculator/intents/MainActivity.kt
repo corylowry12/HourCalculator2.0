@@ -527,7 +527,6 @@ class MainActivity : AppCompatActivity() {
                         timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        if (FollowSystemThemeChoice(this).loadFollowSystemThemePreference() == 0) {
                             mainConstraint.setBackgroundColor(
                                 ContextCompat.getColor(
                                     this,
@@ -536,18 +535,6 @@ class MainActivity : AppCompatActivity() {
                             )
                             badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
                             timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                        }
-                        else {
-                            mainConstraint.setBackgroundColor(
-                                ContextCompat.getColor(
-                                    this,
-                                    R.color.darkThemeBackground
-                                )
-                            )
-                            badge.badgeTextColor = ContextCompat.getColor(this,
-                                R.color.darkThemeBackground
-                            )
-                        }
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         mainConstraint.setBackgroundColor(
