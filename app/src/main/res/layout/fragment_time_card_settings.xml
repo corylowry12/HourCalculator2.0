@@ -33,7 +33,6 @@
                 android:elevation="0dp"
                 app:buttonGravity="center_vertical"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
                 app:title="Time Card Settings"
