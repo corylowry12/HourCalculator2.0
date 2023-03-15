@@ -1,21 +1,22 @@
 package com.cory.hourcalculator.fragments
 
 import android.content.Context
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.CustomColorGenerator
-import com.cory.hourcalculator.classes.DefaultTimeCardName
-import com.cory.hourcalculator.classes.Vibrate
-import com.cory.hourcalculator.classes.WagesData
+import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
@@ -83,6 +84,52 @@ class TimeCardSettingsFragment : Fragment() {
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.cardViewDefaultName).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        val topAppBar =
+            requireActivity().findViewById<MaterialToolbar>(R.id.topAppBarTimeCardSettings)
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+        }
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardSettings)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardSettings)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
     }
 
     private fun hideKeyboard(wagesEditText: TextInputEditText) {
