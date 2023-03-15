@@ -56,9 +56,11 @@ class PatchNotesFragment : Fragment() {
     private var bugFixesArrayInternal = arrayOf("Fixed issue where if you went to time card info view and scrolled and clicked the time card tab it would make the app crash", "Fixed crashing when opening the version info view", "Fixed issue with reset settings bottom sheet not matching the current theme",
                                                 "Fixed issue with there being no vibration when clicking the reset button in the number of days view", "Fixed issue with there being not vibration when clicking the view repo button in the about app view", "Fixed issue with layout not being positioned properly in the edit view",
                                                 "Fixed issue with there being no vibration when clicking the generate a random color button", "Fixed issue with crashing when deleting an entry in the edit view", "Fixed issue with cards in the history view not being curved properly when undoing the deletion of an hour in the edit view",
-                                                "Fixed issue with there being no vibration when clicking the delete or delete all buttons in the time cards view", "Fixed some issues with font size in the number of days view", "Fixed issue with the one entry button being offset in the number of days view")
+                                                "Fixed issue with there being no vibration when clicking the delete or delete all buttons in the time cards view", "Fixed some issues with font size in the number of days view", "Fixed issue with the one entry button being offset in the number of days view",
+                                                "Fixed issue where if you went to time cards view and then clicked another tab and then hit the back button and it went back to time cards view, the bottom nav bar wouldn't update", "Fixed issue with text color and icon color in the top app bar in the time cards setting view not matching the theme",
+                                                "Fixed issue where generate a random color card didn't curve properly on devices older than android 12")
 
-    private var newFeaturesArrayInternal = arrayOf("No new features")
+    private var newFeaturesArrayInternal = arrayOf("Added an all new gallery view to view all time card images in one place")
 
     private var enhancementsArrayInternal = arrayOf("Tweaked the design of the history item options menu (menu that contains edit, delete, and delete all)")
 
@@ -89,7 +91,7 @@ class PatchNotesFragment : Fragment() {
                         themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        activity?.setTheme(R.style.Theme_AMOLED)
                         themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {

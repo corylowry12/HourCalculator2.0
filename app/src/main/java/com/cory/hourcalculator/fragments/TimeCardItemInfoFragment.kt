@@ -94,9 +94,7 @@ class TimeCardItemInfoFragment : Fragment() {
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
-                            AccentColor(requireContext()).followSystemTheme(
-                                requireContext()
-                            )
+                            R.style.Theme_AMOLED
                         )
                         themeSelection = true
                     }
@@ -132,16 +130,6 @@ class TimeCardItemInfoFragment : Fragment() {
                 list,
                 1
             )
-
-        try {
-            val runnable = Runnable {
-                //(activity as MainActivity).setActiveTab(2)
-            }
-
-            MainActivity().runOnUiThread(runnable)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
         val topAppBarTimeCardItem =
             view.findViewById<MaterialToolbar>(R.id.materialToolBarTimeCardItemInfo)

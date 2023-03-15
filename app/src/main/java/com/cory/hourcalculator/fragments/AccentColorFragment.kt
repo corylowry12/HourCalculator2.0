@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.blue
@@ -60,7 +61,7 @@ class AccentColorFragment : Fragment() {
                         themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        activity?.setTheme(R.style.Theme_AMOLED)
                         themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -85,9 +86,6 @@ class AccentColorFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            val id = typedValue.resourceId
             resetDrawable?.colorFilter = BlendModeColorFilter(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()), BlendMode.SRC_ATOP)
             navigationDrawable?.colorFilter = BlendModeColorFilter(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()), BlendMode.SRC_ATOP)
         }
@@ -157,20 +155,33 @@ class AccentColorFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        generateARandomColorCardView.shapeAppearanceModel = generateARandomColorCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        followGoogleAppsCardView.shapeAppearanceModel = followGoogleAppsCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(28f)
-            .setBottomLeftCornerSize(28f)
-            .build()
+
+        if (Build.VERSION.SDK_INT < 31) {
+            followGoogleAppsCardView?.visibility = View.GONE
+            generateARandomColorCardView.shapeAppearanceModel = generateARandomColorCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(28f)
+                .setBottomLeftCornerSize(28f)
+                .build()
+        }
+        else {
+            generateARandomColorCardView.shapeAppearanceModel = generateARandomColorCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(0f)
+                .setBottomLeftCornerSize(0f)
+                .build()
+            followGoogleAppsCardView.shapeAppearanceModel = followGoogleAppsCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(28f)
+                .setBottomLeftCornerSize(28f)
+                .build()
+        }
 
         val generateARandomColorOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
 
@@ -316,17 +327,6 @@ class AccentColorFragment : Fragment() {
 
         val materialYouStyle2Switch = view.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
 
-        if (Build.VERSION.SDK_INT < 31) {
-            followGoogleAppsCardView?.visibility = View.GONE
-            generateARandomColorCardView.shapeAppearanceModel = generateARandomColorCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(28f)
-                .setBottomLeftCornerSize(28f)
-                .build()
-        }
-
         if (MaterialYouEnabled(requireContext()).loadMaterialYou()) {
             materialYouStyle2Switch?.isChecked = true
             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
@@ -370,7 +370,7 @@ class AccentColorFragment : Fragment() {
         val material2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
 
         customCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
-        generateARandomColorCardView?.setBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        generateARandomColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         materialYouSwitchCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))

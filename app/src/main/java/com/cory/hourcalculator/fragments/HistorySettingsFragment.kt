@@ -34,7 +34,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class HistorySettingsFragment : Fragment() {
 
-    private var color: Int = 0
     var themeSelection = false
 
     override fun onCreateView(
@@ -62,7 +61,7 @@ class HistorySettingsFragment : Fragment() {
                         themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        activity?.setTheme(R.style.Theme_AMOLED)
                         themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {

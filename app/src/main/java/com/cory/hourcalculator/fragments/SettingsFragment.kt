@@ -62,7 +62,7 @@ class SettingsFragment : Fragment() {
                         themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        activity?.setTheme(AccentColor(requireContext()).followSystemTheme(requireContext()))
+                        activity?.setTheme(R.style.Theme_AMOLED)
                         themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -125,7 +125,7 @@ class SettingsFragment : Fragment() {
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
-        val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardGalleryCardView)
+        val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
         val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
@@ -204,6 +204,10 @@ class SettingsFragment : Fragment() {
 
         timeCardSettingsCardView.setOnClickListener {
             openFragment(TimeCardSettingsFragment())
+        }
+
+        timeCardGalleryCardView.setOnClickListener {
+            openFragment(GalleryFragment())
         }
 
         val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
@@ -289,7 +293,7 @@ class SettingsFragment : Fragment() {
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
-        val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardGalleryCardView)
+        val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
         val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)

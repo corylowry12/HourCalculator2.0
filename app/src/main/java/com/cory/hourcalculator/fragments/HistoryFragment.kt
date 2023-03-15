@@ -88,9 +88,7 @@ class HistoryFragment : Fragment() {
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
-                            AccentColor(requireContext()).followSystemTheme(
-                                requireContext()
-                            )
+                            R.style.Theme_AMOLED
                         )
                         themeSelection = true
                     }
@@ -455,138 +453,6 @@ class HistoryFragment : Fragment() {
                             }
                         }
 
-                        /* val listItems: Array<String> = if (containsColon) {
-                            if ((sortData.loadSortState() == getString(R.string.total_desc) || sortData.loadSortState() == getString(
-                                    R.string.total_asc
-                                )) && containsColon
-                            ) {
-                                selectedItem = 0
-                                sortData.setSortState(getString(R.string.day_desc))
-                            }
-                            arrayOf(
-                                getString(R.string.sort_by_last_entered),
-                                getString(R.string.sort_by_first_entered)
-                            )
-                        } else {
-                            arrayOf(
-                                getString(R.string.sort_by_last_entered),
-                                getString(R.string.sort_by_first_entered),
-                                getString(R.string.sort_by_most_entered),
-                                getString(R.string.sort_by_least_entered)
-                            )
-                        }
-
-                        val collapsingToolbarLayout =
-                            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-
-                        val alert = MaterialAlertDialogBuilder(
-                            requireContext(),
-                            AccentColor(requireContext()).alertTheme()
-                        )
-                        alert.setTitle(getString(R.string.sorting_method))
-                        alert.setSingleChoiceItems(
-                            listItems,
-                            selectedItem
-                        ) { dialog, i ->
-                            Vibrate().vibration(requireContext())
-                            when (i) {
-                                0 -> {
-                                    listView?.scrollToPosition(0)
-                                    collapsingToolbarLayout.setExpanded(true, true)
-                                    sortData.setSortState(getString(R.string.day_desc))
-                                    changeSortMethod()
-                                    customAdapter.checkBoxVisible = false
-                                    try {
-                                        topAppBar.navigationIcon = null
-                                        customAdapter.snackbarDeleteSelected.dismiss()
-                                        customAdapter.snackbarDismissCheckBox.dismiss()
-                                    } catch (e: UninitializedPropertyAccessException) {
-                                        e.printStackTrace()
-                                    }
-                                    view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                        0,
-                                        dataList.size
-                                    )
-                                    Toast.makeText(
-                                        requireContext(),
-                                        getString(R.string.changed_sort_mode_last_entered),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                1 -> {
-                                    listView?.scrollToPosition(0)
-                                    collapsingToolbarLayout.setExpanded(true, true)
-                                    sortData.setSortState(getString(R.string.day_asc))
-                                    changeSortMethod()
-                                    customAdapter.checkBoxVisible = false
-                                    try {
-                                        topAppBar.navigationIcon = null
-                                        customAdapter.snackbarDeleteSelected.dismiss()
-                                        customAdapter.snackbarDismissCheckBox.dismiss()
-                                    } catch (e: UninitializedPropertyAccessException) {
-                                        e.printStackTrace()
-                                    }
-                                    view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                        0,
-                                        dataList.size
-                                    )
-                                    Toast.makeText(
-                                        requireContext(),
-                                        getString(R.string.changed_sort_mode_first_entered),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                2 -> {
-                                    listView?.scrollToPosition(0)
-                                    collapsingToolbarLayout.setExpanded(true, true)
-                                    sortData.setSortState(getString(R.string.total_desc))
-                                    changeSortMethod()
-                                    customAdapter.checkBoxVisible = false
-                                    try {
-                                        topAppBar.navigationIcon = null
-                                        customAdapter.snackbarDeleteSelected.dismiss()
-                                        customAdapter.snackbarDismissCheckBox.dismiss()
-                                    } catch (e: UninitializedPropertyAccessException) {
-                                        e.printStackTrace()
-                                    }
-                                    view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                        0,
-                                        dataList.size
-                                    )
-                                    Toast.makeText(
-                                        requireContext(),
-                                        getString(R.string.changed_sort_mode_most_entered),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                3 -> {
-                                    listView?.scrollToPosition(0)
-                                    collapsingToolbarLayout.setExpanded(true, true)
-                                    sortData.setSortState(getString(R.string.total_asc))
-                                    changeSortMethod()
-                                    customAdapter.checkBoxVisible = false
-                                    try {
-                                        topAppBar.navigationIcon = null
-                                        customAdapter.snackbarDeleteSelected.dismiss()
-                                        customAdapter.snackbarDismissCheckBox.dismiss()
-                                    } catch (e: UninitializedPropertyAccessException) {
-                                        e.printStackTrace()
-                                    }
-                                    view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                        0,
-                                        dataList.size
-                                    )
-                                    Toast.makeText(
-                                        requireContext(),
-                                        getString(R.string.changed_sort_mode_least_entered),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                            dialog.dismiss()
-                        }
-                        alert.show()
-                    }*/
                         val sortingLayout =
                             layoutInflater.inflate(R.layout.sorting_bottom_sheet, null)
                         dialog.setContentView(sortingLayout)

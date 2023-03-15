@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -67,9 +68,7 @@ class TimeCardsFragment : Fragment() {
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
-                            AccentColor(requireContext()).followSystemTheme(
-                                requireContext()
-                            )
+                            R.style.Theme_AMOLED
                         )
                         themeSelection = true
                     }
@@ -123,7 +122,7 @@ class TimeCardsFragment : Fragment() {
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 2
-            //(activity as MainActivity).setActiveTab(2)
+            (activity as MainActivity).setActiveTab(2)
         }
 
         MainActivity().runOnUiThread(runnable)
@@ -215,6 +214,9 @@ class TimeCardsFragment : Fragment() {
     private fun loadIntoList() {
 
         val dbHandler = TimeCardDBHelper(requireActivity().applicationContext, null)
+        //val cursor = dbHandler.getAllImages(requireContext())
+        //cursor.moveToFirst()
+        //Toast.makeText(requireContext(), cursor.count.toString(), Toast.LENGTH_SHORT).show()
 
         dataList.clear()
         val cursor = dbHandler.getAllRow(requireContext())

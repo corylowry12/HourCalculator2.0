@@ -59,9 +59,7 @@ class BackgroundColorFragment : Fragment() {
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
-                            AccentColor(requireContext()).followSystemTheme(
-                                requireContext()
-                            )
+                            R.style.Theme_AMOLED
                         )
                         themeSelection = true
                     }
@@ -523,9 +521,7 @@ class BackgroundColorFragment : Fragment() {
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
-                            AccentColor(requireContext()).followSystemTheme(
-                                requireContext()
-                            )
+                            R.style.Theme_AMOLED
                         )
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -535,5 +531,4 @@ class BackgroundColorFragment : Fragment() {
             }
         }
     }
-
 }

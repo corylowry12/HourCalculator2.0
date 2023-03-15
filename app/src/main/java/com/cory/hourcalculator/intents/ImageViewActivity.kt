@@ -46,7 +46,7 @@ class ImageViewActivity : AppCompatActivity() {
                         themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
-                        setTheme(AccentColor(this).followSystemTheme(this))
+                        setTheme(R.style.Theme_AMOLED)
                         themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
