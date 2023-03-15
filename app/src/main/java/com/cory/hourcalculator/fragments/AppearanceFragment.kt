@@ -58,9 +58,7 @@ class AppearanceFragment : Fragment() {
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
-                            AccentColor(requireContext()).followSystemTheme(
-                                requireContext()
-                            )
+                            R.style.Theme_AMOLED
                         )
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -121,45 +119,6 @@ class AppearanceFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        val dialog = BottomSheetDialog(requireContext())
-
-        topAppBar?.setOnMenuItemClickListener {
-            Vibrate().vibration(requireContext())
-            when (it.itemId) {
-                R.id.reset -> {
-                    val resetSettingsLayout =
-                        layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
-                    dialog.setContentView(resetSettingsLayout)
-                    dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                        "Would you like to reset Appearance Settings?"
-                    /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
-                    val yesResetButton =
-                        resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton =
-                        resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
-                    yesResetButton.setOnClickListener {
-                        reset()
-                        dialog.dismiss()
-                    }
-                    cancelResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        dialog.dismiss()
-                    }
-                    dialog.show()
-                    true
-                }
-                else -> true
-            }
-        }
 
         val nestedScrollView = view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
         val appBar = view.findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
@@ -367,69 +326,6 @@ class AppearanceFragment : Fragment() {
             }
         }
 
-        /*enableColoredNavBar.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (coloredNavBarData.loadNavBar()) {
-                Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_is_already_enabled), Toast.LENGTH_SHORT).show()
-            } else {
-                disableColoredNavBar.isChecked = false
-                Vibrate().vibration(requireContext())
-
-                coloredNavBarData.setNavBar(true)
-
-                    when {
-                        accentColor.loadAccent() == 0 -> {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-                        }
-                        accentColor.loadAccent() == 1 -> {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.pinkAccent)
-                        }
-                        accentColor.loadAccent() == 2 -> {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.orangeAccent)
-                        }
-                        accentColor.loadAccent() == 3 -> {
-                            activity?.window?.navigationBarColor =
-                                ContextCompat.getColor(requireContext(), R.color.redAccent)
-                        }
-                        accentColor.loadAccent() == 4 -> {
-                            if (!FollowSystemVersion(requireContext()).loadSystemColor()) {
-                                activity?.window?.navigationBarColor =
-                                    ContextCompat.getColor(requireContext(), R.color.systemAccent)
-                            }
-                            else {
-                                if (themeSelection) {
-                                    activity?.window?.navigationBarColor =
-                                        ContextCompat.getColor(requireContext(), R.color.navBarGoogle)
-                                }
-                                else {
-                                    activity?.window?.navigationBarColor =
-                                        ContextCompat.getColor(requireContext(), R.color.navBarGoogleLight)
-                                }
-                            }
-                        }
-                    }
-
-                    Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_enabled), Toast.LENGTH_SHORT).show()
-                }
-            }*/
-
-        /*disableColoredNavBar.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            if (!coloredNavBarData.loadNavBar()) {
-                Toast.makeText(requireContext(), getString(R.string.colored_navigation_bar_is_already_disabled), Toast.LENGTH_SHORT).show()
-            } else {
-                enableColoredNavBar.isChecked = false
-                activity?.window?.navigationBarColor =
-                    ContextCompat.getColor(requireContext(), R.color.black)
-                coloredNavBarData.setNavBar(false)
-
-                Toast.makeText(requireContext(), getString(R.string.colored_nav_bar_disabled), Toast.LENGTH_SHORT).show()
-            }
-        }*/
-
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -516,137 +412,6 @@ class AppearanceFragment : Fragment() {
             false
         )
 
-    }
-
-    private fun reset() {
-
-        /*Vibrate().vibration(requireContext())
-        // if (Build.VERSION.SDK_INT < 31) {
-        when {
-            AccentColor(requireContext()).loadAccent() != 0 -> {
-                AccentColor(requireContext()).setAccentState(0)
-                DarkThemeData(requireContext()).setDarkModeState(3)
-                restartApplication()
-            }
-            DarkThemeData(requireContext()).loadDarkModeState() != 3 -> {
-                //view?.findViewById<RadioButton>(R.id.lightTheme)?.isChecked = false
-                //view?.findViewById<RadioButton>(R.id.darkTheme)?.isChecked = false
-                //view?.findViewById<RadioButton>(R.id.blackTheme)?.isChecked = false
-                //view?.findViewById<RadioButton>(R.id.followSystem)?.isChecked = true
-                AccentColor(requireContext()).setAccentState(0)
-                DarkThemeData(requireContext()).setDarkModeState(3)
-                restartThemeChange()
-            }
-            else -> {
-                AccentColor(requireContext()).setAccentState(0)
-                DarkThemeData(requireContext()).setDarkModeState(3)
-            }
-        }
-        ChosenAppIconData(requireContext()).setChosenAppIcon("auto")
-        activity?.packageManager?.setComponentEnabledSetting(
-            ComponentName(
-                BuildConfig.APPLICATION_ID,
-                "com.cory.hourcalculator.SplashOrange"
-            ),
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
-        activity?.packageManager?.setComponentEnabledSetting(
-            ComponentName(
-                BuildConfig.APPLICATION_ID,
-                "com.cory.hourcalculator.SplashRed"
-            ),
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
-        activity?.packageManager?.setComponentEnabledSetting(
-            ComponentName(
-                BuildConfig.APPLICATION_ID,
-                "com.cory.hourcalculator.SplashPink"
-            ),
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
-        activity?.packageManager?.setComponentEnabledSetting(
-            ComponentName(
-                BuildConfig.APPLICATION_ID,
-                "com.cory.hourcalculator.SplashScreenNoIcon"
-            ),
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
-        )
-        /* }
-         else if (Build.VERSION.SDK_INT >= 31) {
-             when {
-                 AccentColor(requireContext()).loadAccent() != 4 -> {
-                     activity?.packageManager?.setComponentEnabledSetting(
-                         ComponentName(
-                             BuildConfig.APPLICATION_ID,
-                             "com.cory.hourcalculator.SplashOrange"
-                         ),
-                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                         PackageManager.DONT_KILL_APP
-                     )
-                     activity?.packageManager?.setComponentEnabledSetting(
-                         ComponentName(
-                             BuildConfig.APPLICATION_ID,
-                             "com.cory.hourcalculator.SplashRed"
-                         ),
-                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                         PackageManager.DONT_KILL_APP
-                     )
-                     activity?.packageManager?.setComponentEnabledSetting(
-                         ComponentName(
-                             BuildConfig.APPLICATION_ID,
-                             "com.cory.hourcalculator.SplashPink"
-                         ),
-                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                         PackageManager.DONT_KILL_APP
-                     )
-                     activity?.packageManager?.setComponentEnabledSetting(
-                         ComponentName(
-                             BuildConfig.APPLICATION_ID,
-                             "com.cory.hourcalculator.SplashScreenNoIcon"
-                         ),
-                         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                         PackageManager.DONT_KILL_APP
-                     )
-                     AccentColor(requireContext()).setAccentState(4)
-                     DarkThemeData(requireContext()).setDarkModeState(3)
-                     restartApplication()
-                 }
-                 DarkThemeData(requireContext()).loadDarkModeState() != 3 -> {
-                     view?.findViewById<RadioButton>(R.id.lightTheme)?.isChecked = false
-                     view?.findViewById<RadioButton>(R.id.darkTheme)?.isChecked = false
-                     view?.findViewById<RadioButton>(R.id.blackTheme)?.isChecked = false
-                     view?.findViewById<RadioButton>(R.id.followSystem)?.isChecked = true
-                     AccentColor(requireContext()).setAccentState(4)
-                     DarkThemeData(requireContext()).setDarkModeState(3)
-                     restartThemeChange()
-                 }
-                 else -> {
-                     AccentColor(requireContext()).setAccentState(4)
-                     DarkThemeData(requireContext()).setDarkModeState(3)
-                 }
-             }
-         }*/
-        ColoredNavBarData(requireContext()).setNavBar(false)
-        view?.findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)?.isChecked = false
-        //view?.findViewById<RadioButton>(R.id.disableColoredNavBar)?.isChecked = true
-        //view?.findViewById<RadioButton>(R.id.enableColoredNavBar)?.isChecked = false
-        activity?.window?.navigationBarColor =
-            ContextCompat.getColor(requireContext(), R.color.black)
-
-        if (FollowSystemThemeChoice(requireContext()).loadFollowSystemThemePreference() != 0) {
-            FollowSystemThemeChoice(requireContext()).setFollowSystemThemePreference(0)
-            //view?.findViewById<RadioButton>(R.id.darkThemeSystem)?.isChecked = false
-            //view?.findViewById<RadioButton>(R.id.amoledSystemTheme)?.isChecked = true
-            restartThemeChange()
-        }
-        Toast.makeText(
-            requireContext(),
-            getString(R.string.appearance_settings_reset),
-            Toast.LENGTH_LONG
-        ).show()*/
     }
 
     private fun openFragment(fragment: Fragment) {
