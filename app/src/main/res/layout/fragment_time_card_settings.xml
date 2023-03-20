@@ -53,13 +53,47 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/coloredImageViewBackgroundCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/coloredImageViewBackgroundConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/coloredImageViewBackgroundSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Make background match the base color of the image"
+                        android:textColor="#000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:clickable="false"
+                        android:background="@null" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewDefaultName"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-
+                android:layout_below="@id/coloredImageViewBackgroundCardView"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout
