@@ -29,8 +29,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class VersionInfoFragment : Fragment() {
 
-    var themeSelection = false
-
     private var package_name = "com.android.chrome"
 
     override fun onCreateView(
@@ -41,29 +39,23 @@ class VersionInfoFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
