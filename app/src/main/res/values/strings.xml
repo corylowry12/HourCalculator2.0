@@ -211,7 +211,6 @@
     <string name="hour_calculated_in_time_format">Hour calculated in time format</string>
     <string name="hour_calculated_in_decimal_format">Hour calculated in decimal format</string>
     <string name="time_cards">Time Cards</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="would_you_like_to_hide_checkboxes">Would you like to hide checkboxes?</string>
+    <string name="title_activity_view_time_card_info">ViewTimeCardInfoActivity</string>
 </resources>
