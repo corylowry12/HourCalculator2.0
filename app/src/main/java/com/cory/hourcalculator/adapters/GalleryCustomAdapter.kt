@@ -65,6 +65,8 @@ class GalleryCustomAdapter( private val context: Context,
             Vibrate().vibration(context)
             val intent = Intent(context, ImageViewActivity::class.java)
             intent.putExtra("id", dataList[position]["id"])
+            intent.putExtra("name", dataList[position]["name"])
+            intent.putExtra("gallery", true)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 (context as AppCompatActivity),
                 holder.itemView.findViewById(R.id.galleryImage),
