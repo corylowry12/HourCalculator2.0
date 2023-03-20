@@ -34,8 +34,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class HistorySettingsFragment : Fragment() {
 
-    var themeSelection = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,29 +42,23 @@ class HistorySettingsFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -79,6 +71,7 @@ class HistorySettingsFragment : Fragment() {
 
         val toggleHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val historyDeletionCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
+        val historyDeleteAllOnLimitReachedCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
         val numberOfDaysCardView = requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
         val openHoursForEditingCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
 
@@ -90,6 +83,13 @@ class HistorySettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         historyDeletionCardView.shapeAppearanceModel = historyDeletionCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        historyDeleteAllOnLimitReachedCardView.shapeAppearanceModel = historyDeleteAllOnLimitReachedCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -289,6 +289,29 @@ class HistorySettingsFragment : Fragment() {
                 }
             }
 
+        val deleteAllOnLimitReachedSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historyDeleteAllOnLimitSwitch)
+
+        if (DeleteAllOnLimitReachedData(requireContext()).loadDeleteAllState()) {
+            deleteAllOnLimitReachedSwitch.isChecked = true
+            deleteAllOnLimitReachedSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        }
+        else {
+            deleteAllOnLimitReachedSwitch.isChecked = false
+            deleteAllOnLimitReachedSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView).setOnClickListener {
+            deleteAllOnLimitReachedSwitch.isChecked = !deleteAllOnLimitReachedSwitch.isChecked
+            DeleteAllOnLimitReachedData(requireContext()).setDeleteAllState(deleteAllOnLimitReachedSwitch.isChecked)
+
+            if (deleteAllOnLimitReachedSwitch.isChecked) {
+                deleteAllOnLimitReachedSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            }
+            else {
+                deleteAllOnLimitReachedSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
         val daysWorkedCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
         daysWorkedCardView.setOnClickListener {
@@ -439,16 +462,19 @@ class HistorySettingsFragment : Fragment() {
     private fun updateCustomColor() {
         val toggleHistoryCardView = requireView().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val historyDeletionCardView = requireView().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
+        val historyDeleteAllOnLimitReached = requireView().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
         val numberOfDaysCardView = requireView().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
         val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
 
         toggleHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historyDeletionCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        historyDeleteAllOnLimitReached.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         numberOfDaysCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         clickableHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val toggleHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
         val toggleHistoryDeletion = requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
+        val toggleDeleteAllSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historyDeleteAllOnLimitSwitch)
         val clickableHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
 
         val states = arrayOf(
@@ -465,6 +491,8 @@ class HistorySettingsFragment : Fragment() {
         toggleHistorySwitch.trackTintList = ColorStateList(states, colors)
         toggleHistoryDeletion.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         toggleHistoryDeletion.trackTintList = ColorStateList(states, colors)
+        toggleDeleteAllSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        toggleDeleteAllSwitch.trackTintList = ColorStateList(states, colors)
         clickableHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         clickableHistorySwitch.trackTintList = ColorStateList(states, colors)
 
