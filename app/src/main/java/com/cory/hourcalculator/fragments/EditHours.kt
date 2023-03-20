@@ -48,6 +48,8 @@ class EditHours : Fragment() {
     private lateinit var timePickerOutTime : TimePicker
     private lateinit var infoTextView1 : TextView
 
+    var historyDateEntry : Long = 0
+
     private val dataList = ArrayList<HashMap<String, String>>()
 
     private lateinit var idMap: String
@@ -64,8 +66,6 @@ class EditHours : Fragment() {
     var breakTimeBool = false
     private var dateChangedBool = false
 
-    var themeSelection = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,29 +74,23 @@ class EditHours : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -209,6 +203,20 @@ class EditHours : Fragment() {
 
             val dateChip = activity?.findViewById<Chip>(R.id.dateChipEdit)
 
+            dateChip?.setOnLongClickListener {
+                val calendar = Calendar.getInstance()
+                val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a")
+                val day4 = calendar.timeInMillis
+                calendar.timeInMillis
+
+                val date2 = simpleDateFormat.format(day4)
+                day = date2
+
+                dateChip.text = date2
+                dateChangedBool = true
+                return@setOnLongClickListener true
+            }
+
             dateChip?.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 val datePicker = DatePickerDialog(
@@ -216,6 +224,9 @@ class EditHours : Fragment() {
                     AccentColor(requireContext()).dateDialogTheme(requireContext())
                 )
                 datePicker.setCancelable(false)
+
+                val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
+                val dateString = formatter.format(historyDateEntry)
 
                 val (month1, day2, year1) = day.split("/")
                 val year2 = year1.dropLast(12)
@@ -260,24 +271,23 @@ class EditHours : Fragment() {
                     day = date2
 
                     dateChip.text = date2
+                    dateChangedBool = true
 
                     datePicker.dismiss()
                 }
 
                 neutralButton.setOnClickListener {
                     Vibrate().vibration(requireContext())
-                    dateChangedBool = false
-                    timeEditHourData.setDateBool(false)
+                    if (dateChip.text == dateString) {
+                        dateChangedBool = false
+                        timeEditHourData.setDateBool(false)
+                    }
+                    else {
+                        dateChangedBool = true
+                        timeEditHourData.setDateBool(true)
+                    }
                     datePicker.dismiss()
                 }
-                /*val datePickerDialog = BottomSheetDialog(requireContext())
-                val datePickerLayout =
-                    layoutInflater.inflate(R.layout.date_picker_bottom_sheet, null)
-                val datePicker = datePickerLayout.findViewById<DatePicker>(R.id.datePicker)
-                //datePicker.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-
-                datePickerDialog.setContentView(datePickerLayout)
-                datePickerDialog.show()*/
             }
 
             val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
@@ -563,6 +573,7 @@ class EditHours : Fragment() {
         map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
         map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
         map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+        historyDateEntry = map["date"]!!.toLong()
         dataList.add(map)
 
         idMap = map["id"].toString()
