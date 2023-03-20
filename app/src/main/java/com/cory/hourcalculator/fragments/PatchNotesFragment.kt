@@ -20,9 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.adapters.PatchNotesBugFixesAdapter
-import com.cory.hourcalculator.adapters.PatchNotesEnhancementsAdapter
-import com.cory.hourcalculator.adapters.PatchNotesNewFeaturesAdapter
+import com.cory.hourcalculator.adapters.PatchNotesAdapter
 import com.cory.hourcalculator.classes.*
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -51,20 +49,16 @@ class PatchNotesFragment : Fragment() {
                                             "App icon radio buttons will no be checked if you click the icon but not the radio button", "App will no longer let you go to another tab when edit view is visible to prevent accidentally leaving and losing edited data",
                                             "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item",
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
-                                            "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view")
+                                            "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view", "Added a toast message when entry is automatically deleted")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue where if you went to time card info view and scrolled and clicked the time card tab it would make the app crash", "Fixed crashing when opening the version info view", "Fixed issue with reset settings bottom sheet not matching the current theme",
-                                                "Fixed issue with there being no vibration when clicking the reset button in the number of days view", "Fixed issue with there being not vibration when clicking the view repo button in the about app view", "Fixed issue with layout not being positioned properly in the edit view",
-                                                "Fixed issue with there being no vibration when clicking the generate a random color button", "Fixed issue with crashing when deleting an entry in the edit view", "Fixed issue with cards in the history view not being curved properly when undoing the deletion of an hour in the edit view",
-                                                "Fixed issue with there being no vibration when clicking the delete or delete all buttons in the time cards view", "Fixed some issues with font size in the number of days view", "Fixed issue with the one entry button being offset in the number of days view",
-                                                "Fixed issue where if you went to time cards view and then clicked another tab and then hit the back button and it went back to time cards view, the bottom nav bar wouldn't update", "Fixed issue with text color and icon color in the top app bar in the time cards setting view not matching the theme",
-                                                "Fixed issue where generate a random color card didn't curve properly on devices older than android 12")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue with crashing if you went to the time card settings view and then clicked the time cards tab", "Fixed issue with back button in top app bar not doing anything in the gallery view", "Fixed issue with the top app bar not matching the bottom nav color when material you theming was enabled (Android 12+)")
 
-    private var newFeaturesArrayInternal = arrayOf("Added an all new gallery view to view all time card images in one place")
+    private var newFeaturesArrayInternal = arrayOf("Added ability to delete all entries when limit is reached in the history settings", "Added a toggle to make the background when viewing time card image match the base color of the image (disabled by default)",
+                                                    "Added the ability to automatically update to the current date by long clicking the date button when editing an entry", "Added the ability to long click an image when viewing it and hide all ui elements")
 
-    private var enhancementsArrayInternal = arrayOf("Tweaked the design of the history item options menu (menu that contains edit, delete, and delete all)")
-
-    var themeSelection = false
+    private var enhancementsArrayInternal = arrayOf("Splash screen will no match wallpaper color (Android 12+)", "Removed slide in animation when opening time card info view", "Added a toast message when entry is automatically deleted", "Tweaked bottom nav icon color when material you and light theme enabled (Android 12+)",
+                                                    "Tweaked bottom nav text color when material you and light theme enabled (Android 12+)", "Tweaked menu icon color when material you and light theme enabled (Android 12+)", "Tweaked collapsed text color when material you and light theme enabled (Android 12+)",
+                                                    "Added a 50 entry limit when exporting hours")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,29 +68,23 @@ class PatchNotesFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -167,11 +155,11 @@ class PatchNotesFragment : Fragment() {
             bugFixesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             if (BuildConfig.FLAVOR == "Internal") {
                 bugFixesRecyclerView.adapter =
-                    PatchNotesBugFixesAdapter(requireContext(), bugFixesArrayInternal)
+                    PatchNotesAdapter(requireContext(), bugFixesArrayInternal)
             }
             else {
                 bugFixesRecyclerView.adapter =
-                    PatchNotesBugFixesAdapter(requireContext(), bugFixesArray)
+                    PatchNotesAdapter(requireContext(), bugFixesArray)
             }
             if (bugFixesRecyclerView.visibility == View.GONE) {
                 bugFixesRecyclerView.visibility = View.VISIBLE
@@ -191,11 +179,11 @@ class PatchNotesFragment : Fragment() {
             newFeaturesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             if (BuildConfig.FLAVOR == "Internal") {
                 newFeaturesRecyclerView.adapter =
-                    PatchNotesNewFeaturesAdapter(requireContext(), newFeaturesArrayInternal)
+                    PatchNotesAdapter(requireContext(), newFeaturesArrayInternal)
             }
             else {
                 newFeaturesRecyclerView.adapter =
-                    PatchNotesNewFeaturesAdapter(requireContext(), newFeaturesArray)
+                    PatchNotesAdapter(requireContext(), newFeaturesArray)
             }
 
             if (newFeaturesRecyclerView.visibility == View.GONE) {
@@ -216,11 +204,11 @@ class PatchNotesFragment : Fragment() {
             enhancementsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             if (BuildConfig.FLAVOR == "Internal") {
                 enhancementsRecyclerView.adapter =
-                    PatchNotesEnhancementsAdapter(requireContext(), enhancementsArrayInternal)
+                    PatchNotesAdapter(requireContext(), enhancementsArrayInternal)
             }
             else {
                 enhancementsRecyclerView.adapter =
-                    PatchNotesEnhancementsAdapter(requireContext(), enhancementsArray)
+                    PatchNotesAdapter(requireContext(), enhancementsArray)
             }
 
             if (enhancementsRecyclerView.visibility == View.GONE) {
