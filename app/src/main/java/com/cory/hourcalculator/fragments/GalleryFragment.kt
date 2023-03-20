@@ -1,5 +1,6 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
@@ -18,9 +19,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.adapters.GalleryCustomAdapter
 import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
-import com.cory.hourcalculator.classes.ColoredTitleBarTextData
-import com.cory.hourcalculator.classes.CustomColorGenerator
-import com.cory.hourcalculator.classes.MenuTintData
+import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -36,12 +35,45 @@ class GalleryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(
+                            R.style.Theme_AMOLED
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBarGallery =
+            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarGallery)
+        topAppBarGallery.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
+        }
 
         updateCustomColor()
 
