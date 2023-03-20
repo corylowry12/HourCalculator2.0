@@ -21,8 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/app_name"
         app:titleCentered="true"
-        android:fitsSystemWindows="false"
-        android:background="@color/cardTeal"/>
+        android:fitsSystemWindows="false" />
 
     <TimePicker
         android:id="@+id/timePickerInTimeHomeFragment"
@@ -105,7 +104,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        android:hapticFeedbackEnabled="true"
         android:text="@string/calculate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
