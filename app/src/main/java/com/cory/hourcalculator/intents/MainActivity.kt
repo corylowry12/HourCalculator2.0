@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -37,6 +38,8 @@ import java.util.*
 
 @DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
+
+    public lateinit var mContext : Context
 
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
@@ -85,6 +88,8 @@ class MainActivity : AppCompatActivity() {
             CustomColorGenerator(this).generateARandomColor()
         }
 
+        mContext = this
+
         Log.i("DEBUG", "created")
 
         if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
@@ -123,14 +128,15 @@ class MainActivity : AppCompatActivity() {
         }
         
         val context = this
-        GlobalScope.launch(Dispatchers.Main) {
-            MobileAds.initialize(context)
-            val adView = AdView(context)
-            adView.adUnitId = GoogleAdsKey().API_KEY
-            val mAdView = findViewById<AdView>(R.id.adView)
-            val adRequest = AdRequest.Builder().build()
-            mAdView.loadAd(adRequest)
+        val runnable = Runnable {
+                MobileAds.initialize(context)
+                val adView = AdView(context)
+                adView.adUnitId = GoogleAdsKey().API_KEY
+                val mAdView = findViewById<AdView>(R.id.adView)
+                val adRequest = AdRequest.Builder().build()
+                mAdView.loadAd(adRequest)
         }
+        runOnUiThread(runnable)
 
         Log.i("DEBUG", "created ad")
 
@@ -197,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
                         return@setOnItemSelectedListener false
                     }
-                    else if (currentFragment.toString().startsWith("Time", true) && !currentFragment.toString().contains("Info")) {
+                    else if (currentFragment.toString().startsWith("Time", true) && (!currentFragment.toString().contains("Info") && !currentFragment.toString().contains("Settings"))) {
                         timeCards.scrollToTop()
                         return@setOnItemSelectedListener true
                     }
@@ -271,6 +277,21 @@ class MainActivity : AppCompatActivity() {
         bottomNav.itemRippleColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
         bottomNav.itemActiveIndicatorColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
     }
+
+       fun openTimeCardInfoView(id: String, name: String) {
+            val timeCardInfoFragment = TimeCardItemInfoFragment()
+            timeCardInfoFragment.arguments = Bundle().apply {
+                putString("id", id)
+                putString("name", name)
+            }
+            val manager =
+                this.supportFragmentManager.beginTransaction()
+            manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            manager.replace(R.id.fragment_container, timeCardInfoFragment)
+                .addToBackStack(null)
+            manager.commit()
+        }
+
 
     private fun replaceFragment(fragment: Fragment, goingToTab: Int) {
         Log.i("DEBUG", "replaced fragment")
