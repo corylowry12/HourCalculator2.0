@@ -34,7 +34,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class SettingsFragment : Fragment() {
 
-    var themeSelection = false
     private var scrollPosition = 0
 
     override fun onCreateView(
@@ -45,29 +44,23 @@ class SettingsFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -103,28 +96,13 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    /*override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        main()
-
-    }*/
-
-    /*override fun onResume() {
-        super.onResume()
-        main()
-
-        //val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
-
-        //nestedScrollView.scrollTo(scrollPosition, 0)
-    }*/
-
     private fun main() {
 
         val appearanceCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardView)
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
@@ -152,6 +130,13 @@ class SettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         timeCardSettingsCardView.shapeAppearanceModel = timeCardSettingsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        animationSettingsCardView.shapeAppearanceModel = animationSettingsCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -293,6 +278,7 @@ class SettingsFragment : Fragment() {
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
@@ -302,6 +288,7 @@ class SettingsFragment : Fragment() {
         appSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historySettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        animationSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardGalleryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         patchNotesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         aboutCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
