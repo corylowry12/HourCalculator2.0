@@ -1,23 +1,34 @@
 package com.cory.hourcalculator.intents
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.*
 import android.media.ExifInterface
+import android.os.Build
 import android.os.Bundle
+import android.transition.Fade
 import android.util.TypedValue
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
+import androidx.palette.graphics.Palette
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.ortiz.touchview.TouchImageView
+
 
 class ImageViewActivity : AppCompatActivity() {
 
@@ -62,10 +73,52 @@ class ImageViewActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         val imageView = findViewById<TouchImageView>(R.id.touchImageView)
+        val viewTimeCardFAB = findViewById<ExtendedFloatingActionButton>(R.id.viewTimeCardFAB)
+        val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val fade = Fade()
+            fade.excludeTarget(R.id.viewImageToolBar, true)
+            fade.excludeTarget(android.R.id.statusBarBackground, true)
+            fade.excludeTarget(android.R.id.navigationBarBackground, true)
+            fade.excludeTarget(R.id.viewTimeCardFAB, true)
+            window.enterTransition = fade
+            window.exitTransition = fade
+        }
 
         val id = intent.getStringExtra("id")
+        val name = intent.getStringExtra("name")
 
-        val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
+        if (intent.getBooleanExtra("gallery", false)) {
+            //viewTimeCardFAB.visibility = View.VISIBLE
+        }
+
+        imageView.setOnLongClickListener {
+            Vibrate().vibration(this)
+            /*if (intent.getBooleanExtra("gallery", false)) {
+                if (viewTimeCardFAB.visibility == View.GONE) {
+                    viewTimeCardFAB.visibility = View.VISIBLE
+                }
+                else {
+                    viewTimeCardFAB.visibility = View.GONE
+                }
+            }*/
+            if (viewImageMaterialToolbar.visibility == View.GONE) {
+                viewImageMaterialToolbar.visibility = View.VISIBLE
+            }
+            else {
+                viewImageMaterialToolbar.visibility = View.GONE
+            }
+            return@setOnLongClickListener true
+        }
+
+        viewTimeCardFAB.setOnClickListener {
+            val intent = Intent(this, ViewTimeCardInfoActivity::class.java)
+            intent.putExtra("id", id.toString())
+            intent.putExtra("name", name.toString())
+            startActivity(intent)
+            finishAfterTransition()
+        }
 
         val deleteImageDrawable = viewImageMaterialToolbar.menu.findItem(R.id.deleteImage).icon
         deleteImageDrawable!!.mutate()
@@ -181,6 +234,9 @@ class ImageViewActivity : AppCompatActivity() {
                     true
                 )
             imageView.setImageBitmap(bitmap)
+            if (MatchImageViewContentsBackgroundData(this).loadMatchImageViewContents()) {
+                setBackgroundColor(bitmap)
+            }
 
         } catch (e: java.lang.NullPointerException) {
             e.printStackTrace()
@@ -195,5 +251,50 @@ class ImageViewActivity : AppCompatActivity() {
                 finishAfterTransition()
             }
         })
+    }
+
+    private fun setBackgroundColor(bitmap: Bitmap) {
+        Palette.Builder(bitmap).generate { palette ->
+            val vSwatch = palette?.dominantSwatch?.rgb
+            val color =
+                Color.rgb(
+                    vSwatch!!.red,
+                    vSwatch.green,
+                    vSwatch.blue
+                )
+            this@ImageViewActivity.window.navigationBarColor = color
+            this@ImageViewActivity.window.statusBarColor = color
+            val invertedColor = Color.rgb(
+                255 - vSwatch.red, 255 - vSwatch.green,
+                255 - vSwatch.blue
+            )
+
+            try {
+                val imageViewConstraint =
+                    findViewById<ConstraintLayout>(R.id.imageViewConstraint)
+                imageViewConstraint.setBackgroundColor(color)
+                findViewById<MaterialToolbar>(R.id.viewImageToolBar).setNavigationIconTint(invertedColor)
+
+                val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
+
+                val deleteImageDrawable = viewImageMaterialToolbar.menu.findItem(R.id.deleteImage).icon
+                deleteImageDrawable!!.mutate()
+
+                val navigationDrawable = viewImageMaterialToolbar?.navigationIcon
+                navigationDrawable?.mutate()
+
+                deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                        invertedColor,
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        invertedColor,
+                        BlendMode.SRC_ATOP
+                    )
+
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+            }
+        }
     }
 }
