@@ -14,7 +14,7 @@ import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 
-class PatchNotesNewFeaturesAdapter(
+class PatchNotesAdapter(
     val context: Context,
     private val dataList: Array<String>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -84,7 +84,7 @@ class PatchNotesNewFeaturesAdapter(
         val layoutTransition2 = layout2.layoutTransition
         layoutTransition2.enableTransitionType(LayoutTransition.CHANGING)
 
-        (holder as PatchNotesNewFeaturesAdapter.ViewHolder).bind(position)
+        (holder as PatchNotesAdapter.ViewHolder).bind(position)
     }
 
     override fun getItemCount(): Int {
