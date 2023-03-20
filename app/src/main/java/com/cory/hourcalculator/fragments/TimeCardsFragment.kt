@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -23,7 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
-import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.classes.ColoredTitleBarTextData
+import com.cory.hourcalculator.classes.CustomColorGenerator
+import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.MainActivity
@@ -38,8 +40,6 @@ class TimeCardsFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var timeCardCustomAdapter: TimeCardCustomAdapter
 
-    var themeSelection = false
-
     private lateinit var recyclerViewState: Parcelable
 
     override fun onCreateView(
@@ -50,31 +50,25 @@ class TimeCardsFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -196,9 +190,9 @@ class TimeCardsFragment : Fragment() {
 
             }
 
-                snackbar.setActionTextColor(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
-                )
+            snackbar.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
+            )
 
             snackbar.apply {
                 snackbar.view.background = ResourcesCompat.getDrawable(
