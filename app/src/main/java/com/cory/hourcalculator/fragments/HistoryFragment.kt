@@ -58,8 +58,6 @@ class HistoryFragment : Fragment() {
 
     private var containsColon = false
 
-    var themeSelection = false
-
     private lateinit var customAdapter: CustomAdapter
 
     override fun onCreateView(
@@ -70,31 +68,25 @@ class HistoryFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -270,13 +262,16 @@ class HistoryFragment : Fragment() {
 
                     exportCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
-                        //Toast.makeText(requireContext(), "Cant do this right now", Toast.LENGTH_SHORT).show()
-                        if (HistoryToggleData(requireContext()).loadHistoryState()) {
+
+                        if (customAdapter.getSelectedCount() <= 50) {
                             topAppBar.navigationIcon = null
                             customAdapter.snackbarDeleteSelected.dismiss()
                             customAdapter.snackbarDismissCheckBox.dismiss()
                             customAdapter.exportSelected()
                             historyOptionsDialog.dismiss()
+                        }
+                        else {
+                            Toast.makeText(requireContext(), "Can't export more than 50 entries at a time", Toast.LENGTH_SHORT).show()
                         }
                     }
 
