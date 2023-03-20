@@ -64,7 +64,6 @@ class TimeCardItemInfoFragment : Fragment() {
 
     private lateinit var editable: Editable
 
-    var themeSelection = false
     private lateinit var id: String
 
     private lateinit var image: String
@@ -76,31 +75,25 @@ class TimeCardItemInfoFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 activity?.setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
@@ -368,12 +361,6 @@ class TimeCardItemInfoFragment : Fragment() {
             )
             startActivity(intent, options.toBundle())
         }
-
-        val timeCardItemInfoRecyclerView =
-            activity?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
-        val animation =
-            AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
-        timeCardItemInfoRecyclerView?.layoutAnimation = animation
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
