@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -32,9 +33,12 @@ import com.google.android.material.shape.CornerFamily
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.math.abs
 
-
-@DelicateCoroutinesApi
 class AppearanceFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColorChange()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -389,31 +393,6 @@ class AppearanceFragment : Fragment() {
         }
     }
 
-    private fun restartThemeChange() {
-
-        val runnable = Runnable {
-            (context as MainActivity).setBackgroundColor()
-        }
-        MainActivity().runOnUiThread(runnable)
-
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.detach(this)?.commitNow()
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.attach(this)?.commitNow()
-
-        view?.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
-            ?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll())
-
-        val collapsingToolbarLayout =
-            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
-
-        collapsingToolbarLayout.setExpanded(
-            AppearanceScrollPosition(requireContext()).loadCollapsed(),
-            false
-        )
-
-    }
-
     private fun openFragment(fragment: Fragment) {
         Vibrate().vibration(requireContext())
 
@@ -440,6 +419,7 @@ class AppearanceFragment : Fragment() {
     }
 
     private fun updateCustomColorChange() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.coordinatorLayoutAppearance).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val customColorGenerator = CustomColorGenerator(requireContext())
 
         val backgroundColorCardView =
