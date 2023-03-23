@@ -23,15 +23,29 @@ class CustomColorGenerator(context: Context) {
         editor.apply()
     }
 
+    fun setRandomGeneratedHex(state: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("randomHex", state)
+        editor.apply()
+    }
+
+    fun loadRandomHex(): String {
+        val state = sharedPreferences.getString("randomHex", "#53c8c8")
+        return (state!!)
+    }
+
     fun generateARandomColor() {
         val red = Random.nextInt(50,200)
         val green = Random.nextInt(50,200)
         val blue = Random.nextInt(50,200)
         val hex = String.format("#%02X%02X%02X", red, green, blue)
-        setCustomHex(hex)
+        setRandomGeneratedHex(hex)
     }
 
     fun loadCustomHex(): String {
+        if (GenerateARandomColorData(insideContext).loadGenerateARandomColorOnAppLaunch()) {
+            return loadRandomHex()
+        }
         val state = sharedPreferences.getString("customColor", "#53c8c8")
         return (state!!)
     }
@@ -434,7 +448,7 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_700
+                                insideContext, android.R.color.system_accent2_600
                             ) and 0x00ffffff
                         )
                     }"
@@ -454,7 +468,7 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_700
+                                        insideContext, android.R.color.system_accent2_600
                                     ) and 0x00ffffff
                                 )
                             }"
@@ -491,7 +505,7 @@ class CustomColorGenerator(context: Context) {
                 }
                 darkThemeData.loadDarkModeState() == 2 -> {
                     return "#${
-                        this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+                        this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
                     }"
                 }
                 darkThemeData.loadDarkModeState() == 3 -> {
@@ -503,12 +517,12 @@ class CustomColorGenerator(context: Context) {
                         }
                         Configuration.UI_MODE_NIGHT_YES -> {
                             return "#${
-                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
                             }"
                         }
                         Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                             return "#${
-                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
                             }"
                         }
                     }
@@ -516,7 +530,7 @@ class CustomColorGenerator(context: Context) {
             }
         }
         return "#${
-            this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+            this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
         }"
     }
 
@@ -624,7 +638,7 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_700
+                                insideContext, android.R.color.system_accent2_600
                             ) and 0x00ffffff
                         )
                     }"
@@ -644,7 +658,7 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_700
+                                        insideContext, android.R.color.system_accent2_600
                                     ) and 0x00ffffff
                                 )
                             }"
@@ -681,7 +695,7 @@ class CustomColorGenerator(context: Context) {
                 }
                 darkThemeData.loadDarkModeState() == 2 -> {
                     return "#${
-                        this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+                        this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
                     }"
                 }
                 darkThemeData.loadDarkModeState() == 3 -> {
@@ -693,12 +707,12 @@ class CustomColorGenerator(context: Context) {
                         }
                         Configuration.UI_MODE_NIGHT_YES -> {
                             return "#${
-                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
                             }"
                         }
                         Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                             return "#${
-                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+                                this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
                             }"
                         }
                     }
@@ -706,7 +720,7 @@ class CustomColorGenerator(context: Context) {
             }
         }
         return "#${
-            this.lighten(Color.parseColor(this.loadCustomHex()), 0.6)
+            this.lighten(Color.parseColor(this.loadCustomHex()), 0.7)
         }"
     }
 
@@ -771,7 +785,7 @@ class CustomColorGenerator(context: Context) {
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
                 return "#${
-                    this.darken(Color.parseColor(this.loadCustomHex()), 0.6)
+                    this.darken(Color.parseColor(this.loadCustomHex()), 0.4)
                 }"
             }
             darkThemeData.loadDarkModeState() == 2 -> {
@@ -783,7 +797,7 @@ class CustomColorGenerator(context: Context) {
                 when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         return "#${
-                            this.darken(Color.parseColor(this.loadCustomHex()), 0.6)
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.4)
                         }"
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
@@ -866,7 +880,7 @@ class CustomColorGenerator(context: Context) {
             when {
                 darkThemeData.loadDarkModeState() == 0 -> {
                     return "#${
-                        this.darken(Color.parseColor(this.loadCustomHex()), 0.6)
+                        this.darken(Color.parseColor(this.loadCustomHex()), 0.4)
                     }"
                 }
                 darkThemeData.loadDarkModeState() == 2 -> {
@@ -878,7 +892,7 @@ class CustomColorGenerator(context: Context) {
                     when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                         Configuration.UI_MODE_NIGHT_NO -> {
                             return "#${
-                                this.darken(Color.parseColor(this.loadCustomHex()), 0.6)
+                                this.darken(Color.parseColor(this.loadCustomHex()), 0.4)
                             }"
                         }
                         Configuration.UI_MODE_NIGHT_YES -> {
