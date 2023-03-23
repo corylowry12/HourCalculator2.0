@@ -30,7 +30,12 @@ import com.google.android.play.core.review.ReviewManagerFactory
 
 class AboutAppFragment : Fragment() {
 
-    private var package_name = "com.android.chrome"
+    private var packageName = "com.android.chrome"
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColor()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -164,9 +169,9 @@ class AboutAppFragment : Fragment() {
         builder.setInstantAppsEnabled(true)
         val customBuilder = builder.build()
 
-        if (this.isPackageInstalled(package_name)) {
+        if (this.isPackageInstalled(packageName)) {
             // if chrome is available use chrome custom tabs
-            customBuilder.intent.setPackage(package_name)
+            customBuilder.intent.setPackage(packageName)
             customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
         } else {
             Toast.makeText(requireContext(), getString(R.string.there_was_an_error), Toast.LENGTH_SHORT).show()
