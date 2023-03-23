@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
@@ -29,12 +30,18 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.slider.Slider
-
+import kotlin.random.Random
 
 class AccentColorFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColorChange()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -138,6 +145,8 @@ class AccentColorFragment : Fragment() {
         }
 
         val customCardView = view.findViewById<MaterialCardView>(R.id.customCardViewAccentColor)
+        val addColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.addColorCardView)
+        val viewSavedColorsCardView = requireActivity().findViewById<MaterialCardView>(R.id.viewSavedColorsCardView)
         val generateARandomColorCardView = view.findViewById<MaterialCardView>(R.id.generateARandomColorOnAppLaunchCardView)
         val followGoogleAppsCardView = view.findViewById<MaterialCardView>(R.id.followGoogleAppsCardView)
 
@@ -145,6 +154,20 @@ class AccentColorFragment : Fragment() {
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
             .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        addColorCardView.shapeAppearanceModel = addColorCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        viewSavedColorsCardView.shapeAppearanceModel = viewSavedColorsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
@@ -187,8 +210,9 @@ class AccentColorFragment : Fragment() {
             generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        generateARandomColorOnAppLaunchSwitch.setOnClickListener {
+        generateARandomColorCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
+            generateARandomColorOnAppLaunchSwitch.isChecked = !generateARandomColorOnAppLaunchSwitch.isChecked
             GenerateARandomColorData(requireContext()).setGenerateARandomColorOnAppLaunch(generateARandomColorOnAppLaunchSwitch.isChecked)
             if (generateARandomColorOnAppLaunchSwitch.isChecked) {
                 generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
@@ -196,9 +220,32 @@ class AccentColorFragment : Fragment() {
             else {
                 generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+            requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = CustomColorGenerator(requireContext()).loadCustomHex()
+            updateCustomColorChange()
         }
 
         requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = CustomColorGenerator(requireContext()).loadCustomHex()
+
+        customCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val allColors = mutableSetOf<String>()
+            val colorsSet = UserAddedColors(requireContext()).loadColors()
+            val oldCount = colorsSet?.count()
+            for (i in 0 until UserAddedColors(requireContext()).loadColors()!!.count()) {
+                allColors.add(colorsSet!!.elementAt(i))
+            }
+            allColors.add(requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text.drop(1).toString())
+            UserAddedColors(requireContext()).addColor(allColors)
+            val newCount = UserAddedColors(requireContext()).loadColors()?.count()
+            if (newCount!! > oldCount!!) {
+                Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+            }
+            requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).loadColors()?.count().toString()
+            return@setOnLongClickListener true
+        }
         customCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             val customColorPickerDialog = BottomSheetDialog(requireContext())
@@ -225,7 +272,7 @@ class AccentColorFragment : Fragment() {
 
             selectButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
             cancelSelectButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            generateRandomButtonCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            generateRandomButtonCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
             val color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()) //The color u want
             generateRandomButton.setColorFilter(color)
@@ -249,9 +296,9 @@ class AccentColorFragment : Fragment() {
 
             generateRandomButtonCardView.setOnClickListener {
                 Vibrate().vibration(requireContext())
-                val red = (50..200).random()
-                val green = (50..200).random()
-                val blue = (50..200).random()
+                val red = Random.nextInt(50,200)
+                val green = Random.nextInt(50,200)
+                val blue = Random.nextInt(50,200)
                 hex = String.format("#%02X%02X%02X", red, green, blue).drop(1)
                 hexadecimalTextView.text = hex
                 coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
@@ -307,6 +354,12 @@ class AccentColorFragment : Fragment() {
                 Vibrate().vibration(requireContext())
                 customColorPickerDialog.dismiss()
                 CustomColorGenerator(requireContext()).setCustomHex("#$hex")
+                MaterialYouEnabled(requireContext()).setMaterialYouState(false)
+                GenerateARandomColorData(requireContext()).setGenerateARandomColorOnAppLaunch(false)
+                activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.isChecked = false
+                activity?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.isChecked = false
+                activity?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 updateCustomColorChange()
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = "#$hex"
             }
@@ -316,6 +369,47 @@ class AccentColorFragment : Fragment() {
             }
 
             customColorPickerDialog.show()
+        }
+
+        requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).loadColors()?.count().toString()
+
+        addColorCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            val allColors = mutableSetOf<String>()
+            val colorsSet = UserAddedColors(requireContext()).loadColors()
+            val oldCount = colorsSet?.count()
+            for (i in 0 until UserAddedColors(requireContext()).loadColors()!!.count()) {
+                allColors.add(colorsSet!!.elementAt(i))
+            }
+            allColors.add(requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text.drop(1).toString())
+            UserAddedColors(requireContext()).addColor(allColors)
+            val newCount = UserAddedColors(requireContext()).loadColors()?.count()
+            if (newCount!! > oldCount!!) {
+                Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+            }
+            requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).loadColors()?.count().toString()
+        }
+
+        viewSavedColorsCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            if (UserAddedColors(requireContext()).loadColors()?.isEmpty()!!) {
+                Toast.makeText(requireContext(), "Must save a color first", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+                transaction?.replace(R.id.fragment_container, SavedColorsFragment())
+                    ?.addToBackStack(null)
+                transaction?.commit()
+            }
         }
 
         val materialYouStyle2Switch = view.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
@@ -328,8 +422,9 @@ class AccentColorFragment : Fragment() {
             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        materialYouStyle2Switch.setOnCheckedChangeListener { buttonView, isChecked ->
+        followGoogleAppsCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
+            materialYouStyle2Switch.isChecked = !materialYouStyle2Switch.isChecked
             MaterialYouEnabled(requireContext()).setMaterialYouState(materialYouStyle2Switch.isChecked)
             updateCustomColorChange()
             if (MaterialYouEnabled(requireContext()).loadMaterialYou()) {
@@ -347,26 +442,46 @@ class AccentColorFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= 31) {
             MaterialYouEnabled(requireContext()).setMaterialYouState(true)
             view?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.isChecked = true
+            view?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         } else {
             MaterialYouEnabled(requireContext()).setMaterialYouState(false)
             view?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.isChecked = false
+            view?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
+
+        GenerateARandomColorData(requireContext()).setGenerateARandomColorOnAppLaunch(false)
+        view?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.isChecked = false
+        view?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        updateCustomColorChange()
     }
 
     private fun updateCustomColorChange() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.accentColorCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val customColorGenerator = CustomColorGenerator(requireContext())
 
         val customCardView = requireActivity().findViewById<MaterialCardView>(R.id.customCardViewAccentColor)
+        val addColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.addColorCardView)
+        val viewSavedColorsCardView = requireActivity().findViewById<MaterialCardView>(R.id.viewSavedColorsCardView)
         val generateARandomColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.generateARandomColorOnAppLaunchCardView)
         val materialYouSwitchCardView = requireActivity().findViewById<MaterialCardView>(R.id.followGoogleAppsCardView)
         val generateARandomColorSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
         val material2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
 
         customCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        addColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        viewSavedColorsCardView.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         generateARandomColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         materialYouSwitchCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        requireActivity().findViewById<Chip>(R.id.viewSavedColorsCountChip)
+            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.viewSavedColorsCountChip).closeIconTint =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.viewSavedColorsCountChip).chipBackgroundColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -426,6 +541,30 @@ class AccentColorFragment : Fragment() {
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val generateARandomColorOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
+
+        if (GenerateARandomColorData(requireContext()).loadGenerateARandomColorOnAppLaunch()) {
+            generateARandomColorOnAppLaunchSwitch.isChecked = true
+            generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        }
+        else {
+            generateARandomColorOnAppLaunchSwitch.isChecked = false
+            generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        val materialYouStyle2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
+
+        if (MaterialYouEnabled(requireContext()).loadMaterialYou()) {
+            materialYouStyle2Switch?.isChecked = true
+            materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!MaterialYouEnabled(requireContext()).loadMaterialYou()) {
+            materialYouStyle2Switch?.isChecked = false
+            materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
     }
 }
