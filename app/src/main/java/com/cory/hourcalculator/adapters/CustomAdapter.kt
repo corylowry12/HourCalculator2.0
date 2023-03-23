@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.set
 
-@DelicateCoroutinesApi
 class CustomAdapter(
     private val context: Context,
     private val dataList: ArrayList<HashMap<String, String>>
@@ -50,6 +49,10 @@ class CustomAdapter(
     private lateinit var items: RecyclerView.ViewHolder
 
     lateinit var historyCardView: MaterialCardView
+
+    fun updateCardColor() {
+        notifyDataSetChanged()
+    }
 
     fun checkboxVisible() {
         checkBoxVisible = false
@@ -78,16 +81,16 @@ class CustomAdapter(
             val imageViewOptions = itemView.findViewById<ImageButton>(R.id.imageViewOptions)
             val imageViewOptionsCardView = itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView)
 
-            imageViewOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+            imageViewOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateTopAppBarColor()))
 
-            val color = Color.parseColor(CustomColorGenerator(context).generateMenuTintColor()) //The color u want
+            val color = Color.parseColor(CustomColorGenerator(context).generateMenuTintColor())
             imageViewOptions.setColorFilter(color)
 
             historyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
 
             val states = arrayOf(
-                intArrayOf(-android.R.attr.state_checked), // unchecked
-                intArrayOf(android.R.attr.state_checked)  // checked
+                intArrayOf(-android.R.attr.state_checked),
+                intArrayOf(android.R.attr.state_checked)
             )
 
             val colors = intArrayOf(
