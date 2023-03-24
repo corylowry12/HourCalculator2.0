@@ -451,7 +451,7 @@ class CustomAdapter(
 
             selectedItemsList.clear()
 
-            for (i in 0 until dataList.count()) {
+            /*for (i in 0 until dataList.count()) {
                 if (dataList.count() == 1) {
                     historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
                         .toBuilder()
@@ -486,9 +486,9 @@ class CustomAdapter(
                             .setBottomLeftCornerSize(28f)
                             .build()
                     }
-                    notifyItemChanged(i)
                 }
-            }
+            }*/
+            notifyItemRangeChanged(0, dataList.count())
 
             val restoreState = Runnable {
                 (context as MainActivity).restoreState()
@@ -699,7 +699,7 @@ class CustomAdapter(
 
                                 notifyItemInserted(itemPosition)
 
-                                for (i in 0 until dataList.count()) {
+                                /*for (i in 0 until dataList.count()) {
                                     if (dataList.count() == 1) {
                                         holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel =
                                             holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel
@@ -738,9 +738,9 @@ class CustomAdapter(
                                                     .setBottomLeftCornerSize(28f)
                                                     .build()
                                         }
-                                    }
-                                    notifyItemChanged(i)
-                                }
+                                    }*/
+                                //notifyItemChanged(i)
+                            notifyItemRangeChanged(0, dataList.count())
 
                                 val restoreState = Runnable {
                                     (context as MainActivity).restoreState()
