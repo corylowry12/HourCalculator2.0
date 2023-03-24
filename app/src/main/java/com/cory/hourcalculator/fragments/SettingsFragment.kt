@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -31,10 +32,14 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class SettingsFragment : Fragment() {
 
     private var scrollPosition = 0
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColor()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -274,6 +279,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.settingsCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val appearanceCardView = requireActivity().findViewById<MaterialCardView>(R.id.themeCardView)
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
@@ -297,6 +303,8 @@ class SettingsFragment : Fragment() {
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutSettings)
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        collapsingToolbarLayout.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutSettings)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
