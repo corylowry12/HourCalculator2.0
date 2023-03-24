@@ -73,7 +73,6 @@ class ImageViewActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         val imageView = findViewById<TouchImageView>(R.id.touchImageView)
-        val viewTimeCardFAB = findViewById<ExtendedFloatingActionButton>(R.id.viewTimeCardFAB)
         val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -81,7 +80,6 @@ class ImageViewActivity : AppCompatActivity() {
             fade.excludeTarget(R.id.viewImageToolBar, true)
             fade.excludeTarget(android.R.id.statusBarBackground, true)
             fade.excludeTarget(android.R.id.navigationBarBackground, true)
-            fade.excludeTarget(R.id.viewTimeCardFAB, true)
             window.enterTransition = fade
             window.exitTransition = fade
         }
@@ -89,20 +87,8 @@ class ImageViewActivity : AppCompatActivity() {
         val id = intent.getStringExtra("id")
         val name = intent.getStringExtra("name")
 
-        if (intent.getBooleanExtra("gallery", false)) {
-            //viewTimeCardFAB.visibility = View.VISIBLE
-        }
-
         imageView.setOnLongClickListener {
             Vibrate().vibration(this)
-            /*if (intent.getBooleanExtra("gallery", false)) {
-                if (viewTimeCardFAB.visibility == View.GONE) {
-                    viewTimeCardFAB.visibility = View.VISIBLE
-                }
-                else {
-                    viewTimeCardFAB.visibility = View.GONE
-                }
-            }*/
             if (viewImageMaterialToolbar.visibility == View.GONE) {
                 viewImageMaterialToolbar.visibility = View.VISIBLE
             }
@@ -110,14 +96,6 @@ class ImageViewActivity : AppCompatActivity() {
                 viewImageMaterialToolbar.visibility = View.GONE
             }
             return@setOnLongClickListener true
-        }
-
-        viewTimeCardFAB.setOnClickListener {
-            val intent = Intent(this, ViewTimeCardInfoActivity::class.java)
-            intent.putExtra("id", id.toString())
-            intent.putExtra("name", name.toString())
-            startActivity(intent)
-            finishAfterTransition()
         }
 
         val deleteImageDrawable = viewImageMaterialToolbar.menu.findItem(R.id.deleteImage).icon
@@ -151,6 +129,13 @@ class ImageViewActivity : AppCompatActivity() {
         viewImageMaterialToolbar.setNavigationOnClickListener {
             Vibrate().vibration(this)
             imageView.resetZoom()
+            if (ColoredNavBarData(this).loadNavBar()) {
+                this@ImageViewActivity.window.navigationBarColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor())
+            }
+            else {
+                this@ImageViewActivity.window.navigationBarColor =
+                    Color.parseColor("#000000")
+            }
             finishAfterTransition()
         }
         viewImageMaterialToolbar.setOnMenuItemClickListener {
@@ -182,6 +167,13 @@ class ImageViewActivity : AppCompatActivity() {
                     noButton.setOnClickListener {
                         Vibrate().vibration(this)
                         deleteImageDialog.dismiss()
+                        if (ColoredNavBarData(this).loadNavBar()) {
+                            this@ImageViewActivity.window.navigationBarColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor())
+                        }
+                        else {
+                            this@ImageViewActivity.window.navigationBarColor =
+                                Color.parseColor("#000000")
+                        }
                         finishAfterTransition()
                     }
                     deleteImageDialog.show()
@@ -248,6 +240,13 @@ class ImageViewActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 //imageView.setZoom(1f)
                 imageView.resetZoom()
+                if (ColoredNavBarData(this@ImageViewActivity).loadNavBar()) {
+                    this@ImageViewActivity.window.navigationBarColor = Color.parseColor(CustomColorGenerator(this@ImageViewActivity).generateBottomNavBackgroundColor())
+                }
+                else {
+                    this@ImageViewActivity.window.navigationBarColor =
+                        Color.parseColor("#000000")
+                }
                 finishAfterTransition()
             }
         })
@@ -262,8 +261,16 @@ class ImageViewActivity : AppCompatActivity() {
                     vSwatch.green,
                     vSwatch.blue
                 )
-            this@ImageViewActivity.window.navigationBarColor = color
-            this@ImageViewActivity.window.statusBarColor = color
+
+            if (ColoredNavBarData(this).loadNavBar()) {
+                this@ImageViewActivity.window.navigationBarColor = color
+            }
+            else {
+                this@ImageViewActivity.window.navigationBarColor =
+                    Color.parseColor("#000000")
+            }
+
+            this@ImageViewActivity.window.statusBarColor = Color.parseColor(CustomColorGenerator(this@ImageViewActivity).generateBackgroundColor())
             val invertedColor = Color.rgb(
                 255 - vSwatch.red, 255 - vSwatch.green,
                 255 - vSwatch.blue
