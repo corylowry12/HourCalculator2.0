@@ -22,6 +22,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.intents.ImageViewActivity
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
@@ -73,6 +74,14 @@ class GalleryCustomAdapter( private val context: Context,
                 "transition_image"
             )
             context.startActivity(intent, options.toBundle())
+        }
+
+        holder.itemView.findViewById<MaterialCardView>(R.id.galleryCard).setOnLongClickListener {
+            val runnable = Runnable {
+                (context as MainActivity).openTimeCardInfoView(dataList[position]["id"].toString(),  dataList[position]["name"].toString())
+            }
+            MainActivity().runOnUiThread(runnable)
+            return@setOnLongClickListener true
         }
         (holder as GalleryCustomAdapter.ViewHolder).bind(position)
     }
