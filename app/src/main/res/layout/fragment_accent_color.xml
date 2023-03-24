@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     android:fitsSystemWindows="true"
-    tools:context=".fragments.BackgroundColorFragment">
+    android:id="@+id/accentColorCoordinatorLayout"
+    tools:context=".fragments.AccentColorFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAccentColorFragment"
@@ -88,6 +88,124 @@
                         android:text="#FFFFFF"
                         android:textColor="?attr/settingsTextColor"/>
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/customThemeColorThemeCardView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:cardCornerRadius="9dp"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        app:strokeColor="#000000"
+                        app:strokeWidth="1dp"
+                        android:contentDescription="follow system card view"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/addColorCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/customCardViewAccentColor"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintViewAddColors"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/addColorImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/baseline_add_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/addColor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:paddingEnd="5dp"
+                        android:text="Save Color"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/addColorImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/viewSavedColorsCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/addColorCardView"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintViewSavedColors"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/viewSavedColorsImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/baseline_favorite_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/viewSavedColors"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:paddingEnd="5dp"
+                        android:text="View Saved Colors"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintEnd_toStartOf="@id/viewSavedColorsCountChip"
+                        app:layout_constraintStart_toEndOf="@id/viewSavedColorsImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/viewSavedColorsCountChip"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        app:chipStrokeWidth="0dp"
+                        android:layout_width="wrap_content"
+                        app:closeIconVisible="true"
+                        app:chipCornerRadius="28dp"
+                        android:layout_height="wrap_content"
+                        app:closeIcon="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="1"
+                        android:clickable="false"
+                        android:layout_marginEnd="20dp"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -100,13 +218,12 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
-                android:layout_below="@id/customCardViewAccentColor">
+                android:layout_below="@id/viewSavedColorsCardView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/generateARandomColorOnAppLaunchConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
@@ -135,13 +252,14 @@
                 android:layout_below="@id/generateARandomColorOnAppLaunchCardView"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/followGoogleAppsConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@null"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
@@ -157,7 +275,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:background="@null"/>
+                        android:background="@null"
+                        android:clickable="false"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
