@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class PatchNotesFragment : Fragment() {
 
     private var bugFixesArray = arrayOf("Fixed issue where when resetting \'App Settings\' to default it would uncheck the Vibration switch even though vibration is enabled after resetting", "Fixed issue with there being no vibration when long clicking items in history view",
@@ -37,7 +37,7 @@ class PatchNotesFragment : Fragment() {
                                         "Fixed crashing when trying to leave the edit hour view if there were pending changes and you clicked yes to save them", "Fixed issue with title and menu buttons not being centered properly in title bars",
                                         "Fixed issue with github button in about view still using built in web view instead of custom tab", "Fixed issue when hitting back button and the bottom nav bar wouldn't change selected tab",
                                         "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11", "Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time",
-                                        "Fixed some issues with weird splash screen logos on certain devices", "Fixed issue with there being not vibration when clicking the view repo button in the about app view")
+                                        "Fixed some issues with weird splash screen logos on certain devices", "Fixed issue with there being not vibration when clicking the view repo button in the about app view", "Fixed issue where the date would be December 31st, 1969 when undoing hour deletion in the history settings view")
 
     private var newFeaturesArray = arrayOf("Added the ability to click on the history tab when the history view is active and scroll to the top", "Added the ability to calculate in time or decimal format depending on which is enabled by long pressing the calculate button (eg. if decimal format is enabled, long pressing will calculate in time format)",
                                             "Added the ability to click on an hour entry and open it to edit it (disabled by default, to enable go to Settings->App Settings->Open hour for editing on history item click)", "Added a toggle to change menu item tint to match the theme")
@@ -51,14 +51,12 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view", "Added a toast message when entry is automatically deleted")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue with crashing if you went to the time card settings view and then clicked the time cards tab", "Fixed issue with back button in top app bar not doing anything in the gallery view", "Fixed issue with the top app bar not matching the bottom nav color when material you theming was enabled (Android 12+)")
+    private var bugFixesArrayInternal = arrayOf("No new bug fixes")
 
-    private var newFeaturesArrayInternal = arrayOf("Added ability to delete all entries when limit is reached in the history settings", "Added a toggle to make the background when viewing time card image match the base color of the image (disabled by default)",
-                                                    "Added the ability to automatically update to the current date by long clicking the date button when editing an entry", "Added the ability to long click an image when viewing it and hide all ui elements")
+    private var newFeaturesArrayInternal = arrayOf("Added ability to clear break text box automatically when hours are calculated (disabled by default)", "Added the ability to rename colors that you saved")
 
-    private var enhancementsArrayInternal = arrayOf("Splash screen will no match wallpaper color (Android 12+)", "Removed slide in animation when opening time card info view", "Added a toast message when entry is automatically deleted", "Tweaked bottom nav icon color when material you and light theme enabled (Android 12+)",
-                                                    "Tweaked bottom nav text color when material you and light theme enabled (Android 12+)", "Tweaked menu icon color when material you and light theme enabled (Android 12+)", "Tweaked collapsed text color when material you and light theme enabled (Android 12+)",
-                                                    "Added a 50 entry limit when exporting hours")
+    private var enhancementsArrayInternal = arrayOf("Adjusted bottom padding for the list view in the choose app icons view so it doesn't come up as high when scrolled all the way down", "Tweaked the text for the info bottom sheet when long pressing a setting to see what it does",
+                                                    "Tweaked the padding of the patch notes list so it doesn't scroll up as far and have as much padding on the bottom", "App will now show what color is selected in the accent color view")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -265,6 +263,7 @@ class PatchNotesFragment : Fragment() {
     }
 
     private fun updateCustomTheme(): MaterialToolbar? {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.patchNotesCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
         requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
