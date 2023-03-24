@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     android:fitsSystemWindows="true"
+    android:id="@+id/appSettingsCoordinatorLayout"
     tools:context=".fragments.AppSettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -47,6 +47,7 @@
         android:clipToPadding="false"
         android:overScrollMode="always"
         android:paddingBottom="25dp"
+        android:isScrollContainer="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -59,16 +60,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:background="@null">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/setOutTimeSwitch"
@@ -79,6 +81,8 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"
                          />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -91,17 +95,17 @@
                 android:layout_below="@id/cardViewSetOutTime"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:background="@null">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/setCalculationTypeSwitch"
@@ -112,6 +116,8 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"
                          />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -124,16 +130,17 @@
                 android:layout_below="@id/cardViewCalculation"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:background="@null">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/toggleLongPressingCalculateSwitch"
@@ -144,6 +151,8 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"
                          />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -156,16 +165,17 @@
                 android:layout_below="@id/cardViewDisableLongPress"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:background="@null">
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/vibrationSwitch"
@@ -175,7 +185,9 @@
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -187,13 +199,13 @@
                 android:layout_below="@id/cardViewVibration"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
+                   android:background="@null"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
@@ -208,7 +220,44 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"
                          />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewClearBreakTextBox"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewBreakTextBox"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginEnd="10dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/clearBreakTextBoxSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Clear break text box automatically when time is successfully calculated"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"
+                        />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -217,10 +266,9 @@
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewBreakTextBox"
+                android:layout_below="@id/cardViewClearBreakTextBox"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout
