@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -25,13 +26,11 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class HistorySettingsFragment : Fragment() {
 
     override fun onCreateView(
@@ -214,17 +213,30 @@ class HistorySettingsFragment : Fragment() {
             Vibrate().vibration(requireContext())
             if (toggleHistory.isChecked) {
                 toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), getString(R.string.history_is_enabled), Toast.LENGTH_SHORT).show()
             } else {
-                val alertDialog = MaterialAlertDialogBuilder(
-                    requireContext(),
-                    AccentColor(requireContext()).alertTheme()
-                )
-                alertDialog.setCancelable(false)
-                alertDialog.setTitle(getString(R.string.history))
-                alertDialog.setMessage(getString(R.string.what_would_you_like_to_do_with_history))
-                alertDialog.setPositiveButton(getString(R.string.delete)) { _, _ ->
+
+                val dialog = BottomSheetDialog(requireContext())
+                val historySettingsWarningBottomSheet = LayoutInflater.from(context)
+                    .inflate(R.layout.history_settings_warning_bottom_sheet, null)
+                dialog.setContentView(historySettingsWarningBottomSheet)
+                dialog.setCancelable(false)
+
+                val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
+                val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
+                val infoCardView = historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
+                val yesButton = historySettingsWarningBottomSheet.findViewById<Button>(R.id.yesButton)
+                val noButton =
+                    historySettingsWarningBottomSheet.findViewById<Button>(R.id.cancelButton)
+
+                title.text = "History"
+                body.text = "Would you like to clear history?"
+
+                infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                yesButton.setOnClickListener {
                     Vibrate().vibration(requireContext())
+                    dialog.dismiss()
                     val dbHandler = DBHelper(requireContext(), null)
                     dbHandler.deleteAll()
                     Toast.makeText(requireContext(), getString(R.string.history_deleted), Toast.LENGTH_SHORT).show()
@@ -234,12 +246,19 @@ class HistorySettingsFragment : Fragment() {
 
                     MainActivity().runOnUiThread(runnable)
                 }
-                alertDialog.setNeutralButton(getString(R.string.nothing)) { _, _ ->
+                noButton.setOnClickListener {
                     Vibrate().vibration(requireContext())
+                    dialog.dismiss()
                 }
-                alertDialog.create().show()
+                dialog.show()
                 toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), getString(R.string.history_disabled), Toast.LENGTH_SHORT).show()
+                HistoryAutomaticDeletion(requireContext()).setHistoryDeletionState(false)
+                requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked = false
+                activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_close_16
+                    )
             }
             historyToggleData.setHistoryToggle(toggleHistory.isChecked)
             val runnable = Runnable {
@@ -269,23 +288,29 @@ class HistorySettingsFragment : Fragment() {
 
         activity?.findViewById<MaterialCardView>(R.id.historyDeletionCardView)
             ?.setOnClickListener {
-                requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked =
-                    !requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked
                 Vibrate().vibration(requireContext())
-                if (activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.isChecked!!) {
-                    activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                    historyDeletion.setHistoryDeletionState(true)
-                    greaterThan()
-                } else {
-                    activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                    historyDeletion.setHistoryDeletionState(false)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.history_automatic_deletion_disabled),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (HistoryToggleData(requireContext()).loadHistoryState()) {
+                    requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked =
+                        !requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked
+                    if (activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.isChecked!!) {
+                        activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_baseline_check_16
+                            )
+                        historyDeletion.setHistoryDeletionState(true)
+                        greaterThan()
+                    } else {
+                        activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_baseline_close_16
+                            )
+                        historyDeletion.setHistoryDeletionState(false)
+                    }
+                }
+                else {
+                    Toast.makeText(requireContext(), "History must be enabled", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -301,6 +326,7 @@ class HistorySettingsFragment : Fragment() {
         }
 
         requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView).setOnClickListener {
+            Vibrate().vibration(requireContext())
             deleteAllOnLimitReachedSwitch.isChecked = !deleteAllOnLimitReachedSwitch.isChecked
             DeleteAllOnLimitReachedData(requireContext()).setDeleteAllState(deleteAllOnLimitReachedSwitch.isChecked)
 
@@ -331,10 +357,7 @@ class HistorySettingsFragment : Fragment() {
                     R.anim.enter_from_left,
                     R.anim.exit_to_right
                 )
-                transaction?.add(
-                    R.id.fragment_container,
-                    NumberOfEntriesBeforeDeletionFragment()
-                )?.addToBackStack(null)
+                transaction?.replace(R.id.fragment_container, NumberOfEntriesBeforeDeletionFragment())?.addToBackStack(null)
                 transaction?.commit()
             }
         }
@@ -355,11 +378,9 @@ class HistorySettingsFragment : Fragment() {
             historyClickable.setHistoryItemClickable(historyClickableSwitch.isChecked)
             if (historyClickableSwitch.isChecked) {
                 historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), "History items are now clickable", Toast.LENGTH_SHORT).show()
             }
             else {
                 historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), "History items are not clickable", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -375,22 +396,41 @@ class HistorySettingsFragment : Fragment() {
         val greaterThan =
             dbHandler.getCount() - DaysWorkedPerWeek(requireContext()).loadDaysWorked()
         if (dbHandler.getCount() > DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
-            val alert = MaterialAlertDialogBuilder(
-                requireContext(),
-                AccentColor(requireContext()).alertTheme()
-            )
-            alert.setCancelable(false)
-            alert.setTitle(getString(R.string.warning))
-            if (greaterThan > 1) {
-                alert.setMessage(getString(R.string.history_deletion_multiple, greaterThan))
-            } else {
-                alert.setMessage(getString(R.string.history_deletion_single, greaterThan))
+
+            val dialog = BottomSheetDialog(requireContext())
+            val historySettingsWarningBottomSheet = LayoutInflater.from(context)
+                .inflate(R.layout.history_settings_warning_bottom_sheet, null)
+            dialog.setContentView(historySettingsWarningBottomSheet)
+            dialog.setCancelable(false)
+
+            val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
+            val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
+            val infoCardView = historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
+            val yesButton = historySettingsWarningBottomSheet.findViewById<Button>(R.id.yesButton)
+            val noButton =
+                historySettingsWarningBottomSheet.findViewById<Button>(R.id.cancelButton)
+
+            title.text = "Warning"
+
+            if (DeleteAllOnLimitReachedData(requireContext()).loadDeleteAllState()) {
+                body.text = "The number of hours stored is greater than the number allowed to be stored. Would you like to delete all entries?"
+            }
+            else {
+                if (greaterThan > 1) {
+                    body.text = getString(R.string.history_deletion_multiple, greaterThan)
+                } else {
+                    body.text = getString(R.string.history_deletion_single, greaterThan)
+                }
             }
 
-            val historyDeletion2 = HistoryDeletion(requireContext())
-            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                Vibrate().vibration(requireContext())
+            infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
 
+            val historyDeletion2 = HistoryDeletion(requireContext())
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                dialog.dismiss()
                 val undoValues = historyDeletion2.deletion()
                 val runnable = Runnable {
                     (context as MainActivity).changeBadgeNumber()
@@ -401,16 +441,17 @@ class HistorySettingsFragment : Fragment() {
                 snackbar.duration = 5000
 
                 snackbar.setAction(getString(R.string.undo)) {
-
+                    Vibrate().vibration(requireContext())
                     historyDeletion.setHistoryDeletionState(false)
 
                     for (i in 1..undoValues["count"]!!.toInt()) {
-                        dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["breakTime"].toString().toLong(), undoValues["breakTime"].toString())
+                        dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["date"].toString().toLong(), undoValues["breakTime"].toString())
                     }
 
                     MainActivity().runOnUiThread(runnable)
 
                     toggleHistoryAutomaticDeletion?.isChecked = false
+                    toggleHistoryAutomaticDeletion?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 }
 
                 snackbar.setActionTextColor(
@@ -421,19 +462,15 @@ class HistorySettingsFragment : Fragment() {
                 }
                 snackbar.show()
             }
-            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+            noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
+                dialog.dismiss()
                 historyDeletion.setHistoryDeletionState(false)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.history_automatic_deletion_disabled),
-                    Toast.LENGTH_SHORT
-                ).show()
 
                 toggleHistoryAutomaticDeletion?.isChecked = false
                 activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            alert.show()
+            dialog.show()
         }
     }
 
@@ -460,6 +497,7 @@ class HistorySettingsFragment : Fragment() {
     }
 
     private fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.historySettingsCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val toggleHistoryCardView = requireView().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val historyDeletionCardView = requireView().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
         val historyDeleteAllOnLimitReached = requireView().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
