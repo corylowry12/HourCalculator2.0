@@ -15,6 +15,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -79,34 +80,7 @@ class TimeCardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val collapsingToolbarLayout =
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
-
-        collapsingToolbarLayout?.setContentScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
-        collapsingToolbarLayout?.setStatusBarScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
-
-        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
-                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-        } else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
-                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-        }
+       updateCustomTheme()
 
         val recyclerViewTimeCards = view.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
 
@@ -237,6 +211,13 @@ class TimeCardsFragment : Fragment() {
             map["totalHours"] =
                 cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
             map["week"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_WEEK))
+            try {
+                map["image"] =
+                    cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_IMAGE))
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+                map["image"] = ""
+            }
             map["count"] =
                 TimeCardsItemDBHelper(requireActivity().applicationContext, null).getCountForItemID(
                     map["id"].toString().toInt()
@@ -311,6 +292,38 @@ class TimeCardsFragment : Fragment() {
             val noHoursStoredTextView =
                 activity?.findViewById<TextView>(R.id.noEntriesStoredTextViewTimeCards)
             noHoursStoredTextView?.visibility = View.VISIBLE
+        }
+    }
+
+    fun updateCustomTheme() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.timeCardsCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        val collapsingToolbarLayout =
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+
+        collapsingToolbarLayout?.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout?.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 }
