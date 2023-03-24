@@ -70,7 +70,7 @@ class SavedColorsFragment : Fragment() {
         val savedColorsRecyclerView = requireActivity().findViewById<RecyclerView>(R.id.savedColorRecyclerView)
         savedColorsRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
         savedColorsRecyclerView.adapter =
-            SavedColorsAdapter(requireContext(), UserAddedColors(requireContext()).loadColors()!!, this)
+            SavedColorsAdapter(requireContext(), UserAddedColors(requireContext()).read(), this)
     }
 
     fun updateCustomColor() {
