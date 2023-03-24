@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/savedColorItemCardView"
+    style="@style/Widget.Material3.CardView.Filled"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:animateLayoutChanges="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:id="@+id/savedColorTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/settingsTextColor"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/imageViewRenameCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="test" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/imageViewRenameCardView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/savedColorPreviewCardView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="15dp"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:foreground="?attr/selectableItemBackground">
+            <ImageButton
+                android:id="@+id/imageViewRename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:clickable="false"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/savedColorPreviewCardView"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            app:cardCornerRadius="9dp"
+            style="@style/Widget.Material3.CardView.Filled"
+            app:strokeColor="#000000"
+            app:strokeWidth="1dp"
+            android:contentDescription="savedColorPreviewCardView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
