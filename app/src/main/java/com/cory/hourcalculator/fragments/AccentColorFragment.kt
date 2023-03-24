@@ -31,6 +31,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.slider.Slider
@@ -76,6 +77,24 @@ class AccentColorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /*val addedColors = UserAddedColors(requireContext()).read()
+        val dataList = ArrayList<HashMap<String, String>>()
+
+        for (i in 0 until UserAddedColors(requireContext()).read().count()) {
+            val allColors = HashMap<String, String>()
+            try {
+                allColors["name"] = addedColors[i]["name"].toString()
+            } catch (e: java.lang.Exception) {
+                allColors["name"] = ""
+            }
+            allColors["hex"] = addedColors[i]["hex"].toString()
+            dataList.add(allColors)
+        }
+
+        val alert = MaterialAlertDialogBuilder(requireContext())
+        alert.setMessage(addedColors.toString())
+        alert.show()*/
 
         val topAppBarAccent = view.findViewById<MaterialToolbar>(R.id.materialToolBarAccentColorFragment)
 
@@ -371,11 +390,11 @@ class AccentColorFragment : Fragment() {
             customColorPickerDialog.show()
         }
 
-        requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).loadColors()?.count().toString()
+        requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).read().count().toString()
 
         addColorCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val allColors = mutableSetOf<String>()
+            /*val allColors = mutableSetOf<String>()
             val colorsSet = UserAddedColors(requireContext()).loadColors()
             val oldCount = colorsSet?.count()
             for (i in 0 until UserAddedColors(requireContext()).loadColors()!!.count()) {
@@ -389,13 +408,46 @@ class AccentColorFragment : Fragment() {
             }
             else {
                 Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+            }*/
+
+            val addedColors = UserAddedColors(requireContext()).read()
+            val dataList = ArrayList<HashMap<String, String>>()
+
+            for (i in 0 until UserAddedColors(requireContext()).read().count()) {
+                val allColors = HashMap<String, String>()
+                try {
+                    allColors["name"] = addedColors[i]["name"].toString()
+                } catch (e: java.lang.Exception) {
+                    allColors["name"] = ""
+                }
+                allColors["hex"] = addedColors[i]["hex"].toString()
+                dataList.add(allColors)
             }
-            requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).loadColors()?.count().toString()
+            val contains = dataList.filter { it.containsValue(requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text.drop(1).toString()) }
+
+            if (contains.isEmpty()) {
+                val newColor = HashMap<String, String>()
+                newColor["name"] = ""
+                newColor["hex"] =
+                    requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text.drop(
+                        1
+                    ).toString()
+                dataList.add(newColor)
+                UserAddedColors(requireContext()).insert(dataList)
+            }
+
+            if (contains.isEmpty()) {
+                Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+            }
+            requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColors(requireContext()).read().count().toString()
         }
 
         viewSavedColorsCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-            if (UserAddedColors(requireContext()).loadColors()?.isEmpty()!!) {
+            if (UserAddedColors(requireContext()).read().isEmpty()) {
                 Toast.makeText(requireContext(), "Must save a color first", Toast.LENGTH_SHORT).show()
             }
             else {
@@ -461,6 +513,7 @@ class AccentColorFragment : Fragment() {
         val customColorGenerator = CustomColorGenerator(requireContext())
 
         val customCardView = requireActivity().findViewById<MaterialCardView>(R.id.customCardViewAccentColor)
+        val customColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.customThemeColorThemeCardView)
         val addColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.addColorCardView)
         val viewSavedColorsCardView = requireActivity().findViewById<MaterialCardView>(R.id.viewSavedColorsCardView)
         val generateARandomColorCardView = requireActivity().findViewById<MaterialCardView>(R.id.generateARandomColorOnAppLaunchCardView)
@@ -469,6 +522,7 @@ class AccentColorFragment : Fragment() {
         val material2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
 
         customCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
+        customColorCardView.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCustomColorPrimary()))
         addColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         viewSavedColorsCardView.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         generateARandomColorCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
@@ -531,6 +585,10 @@ class AccentColorFragment : Fragment() {
         if (ColoredNavBarData(requireContext()).loadNavBar()) {
             activity?.window?.navigationBarColor =
                 Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
+        }
+        else {
+            activity?.window?.navigationBarColor =
+                Color.parseColor("#000000")
         }
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
