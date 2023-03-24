@@ -75,6 +75,8 @@
                 app:chipCornerRadius="28dp"
                 android:layout_height="wrap_content"
                 app:closeIcon="@drawable/ic_baseline_chevron_right_24"
+                app:chipIconEnabled="true"
+                app:chipIcon="@drawable/baseline_image_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
