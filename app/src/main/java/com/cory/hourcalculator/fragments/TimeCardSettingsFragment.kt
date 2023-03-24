@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -105,6 +106,7 @@ class TimeCardSettingsFragment : Fragment() {
         }
 
         coloredImageViewBackgroundCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
             imageViewBackgroundSwitch.isChecked = !imageViewBackgroundSwitch.isChecked
             imageViewBackground.setMatchImageViewContents(imageViewBackgroundSwitch.isChecked)
 
@@ -153,6 +155,7 @@ class TimeCardSettingsFragment : Fragment() {
     }
 
     fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.coordinatorLayoutTimeCardSettings).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardSettings)
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
