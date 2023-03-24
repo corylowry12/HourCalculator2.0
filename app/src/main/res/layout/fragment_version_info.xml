@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     android:fitsSystemWindows="true"
     android:id="@+id/coordinatorLayoutVersionInfo"
     tools:context=".fragments.VersionInfoFragment">
@@ -16,6 +15,7 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLayoutVersionInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
@@ -205,13 +205,14 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/materialConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:background="@null">
 
                     <TextView
                         android:id="@+id/materialHeading"
@@ -269,13 +270,14 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/googleAdsConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:background="@null">
 
                     <TextView
                         android:id="@+id/adsHeading"
@@ -334,13 +336,14 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firebaseAnalyticsConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:background="@null">
 
                     <TextView
                         android:id="@+id/analyticsHeading"
@@ -398,13 +401,14 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firebaseCrashlyticsConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:background="@null">
 
                     <TextView
                         android:id="@+id/crashlyticsHeading"
@@ -463,13 +467,14 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firebasePerfConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:background="@null">
 
                     <TextView
                         android:id="@+id/performanceHeading"
@@ -528,13 +533,14 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/inAppReviewConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:background="@null">
 
                     <TextView
                         android:id="@+id/inAppReviewHeading"
