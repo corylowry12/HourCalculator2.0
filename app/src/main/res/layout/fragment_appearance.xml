@@ -5,7 +5,6 @@
     android:id="@+id/coordinatorLayoutAppearance"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     android:fitsSystemWindows="true"
     tools:context=".fragments.AppearanceFragment">
 
@@ -65,7 +64,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:padding="20dp"
+                    android:background="@null">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/currentSelectedThemeCardView"
@@ -117,13 +117,14 @@
                 android:layout_below="@id/themeCardViewAppearance"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/accentColorConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@null"
                     android:padding="20dp">
 
                         <com.google.android.material.card.MaterialCardView
@@ -175,14 +176,14 @@
                 android:layout_below="@id/accentColorCardView"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/appIconConstraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@null"
                     android:padding="10dp">
 
                     <com.google.android.material.card.MaterialCardView
@@ -191,7 +192,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-
                         app:cardCornerRadius="12dp">
 
                         <ImageView
