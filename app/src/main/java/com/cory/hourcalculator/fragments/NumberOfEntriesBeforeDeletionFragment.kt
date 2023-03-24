@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.cory.hourcalculator.R
@@ -305,21 +306,41 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         val greaterThan =
             dbHandler.getCount() - number
         if (dbHandler.getCount() > number) {
-            val alert = MaterialAlertDialogBuilder(
-                requireContext(),
-                AccentColor(requireContext()).alertTheme()
-            )
-            alert.setCancelable(false)
-            alert.setTitle(getString(R.string.warning))
-            if (greaterThan > 1) {
-                alert.setMessage(getString(R.string.history_deletion_multiple, greaterThan))
-            } else {
-                alert.setMessage(getString(R.string.history_deletion_single, greaterThan))
+
+            val dialog = BottomSheetDialog(requireContext())
+            val historySettingsWarningBottomSheet = LayoutInflater.from(context)
+                .inflate(R.layout.history_settings_warning_bottom_sheet, null)
+            dialog.setContentView(historySettingsWarningBottomSheet)
+            dialog.setCancelable(false)
+
+            val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
+            val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
+            val infoCardView = historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
+            val yesButton = historySettingsWarningBottomSheet.findViewById<Button>(R.id.yesButton)
+            val noButton =
+                historySettingsWarningBottomSheet.findViewById<Button>(R.id.cancelButton)
+
+            title.text = "Warning"
+
+            if (DeleteAllOnLimitReachedData(requireContext()).loadDeleteAllState()) {
+                body.text = "The number of hours stored is greater than the number allowed to be stored. Would you like to delete all entries?"
+            }
+            else {
+                if (greaterThan > 1) {
+                    body.text = getString(R.string.history_deletion_multiple, greaterThan)
+                } else {
+                    body.text = getString(R.string.history_deletion_single, greaterThan)
+                }
             }
 
+            infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+            noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
             val historyDeletion = HistoryDeletion(requireContext())
-            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            yesButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
+                dialog.dismiss()
                 DaysWorkedPerWeek(requireContext()).setDaysWorked(number)
 
                 when (number) {
@@ -403,7 +424,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     DaysWorkedPerWeek(requireContext()).setDaysWorked(7)
 
                     for (i in 1..undoValues["count"]!!.toInt()) {
-                        dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["breakTime"].toString().toLong(), undoValues["breakTime"].toString())
+                        dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["date"].toString().toLong(), undoValues["breakTime"].toString())
                     }
 
                     MainActivity().runOnUiThread(runnable)
@@ -419,88 +440,153 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                 }
                 snackbar.show()
             }
-            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+            noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
-                HistoryAutomaticDeletion(requireContext()).setHistoryDeletionState(false)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.history_automatic_deletion_disabled),
-                    Toast.LENGTH_SHORT
-                ).show()
+                dialog.dismiss()
+                DaysWorkedPerWeek(requireContext()).setDaysWorked(DaysWorkedPerWeek(requireContext()).loadDaysWorked())
+
+                when (DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
+                    1 -> {
+                        one.isChecked = true
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    2 -> {
+                        one.isChecked = false
+                        two.isChecked = true
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    3 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = true
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    4 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = true
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    5 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = true
+                        six.isChecked = false
+                        seven.isChecked = false
+                    }
+                    6 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = true
+                        seven.isChecked = false
+                    }
+                    7 -> {
+                        one.isChecked = false
+                        two.isChecked = false
+                        three.isChecked = false
+                        four.isChecked = false
+                        five.isChecked = false
+                        six.isChecked = false
+                        seven.isChecked = true
+                    }
+                }
 
                 activity?.supportFragmentManager?.popBackStack()
             }
-            alert.show()
+            dialog.show()
         }
         else {
             DaysWorkedPerWeek(requireContext()).setDaysWorked(number)
-            if (number == 1) {
-                one.isChecked = true
-                two.isChecked = false
-                three.isChecked = false
-                four.isChecked = false
-                five.isChecked = false
-                six.isChecked = false
-                seven.isChecked = false
-            }
-            else if (number == 2) {
-                one.isChecked = false
-                two.isChecked = true
-                three.isChecked = false
-                four.isChecked = false
-                five.isChecked = false
-                six.isChecked = false
-                seven.isChecked = false
-            }
-            else if (number == 3) {
-                one.isChecked = false
-                two.isChecked = false
-                three.isChecked = true
-                four.isChecked = false
-                five.isChecked = false
-                six.isChecked = false
-                seven.isChecked = false
-            }
-            else if (number == 4) {
-                one.isChecked = false
-                two.isChecked = false
-                three.isChecked = false
-                four.isChecked = true
-                five.isChecked = false
-                six.isChecked = false
-                seven.isChecked = false
-            }
-            else if (number == 5) {
-                one.isChecked = false
-                two.isChecked = false
-                three.isChecked = false
-                four.isChecked = false
-                five.isChecked = true
-                six.isChecked = false
-                seven.isChecked = false
-            }
-            else if (number == 6) {
-                one.isChecked = false
-                two.isChecked = false
-                three.isChecked = false
-                four.isChecked = false
-                five.isChecked = false
-                six.isChecked = true
-                seven.isChecked = false
-            }
-            else if (number == 7) {
-                one.isChecked = false
-                two.isChecked = false
-                three.isChecked = false
-                four.isChecked = false
-                five.isChecked = false
-                six.isChecked = false
-                seven.isChecked = true
+            when (number) {
+                1 -> {
+                    one.isChecked = true
+                    two.isChecked = false
+                    three.isChecked = false
+                    four.isChecked = false
+                    five.isChecked = false
+                    six.isChecked = false
+                    seven.isChecked = false
+                }
+                2 -> {
+                    one.isChecked = false
+                    two.isChecked = true
+                    three.isChecked = false
+                    four.isChecked = false
+                    five.isChecked = false
+                    six.isChecked = false
+                    seven.isChecked = false
+                }
+                3 -> {
+                    one.isChecked = false
+                    two.isChecked = false
+                    three.isChecked = true
+                    four.isChecked = false
+                    five.isChecked = false
+                    six.isChecked = false
+                    seven.isChecked = false
+                }
+                4 -> {
+                    one.isChecked = false
+                    two.isChecked = false
+                    three.isChecked = false
+                    four.isChecked = true
+                    five.isChecked = false
+                    six.isChecked = false
+                    seven.isChecked = false
+                }
+                5 -> {
+                    one.isChecked = false
+                    two.isChecked = false
+                    three.isChecked = false
+                    four.isChecked = false
+                    five.isChecked = true
+                    six.isChecked = false
+                    seven.isChecked = false
+                }
+                6 -> {
+                    one.isChecked = false
+                    two.isChecked = false
+                    three.isChecked = false
+                    four.isChecked = false
+                    five.isChecked = false
+                    six.isChecked = true
+                    seven.isChecked = false
+                }
+                7 -> {
+                    one.isChecked = false
+                    two.isChecked = false
+                    three.isChecked = false
+                    four.isChecked = false
+                    five.isChecked = false
+                    six.isChecked = false
+                    seven.isChecked = true
+                }
             }
         }
     }
 
     private fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.numberOfEntriesBeforeDeletionCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val oneCardView = requireView().findViewById<MaterialCardView>(R.id.oneCardView)
         oneCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         val twoCardView = requireView().findViewById<MaterialCardView>(R.id.twoCardView)
