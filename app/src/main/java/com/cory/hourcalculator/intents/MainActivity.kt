@@ -2,13 +2,10 @@ package com.cory.hourcalculator.intents
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,17 +26,12 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-
-@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
-
-    public lateinit var mContext : Context
 
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
@@ -52,7 +44,11 @@ class MainActivity : AppCompatActivity() {
 
     private val dbHandler = DBHelper(this, null)
 
-    @SuppressLint("CutPasteId")
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColor()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -84,13 +80,21 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
+        val dataList = ArrayList<HashMap<String, String>>()
+
+        for (i in 0 until UserAddedColors(this).loadColors()!!.count()) {
+            val colors = kotlin.collections.HashMap<String, String>()
+            colors["name"] = ""
+            colors["hex"] = UserAddedColors(this).loadColors()!!.elementAt(i)
+            dataList.add(colors)
+        }
+
+        UserAddedColors(this).insert(dataList)
+        UserAddedColors(this).clear()
+
         if (GenerateARandomColorData(this).loadGenerateARandomColorOnAppLaunch()) {
             CustomColorGenerator(this).generateARandomColor()
         }
-
-        mContext = this
-
-        Log.i("DEBUG", "created")
 
         if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
             if (isComponentEnabled("com.cory.hourcalculator.SplashScreenNoIcon") == 1) {
@@ -109,7 +113,6 @@ class MainActivity : AppCompatActivity() {
                 ChosenAppIconData(this).setChosenAppIcon("material you")
             }
         }
-        Log.i("DEBUG", "check shared pref 2")
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -137,8 +140,6 @@ class MainActivity : AppCompatActivity() {
                 mAdView.loadAd(adRequest)
         }
         runOnUiThread(runnable)
-
-        Log.i("DEBUG", "created ad")
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
@@ -197,6 +198,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.timeCards -> {
                     val currentFragment = supportFragmentManager.fragments.last()
+
                     if (currentFragment.toString().startsWith("EditHours", true)) {
                         bottomNav.menu.findItem(R.id.timeCards).isChecked = false
                         bottomNav.menu.findItem(R.id.history).isChecked = true
@@ -205,6 +207,16 @@ class MainActivity : AppCompatActivity() {
                     }
                     else if (currentFragment.toString().startsWith("Time", true) && (!currentFragment.toString().contains("Info") && !currentFragment.toString().contains("Settings"))) {
                         timeCards.scrollToTop()
+                        return@setOnItemSelectedListener true
+                    }
+                    else if (currentFragment.toString().startsWith("Time", true) && (currentFragment.toString().contains("Info") && !currentFragment.toString().contains("Settings")) || currentFragment.toString().startsWith("supportrequestmanager", true)) {
+                        val transaction = supportFragmentManager.beginTransaction()
+                        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+
+                        transaction.replace(R.id.fragment_container, timeCards).addToBackStack(null)
+
+                        transaction.commit()
+                        currentTab = 2
                         return@setOnItemSelectedListener true
                     }
                     else {
@@ -257,19 +269,15 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        Log.i("DEBUG", "created bottom nav click listeners")
-
         bottomNav.itemActiveIndicatorColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
 
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, homeFragment)
         transaction.commitNow()
-        Log.i("DEBUG", "created home fragment")
     }
 
     fun updateBottomNavCustomColor() {
-        Log.i("DEBUG", "updated bottom nav colors")
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.itemIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
         bottomNav.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor()))
@@ -278,26 +286,9 @@ class MainActivity : AppCompatActivity() {
         bottomNav.itemActiveIndicatorColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
     }
 
-       fun openTimeCardInfoView(id: String, name: String) {
-            val timeCardInfoFragment = TimeCardItemInfoFragment()
-            timeCardInfoFragment.arguments = Bundle().apply {
-                putString("id", id)
-                putString("name", name)
-            }
-            val manager =
-                this.supportFragmentManager.beginTransaction()
-            manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            manager.replace(R.id.fragment_container, timeCardInfoFragment)
-                .addToBackStack(null)
-            manager.commit()
-        }
-
-
     private fun replaceFragment(fragment: Fragment, goingToTab: Int) {
-        Log.i("DEBUG", "replaced fragment")
 
         val transaction = supportFragmentManager.beginTransaction()
-        val bottomNav = this.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         /*if (homeFragment.isVisible) {
             transaction.setCustomAnimations(
@@ -371,11 +362,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
+
         transaction.commit()
     }
 
     fun update() {
-        Log.i("DEBUG", "changed badge number")
         changeBadgeNumber()
     }
 
@@ -401,44 +392,37 @@ class MainActivity : AppCompatActivity() {
         snackbar.show()
     }
 
-    fun undo() {
-        Log.i("DEBUG", "undo")
+    private fun undo() {
         historyFragment.undo()
         changeBadgeNumber()
     }
 
     fun saveState() {
-        Log.i("DEBUG", "save state")
         changeBadgeNumber()
         historyFragment.saveState()
     }
 
     fun saveTimeCardState() {
-        Log.i("DEBUG", "save time card state")
         changeBadgeNumber()
         timeCards.saveState()
     }
 
     fun restoreState() {
-        Log.i("DEBUG", "restore history state")
         changeBadgeNumber()
         historyFragment.restoreState()
     }
 
     fun deleteAll() {
-        Log.i("DEBUG", "history delete all")
         changeBadgeNumber()
         historyFragment.deleteAll()
     }
 
     fun deleteAllTimeCards() {
-        Log.i("DEBUG", "time cards delete all")
         update()
         timeCards.deleteAll()
     }
 
     fun checkBoxVisible(visible: Boolean) {
-        Log.i("DEBUG", "history check box visible")
         historyFragment.checkBoxVisible(visible)
     }
 
@@ -488,27 +472,40 @@ class MainActivity : AppCompatActivity() {
     fun setActiveTab(view: Int) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
-        if (view == 0) {
-            bottomNav.menu.findItem(R.id.ic_home).isChecked = true
-        }
-        else if (view == 1) {
-            bottomNav.menu.findItem(R.id.history).isChecked = true
-        }
-        else if (view == 2) {
-            bottomNav.menu.findItem(R.id.timeCards).isChecked = true
-        }
-        else if (view == 3) {
-            bottomNav.menu.findItem(R.id.settings).isChecked = true
+        when (view) {
+            0 -> {
+                bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+            }
+            1 -> {
+                bottomNav.menu.findItem(R.id.history).isChecked = true
+            }
+            2 -> {
+                bottomNav.menu.findItem(R.id.timeCards).isChecked = true
+            }
+            3 -> {
+                bottomNav.menu.findItem(R.id.settings).isChecked = true
+            }
         }
     }
 
     @SuppressLint("CutPasteId")
-    fun setBackgroundColor() {
+    fun updateCustomColor() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
         val badge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
         val timeCardBadge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+
+        updateBottomNavCustomColor()
+
+        if (ColoredNavBarData(this).loadNavBar()) {
+            window?.navigationBarColor =
+                Color.parseColor(CustomColorGenerator(this).generateNavBarColor())
+        }
+        else {
+            window?.navigationBarColor =
+                Color.parseColor("#000000")
+        }
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -611,6 +608,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun openTimeCardInfoView(id: String, name: String) {
+        val timeCardInfoFragment = TimeCardItemInfoFragment()
+        timeCardInfoFragment.arguments = Bundle().apply {
+            putString("id", id)
+            putString("name", name)
+        }
+        val manager = supportFragmentManager.beginTransaction()
+        manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        manager.replace(R.id.fragment_container, timeCardInfoFragment)
+            .addToBackStack(null)
+        manager.commit()
     }
 
     private fun isComponentEnabled(componentName: String) : Int {
