@@ -28,8 +28,12 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
 
-
 class HomeFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomTheme()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -149,7 +153,7 @@ class HomeFragment : Fragment() {
         }
 
         val constraintLayout =
-            requireActivity().findViewById<CoordinatorLayout>(R.id.homeFragmentConstraintLayout)
+            requireActivity().findViewById<CoordinatorLayout>(R.id.homeFragmentCoordinatorLayout)
 
         constraintLayout?.setOnClickListener {
             val imm =
@@ -211,7 +215,7 @@ class HomeFragment : Fragment() {
 
         var doubleBackToExitPressedOnce = false
 
-        requireActivity().onBackPressedDispatcher?.addCallback(
+        requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -239,6 +243,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateCustomTheme() {
+
+        requireActivity().findViewById<CoordinatorLayout>(R.id.homeFragmentCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
 
         val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment)
 
@@ -362,7 +368,7 @@ class HomeFragment : Fragment() {
                     Vibrate().vibrateOnError(requireContext())
                     infoTextView!!.text =
                         getString(R.string.error_with_break_time_must_be_numbers_only)
-                } else {
+                } else if (breakTime.text.toString().toInt() > 0) {
                     var withBreak =
                         (diffMinutes.toInt() - breakTime.text.toString().toInt()).toString()
                     var hoursWithBreak = diffHours
@@ -401,6 +407,24 @@ class HomeFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                    }
+                }
+                else {
+                    savingHours(
+                        "$diffHours:$diffMinutes",
+                        inTimeTotal,
+                        outTimeTotal,
+                        "0"
+                    )
+                    infoTextView?.text =
+                        getString(R.string.total_hours_time_format, diffHours, diffMinutes)
+
+                    if (method == 1) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.hour_calculated_in_time_format),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } else {
@@ -537,7 +561,7 @@ class HomeFragment : Fragment() {
                     Vibrate().vibrateOnError(requireContext())
                     infoTextView1!!.text =
                         getString(R.string.error_with_break_time_must_be_numbers_only)
-                } else {
+                } else if (breakTime.text.toString().toInt() > 0) {
                     breakTimeNumber = breakTime.text.toString().toDouble() / 60
                     val totalHoursWithBreak = (totalHours - breakTimeNumber).toBigDecimal()
                         .setScale(2, RoundingMode.HALF_EVEN)
@@ -566,6 +590,21 @@ class HomeFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                    }
+                }
+                else {
+                    savingHours(totalHours.toString(), inTimeTotal, outTimeTotal, "0")
+                    infoTextView1?.text = getString(
+                        R.string.total_hours_decimal_format,
+                        hoursDifference,
+                        minutesWithoutFirstDecimal
+                    )
+                    if (method == 1) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.hour_calculated_in_decimal_format),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } else {
@@ -615,6 +654,10 @@ class HomeFragment : Fragment() {
 
             val date = System.currentTimeMillis()
             dbHandler.insertRow(inTimeTotal, outTimeTotal, totalHours, date, breakTime)
+        }
+
+        if (ClearBreakTextAutomaticallyData(requireContext()).loadClearAutomatically()) {
+            requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment).text = null
         }
     }
 
