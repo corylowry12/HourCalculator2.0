@@ -18,15 +18,18 @@ import androidx.activity.OnBackPressedCallback
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.CornerFamily
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class VersionInfoFragment : Fragment() {
 
     private var package_name = "com.android.chrome"
@@ -66,6 +69,171 @@ class VersionInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        updateCustomTheme()
+
+        val topAppBarVersionInfo =
+            activity?.findViewById<MaterialToolbar>(R.id.topAppBarVersionInfo)
+
+        topAppBarVersionInfo?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            })
+
+        val versionHeadingCardView = requireActivity().findViewById<MaterialCardView>(R.id.versionHeadingCardView)
+        val buildNumberCardView = requireActivity().findViewById<MaterialCardView>(R.id.buildNumberCardView)
+        val dateUpdatedCardView = requireActivity().findViewById<MaterialCardView>(R.id.dateUpdatedCardView)
+        val materialDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.materialDependencyCardView)
+        val googleAdsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.googleAdsDependencyCardView)
+        val firebaseAnalyticsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebaseAnalyticsDependencyCardView)
+        val firebaseCrashlyticsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebaseCrashlyticsDependencyCardView)
+        val firebasePerformanceMonitoringDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebasePerformanceMonitoringDependencyCardView)
+        val inAppReviewDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.inAppReviewDependencyCardView)
+
+        versionHeadingCardView.shapeAppearanceModel = versionHeadingCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        buildNumberCardView.shapeAppearanceModel = buildNumberCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        dateUpdatedCardView.shapeAppearanceModel = dateUpdatedCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        materialDependencyCardView.shapeAppearanceModel = materialDependencyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        googleAdsDependencyCardView.shapeAppearanceModel = googleAdsDependencyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        firebaseAnalyticsDependencyCardView.shapeAppearanceModel = firebaseAnalyticsDependencyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        firebaseCrashlyticsDependencyCardView.shapeAppearanceModel = firebaseCrashlyticsDependencyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        firebasePerformanceMonitoringDependencyCardView.shapeAppearanceModel = firebasePerformanceMonitoringDependencyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+       inAppReviewDependencyCardView.shapeAppearanceModel = inAppReviewDependencyCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
+        val materialSubtitle = view.findViewById<TextView>(R.id.materialSubtitle)
+
+        materialDependencyCardView.setOnClickListener {
+            LinkClass(requireContext()).setLink(materialSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val versionNumber = view.findViewById<TextView>(R.id.versionNumber)
+        val buildNumber = view.findViewById<TextView>(R.id.buildNumber)
+
+        versionNumber.text = BuildConfig.VERSION_NAME
+        buildNumber.text = BuildConfig.VERSION_CODE.toString()
+
+
+        val googleAdsSubtitle = view.findViewById<TextView>(R.id.googleAdsSubtitle)
+
+        googleAdsDependencyCardView.setOnClickListener {
+            LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val firebaseAnalyticsSubtitle = view.findViewById<TextView>(R.id.firebaseAnalyticsSubtitle)
+
+        firebaseAnalyticsDependencyCardView.setOnClickListener {
+            LinkClass(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val firebaseCrashlyticsSubtitle = view.findViewById<TextView>(R.id.firebaseCrashlyticsSubtitle)
+
+        firebaseCrashlyticsDependencyCardView.setOnClickListener {
+            LinkClass(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val firebasePerfSubtitle = view.findViewById<TextView>(R.id.firebasePerfSubtitle)
+
+        firebasePerformanceMonitoringDependencyCardView.setOnClickListener {
+            LinkClass(requireContext()).setLink(firebasePerfSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val inAppReviewSubtitle = view.findViewById<TextView>(R.id.inAppReviewSubtitle)
+
+        inAppReviewDependencyCardView.setOnClickListener {
+            LinkClass(requireContext()).setLink(inAppReviewSubtitle.text.toString())
+            openCustomTab()
+        }
+    }
+
+    fun updateCustomTheme() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.coordinatorLayoutVersionInfo).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+
+        val versionHeadingCardView = requireActivity().findViewById<MaterialCardView>(R.id.versionHeadingCardView)
+        val buildNumberCardView = requireActivity().findViewById<MaterialCardView>(R.id.buildNumberCardView)
+        val dateUpdatedCardView = requireActivity().findViewById<MaterialCardView>(R.id.dateUpdatedCardView)
+        val materialDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.materialDependencyCardView)
+        val googleAdsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.googleAdsDependencyCardView)
+        val firebaseAnalyticsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebaseAnalyticsDependencyCardView)
+        val firebaseCrashlyticsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebaseCrashlyticsDependencyCardView)
+        val firebasePerformanceMonitoringDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebasePerformanceMonitoringDependencyCardView)
+        val inAppReviewDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.inAppReviewDependencyCardView)
+
+        versionHeadingCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        buildNumberCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        dateUpdatedCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        materialDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        googleAdsDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        firebaseAnalyticsDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        firebaseCrashlyticsDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        firebasePerformanceMonitoringDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        inAppReviewDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
         val topAppBarVersionInfo =
             activity?.findViewById<MaterialToolbar>(R.id.topAppBarVersionInfo)
 
@@ -82,81 +250,27 @@ class VersionInfoFragment : Fragment() {
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
 
-        topAppBarVersionInfo?.setNavigationOnClickListener {
-            Vibrate().vibration(requireContext())
-            activity?.supportFragmentManager?.popBackStack()
+        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutVersionInfo)
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            collapsingToolbarLayout?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
         }
-
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    activity?.supportFragmentManager?.popBackStack()
-                }
-            })
-
-        val materialConstraint = view.findViewById<ConstraintLayout>(R.id.materialConstraintLayout)
-        val materialSubtitle = view.findViewById<TextView>(R.id.materialSubtitle)
-
-        materialConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(materialSubtitle.text.toString())
-            openCustomTab()
-        }
-
-        val versionNumber = view.findViewById<TextView>(R.id.versionNumber)
-        val buildNumber = view.findViewById<TextView>(R.id.buildNumber)
-
-        versionNumber.text = BuildConfig.VERSION_NAME
-        buildNumber.text = BuildConfig.VERSION_CODE.toString()
-
-        val googleAdsConstraint = view.findViewById<ConstraintLayout>(R.id.googleAdsConstraint)
-        val googleAdsSubtitle = view.findViewById<TextView>(R.id.googleAdsSubtitle)
-
-        googleAdsConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
-            openCustomTab()
-        }
-
-        val firebaseAnalyticsConstraint = view.findViewById<ConstraintLayout>(R.id.firebaseAnalyticsConstraint)
-        val firebaseAnalyticsSubtitle = view.findViewById<TextView>(R.id.firebaseAnalyticsSubtitle)
-
-        firebaseAnalyticsConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
-            openCustomTab()
-        }
-
-        val firebaseCrashlyticsConstraint = view.findViewById<ConstraintLayout>(R.id.firebaseCrashlyticsConstraint)
-        val firebaseCrashlyticsSubtitle = view.findViewById<TextView>(R.id.firebaseCrashlyticsSubtitle)
-
-        firebaseCrashlyticsConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
-            openCustomTab()
-        }
-
-        val firebasePerfConstraint = view.findViewById<ConstraintLayout>(R.id.firebasePerfConstraint)
-        val firebasePerfSubtitle = view.findViewById<TextView>(R.id.firebasePerfSubtitle)
-
-        firebasePerfConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(firebasePerfSubtitle.text.toString())
-            openCustomTab()
-        }
-
-        val inAppReviewConstraint = view.findViewById<ConstraintLayout>(R.id.inAppReviewConstraint)
-        val inAppReviewSubtitle = view.findViewById<TextView>(R.id.inAppReviewSubtitle)
-
-        inAppReviewConstraint.setOnClickListener {
-            LinkClass(requireContext()).setLink(inAppReviewSubtitle.text.toString())
-            openCustomTab()
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            collapsingToolbarLayout?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 
     private fun openCustomTab() {
+        Vibrate().vibration(requireContext())
         val builder = CustomTabsIntent.Builder()
         val params = CustomTabColorSchemeParams.Builder()
-        val typedValue = TypedValue()
-        (context as Activity).theme
-            .resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
-        params.setToolbarColor(ContextCompat.getColor(requireContext(), typedValue.resourceId))
+
+        params.setToolbarColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         builder.setDefaultColorSchemeParams(params.build())
         builder.setShowTitle(true)
         builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
