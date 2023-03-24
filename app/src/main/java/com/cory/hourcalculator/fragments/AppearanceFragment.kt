@@ -261,6 +261,30 @@ class AppearanceFragment : Fragment() {
             toggleColoredNavBar(coloredNavBarSwitch.isChecked, coloredNavBarData, accentColor)
         }
 
+        coloredNavigationBarCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the systems navigation bar will match the accent color that is chosen.\n" +
+                        "When disabled the navigation bar will be black."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val coloredMenuTintSwitch = view.findViewById<MaterialSwitch>(R.id.coloredMenuTintSwitch)
         val coloredMenuTintData = MenuTintData(requireContext())
 
@@ -372,24 +396,12 @@ class AppearanceFragment : Fragment() {
 
             activity?.window?.navigationBarColor =
                 Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
-
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.colored_nav_bar_enabled),
-                Toast.LENGTH_SHORT
-            ).show()
         } else {
             activity?.findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             activity?.window?.navigationBarColor =
                 ContextCompat.getColor(requireContext(), R.color.black)
             coloredNavBarData.setNavBar(false)
-
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.colored_nav_bar_disabled),
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 
@@ -405,17 +417,6 @@ class AppearanceFragment : Fragment() {
         )
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
-    }
-
-    private fun restartApplication() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            val intent =
-                requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
-            intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            activity?.finish()
-        }, 1000)
     }
 
     private fun updateCustomColorChange() {
