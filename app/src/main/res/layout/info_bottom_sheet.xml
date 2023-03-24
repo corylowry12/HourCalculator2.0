@@ -81,7 +81,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="5dp"
         android:text="Number of Entries:"
         android:textColor="?attr/settingsTextColor"
         style="@style/TextAppearance.Material3.BodyLarge"/>
@@ -111,7 +110,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="5dp"
         android:text="Wages:"
         android:textColor="?attr/settingsTextColor"
         style="@style/TextAppearance.Material3.BodyLarge"/>
