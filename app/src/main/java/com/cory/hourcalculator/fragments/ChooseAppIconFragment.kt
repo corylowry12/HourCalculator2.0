@@ -9,6 +9,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +21,11 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 
 class ChooseAppIconFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        customColorChange()
+    }
 
     private val appIconDataList = ArrayList<HashMap<String, String>>()
 
@@ -64,6 +70,37 @@ class ChooseAppIconFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        customColorChange()
+
+        gridLayoutManager = GridLayoutManager(requireContext(), 1)
+
+        val appIconRecyclerView = activity?.findViewById<RecyclerView>(R.id.appIconRecyclerView)
+        appIconRecyclerView?.layoutManager = gridLayoutManager
+        val iconArray = arrayOf(
+            R.drawable.hourcalclogoteal.toString(),
+            R.drawable.hourcalclogopink.toString(),
+            R.drawable.hourcalclogoorange.toString(),
+            R.drawable.hourcalclogored.toString(),
+            R.drawable.hourcalclogoblue.toString(),
+            R.drawable.hourcalculatorlogoyellowgradient.toString(),
+            R.drawable.hourcalclogo_christmas.toString(),
+            R.drawable.hourcalclogoteal.toString()
+        )
+        val iconNameArray =
+            arrayOf("Teal", "Pink", "Orange", "Red", "Blue", "OG", "Snow Falling", "Material You")
+        for (i in 0 until iconArray.count()) {
+            val map = HashMap<String, String>()
+            map["icon"] = iconArray.elementAt(i)
+            map["name"] = iconNameArray.elementAt(i)
+            appIconDataList.add(map)
+        }
+        appIconAdapter = AppIconAdapter(requireContext(), appIconDataList)
+
+        appIconRecyclerView?.adapter = appIconAdapter
+    }
+
+    private fun customColorChange() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.chooseAppIconCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val appIconToolBar =
             activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAppIconsFragment)
 
@@ -118,31 +155,5 @@ class ChooseAppIconFragment : Fragment() {
                 BlendMode.SRC_ATOP
             )
         }
-
-        gridLayoutManager = GridLayoutManager(requireContext(), 1)
-
-        val appIconRecyclerView = activity?.findViewById<RecyclerView>(R.id.appIconRecyclerView)
-        appIconRecyclerView?.layoutManager = gridLayoutManager
-        val iconArray = arrayOf(
-            R.drawable.hourcalclogoteal.toString(),
-            R.drawable.hourcalclogopink.toString(),
-            R.drawable.hourcalclogoorange.toString(),
-            R.drawable.hourcalclogored.toString(),
-            R.drawable.hourcalclogoblue.toString(),
-            R.drawable.hourcalculatorlogoyellowgradient.toString(),
-            R.drawable.hourcalclogo_christmas.toString(),
-            R.drawable.hourcalclogoteal.toString()
-        )
-        val iconNameArray =
-            arrayOf("Teal", "Pink", "Orange", "Red", "Blue", "OG", "Snow Falling", "Material You")
-        for (i in 0 until iconArray.count()) {
-            val map = HashMap<String, String>()
-            map["icon"] = iconArray.elementAt(i)
-            map["name"] = iconNameArray.elementAt(i)
-            appIconDataList.add(map)
-        }
-        appIconAdapter = AppIconAdapter(requireContext(), appIconDataList)
-
-        appIconRecyclerView?.adapter = appIconAdapter
     }
 }
