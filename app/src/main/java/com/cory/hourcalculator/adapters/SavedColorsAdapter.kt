@@ -7,21 +7,20 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.fragments.SavedColorsFragment
 import com.cory.hourcalculator.intents.MainActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
-import java.util.ArrayList
-import java.util.HashMap
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 
 class SavedColorsAdapter(private val context: Context,
-private val dataList: MutableSet<String>, fragment: SavedColorsFragment
+private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsFragment
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val newFragment = fragment
 
@@ -35,10 +34,22 @@ private val dataList: MutableSet<String>, fragment: SavedColorsFragment
         fun bind(position: Int) {
             savedColorCardView = itemView.findViewById(R.id.savedColorItemCardView)
 
-            title.text = "#${dataList.elementAt(position).toString()}"
+            val imageViewRename = itemView.findViewById<ImageButton>(R.id.imageViewRename)
+            val imageViewRenameCardView = itemView.findViewById<MaterialCardView>(R.id.imageViewRenameCardView)
 
+            imageViewRenameCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateTopAppBarColor()))
+
+            val color = Color.parseColor(CustomColorGenerator(context).generateMenuTintColor())
+            imageViewRename.setColorFilter(color)
+
+            if (dataList[position]["name"] == "") {
+                title.text = "#${dataList[position]["hex"]}"
+            }
+            else {
+                title.text = dataList[position]["name"]
+            }
             savedColorCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-            previewCardView.setCardBackgroundColor(Color.parseColor(title.text.toString()))
+            previewCardView.setCardBackgroundColor(Color.parseColor("#${dataList[position]["hex"]}"))
 
             if (dataList.count() == 1) {
                 savedColorCardView.shapeAppearanceModel = savedColorCardView.shapeAppearanceModel
@@ -77,7 +88,7 @@ private val dataList: MutableSet<String>, fragment: SavedColorsFragment
             }
 
             if (!MaterialYouEnabled(context).loadMaterialYou()) {
-                if (CustomColorGenerator(context).loadCustomHex() == title.text) {
+                if (CustomColorGenerator(context).loadCustomHex() == "#${dataList[position]["hex"]}") {
                     savedColorCardView.strokeWidth = 7
                 } else {
                     savedColorCardView.strokeWidth = 0
@@ -95,9 +106,76 @@ private val dataList: MutableSet<String>, fragment: SavedColorsFragment
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         savedColorCardView = holder.itemView.findViewById(R.id.savedColorItemCardView)
 
+        holder.itemView.findViewById<MaterialCardView>(R.id.imageViewRenameCardView).setOnClickListener {
+            Vibrate().vibration(context)
+            val dialog = BottomSheetDialog(context)
+            val renameLayout = LayoutInflater.from(context)
+                .inflate(R.layout.rename_color_bottom_sheet, null)
+            dialog.setContentView(renameLayout)
+            dialog.setCancelable(true)
+
+            val editText = renameLayout.findViewById<TextInputEditText>(R.id.renameTextInputEditText)
+            val renameButton = renameLayout.findViewById<Button>(R.id.renameButton)
+            val cancelButton = renameLayout.findViewById<Button>(R.id.cancelButton)
+            val renameCardView = renameLayout.findViewById<MaterialCardView>(R.id.renameCardView)
+
+            renameCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(context).generateCardColor()
+                )
+            )
+            renameButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        context
+                    ).generateCustomColorPrimary()
+                )
+            )
+            cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+            editText.setText(dataList[holder.adapterPosition]["name"].toString())
+
+            renameButton.setOnClickListener {
+                Vibrate().vibration(context)
+                dialog.dismiss()
+                val addedColors = UserAddedColors(context).read()
+                dataList.clear()
+
+                for (i in 0 until UserAddedColors(context).read().count()) {
+                    val allColors = HashMap<String, String>()
+                    if (i == holder.adapterPosition) {
+                        try {
+                            allColors["name"] = editText.text.toString()
+                        } catch (e: java.lang.Exception) {
+                            allColors["name"] = ""
+                        }
+                    }
+                    else {
+
+                        try {
+                            allColors["name"] = addedColors[i]["name"].toString()
+                        } catch (e: java.lang.Exception) {
+                            allColors["name"] = ""
+                        }
+
+                    }
+                    allColors["hex"] = addedColors[i]["hex"].toString()
+                    dataList.add(allColors)
+                }
+                UserAddedColors(context).clearHash()
+                UserAddedColors(context).insert(dataList)
+                notifyDataSetChanged()
+            }
+            cancelButton.setOnClickListener {
+                Vibrate().vibration(context)
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+
         holder.itemView.findViewById<MaterialCardView>(R.id.savedColorItemCardView).setOnClickListener {
             Vibrate().vibration(context)
-            CustomColorGenerator(context).setCustomHex(holder.itemView.findViewById<TextView>(R.id.savedColorTitle).text.toString())
+            CustomColorGenerator(context).setCustomHex("#${dataList[holder.adapterPosition]["hex"].toString()}")
             holder.itemView.findViewById<MaterialCardView>(R.id.savedColorItemCardView).strokeWidth = 7
             notifyDataSetChanged()
 
@@ -108,7 +186,7 @@ private val dataList: MutableSet<String>, fragment: SavedColorsFragment
 
         savedColorCardView.setOnLongClickListener {
             Vibrate().vibration(context)
-            val allColors = mutableSetOf<String>()
+            /*val allColors = mutableSetOf<String>()
             val colorsSet = UserAddedColors(context).loadColors()
             for (i in 0 until UserAddedColors(context).loadColors()!!.count()) {
                 allColors.add(colorsSet!!.elementAt(i))
@@ -119,53 +197,30 @@ private val dataList: MutableSet<String>, fragment: SavedColorsFragment
             dataList.clear()
             for (i in 0 until UserAddedColors(context).loadColors()!!.count()) {
                 dataList.add(UserAddedColors(context).loadColors()!!.elementAt(i))
+            }*/
+
+            val addedColors = UserAddedColors(context).read()
+            dataList.clear()
+
+            for (i in 0 until UserAddedColors(context).read().count()) {
+                val allColors = HashMap<String, String>()
+                try {
+                    allColors["name"] = addedColors[i]["name"].toString()
+                } catch (e: java.lang.Exception) {
+                    allColors["name"] = ""
+                }
+                allColors["hex"] = addedColors[i]["hex"].toString()
+                dataList.add(allColors)
             }
+            dataList.removeAt(holder.adapterPosition)
             notifyItemRemoved(holder.adapterPosition)
+            UserAddedColors(context).insert(dataList)
             Toast.makeText(context, "Color Deleted", Toast.LENGTH_SHORT).show()
 
             if (dataList.isEmpty()) {
                 newFragment.itemCountZero()
             }
             else {
-                for (i in 0 until dataList.count()) {
-                    if (dataList.count() == 1) {
-                        Toast.makeText(context, "1", Toast.LENGTH_SHORT).show()
-                        savedColorCardView.shapeAppearanceModel = savedColorCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                            .setBottomRightCornerSize(28f)
-                            .setBottomLeftCornerSize(28f)
-                            .build()
-                    } else if (dataList.count() > 1) {
-                        Toast.makeText(context, "2", Toast.LENGTH_SHORT).show()
-                        if (i == 0) {
-                            savedColorCardView.shapeAppearanceModel = savedColorCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        } else if (i > 0 && i < dataList.count() - 1) {
-                            savedColorCardView.shapeAppearanceModel = savedColorCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        } else if (i == dataList.count() - 1) {
-                            savedColorCardView.shapeAppearanceModel = savedColorCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(28f)
-                                .setBottomLeftCornerSize(28f)
-                                .build()
-                        }
-                    }
-                }
                 notifyItemRangeChanged(0, dataList.count())
             }
             return@setOnLongClickListener true
