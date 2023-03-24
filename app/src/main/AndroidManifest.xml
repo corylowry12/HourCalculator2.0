@@ -32,13 +32,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
         <activity
-            android:name=".intents.ViewTimeCardInfoActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MyApplication"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
             android:name=".intents.ImageViewActivity"
             android:exported="false"
             android:theme="@style/Theme.MyApplication" />
