@@ -1,14 +1,14 @@
 package com.cory.hourcalculator.fragments
 
-import android.content.Intent
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +29,27 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 
+
 class BackgroundColorFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColorChange(true)
+
+        val followSystemCardView = activity?.findViewById<MaterialCardView>(R.id.followSystemCardView)
+
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                followSystemCardView?.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
+            }
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +96,7 @@ class BackgroundColorFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        updateCustomColorChange()
+        updateCustomColorChange(false)
 
         topAppBarBackgroundColorFragment.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -237,7 +257,7 @@ class BackgroundColorFragment : Fragment() {
         lightThemeButton?.isChecked = false
         amoledThemeButton?.isChecked = false
         followSystemThemeButton.isChecked = true
-        updateCustomColorChange()
+        updateCustomColorChange(true)
     }
 
     private fun changeToDark(
@@ -258,7 +278,7 @@ class BackgroundColorFragment : Fragment() {
             lightThemeButton?.isChecked = false
             followSystemThemeButton?.isChecked = false
             amoledThemeButton.isChecked = true
-            updateCustomColorChange()
+            updateCustomColorChange(true)
         }
     }
 
@@ -280,32 +300,8 @@ class BackgroundColorFragment : Fragment() {
             amoledThemeButton?.isChecked = false
             followSystemThemeButton?.isChecked = false
             lightThemeButton.isChecked = true
-            updateCustomColorChange()
+            updateCustomColorChange(true)
         }
-    }
-
-    private fun restartThemeChange() {
-
-        val runnable = Runnable {
-            (context as MainActivity).setBackgroundColor()
-        }
-        MainActivity().runOnUiThread(runnable)
-
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.detach(this)?.commitNow()
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.attach(this)?.commitNow()
-
-        // view?.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
-        // ?.scrollTo(0, AppearanceScrollPosition(requireContext()).loadScroll())
-
-        //val collapsingToolbarLayout =
-        //requireView().findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
-
-        //collapsingToolbarLayout.setExpanded(
-        // AppearanceScrollPosition(requireContext()).loadCollapsed(),
-        //false
-        //)
     }
 
     private fun reset() {
@@ -318,10 +314,34 @@ class BackgroundColorFragment : Fragment() {
         followSystemRadioButton?.isChecked = true
 
         DarkThemeData(requireContext()).setDarkModeState(3)
-        updateCustomColorChange()
+        updateCustomColorChange(true)
     }
 
-    private fun updateCustomColorChange() {
+    private fun updateCustomColorChange(animate: Boolean) {
+
+        /*if (animate) {
+
+            var color = Color.TRANSPARENT
+            val background = requireActivity().findViewById<CoordinatorLayout>(R.id.backgroundColorCoordinatorLayout).background
+            if (background is ColorDrawable) {
+                color = background.color
+            }
+            val colorTo = Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor())
+            var hex = String.format("#%06X", color).drop(1)
+            val hexLong = hex.toLong(16)
+
+            val anim = ValueAnimator()
+            anim.setIntValues(hexLong.toInt(), colorTo)
+            anim.setEvaluator(ArgbEvaluator())
+            anim.addUpdateListener { valueAnimator -> requireView().setBackgroundColor((valueAnimator.animatedValue as Int)!!) }
+
+            anim.duration = 250
+            anim.start()
+        }
+        else {*/
+            requireActivity().findViewById<CoordinatorLayout>(R.id.backgroundColorCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        //}
+
         val lightThemeCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.lightThemeCardViewBackgroundColor)
         val darkThemeCardView =
@@ -473,8 +493,7 @@ class BackgroundColorFragment : Fragment() {
         followSystemThemeButton.buttonTintList = ColorStateList(states, colors)
 
         val runnable = Runnable {
-            (context as MainActivity).updateBottomNavCustomColor()
-            (context as MainActivity).setBackgroundColor()
+            (context as MainActivity).updateCustomColor()
             if (ColoredNavBarData(requireContext()).loadNavBar()) {
                 activity?.window?.navigationBarColor =
                     Color.parseColor(CustomColorGenerator(requireContext()).generateNavBarColor())
