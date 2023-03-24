@@ -1,6 +1,5 @@
 package com.cory.hourcalculator.fragments
 
-import android.R.color
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -8,7 +7,6 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,7 +21,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -42,11 +40,8 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
 
-
-@DelicateCoroutinesApi
 class HistoryFragment : Fragment() {
 
     private var output: String = ""
@@ -54,11 +49,185 @@ class HistoryFragment : Fragment() {
     private var outputWages: String = ""
     private val dataList = ArrayList<HashMap<String, String>>()
 
+    lateinit var infoDialog: BottomSheetDialog
+    lateinit var sortDialog: BottomSheetDialog
+
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private var containsColon = false
 
     private lateinit var customAdapter: CustomAdapter
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomTheme()
+        customAdapter.updateCardColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(
+                            R.style.Theme_AMOLED
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+        try {
+            if (infoDialog.isShowing) {
+                infoDialog.dismiss()
+                info()
+            }
+        } catch (e: UninitializedPropertyAccessException) {
+            e.printStackTrace()
+        }
+        try {
+            if (sortDialog.isShowing) {
+                sortDialog.dismiss()
+                sort()
+            }
+        } catch (e: UninitializedPropertyAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun info() {
+        val wagesData = WagesData(requireContext())
+        val dbHandler = DBHelper(requireContext(), null)
+        if (dbHandler.getCount() > 0) {
+            infoDialog = BottomSheetDialog(requireContext())
+            val infoLayout =
+                layoutInflater.inflate(R.layout.info_bottom_sheet, null)
+            infoDialog.setContentView(infoLayout)
+            infoDialog.setCancelable(true)
+
+            val totalHours = infoLayout.findViewById<TextView>(R.id.bodyTextView)
+            val numberOfEntries = infoLayout.findViewById<TextView>(R.id.body1TextView)
+            val wagesTextView = infoLayout.findViewById<TextView>(R.id.body2TextView)
+            val okButton = infoLayout.findViewById<Button>(R.id.okButton)
+
+            val totalHoursCardView =
+                infoLayout.findViewById<MaterialCardView>(R.id.totalHoursCardView)
+            val totalNumberOfEntriesCardView =
+                infoLayout.findViewById<MaterialCardView>(R.id.totalNumberOfEntriesCardView)
+            val wagesCardView =
+                infoLayout.findViewById<MaterialCardView>(R.id.wagesCardView)
+
+            totalHoursCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            totalNumberOfEntriesCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            wagesCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(
+                        CustomColorGenerator(requireContext()).generateCardColor()
+                    )
+                )
+            )
+            okButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        requireContext()
+                    ).generateCustomColorPrimary()
+                )
+            )
+            totalHoursCardView.shapeAppearanceModel =
+                totalHoursCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            totalNumberOfEntriesCardView.shapeAppearanceModel =
+                totalNumberOfEntriesCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(28f)
+                .setBottomLeftCornerSize(28f)
+                .build()
+
+            if (wagesData.loadWageAmount() != "") {
+                try {
+                    val wages =
+                        outputWages.toDouble() * wagesData.loadWageAmount().toString()
+                            .toDouble()
+                    val wagesRounded = String.format("%.2f", wages)
+                    totalHours.text = "Total Hours: $output/$outputColon"
+                    numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                    wagesTextView.text = "Wages: $$wagesRounded"
+                } catch (e: NumberFormatException) {
+                    e.printStackTrace()
+                    totalHours.text = "Total Hours: $output/$outputColon"
+                    numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                    wagesTextView.text = "Wages: Error"
+                }
+            } else {
+                totalHours.text = "Total Hours: $output/$outputColon"
+                numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                wagesCardView.visibility = View.GONE
+                totalNumberOfEntriesCardView.shapeAppearanceModel =
+                    totalNumberOfEntriesCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+            }
+            /*if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }*/
+            okButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.cant_show_info_history_empty),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +268,7 @@ class HistoryFragment : Fragment() {
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 1
-            //(activity as MainActivity).setActiveTab(1)
+            (activity as MainActivity).setActiveTab(1)
         }
 
         MainActivity().runOnUiThread(runnable)
@@ -119,7 +288,434 @@ class HistoryFragment : Fragment() {
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
-        val accentColor = AccentColor(requireContext())
+        updateCustomTheme()
+
+        val sortData = SortData(requireContext())
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
+
+        topAppBar?.setOnMenuItemClickListener { menuItem ->
+            val dbHandler = DBHelper(requireContext(), null)
+            when (menuItem.itemId) {
+                R.id.options -> {
+                    Vibrate().vibration(requireContext())
+                    val historyOptionsDialog = BottomSheetDialog(requireContext())
+                    val historyOptions =
+                        layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
+
+                    historyOptionsDialog.setContentView(historyOptions)
+                    //val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
+                    //val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
+
+                    val exportCardView =
+                        historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
+                    val deleteSelectedCardView =
+                        historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
+
+                    exportCardView.setCardBackgroundColor(
+                        ColorStateList.valueOf(
+                            Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                        )
+                    )
+                    deleteSelectedCardView.setCardBackgroundColor(
+                        ColorStateList.valueOf(
+                            Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                        )
+                    )
+
+                    exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                    deleteSelectedCardView.shapeAppearanceModel =
+                        deleteSelectedCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(28f)
+                            .setBottomLeftCornerSize(28f)
+                            .build()
+
+                    exportCardView.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+
+                        if (customAdapter.getSelectedCount() <= 50) {
+                            topAppBar.navigationIcon = null
+                            customAdapter.snackbarDeleteSelected.dismiss()
+                            customAdapter.snackbarDismissCheckBox.dismiss()
+                            customAdapter.exportSelected()
+                            historyOptionsDialog.dismiss()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Can't export more than 50 entries at a time",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    deleteSelectedCardView.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        customAdapter.checkBoxVisible = false
+                        try {
+                            topAppBar.navigationIcon = null
+                            customAdapter.snackbarDeleteSelected.dismiss()
+                            customAdapter.snackbarDismissCheckBox.dismiss()
+                            customAdapter.deleteSelected(requireView())
+                            historyOptionsDialog.dismiss()
+                        } catch (e: UninitializedPropertyAccessException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    if (customAdapter.getSelectedCount() > 0) {
+                        historyOptionsDialog.show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "There is nothing selected",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    true
+                }
+                R.id.info -> {
+                    Vibrate().vibration(requireContext())
+                    info()
+                    true
+                }
+                R.id.mnuSort -> {
+                    Vibrate().vibration(requireContext())
+                    sort()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        loadIntoList()
+
+        if (customAdapter.isCheckBoxVisible()) {
+            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(
+                requireContext().resources,
+                R.drawable.ic_baseline_close_24,
+                requireContext().theme
+            )
+            val xIconDrawable = topAppBar?.navigationIcon
+            xIconDrawable?.mutate()
+
+            if (MenuTintData(requireContext()).loadMenuTint()) {
+                xIconDrawable?.colorFilter = BlendModeColorFilter(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                    BlendMode.SRC_ATOP
+                )
+            } else {
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                xIconDrawable?.colorFilter = BlendModeColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    BlendMode.SRC_ATOP
+                )
+            }
+        } else {
+            topAppBar?.navigationIcon = null
+        }
+
+        listView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                if (pastVisibleItems > 0) {
+                    requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
+                        ?.show()
+                } else {
+                    requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
+                        ?.hide()
+                }
+            }
+        })
+
+        requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
+            ?.setOnClickListener {
+                scrollToTop()
+            }
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            })
+    }
+
+    private fun sort() {
+        val dbHandler = DBHelper(requireContext(), null)
+        val sortData = SortData(requireContext())
+        val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
+        val listView = requireActivity().findViewById<RecyclerView>(R.id.listView)
+        if (dbHandler.getCount() == 0) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.cant_sort_history_is_empty),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            var selectedItem = -1
+
+            when {
+                sortData.loadSortState() == getString(R.string.day_desc) -> {
+                    selectedItem = 0
+                }
+                sortData.loadSortState() == getString(R.string.day_asc) -> {
+                    selectedItem = 1
+                }
+                sortData.loadSortState() == getString(R.string.total_desc) -> {
+                    selectedItem = 2
+                }
+                sortData.loadSortState() == getString(R.string.total_asc) -> {
+                    selectedItem = 3
+                }
+            }
+
+            sortDialog = BottomSheetDialog(requireContext())
+            val sortingLayout =
+                layoutInflater.inflate(R.layout.sorting_bottom_sheet, null)
+            sortDialog.setContentView(sortingLayout)
+            sortDialog.setCancelable(true)
+
+            val dateDescendingCardView =
+                sortingLayout.findViewById<MaterialCardView>(R.id.dateDescendingCardView)
+            val dateAscendingCardView =
+                sortingLayout.findViewById<MaterialCardView>(R.id.dateAscendingCardView)
+            val totalDescendingCardView =
+                sortingLayout.findViewById<MaterialCardView>(R.id.totalDescendingCardView)
+            val totalAscendingCardView =
+                sortingLayout.findViewById<MaterialCardView>(R.id.totalAscendingCardView)
+
+            totalAscendingCardView.visibility = View.VISIBLE
+            totalDescendingCardView.visibility = View.VISIBLE
+            dateDescendingCardView.shapeAppearanceModel =
+                dateDescendingCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            dateAscendingCardView.shapeAppearanceModel =
+                dateAscendingCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            totalDescendingCardView.shapeAppearanceModel =
+                totalDescendingCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            totalAscendingCardView.shapeAppearanceModel =
+                totalAscendingCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+
+            /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+
+            val dateDescending =
+                sortingLayout.findViewById<RadioButton>(R.id.dateDescending)
+            val dateAscending =
+                sortingLayout.findViewById<RadioButton>(R.id.dateAscending)
+            val totalDescending =
+                sortingLayout.findViewById<RadioButton>(R.id.totalDescending)
+            val totalAscending =
+                sortingLayout.findViewById<RadioButton>(R.id.totalAscending)
+
+            dateDescendingCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            dateAscendingCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            totalDescendingCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            totalAscendingCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            val states = arrayOf(
+                intArrayOf(-android.R.attr.state_checked), // unchecked
+                intArrayOf(android.R.attr.state_checked)  // checked
+            )
+
+            val colors = intArrayOf(
+                Color.parseColor("#000000"),
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            )
+
+            dateDescending.buttonTintList = ColorStateList(states, colors)
+            dateAscending.buttonTintList = ColorStateList(states, colors)
+            totalDescending.buttonTintList = ColorStateList(states, colors)
+            totalAscending.buttonTintList = ColorStateList(states, colors)
+
+            when (selectedItem) {
+                0 -> {
+                    dateDescending.isChecked = true
+                }
+                1 -> {
+                    dateAscending.isChecked = true
+                }
+                2 -> {
+                    totalDescending.isChecked = true
+                }
+                3 -> {
+                    totalAscending.isChecked = true
+                }
+            }
+
+            val collapsingToolbarLayout =
+                requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+
+            dateDescending.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                sortDialog.dismiss()
+                listView?.scrollToPosition(0)
+                collapsingToolbarLayout.setExpanded(true, true)
+                sortData.setSortState(getString(R.string.day_desc))
+                changeSortMethod()
+                customAdapter.checkBoxVisible = false
+                try {
+                    topAppBar.navigationIcon = null
+                    customAdapter.snackbarDeleteSelected.dismiss()
+                    customAdapter.snackbarDismissCheckBox.dismiss()
+                } catch (e: UninitializedPropertyAccessException) {
+                    e.printStackTrace()
+                }
+                requireActivity().findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                    0,
+                    dataList.size
+                )
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.changed_sort_mode_last_entered),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            dateAscending.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                sortDialog.dismiss()
+                listView?.scrollToPosition(0)
+                collapsingToolbarLayout.setExpanded(true, true)
+                sortData.setSortState(getString(R.string.day_asc))
+                changeSortMethod()
+                customAdapter.checkBoxVisible = false
+                try {
+                    topAppBar.navigationIcon = null
+                    customAdapter.snackbarDeleteSelected.dismiss()
+                    customAdapter.snackbarDismissCheckBox.dismiss()
+                } catch (e: UninitializedPropertyAccessException) {
+                    e.printStackTrace()
+                }
+                requireActivity().findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                    0,
+                    dataList.size
+                )
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.changed_sort_mode_first_entered),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            totalDescending.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                sortDialog.dismiss()
+                listView?.scrollToPosition(0)
+                collapsingToolbarLayout.setExpanded(true, true)
+                sortData.setSortState(getString(R.string.total_desc))
+                changeSortMethod()
+                customAdapter.checkBoxVisible = false
+                try {
+                    topAppBar.navigationIcon = null
+                    customAdapter.snackbarDeleteSelected.dismiss()
+                    customAdapter.snackbarDismissCheckBox.dismiss()
+                } catch (e: UninitializedPropertyAccessException) {
+                    e.printStackTrace()
+                }
+                requireActivity().findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                    0,
+                    dataList.size
+                )
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.changed_sort_mode_most_entered),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            totalAscending.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                sortDialog.dismiss()
+                listView?.scrollToPosition(0)
+                collapsingToolbarLayout.setExpanded(true, true)
+                sortData.setSortState(getString(R.string.total_asc))
+                changeSortMethod()
+                customAdapter.checkBoxVisible = false
+                try {
+                    topAppBar.navigationIcon = null
+                    customAdapter.snackbarDeleteSelected.dismiss()
+                    customAdapter.snackbarDismissCheckBox.dismiss()
+                } catch (e: UninitializedPropertyAccessException) {
+                    e.printStackTrace()
+                }
+                requireActivity().findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
+                    0,
+                    dataList.size
+                )
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.changed_sort_mode_least_entered),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            sortDialog.show()
+        }
+    }
+
+    private fun updateCustomTheme() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.historyCoordinatorLayout)
+            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val floatingActionButtonHistory =
             activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
 
@@ -128,43 +724,47 @@ class HistoryFragment : Fragment() {
         floatingActionButtonHistory?.imageTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
 
-        val sortData = SortData(requireContext())
-        val dialog = BottomSheetDialog(requireContext())
-
-        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
-
         val collapsingToolbarLayout =
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
 
-            collapsingToolbarLayout?.setContentScrimColor(
-                Color.parseColor(
-                    CustomColorGenerator(
-                        requireContext()
-                    ).generateTopAppBarColor()
-                )
+        collapsingToolbarLayout?.setExpandedTitleColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTitleBarExpandedTextColor()
             )
-            collapsingToolbarLayout?.setStatusBarScrimColor(
-                Color.parseColor(
-                    CustomColorGenerator(
-                        requireContext()
-                    ).generateTopAppBarColor()
-                )
-            )
-            if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
-                    ?.setCollapsedTitleTextColor(
-                        Color.parseColor(
-                            CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()
-                        )
-                    )
-            } else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
-                    ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-            }
+        )
 
+        collapsingToolbarLayout?.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout?.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
+                ?.setCollapsedTitleTextColor(
+                    Color.parseColor(
+                        CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()
+                    )
+                )
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
 
         val infoDrawable = topAppBar?.menu?.findItem(R.id.info)?.icon
         infoDrawable?.mutate()
@@ -214,524 +814,6 @@ class HistoryFragment : Fragment() {
                 BlendMode.SRC_ATOP
             )
         }
-
-        topAppBar?.setOnMenuItemClickListener { menuItem ->
-            val dbHandler = DBHelper(requireContext(), null)
-            when (menuItem.itemId) {
-                R.id.options -> {
-                    Vibrate().vibration(requireContext())
-                    val historyOptionsDialog = BottomSheetDialog(requireContext())
-                    val historyOptions =
-                        layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
-
-                    historyOptionsDialog.setContentView(historyOptions)
-                    //val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
-                    //val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
-
-                    val exportCardView =
-                        historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
-                    val deleteSelectedCardView =
-                        historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
-
-                        exportCardView.setCardBackgroundColor(
-                            ColorStateList.valueOf(
-                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                            )
-                        )
-                        deleteSelectedCardView.setCardBackgroundColor(
-                            ColorStateList.valueOf(
-                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                            )
-                        )
-
-                    exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                    deleteSelectedCardView.shapeAppearanceModel =
-                        deleteSelectedCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                            .setBottomRightCornerSize(28f)
-                            .setBottomLeftCornerSize(28f)
-                            .build()
-
-                    exportCardView.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-
-                        if (customAdapter.getSelectedCount() <= 50) {
-                            topAppBar.navigationIcon = null
-                            customAdapter.snackbarDeleteSelected.dismiss()
-                            customAdapter.snackbarDismissCheckBox.dismiss()
-                            customAdapter.exportSelected()
-                            historyOptionsDialog.dismiss()
-                        }
-                        else {
-                            Toast.makeText(requireContext(), "Can't export more than 50 entries at a time", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    deleteSelectedCardView.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        customAdapter.checkBoxVisible = false
-                        try {
-                            topAppBar.navigationIcon = null
-                            customAdapter.snackbarDeleteSelected.dismiss()
-                            customAdapter.snackbarDismissCheckBox.dismiss()
-                            customAdapter.deleteSelected(requireView())
-                            historyOptionsDialog.dismiss()
-                        } catch (e: UninitializedPropertyAccessException) {
-                            e.printStackTrace()
-                        }
-                    }
-                    if (customAdapter.getSelectedCount() > 0) {
-                        historyOptionsDialog.show()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "There is nothing selected",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    true
-                }
-                R.id.info -> {
-                    Vibrate().vibration(requireContext())
-                    val wagesData = WagesData(requireContext())
-
-                    if (dbHandler.getCount() > 0) {
-                        val infoLayout =
-                            layoutInflater.inflate(R.layout.info_bottom_sheet, null)
-                        dialog.setContentView(infoLayout)
-                        dialog.setCancelable(true)
-                        dialog.window?.navigationBarColor =
-                            ContextCompat.getColor(requireContext(), R.color.black)
-
-                        val totalHours = infoLayout.findViewById<TextView>(R.id.bodyTextView)
-                        val numberOfEntries = infoLayout.findViewById<TextView>(R.id.body1TextView)
-                        val wagesTextView = infoLayout.findViewById<TextView>(R.id.body2TextView)
-                        val okButton = infoLayout.findViewById<Button>(R.id.okButton)
-
-                        val totalHoursCardView =
-                            infoLayout.findViewById<MaterialCardView>(R.id.totalHoursCardView)
-                        val totalNumberOfEntriesCardView =
-                            infoLayout.findViewById<MaterialCardView>(R.id.totalNumberOfEntriesCardView)
-                        val wagesCardView =
-                            infoLayout.findViewById<MaterialCardView>(R.id.wagesCardView)
-
-                            totalHoursCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                                )
-                            )
-                            totalNumberOfEntriesCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                                )
-                            )
-                            wagesCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(
-                                        CustomColorGenerator(requireContext()).generateCardColor()
-                                    )
-                                )
-                            )
-                            okButton.setBackgroundColor(
-                                Color.parseColor(
-                                    CustomColorGenerator(
-                                        requireContext()
-                                    ).generateCustomColorPrimary()
-                                )
-                            )
-                        totalHoursCardView.shapeAppearanceModel =
-                            totalHoursCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        totalNumberOfEntriesCardView.shapeAppearanceModel =
-                            totalNumberOfEntriesCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                            .setBottomRightCornerSize(28f)
-                            .setBottomLeftCornerSize(28f)
-                            .build()
-
-                        if (wagesData.loadWageAmount() != "") {
-                            try {
-                                val wages =
-                                    outputWages.toDouble() * wagesData.loadWageAmount().toString()
-                                        .toDouble()
-                                val wagesRounded = String.format("%.2f", wages)
-                                totalHours.text = "Total Hours: $output/$outputColon"
-                                numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
-                                wagesTextView.text = "Wages: $$wagesRounded"
-                            } catch (e: NumberFormatException) {
-                                e.printStackTrace()
-                                totalHours.text = "Total Hours: $output/$outputColon"
-                                numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
-                                wagesTextView.text = "Wages: Error"
-                            }
-                        } else {
-                            totalHours.text = "Total Hours: $output/$outputColon"
-                            numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
-                            wagesCardView.visibility = View.GONE
-                            totalNumberOfEntriesCardView.shapeAppearanceModel =
-                                totalNumberOfEntriesCardView.shapeAppearanceModel
-                                    .toBuilder()
-                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                    .setBottomRightCornerSize(28f)
-                                    .setBottomLeftCornerSize(28f)
-                                    .build()
-                        }
-                        /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
-                        okButton.setOnClickListener {
-                            Vibrate().vibration(requireContext())
-                            dialog.dismiss()
-                        }
-                        dialog.show()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.cant_show_info_history_empty),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    true
-                }
-                R.id.mnuSort -> {
-                    Vibrate().vibration(requireContext())
-                    if (dbHandler.getCount() == 0) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.cant_sort_history_is_empty),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        var selectedItem = -1
-
-                        when {
-                            sortData.loadSortState() == getString(R.string.day_desc) -> {
-                                selectedItem = 0
-                            }
-                            sortData.loadSortState() == getString(R.string.day_asc) -> {
-                                selectedItem = 1
-                            }
-                            sortData.loadSortState() == getString(R.string.total_desc) -> {
-                                selectedItem = 2
-                            }
-                            sortData.loadSortState() == getString(R.string.total_asc) -> {
-                                selectedItem = 3
-                            }
-                        }
-
-                        val sortingLayout =
-                            layoutInflater.inflate(R.layout.sorting_bottom_sheet, null)
-                        dialog.setContentView(sortingLayout)
-                        dialog.setCancelable(true)
-
-                        val dateDescendingCardView =
-                            sortingLayout.findViewById<MaterialCardView>(R.id.dateDescendingCardView)
-                        val dateAscendingCardView =
-                            sortingLayout.findViewById<MaterialCardView>(R.id.dateAscendingCardView)
-                        val totalDescendingCardView =
-                            sortingLayout.findViewById<MaterialCardView>(R.id.totalDescendingCardView)
-                        val totalAscendingCardView =
-                            sortingLayout.findViewById<MaterialCardView>(R.id.totalAscendingCardView)
-
-                        totalAscendingCardView.visibility = View.VISIBLE
-                        totalDescendingCardView.visibility = View.VISIBLE
-                        dateDescendingCardView.shapeAppearanceModel =
-                            dateDescendingCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        dateAscendingCardView.shapeAppearanceModel =
-                            dateAscendingCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        totalDescendingCardView.shapeAppearanceModel =
-                            totalDescendingCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(0f)
-                                .setBottomLeftCornerSize(0f)
-                                .build()
-                        totalAscendingCardView.shapeAppearanceModel =
-                            totalAscendingCardView.shapeAppearanceModel
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                .setBottomRightCornerSize(28f)
-                                .setBottomLeftCornerSize(28f)
-                                .build()
-
-                        dialog.window?.navigationBarColor =
-                            ContextCompat.getColor(requireContext(), R.color.black)
-                        /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
-
-                        val dateDescending =
-                            sortingLayout.findViewById<RadioButton>(R.id.dateDescending)
-                        val dateAscending =
-                            sortingLayout.findViewById<RadioButton>(R.id.dateAscending)
-                        val totalDescending =
-                            sortingLayout.findViewById<RadioButton>(R.id.totalDescending)
-                        val totalAscending =
-                            sortingLayout.findViewById<RadioButton>(R.id.totalAscending)
-
-                            dateDescendingCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                                )
-                            )
-                            dateAscendingCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                                )
-                            )
-                            totalDescendingCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                                )
-                            )
-                            totalAscendingCardView.setCardBackgroundColor(
-                                ColorStateList.valueOf(
-                                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                                )
-                            )
-                            val states = arrayOf(
-                                intArrayOf(-android.R.attr.state_checked), // unchecked
-                                intArrayOf(android.R.attr.state_checked)  // checked
-                            )
-
-                            val colors = intArrayOf(
-                                Color.parseColor("#000000"),
-                                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-                            )
-
-                            dateDescending.buttonTintList = ColorStateList(states, colors)
-                            dateAscending.buttonTintList = ColorStateList(states, colors)
-                            totalDescending.buttonTintList = ColorStateList(states, colors)
-                            totalAscending.buttonTintList = ColorStateList(states, colors)
-
-                        if (selectedItem == 0) {
-                            dateDescending.isChecked = true
-                        } else if (selectedItem == 1) {
-                            dateAscending.isChecked = true
-                        } else if (selectedItem == 2) {
-                            totalDescending.isChecked = true
-                        } else if (selectedItem == 3) {
-                            totalAscending.isChecked = true
-                        }
-
-                        val collapsingToolbarLayout =
-                            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
-
-                        dateDescending.setOnClickListener {
-                            Vibrate().vibration(requireContext())
-                            dialog.dismiss()
-                            listView?.scrollToPosition(0)
-                            collapsingToolbarLayout.setExpanded(true, true)
-                            sortData.setSortState(getString(R.string.day_desc))
-                            changeSortMethod()
-                            customAdapter.checkBoxVisible = false
-                            try {
-                                topAppBar.navigationIcon = null
-                                customAdapter.snackbarDeleteSelected.dismiss()
-                                customAdapter.snackbarDismissCheckBox.dismiss()
-                            } catch (e: UninitializedPropertyAccessException) {
-                                e.printStackTrace()
-                            }
-                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                0,
-                                dataList.size
-                            )
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.changed_sort_mode_last_entered),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        dateAscending.setOnClickListener {
-                            Vibrate().vibration(requireContext())
-                            dialog.dismiss()
-                            listView?.scrollToPosition(0)
-                            collapsingToolbarLayout.setExpanded(true, true)
-                            sortData.setSortState(getString(R.string.day_asc))
-                            changeSortMethod()
-                            customAdapter.checkBoxVisible = false
-                            try {
-                                topAppBar.navigationIcon = null
-                                customAdapter.snackbarDeleteSelected.dismiss()
-                                customAdapter.snackbarDismissCheckBox.dismiss()
-                            } catch (e: UninitializedPropertyAccessException) {
-                                e.printStackTrace()
-                            }
-                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                0,
-                                dataList.size
-                            )
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.changed_sort_mode_first_entered),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        totalDescending.setOnClickListener {
-                            Vibrate().vibration(requireContext())
-                            dialog.dismiss()
-                            listView?.scrollToPosition(0)
-                            collapsingToolbarLayout.setExpanded(true, true)
-                            sortData.setSortState(getString(R.string.total_desc))
-                            changeSortMethod()
-                            customAdapter.checkBoxVisible = false
-                            try {
-                                topAppBar.navigationIcon = null
-                                customAdapter.snackbarDeleteSelected.dismiss()
-                                customAdapter.snackbarDismissCheckBox.dismiss()
-                            } catch (e: UninitializedPropertyAccessException) {
-                                e.printStackTrace()
-                            }
-                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                0,
-                                dataList.size
-                            )
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.changed_sort_mode_most_entered),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        totalAscending.setOnClickListener {
-                            Vibrate().vibration(requireContext())
-                            dialog.dismiss()
-                            listView?.scrollToPosition(0)
-                            collapsingToolbarLayout.setExpanded(true, true)
-                            sortData.setSortState(getString(R.string.total_asc))
-                            changeSortMethod()
-                            customAdapter.checkBoxVisible = false
-                            try {
-                                topAppBar.navigationIcon = null
-                                customAdapter.snackbarDeleteSelected.dismiss()
-                                customAdapter.snackbarDismissCheckBox.dismiss()
-                            } catch (e: UninitializedPropertyAccessException) {
-                                e.printStackTrace()
-                            }
-                            view.findViewById<RecyclerView>(R.id.listView).adapter?.notifyItemRangeChanged(
-                                0,
-                                dataList.size
-                            )
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.changed_sort_mode_least_entered),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        dialog.show()
-                    }
-                    true
-                }
-                else -> false
-            }
-        }
-
-        loadIntoList()
-
-        if (customAdapter.isCheckBoxVisible()) {
-            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(
-                requireContext().resources,
-                R.drawable.ic_baseline_close_24,
-                requireContext().theme
-            )
-            val xIconDrawable = topAppBar?.navigationIcon
-            xIconDrawable?.mutate()
-
-            if (MenuTintData(requireContext()).loadMenuTint()) {
-                    xIconDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-            } else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                xIconDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
-        } else {
-            topAppBar?.navigationIcon = null
-        }
-
-        listView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
-
-                if (pastVisibleItems > 0) {
-                    floatingActionButtonHistory?.show()
-                } else {
-                    floatingActionButtonHistory?.hide()
-                }
-            }
-        })
-
-        floatingActionButtonHistory?.setOnClickListener {
-            scrollToTop()
-        }
-
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    activity?.supportFragmentManager?.popBackStack()
-                }
-            })
     }
 
     @SuppressLint("Range")
