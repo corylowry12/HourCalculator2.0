@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
@@ -159,10 +160,7 @@ class AboutAppFragment : Fragment() {
     private fun openCustomTab() {
         val builder = CustomTabsIntent.Builder()
         val params = CustomTabColorSchemeParams.Builder()
-        val typedValue = TypedValue()
-        (context as Activity).theme
-            .resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
-        params.setToolbarColor(ContextCompat.getColor(requireContext(), typedValue.resourceId))
+        params.setToolbarColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         builder.setDefaultColorSchemeParams(params.build())
         builder.setShowTitle(true)
         builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
@@ -213,6 +211,7 @@ class AboutAppFragment : Fragment() {
     }
 
     private fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.aboutAppCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val cardView1 = requireActivity().findViewById<MaterialCardView>(R.id.cardView1)
         val cardView2 = requireActivity().findViewById<MaterialCardView>(R.id.cardView2)
         val cardView3 = requireActivity().findViewById<MaterialCardView>(R.id.cardView3)
