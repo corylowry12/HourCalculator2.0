@@ -10,7 +10,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
@@ -18,20 +21,17 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
-import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class AppSettingsFragment : Fragment() {
 
@@ -88,21 +88,26 @@ class AppSettingsFragment : Fragment() {
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
 
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-        }
-        else {
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
 
         topAppBar?.setNavigationOnClickListener {
@@ -117,15 +122,32 @@ class AppSettingsFragment : Fragment() {
             when (it.itemId) {
                 R.id.reset -> {
 
-                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    val resetSettingsLayout =
+                        layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset App Settings?"
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
-                    resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                    yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                    cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                        "Would you like to reset App Settings?"
+                    val yesResetButton =
+                        resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton =
+                        resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                        .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    yesResetButton.setBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                requireContext()
+                            ).generateCustomColorPrimary()
+                        )
+                    )
+                    cancelResetButton.setTextColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                requireContext()
+                            ).generateCustomColorPrimary()
+                        )
+                    )
                     /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
@@ -151,11 +173,18 @@ class AppSettingsFragment : Fragment() {
             }
         }
 
-        val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
-        val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
-        val longClickEnabledCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
-        val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
-        val breakTextBoxCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
+        val outTimeCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
+        val calculationTypeCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
+        val longClickEnabledCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
+        val vibrationCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
+        val breakTextBoxCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
+        val clearBreakTextBoxCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewClearBreakTextBox)
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
         outTimeCardView.shapeAppearanceModel = outTimeCardView.shapeAppearanceModel
@@ -172,13 +201,14 @@ class AppSettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
-        longClickEnabledCardView.shapeAppearanceModel = longClickEnabledCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
+        longClickEnabledCardView.shapeAppearanceModel =
+            longClickEnabledCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(0f)
+                .setBottomLeftCornerSize(0f)
+                .build()
         vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -187,6 +217,13 @@ class AppSettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         breakTextBoxCardView.shapeAppearanceModel = breakTextBoxCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        clearBreakTextBoxCardView.shapeAppearanceModel = clearBreakTextBoxCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -207,80 +244,153 @@ class AppSettingsFragment : Fragment() {
 
         if (!outTimeData.loadOutTimeState()) {
             outTimeSwitch?.isChecked = true
-            outTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        }
-        else {
+            outTimeSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else {
             outTimeSwitch?.isChecked = false
-            outTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            outTimeSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        outTimeSwitch?.setOnClickListener {
+        outTimeCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            outTimeSwitch?.isChecked = !outTimeSwitch!!.isChecked
             outTimeData.setOutTimeState(!outTimeSwitch.isChecked)
             if (outTimeSwitch.isChecked) {
-                outTimeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_current_time), Toast.LENGTH_SHORT)
-                    .show()
+                outTimeSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                outTimeSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            else {
-                outTimeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), getString(R.string.out_time_will_now_automatically_be_set_to_previous_stored_time), Toast.LENGTH_SHORT)
-                    .show()
+        }
+
+        outTimeCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the out time time picker on the home screen will match the device clock.\n\n" +
+                        "When disabled the out time time picker on the home screen will match what out time was previously entered."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
             }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         val calculationData = CalculationType(requireContext())
 
-        val calculationTypeSwitch = activity?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
+        val calculationTypeSwitch =
+            activity?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
 
         if (calculationData.loadCalculationState()) {
             calculationTypeSwitch?.isChecked = false
-            calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-        }
-        else {
+            calculationTypeSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        } else {
             calculationTypeSwitch?.isChecked = true
-            calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            calculationTypeSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         }
 
-        calculationTypeSwitch?.setOnClickListener {
+        calculationTypeCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            calculationTypeSwitch!!.isChecked = !calculationTypeSwitch.isChecked
             calculationData.setCalculationState(!calculationTypeSwitch.isChecked)
             if (calculationTypeSwitch.isChecked) {
-                calculationTypeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), getString(R.string.decimal_calculation_enabled), Toast.LENGTH_SHORT)
-                    .show()
+                calculationTypeSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                calculationTypeSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            else {
-                calculationTypeSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), getString(R.string.time_calculation_enabled), Toast.LENGTH_SHORT)
-                    .show()
+        }
+
+        calculationTypeCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will calculate time in time format. (eg. Total Hours: 6:45)\n\n" +
+                        "When disabled the app will calculate time in decimal format. (eg. Total Hours: 6.45)"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
             }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         val longClickEnabled = LongPressCalculateButtonEnabled(requireContext())
 
-        val longClickEnabledSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
+        val longClickEnabledSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
 
         if (longClickEnabled.loadLongClick()) {
             longClickEnabledSwitch.isChecked = true
-            longClickEnabledSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        }
-        else {
+            longClickEnabledSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else {
             longClickEnabledSwitch.isChecked = false
-            longClickEnabledSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            longClickEnabledSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        longClickEnabledSwitch.setOnClickListener {
+        longClickEnabledCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
+            longClickEnabledSwitch.isChecked = !longClickEnabledSwitch.isChecked
             longClickEnabled.setLongClick(longClickEnabledSwitch.isChecked)
             if (longClickEnabledSwitch.isChecked) {
-                longClickEnabledSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), "Can now long click calculate button", Toast.LENGTH_SHORT).show()
+                longClickEnabledSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                longClickEnabledSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            else {
-                longClickEnabledSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), "Can no longer long click calculate button", Toast.LENGTH_SHORT).show()
+        }
+
+        longClickEnabledCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled you can long click on the calculate button and calculate time format in the opposite format of what is enabled.\n\n" +
+                        "When disabled you will not be able to long click the calculate button to calculate time in another format."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
             }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         val vibrationData = VibrationData(requireContext())
@@ -288,49 +398,150 @@ class AppSettingsFragment : Fragment() {
 
         if (vibrationData.loadVibrationState()) {
             toggleVibration?.isChecked = true
-            toggleVibration?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleVibration?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         } else if (!vibrationData.loadVibrationState()) {
             toggleVibration?.isChecked = false
-            toggleVibration?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleVibration?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        toggleVibration?.setOnClickListener {
+        vibrationCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            toggleVibration!!.isChecked = !toggleVibration.isChecked
             vibrationData.setVibrationState(toggleVibration.isChecked)
             if (toggleVibration.isChecked) {
-                toggleVibration.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                Toast.makeText(requireContext(), getString(R.string.vibration_enabled), Toast.LENGTH_SHORT).show()
+                toggleVibration.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                toggleVibration.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            else {
-                toggleVibration.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                Toast.makeText(requireContext(), getString(R.string.vibration_disabled), Toast.LENGTH_SHORT).show()
+        }
+
+        vibrationCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will vibrate every time a button is clicked.\n\n" +
+                        "When disabled the app will not vibrate every time a button is clicked."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
             }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
         val toggleBreakTextBox = activity?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
-            toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleBreakTextBox?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             toggleBreakTextBox?.isChecked = true
         } else if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
-            toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleBreakTextBox?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             toggleBreakTextBox?.isChecked = false
         }
 
-        toggleBreakTextBox?.setOnClickListener {
+        breakTextBoxCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            toggleBreakTextBox!!.isChecked = !toggleBreakTextBox.isChecked
             if (toggleBreakTextBox.isChecked) {
-                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                toggleBreakTextBox.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
                 breakTextBoxVisiblityClass.setVisibility(0)
-                Toast.makeText(requireContext(), getString(R.string.break_text_box_enabled), Toast.LENGTH_SHORT)
-                    .show()
-            }
-            else {
-                toggleBreakTextBox.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            } else {
+                toggleBreakTextBox.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 breakTextBoxVisiblityClass.setVisibility(1)
-                Toast.makeText(requireContext(), getString(R.string.break_text_box_disabled), Toast.LENGTH_SHORT)
-                    .show()
             }
+        }
+
+        breakTextBoxCardView!!.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the break text box on the home screen will be shown.\n\n" +
+                        "When disabled the break text box on the home screen will not be shown."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
+        val clearBreakTextAutomaticallyData = ClearBreakTextAutomaticallyData(requireContext())
+        val clearBreakTextBoxSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.clearBreakTextBoxSwitch)
+
+        if (clearBreakTextAutomaticallyData.loadClearAutomatically()) {
+            clearBreakTextBoxSwitch.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            clearBreakTextBoxSwitch.isChecked = true
+        } else if (!clearBreakTextAutomaticallyData.loadClearAutomatically()) {
+            clearBreakTextBoxSwitch.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            clearBreakTextBoxSwitch.isChecked = false
+        }
+
+        clearBreakTextBoxCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            clearBreakTextBoxSwitch.isChecked = !clearBreakTextBoxSwitch.isChecked
+            if (clearBreakTextBoxSwitch.isChecked) {
+                clearBreakTextBoxSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                clearBreakTextBoxSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+            clearBreakTextAutomaticallyData.setClearAutomatically(clearBreakTextBoxSwitch.isChecked)
+        }
+
+        clearBreakTextBoxCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the break time text box will automatically clear after calculation if there is not an error.\n\n" +
+                        "When disabled you will have to manually clear the break text box each time."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         val wagesData = WagesData(requireContext())
@@ -371,8 +582,9 @@ class AppSettingsFragment : Fragment() {
 
     private fun reset() {
         val setOutTimeSwitch = view?.findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
-        val calculationTypeSwitch = view?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
-        val vibrationSwitch= view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+        val calculationTypeSwitch =
+            view?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
+        val vibrationSwitch = view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
         val toggleHistory = view?.findViewById<MaterialSwitch>(R.id.historySwitch)
         val toggleBreakTextBox = view?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
         val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
@@ -392,11 +604,16 @@ class AppSettingsFragment : Fragment() {
         toggleBreakTextBox?.isChecked = true
         wagesEditText?.setText(getString(R.string.wages_default))
 
-        setOutTimeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        calculationTypeSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        vibrationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        toggleBreakTextBox?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        setOutTimeSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        calculationTypeSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        vibrationSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        toggleHistory?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        toggleBreakTextBox?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
 
         val runnable = Runnable {
             (context as MainActivity).toggleHistory()
@@ -404,34 +621,89 @@ class AppSettingsFragment : Fragment() {
 
         MainActivity().runOnUiThread(runnable)
 
-        Toast.makeText(requireContext(), getString(R.string.app_settings_reset_to_default), Toast.LENGTH_LONG)
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.app_settings_reset_to_default),
+            Toast.LENGTH_LONG
+        )
             .show()
     }
 
     private fun updateCustomColor() {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.appSettingsCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
-        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        requireActivity().findViewById<CoordinatorLayout>(R.id.appSettingsCoordinatorLayout)
+            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        val collapsingToolbarLayout =
+            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
+        collapsingToolbarLayout.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
 
-        val outTimeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
-        val calculationTypeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
-        val longClickEnabledCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
-        val vibrationCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
-        val breakTextBoxCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
+        val outTimeCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewSetOutTime)
+        val calculationTypeCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculation)
+        val longClickEnabledCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
+        val vibrationCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
+        val breakTextBoxCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
+        val clearBreakTextBoxCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewClearBreakTextBox)
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
         outTimeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        calculationTypeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        longClickEnabledCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        vibrationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-        breakTextBoxCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        calculationTypeCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
+        longClickEnabledCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
+        vibrationCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
+        breakTextBoxCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
+        clearBreakTextBoxCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
         wagesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val outTimeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
-        val setCalculationTypeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
-        val toggleLongPressingCalculateSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
+        val setCalculationTypeSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
+        val toggleLongPressingCalculateSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
         val vibrationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
-        val breakTextBoxSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
+        val breakTextBoxSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
+        val clearBreakTextBoxSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.clearBreakTextBoxSwitch)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -442,35 +714,48 @@ class AppSettingsFragment : Fragment() {
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         )
 
-        outTimeSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        outTimeSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         outTimeSwitch.trackTintList = ColorStateList(states, colors)
-        setCalculationTypeSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        setCalculationTypeSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         setCalculationTypeSwitch.trackTintList = ColorStateList(states, colors)
-        toggleLongPressingCalculateSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        toggleLongPressingCalculateSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         toggleLongPressingCalculateSwitch.trackTintList = ColorStateList(states, colors)
-        vibrationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        vibrationSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         vibrationSwitch.trackTintList = ColorStateList(states, colors)
-        breakTextBoxSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        breakTextBoxSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         breakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
+        clearBreakTextBoxSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        clearBreakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
 
         val wagesEditText = requireActivity().findViewById<TextInputEditText>(R.id.Wages)
-        val wagesTextInputEditText = activity?.findViewById<TextInputLayout>(R.id.outlinedTextFieldWages)
+        val wagesTextInputEditText =
+            activity?.findViewById<TextInputLayout>(R.id.outlinedTextFieldWages)
 
         wagesTextInputEditText?.boxStrokeColor = Color.parseColor("#000000")
-        wagesTextInputEditText?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        wagesTextInputEditText?.hintTextColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         wagesEditText.textCursorDrawable = null
-        wagesTextInputEditText?.defaultHintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        wagesEditText.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        wagesTextInputEditText?.defaultHintTextColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        wagesEditText.highlightColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         wagesEditText.setTextIsSelectable(false)
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-        }
-        else {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 
