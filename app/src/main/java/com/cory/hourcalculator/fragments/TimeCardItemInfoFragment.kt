@@ -29,6 +29,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -104,6 +105,14 @@ class TimeCardItemInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 2
+            (activity as MainActivity).setActiveTab(2)
+        }
+        MainActivity().runOnUiThread(runnable)
+
+        updateCustomColor()
+
         var list = listOf<String>()
         list = if (Build.VERSION.SDK_INT >= 33) {
             listOf(
@@ -131,56 +140,6 @@ class TimeCardItemInfoFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        requireActivity().findViewById<MaterialCardView>(R.id.timeCardInfoImageViewWrapper).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generatePatchNotesCardColor()))
-
-        val addDrawable = topAppBarTimeCardItem?.menu?.findItem(R.id.add)?.icon
-        addDrawable?.mutate()
-
-        val navigationDrawable = topAppBarTimeCardItem?.navigationIcon
-        navigationDrawable?.mutate()
-
-        val collapsingToolbarLayout =
-            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
-
-        collapsingToolbarLayout.setContentScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
-        collapsingToolbarLayout.setStatusBarScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-
-            addDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-        } else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            addDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-        }
-
         topAppBarTimeCardItem.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.add -> {
@@ -188,8 +147,6 @@ class TimeCardItemInfoFragment : Fragment() {
                     val dialog = BottomSheetDialog(requireContext())
                     val addAPhotoLayout =
                         layoutInflater.inflate(R.layout.add_photo_bottom_sheet, null)
-                    dialog.window?.navigationBarColor =
-                        ContextCompat.getColor(requireContext(), R.color.black)
                     dialog.setContentView(addAPhotoLayout)
 
                     val selectAPhotoCardView =
@@ -289,28 +246,6 @@ class TimeCardItemInfoFragment : Fragment() {
 
         val timeCardInfoNameTextInput =
             requireActivity().findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
-        val textInputLayoutName =
-            requireActivity().findViewById<TextInputLayout>(R.id.textInputLayoutName)
-
-        textInputLayoutName?.boxStrokeColor =
-            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-        textInputLayoutName?.hintTextColor =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        timeCardInfoNameTextInput.textCursorDrawable = null
-        timeCardInfoNameTextInput.highlightColor =
-            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-        timeCardInfoNameTextInput.setTextIsSelectable(false)
-
-        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
-                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-        } else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
-                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
-        }
 
         editable = if (name != null) {
             Editable.Factory.getInstance().newEditable(name)
@@ -560,6 +495,86 @@ class TimeCardItemInfoFragment : Fragment() {
             if (nameEditText.hasFocus()) {
                 nameEditText.clearFocus()
             }
+        }
+    }
+
+    fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.timeCardItemInfoCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        requireActivity().findViewById<MaterialCardView>(R.id.timeCardInfoImageViewWrapper).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generatePatchNotesCardColor()))
+
+        val topAppBarTimeCardItem =
+            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarTimeCardItemInfo)
+        val addDrawable = topAppBarTimeCardItem?.menu?.findItem(R.id.add)?.icon
+        addDrawable?.mutate()
+
+        val navigationDrawable = topAppBarTimeCardItem?.navigationIcon
+        navigationDrawable?.mutate()
+
+        val collapsingToolbarLayout =
+            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+
+        collapsingToolbarLayout.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+
+            addDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            addDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+        }
+
+        val timeCardInfoNameTextInput =
+            requireActivity().findViewById<TextInputEditText>(R.id.timeCardInfoNameTextInput)
+        val textInputLayoutName =
+            requireActivity().findViewById<TextInputLayout>(R.id.textInputLayoutName)
+
+        textInputLayoutName?.boxStrokeColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        textInputLayoutName?.hintTextColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        timeCardInfoNameTextInput.textCursorDrawable = null
+        timeCardInfoNameTextInput.highlightColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        timeCardInfoNameTextInput.setTextIsSelectable(false)
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 }
