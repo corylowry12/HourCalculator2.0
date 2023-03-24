@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
+import com.cory.hourcalculator.intents.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -67,6 +69,12 @@ class GalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
 
         val topAppBarGallery =
             requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarGallery)
@@ -127,6 +135,7 @@ class GalleryFragment : Fragment() {
     }
 
     fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.galleryCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarGallery)
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
