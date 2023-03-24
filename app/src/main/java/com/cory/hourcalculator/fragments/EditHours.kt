@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.intents.MainActivity
@@ -41,7 +42,6 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
-@DelicateCoroutinesApi
 class EditHours : Fragment() {
 
     private lateinit var timePickerInTime : TimePicker
@@ -65,6 +65,11 @@ class EditHours : Fragment() {
     private var outTimeBool = false
     var breakTimeBool = false
     private var dateChangedBool = false
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomColor()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -966,6 +971,7 @@ class EditHours : Fragment() {
     }
 
     private fun updateCustomColor() {
+        requireActivity().findViewById<CoordinatorLayout>(R.id.editHoursCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val materialToolbarEdit = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarEditFragment)
         materialToolbarEdit.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
