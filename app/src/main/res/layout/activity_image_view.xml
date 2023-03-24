@@ -32,16 +32,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/viewTimeCardFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="View Time Card"
-        app:icon="@drawable/baseline_visibility_24"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="4dp"
-        android:visibility="gone"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
