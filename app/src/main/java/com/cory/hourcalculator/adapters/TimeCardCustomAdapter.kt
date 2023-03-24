@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
@@ -25,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
+import java.io.File
 import java.math.RoundingMode
 
 class TimeCardCustomAdapter(
@@ -46,8 +48,22 @@ class TimeCardCustomAdapter(
                 .setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
             itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint =
                 ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
+            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipIconTint =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
             itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor =
                 ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateChipBackgroundColor()))
+
+            try {
+                val imagePath = File(dataList[position]["image"]!!)
+                if (imagePath.exists()) {
+                    countChip.chipIcon = ContextCompat.getDrawable(context, R.drawable.baseline_image_24)
+                } else {
+                    countChip.chipIcon = null
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                countChip.chipIcon = null
+            }
 
             val dataItem = dataList[position]
 
