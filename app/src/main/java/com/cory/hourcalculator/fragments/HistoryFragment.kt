@@ -292,12 +292,9 @@ class HistoryFragment : Fragment() {
 
         updateCustomTheme()
 
-        val sortData = SortData(requireContext())
-
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
 
         topAppBar?.setOnMenuItemClickListener { menuItem ->
-            val dbHandler = DBHelper(requireContext(), null)
             when (menuItem.itemId) {
                 R.id.options -> {
                     Vibrate().vibration(requireContext())
