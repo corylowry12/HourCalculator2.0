@@ -12,7 +12,7 @@
         android:id="@+id/appBarLayoutAccentColorFragment"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:background="?attr/backgroundColor"
+        android:background="@android:color/transparent"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -210,7 +210,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/generateARandomColorOnAppLaunchCardView"
+                android:id="@+id/bottomNavBadgeSettingCardView"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,6 +219,41 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
                 android:layout_below="@id/viewSavedColorsCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomNavBadgeSettingConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/bottomNavBadgeSettingSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Make bottom navigation badges match accent color"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:clickable="false"
+                        android:background="@null"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/generateARandomColorOnAppLaunchCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/bottomNavBadgeSettingCardView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/generateARandomColorOnAppLaunchConstraintLayout"
