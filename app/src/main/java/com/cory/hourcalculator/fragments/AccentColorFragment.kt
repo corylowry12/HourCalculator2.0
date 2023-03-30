@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -302,6 +303,107 @@ class AccentColorFragment : Fragment() {
             updateCustomColorChange()
         }
 
+        if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 0) {
+            requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
+                "Generate a random color on app launch"
+        }
+        else if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 1) {
+            requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
+                "Pick a random color on app launch from saved colors"
+        }
+        val generateARandomColorOptionsCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewRandomColorOptionsCardView)
+
+        generateARandomColorOptionsCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            val optionsDialog = BottomSheetDialog(requireContext())
+            val optionsLayout =
+                layoutInflater.inflate(R.layout.generate_a_random_color_options_bottom_sheet, null)
+            optionsDialog.setContentView(optionsLayout)
+            optionsDialog.setCancelable(true)
+
+            val randomColorCardView = optionsLayout.findViewById<MaterialCardView>(R.id.randomColorCardView)
+            val randomColorFromSavedCardView = optionsLayout.findViewById<MaterialCardView>(R.id.fromSavedColorsCardView)
+            val randomColorRadioButton = optionsLayout.findViewById<RadioButton>(R.id.randomColor)
+            val fromSavedColorsRadioButton = optionsLayout.findViewById<RadioButton>(R.id.fromSavedColors)
+
+            if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 0) {
+                randomColorRadioButton.isChecked = true
+            }
+            else if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 1) {
+                fromSavedColorsRadioButton.isChecked = true
+            }
+
+            randomColorCardView.shapeAppearanceModel =
+                randomColorCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            randomColorFromSavedCardView.shapeAppearanceModel =
+                randomColorFromSavedCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+
+            randomColorCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            randomColorFromSavedCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            val states = arrayOf(
+                intArrayOf(-android.R.attr.state_checked), // unchecked
+                intArrayOf(android.R.attr.state_checked)  // checked
+            )
+
+            val colors = intArrayOf(
+                Color.parseColor("#000000"),
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            )
+
+            randomColorRadioButton.buttonTintList = ColorStateList(states, colors)
+            randomColorRadioButton.buttonTintList = ColorStateList(states, colors)
+            fromSavedColorsRadioButton.buttonTintList = ColorStateList(states, colors)
+            fromSavedColorsRadioButton.buttonTintList = ColorStateList(states, colors)
+
+            randomColorCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                optionsDialog.dismiss()
+                GenerateARandomColorMethodData(requireContext()).setGenerateARandomColorMethod(0)
+                updateCustomColorChange()
+                requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
+                    "Generate a random color on app launch"
+            }
+            randomColorFromSavedCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                optionsDialog.dismiss()
+                if (UserAddedColorsData(requireContext()).read().count() >= 2) {
+                    GenerateARandomColorMethodData(requireContext()).setGenerateARandomColorMethod(1)
+                    val contains = UserAddedColorsData(requireContext()).read().filter { it.containsValue(CustomColorGenerator(requireContext()).loadRandomHex()) }
+                    if (CustomColorGenerator(requireContext()).loadRandomHex() == "" || contains.isEmpty()) {
+                        CustomColorGenerator(requireContext()).generateARandomColor()
+                    }
+                    updateCustomColorChange()
+                    requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
+                        "Pick a random color on app launch from saved colors"
+                }
+                else {
+                    Toast.makeText(requireContext(), "You must have more than 2 colors saved", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            optionsDialog.show()
+        }
+
         customCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             val customColorPickerDialog = BottomSheetDialog(requireContext())
@@ -431,21 +533,6 @@ class AccentColorFragment : Fragment() {
 
         addColorCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-            /*val allColors = mutableSetOf<String>()
-            val colorsSet = UserAddedColorsData(requireContext()).loadColors()
-            val oldCount = colorsSet?.count()
-            for (i in 0 until UserAddedColorsData(requireContext()).loadColors()!!.count()) {
-                allColors.add(colorsSet!!.elementAt(i))
-            }
-            allColors.add(requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text.drop(1).toString())
-            UserAddedColorsData(requireContext()).addColor(allColors)
-            val newCount = UserAddedColorsData(requireContext()).loadColors()?.count()
-            if (newCount!! > oldCount!!) {
-                Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
-            }*/
 
             val addedColors = UserAddedColorsData(requireContext()).read()
             val dataList = ArrayList<HashMap<String, String>>()
@@ -570,6 +657,12 @@ class AccentColorFragment : Fragment() {
         val bottomNavBadgeColorSettingSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.bottomNavBadgeSettingSwitch)
         val generateARandomColorSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
         val material2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
+
+        val generateRandomColorOptionsCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewRandomColorOptionsCardView)
+        val generateARandomColorOptionsIcon = requireActivity().findViewById<ImageButton>(R.id.imageViewRandomColorOptions)
+        generateRandomColorOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        val color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
+        generateARandomColorOptionsIcon.setColorFilter(color)
 
         customCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         customColorCardView.setCardBackgroundColor(Color.parseColor(customColorGenerator.loadCustomHex()))
