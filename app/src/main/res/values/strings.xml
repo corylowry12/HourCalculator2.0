@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">Hour Calculator</string>
     <string name="in_time_adapter">In Time: %1$s</string>
     <string name="out_time_adapter">Out Time: %1$s</string>
@@ -8,7 +7,6 @@
     <string name="total_time_adapter_singular">Total: %1$s Hour</string>
     <string name="total_time_adapter_plural">Total: %1$s Hours</string>
     <string name="date_adapter">Date: %1$s</string>
-
     <string name="total_asc">totalHours ASC</string>
     <string name="info">Info</string>
     <string name="sort">Sort</string>
@@ -30,7 +28,6 @@
     <string name="you_have_pending_changes">You have pending changes. Would you like to save?</string>
     <string name="hour_is_updated">Hour is updated</string>
     <string name="hour_was_not_updated">Hour was not updated</string>
-
     <string name="undo">UNDO</string>
     <string name="entry_deleted">Entry Deleted</string>
     <string name="warning">Warning</string>
