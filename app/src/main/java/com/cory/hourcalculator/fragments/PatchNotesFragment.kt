@@ -63,7 +63,7 @@ class PatchNotesFragment : Fragment() {
                                                 "Fixed issue where if you saved colors and restarted the app, the colors would be gone")
 
     private var newFeaturesArrayInternal = arrayOf("Added the ability to rename a time card entry without entering the time card info view and changing the text box", "Added ability to change the badge color on the bottom navigation view (the icon that shows the number of items in history and time cards) to match the accent color", "Added the ability to remove a photo without viewing the photo first",
-                                                    "Added the ability to manage a photo in the time card view just by long pressing on it", "Added ability to make background be more colorful, instead of being white/black, it'll be a light or dark shade of whatever accent color is chosen")
+                                                    "Added the ability to manage a photo in the time card view just by long pressing on it", "Added ability to make background be more colorful, instead of being white/black, it'll be a light or dark shade of whatever accent color is chosen", "Added option to generate a random color from saved colors (only if you have saved more than 2)")
 
     private var enhancementsArrayInternal = arrayOf("Removed ability to save color by long pressing the pick a custom color card", "App will now generate a random color every time the app is launched whether its enabled or not, it just won't set the color if its disabled", "Accent color custom hex code text view will now show if a color is saved and if you have named it," +
                                                     " it will show the name")
