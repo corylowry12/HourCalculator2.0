@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.sharedprefs.DaysWorkedPerWeekData
+import com.cory.hourcalculator.sharedprefs.DeleteAllOnLimitReachedData
 
 class HistoryDeletion(context: Context) {
     val insideContext = context
 
     private val dbHandler = DBHelper(context, null)
 
-    private val daysWorkedPerWeek = DaysWorkedPerWeek(context)
+    private val daysWorkedPerWeekData = DaysWorkedPerWeekData(context)
 
     @SuppressLint("Range")
     fun deletion() : HashMap<String, String> {
-        var numberToDelete = dbHandler.getCount() - daysWorkedPerWeek.loadDaysWorked()
+        var numberToDelete = dbHandler.getCount() - daysWorkedPerWeekData.loadDaysWorked()
         if (DeleteAllOnLimitReachedData(insideContext).loadDeleteAllState()) {
             numberToDelete = dbHandler.getCount()
             Toast.makeText(insideContext, "All entries deleted automatically", Toast.LENGTH_SHORT).show()
