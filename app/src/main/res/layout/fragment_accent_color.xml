@@ -264,15 +264,50 @@
                     android:paddingEnd="20dp"
                     android:paddingBottom="10dp">
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/generateARandomColorOnAppLaunchSwitch"
+                    <TextView
+                        android:id="@+id/generateRandomColorTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textColor="#000000"
                         android:text="Generate a random color on app launch"
+                        app:layout_constraintEnd_toStartOf="@id/imageViewRandomColorOptionsCardView"
+                        android:layout_marginEnd="4dp"/>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/imageViewRandomColorOptionsCardView"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:layout_constraintEnd_toStartOf="@id/generateARandomColorOnAppLaunchSwitch"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:cardCornerRadius="15dp"
+                        android:layout_marginEnd="4dp"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        android:foreground="?attr/selectableItemBackground">
+                        <ImageButton
+                            android:id="@+id/imageViewRandomColorOptions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/outline_settings_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:clickable="false"/>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/generateARandomColorOnAppLaunchSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:clickable="false"
                         android:background="@null"/>
