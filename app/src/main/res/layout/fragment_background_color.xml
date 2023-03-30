@@ -184,6 +184,41 @@
                         tools:ignore="HardcodedText" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/moreColorBackgroundCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/followSystemThemeCardViewBackgroundColor">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/moreColorBackgroundConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/moreColorBackgroundSwitch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Make background more colorful"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:clickable="false"
+                        android:background="@null"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
