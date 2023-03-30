@@ -11,6 +11,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.fragments.SavedColorsFragment
 import com.cory.hourcalculator.sharedprefs.GenerateARandomColorData
+import com.cory.hourcalculator.sharedprefs.GenerateARandomColorMethodData
 import com.cory.hourcalculator.sharedprefs.MaterialYouData
 import com.cory.hourcalculator.sharedprefs.UserAddedColorsData
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -185,18 +186,13 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
 
         savedColorCardView.setOnLongClickListener {
             Vibrate().vibration(context)
-            /*val allColors = mutableSetOf<String>()
-            val colorsSet = UserAddedColorsData(context).loadColors()
-            for (i in 0 until UserAddedColorsData(context).loadColors()!!.count()) {
-                allColors.add(colorsSet!!.elementAt(i))
+
+            if (GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
+                if (CustomColorGenerator(context).loadRandomHex() == "#${dataList[holder.adapterPosition]["hex"]}") {
+                    CustomColorGenerator(context).generateARandomColor()
+                    newFragment.updateCustomColor()
+                }
             }
-            allColors.remove(holder.itemView.findViewById<TextView>(R.id.savedColorTitle).text.toString().drop(1))
-            UserAddedColorsData(context).clear()
-            UserAddedColorsData(context).addColor(allColors)
-            dataList.clear()
-            for (i in 0 until UserAddedColorsData(context).loadColors()!!.count()) {
-                dataList.add(UserAddedColorsData(context).loadColors()!!.elementAt(i))
-            }*/
 
             val addedColors = UserAddedColorsData(context).read()
             dataList.clear()
@@ -215,6 +211,11 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             notifyItemRemoved(holder.adapterPosition)
             UserAddedColorsData(context).insert(dataList)
             Toast.makeText(context, "Color Deleted", Toast.LENGTH_SHORT).show()
+
+            if (dataList.count() < 2 && GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
+                Toast.makeText(context, "Generating a random color from saved colors is now disabled", Toast.LENGTH_SHORT).show()
+                GenerateARandomColorMethodData(context).setGenerateARandomColorMethod(0)
+            }
 
             if (dataList.isEmpty()) {
                 newFragment.itemCountZero()
