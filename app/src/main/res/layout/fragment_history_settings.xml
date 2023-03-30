@@ -58,13 +58,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@null"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
@@ -78,7 +78,9 @@
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:clickable="false"
+                        android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -114,7 +116,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:clickable="false"/>
+                        android:clickable="false"
+                        android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -150,7 +153,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:clickable="false"/>
+                        android:clickable="false"
+                        android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -230,12 +234,13 @@
                 app:layout_constraintTop_toBottomOf="@id/numberOfDaysCardView"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@null"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="20dp"
@@ -250,6 +255,45 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:clickable="false"
+                        android:background="@null"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewShowWagesInHistory"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardViewHistoryClickable"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/showWagesInHistorySwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Show wages for each history item"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
