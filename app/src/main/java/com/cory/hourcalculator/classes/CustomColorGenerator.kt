@@ -30,17 +30,34 @@ class CustomColorGenerator(context: Context) {
         editor.apply()
     }
 
+    fun setRandomSavedGeneratedHex(state: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("randomSavedHex", state)
+        editor.apply()
+    }
+
     fun loadRandomHex(): String {
+        if (GenerateARandomColorMethodData(insideContext).loadGenerateARandomColorMethod() == 1) {
+            val savedState = sharedPreferences.getString("randomSavedHex", "")
+            return (savedState!!)
+        }
         val state = sharedPreferences.getString("randomHex", "#53c8c8")
         return (state!!)
     }
 
     fun generateARandomColor() {
-        val red = Random.nextInt(50,200)
-        val green = Random.nextInt(50,200)
-        val blue = Random.nextInt(50,200)
-        val hex = String.format("#%02X%02X%02X", red, green, blue)
-        setRandomGeneratedHex(hex)
+        if (GenerateARandomColorMethodData(insideContext).loadGenerateARandomColorMethod() == 0) {
+            val red = Random.nextInt(50, 200)
+            val green = Random.nextInt(50, 200)
+            val blue = Random.nextInt(50, 200)
+            val hex = String.format("#%02X%02X%02X", red, green, blue)
+            setRandomGeneratedHex(hex)
+        }
+        else if (GenerateARandomColorMethodData(insideContext).loadGenerateARandomColorMethod() == 1) {
+            val dataList = UserAddedColorsData(insideContext).read()
+            val random = Random.nextInt(0, dataList.count())
+            setRandomSavedGeneratedHex("#${dataList[random]["hex"]}")
+        }
     }
 
     fun loadCustomHex(): String {
