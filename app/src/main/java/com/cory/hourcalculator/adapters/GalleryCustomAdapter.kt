@@ -3,6 +3,7 @@ package com.cory.hourcalculator.adapters
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -23,6 +24,7 @@ import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.intents.ImageViewActivity
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
@@ -48,6 +50,7 @@ class GalleryCustomAdapter( private val context: Context,
                 nameTextView.text = dataList[position]["name"]
             }
 
+            nameTextView.setTextColor(Color.parseColor("#757575"))
         }
     }
 
