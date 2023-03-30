@@ -86,16 +86,29 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/row_day"
+                android:id="@+id/row_wages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_total"
+                android:text="Wages"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_total"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/row_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_wages"
                 android:text="Day"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
-                app:layout_constraintTop_toBottomOf="@id/row_total"
+                app:layout_constraintTop_toBottomOf="@id/row_wages"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.card.MaterialCardView
