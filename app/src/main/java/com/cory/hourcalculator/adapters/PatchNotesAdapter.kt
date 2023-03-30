@@ -19,10 +19,13 @@ class PatchNotesAdapter(
     private val dataList: Array<String>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    fun updateCardColor() {
+        notifyDataSetChanged()
+    }
+
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var title = itemView.findViewById<TextView>(R.id.tvTitle)!!
-
         fun bind(position: Int) {
 
             title.text = dataList.elementAt(position).toString()
