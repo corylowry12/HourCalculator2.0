@@ -564,7 +564,7 @@ class EditHours : Fragment() {
         val saveButton = activity?.findViewById<Button>(R.id.saveButton)
         val dateChip = activity?.findViewById<Chip>(R.id.dateChipEdit)
 
-        val id = arguments!!.getInt("id") //IdData(requireContext()).loadID()
+        val id = requireArguments().getInt("id") //IdData(requireContext()).loadID()
 
         dataList.clear()
         val cursor = dbHandler.getRow(id.toString())
