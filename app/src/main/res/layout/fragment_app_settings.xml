@@ -11,17 +11,15 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:background="?attr/backgroundColor"
+        android:background="@android:color/transparent"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayoutAppSettings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="28dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:statusBarScrim="?attr/colorPrimary"
             app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar

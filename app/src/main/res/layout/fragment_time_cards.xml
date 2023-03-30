@@ -13,7 +13,7 @@
         android:id="@+id/appBarLayoutTimeCards"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:background="?attr/backgroundColor"
+        android:background="@android:color/transparent"
         app:liftOnScroll="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
