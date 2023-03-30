@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -18,13 +19,13 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -72,6 +73,7 @@ class CustomAdapter(
         var outTime: TextView = itemView.findViewById(R.id.row_out)
         var breakTime: TextView = itemView.findViewById(R.id.row_break)
         var totalTime: TextView = itemView.findViewById(R.id.row_total)
+        var wages: TextView = itemView.findViewById(R.id.row_wages)
         var date: TextView = itemView.findViewById(R.id.row_day)
         var checkBox: CheckBox = itemView.findViewById(R.id.checkbox)
 
@@ -79,9 +81,16 @@ class CustomAdapter(
             historyCardView = itemView.findViewById(R.id.cardViewHistory)
 
             val imageViewOptions = itemView.findViewById<ImageButton>(R.id.imageViewOptions)
-            val imageViewOptionsCardView = itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView)
+            val imageViewOptionsCardView =
+                itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView)
 
-            imageViewOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateTopAppBarColor()))
+            imageViewOptionsCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        context
+                    ).generateTopAppBarColor()
+                )
+            )
 
             val color = Color.parseColor(CustomColorGenerator(context).generateMenuTintColor())
             imageViewOptions.setColorFilter(color)
@@ -167,6 +176,41 @@ class CustomAdapter(
                 checkBox.visibility = View.VISIBLE
             } else {
                 checkBox.visibility = View.GONE
+            }
+
+            if (ShowWagesInHistoryData(context).loadShowWages()) {
+                if (dataItem["totalHours"]!!.contains(":")) {
+                    val (hours, minutes) = dataItem["totalHours"]!!.split(":")
+                    val decimal =
+                        (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                            .toString().drop(1)
+
+                    try {
+                        val wagesDecimal = "$hours$decimal".toDouble()
+                        val wagesFormat = String.format("%.2f", wagesDecimal)
+                        wages.text = "Wages: $${
+                            String.format(
+                                "%.2f",
+                                wagesFormat.toDouble() * WagesData(context).loadWageAmount()!!
+                                    .toDouble()
+                            )
+                        }"
+                    } catch (e: java.lang.NumberFormatException) {
+                        e.printStackTrace()
+                    }
+
+                } else {
+                    wages.text = "Wages: $${
+                        String.format(
+                            "%.2f",
+                            dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
+                                .toDouble()
+                        )
+                    }"
+                }
+            }
+            else {
+                wages.visibility = View.GONE
             }
         }
     }
@@ -268,14 +312,14 @@ class CustomAdapter(
                 firstDateString = formatter.format(sortedList.first().toString().toLong())
                 lastDateString = formatter.format(sortedList.last().toString().toLong())
                 timeCardDBHandler.insertRow(
-                    DefaultTimeCardName(context).loadDefaultName(),
+                    DefaultTimeCardNameData(context).loadDefaultName(),
                     "$firstDateString - $lastDateString",
                     totalHours.toString()
                 )
             } else {
                 firstDateString = formatter.format(sortedList.elementAt(0).toString().toLong())
                 timeCardDBHandler.insertRow(
-                    DefaultTimeCardName(context).loadDefaultName(),
+                    DefaultTimeCardNameData(context).loadDefaultName(),
                     firstDateString,
                     totalHours.toString()
                 )
@@ -544,7 +588,7 @@ class CustomAdapter(
                     true
                 }
 
-            if (ClickableHistoryEntry(context).loadHistoryItemClickable()) {
+            if (ClickableHistoryEntryData(context).loadHistoryItemClickable()) {
                 holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory)
                     .setOnClickListener {
                         Vibrate().vibration(context)
@@ -1108,14 +1152,16 @@ class CustomAdapter(
                 .contains(context.getString(R.string.AM)) || map["outTime"].toString()
                 .contains(context.getString(R.string.PM)))
         ) {
+            val bundle = Bundle()
+            bundle.putInt("id", map["id"]!!.toInt())
+            val editHoursFragment = EditHours()
+            editHoursFragment.arguments = bundle
+            ItemPositionData(context).setPosition(itemPosition)
 
-            val itemPositionData = ItemPosition(context)
-            itemPositionData.setPosition(itemPosition)
-            IdData(context).setID(map["id"]!!.toInt())
             val manager =
                 (context as AppCompatActivity).supportFragmentManager.beginTransaction()
             manager.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            manager.replace(R.id.fragment_container, EditHours())
+            manager.replace(R.id.fragment_container, editHoursFragment)
                 .addToBackStack(null)
             manager.commit()
 
