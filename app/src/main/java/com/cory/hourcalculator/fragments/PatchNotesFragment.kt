@@ -21,16 +21,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.adapters.PatchNotesAdapter
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.MenuTintData
+import com.cory.hourcalculator.sharedprefs.VersionData
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class PatchNotesFragment : Fragment() {
+
+    private lateinit var bugFixesAdapter: PatchNotesAdapter
+    private lateinit var newFeaturesAdapter: PatchNotesAdapter
+    private lateinit var enhancementsAdapter: PatchNotesAdapter
 
     private var bugFixesArray = arrayOf("Fixed issue where when resetting \'App Settings\' to default it would uncheck the Vibration switch even though vibration is enabled after resetting", "Fixed issue with there being no vibration when long clicking items in history view",
                                         "Fixed issue with there being no vibration when clicking \"Hide\" to hide checkboxes", "Fixed issue with there being no vibration when clicking \"Report A Bug\" in the about app view", "Fixed issue with the shape of the floating action button in the history view",
@@ -51,12 +59,50 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view", "Added a toast message when entry is automatically deleted")
 
-    private var bugFixesArrayInternal = arrayOf("No new bug fixes")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue where if you enabled material you theming it would update the custom color circle image", "Fixed issue where hint text color in the rename item bottom sheet was purple", "Fixed issue where wages wouldn't update if you viewed info and then deleted some items",
+                                                "Fixed issue where if you saved colors and restarted the app, the colors would be gone")
 
-    private var newFeaturesArrayInternal = arrayOf("Added ability to clear break text box automatically when hours are calculated (disabled by default)", "Added the ability to rename colors that you saved")
+    private var newFeaturesArrayInternal = arrayOf("Added the ability to rename a time card entry without entering the time card info view and changing the text box", "Added ability to change the badge color on the bottom navigation view (the icon that shows the number of items in history and time cards) to match the accent color", "Added the ability to remove a photo without viewing the photo first",
+                                                    "Added the ability to manage a photo in the time card view just by long pressing on it", "Added ability to make background be more colorful, instead of being white/black, it'll be a light or dark shade of whatever accent color is chosen")
 
-    private var enhancementsArrayInternal = arrayOf("Adjusted bottom padding for the list view in the choose app icons view so it doesn't come up as high when scrolled all the way down", "Tweaked the text for the info bottom sheet when long pressing a setting to see what it does",
-                                                    "Tweaked the padding of the patch notes list so it doesn't scroll up as far and have as much padding on the bottom", "App will now show what color is selected in the accent color view")
+    private var enhancementsArrayInternal = arrayOf("Removed ability to save color by long pressing the pick a custom color card", "App will now generate a random color every time the app is launched whether its enabled or not, it just won't set the color if its disabled", "Accent color custom hex code text view will now show if a color is saved and if you have named it," +
+                                                    " it will show the name")
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateCustomTheme()
+
+        bugFixesAdapter.updateCardColor()
+        enhancementsAdapter.updateCardColor()
+        newFeaturesAdapter.updateCardColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,22 +142,6 @@ class PatchNotesFragment : Fragment() {
         updateCustomTheme()
         val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
-        val navigationDrawable = topAppBar?.navigationIcon
-        navigationDrawable?.mutate()
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-        }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
-
         if (BuildConfig.FLAVOR == "Internal") {
             topAppBar?.title = "Patch Notes (Internal)"
         }
@@ -119,6 +149,16 @@ class PatchNotesFragment : Fragment() {
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+        if (BuildConfig.FLAVOR == "Internal") {
+            bugFixesAdapter = PatchNotesAdapter(requireContext(), bugFixesArrayInternal)
+            newFeaturesAdapter = PatchNotesAdapter(requireContext(), newFeaturesArrayInternal)
+            enhancementsAdapter = PatchNotesAdapter(requireContext(), enhancementsArrayInternal)
+        }
+        else {
+            bugFixesAdapter = PatchNotesAdapter(requireContext(), bugFixesArray)
+            newFeaturesAdapter = PatchNotesAdapter(requireContext(), newFeaturesArray)
+            enhancementsAdapter = PatchNotesAdapter(requireContext(), enhancementsArray)
         }
 
         val bugFixesChip = requireView().findViewById<Chip>(R.id.bugFixesChip)
@@ -153,11 +193,11 @@ class PatchNotesFragment : Fragment() {
             bugFixesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             if (BuildConfig.FLAVOR == "Internal") {
                 bugFixesRecyclerView.adapter =
-                    PatchNotesAdapter(requireContext(), bugFixesArrayInternal)
+                    bugFixesAdapter
             }
             else {
                 bugFixesRecyclerView.adapter =
-                    PatchNotesAdapter(requireContext(), bugFixesArray)
+                    bugFixesAdapter
             }
             if (bugFixesRecyclerView.visibility == View.GONE) {
                 bugFixesRecyclerView.visibility = View.VISIBLE
@@ -177,11 +217,11 @@ class PatchNotesFragment : Fragment() {
             newFeaturesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             if (BuildConfig.FLAVOR == "Internal") {
                 newFeaturesRecyclerView.adapter =
-                    PatchNotesAdapter(requireContext(), newFeaturesArrayInternal)
+                    newFeaturesAdapter
             }
             else {
                 newFeaturesRecyclerView.adapter =
-                    PatchNotesAdapter(requireContext(), newFeaturesArray)
+                    newFeaturesAdapter
             }
 
             if (newFeaturesRecyclerView.visibility == View.GONE) {
@@ -202,11 +242,11 @@ class PatchNotesFragment : Fragment() {
             enhancementsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             if (BuildConfig.FLAVOR == "Internal") {
                 enhancementsRecyclerView.adapter =
-                    PatchNotesAdapter(requireContext(), enhancementsArrayInternal)
+                    enhancementsAdapter
             }
             else {
                 enhancementsRecyclerView.adapter =
-                    PatchNotesAdapter(requireContext(), enhancementsArray)
+                    enhancementsAdapter
             }
 
             if (enhancementsRecyclerView.visibility == View.GONE) {
@@ -219,42 +259,7 @@ class PatchNotesFragment : Fragment() {
             }
         }
 
-        topAppBar?.setOnMenuItemClickListener {
-            Vibrate().vibration(requireContext())
-            when (it.itemId) {
-                R.id.closeAll -> {
-
-                    val bugFixesRecyclerView = requireView().findViewById<RecyclerView>(R.id.bugFixesRecyclerView)
-                    val newFeaturesRecyclerView = requireView().findViewById<RecyclerView>(R.id.newFeaturesRecyclerView)
-                    val enhancementsRecyclerView = requireView().findViewById<RecyclerView>(R.id.enhancementsRecyclerView)
-
-                    if (bugFixesRecyclerView.visibility == View.VISIBLE) {
-                        bugFixesRecyclerView.visibility = View.GONE
-                        bugFixesChip.closeIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_keyboard_arrow_down_24)
-                    }
-                    if (newFeaturesRecyclerView.visibility == View.VISIBLE) {
-                        newFeaturesRecyclerView.visibility = View.GONE
-                        newFeaturesChip.closeIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_keyboard_arrow_down_24)
-                    }
-
-                    if (enhancementsRecyclerView.visibility == View.VISIBLE) {
-                        enhancementsRecyclerView.visibility = View.GONE
-                        enhancementsChip.closeIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_keyboard_arrow_down_24)
-                    }
-
-                    val handler = Handler(Looper.getMainLooper())
-                    val runnable = Runnable {
-                        val collapsingToolbarLayoutPatchNotes = requireView().findViewById<AppBarLayout>(R.id.appBarLayoutPatchNotes)
-                        collapsingToolbarLayoutPatchNotes.setExpanded(true, true)
-                    }
-                    handler.postDelayed(runnable, 50)
-                    true
-                }
-                else -> true
-            }
-        }
-
-        Version(requireContext()).setVersion(BuildConfig.VERSION_NAME)
+        VersionData(requireContext()).setVersion(BuildConfig.VERSION_NAME)
 
         val runnable = Runnable {
             (context as MainActivity).changeSettingsBadge()
@@ -265,6 +270,22 @@ class PatchNotesFragment : Fragment() {
     private fun updateCustomTheme(): MaterialToolbar? {
         requireActivity().findViewById<CoordinatorLayout>(R.id.patchNotesCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+        }
 
         requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
             .setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
@@ -294,6 +315,10 @@ class PatchNotesFragment : Fragment() {
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
+            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
                 ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))

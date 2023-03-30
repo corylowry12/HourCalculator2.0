@@ -22,16 +22,47 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 
 class NumberOfEntriesBeforeDeletionFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateCustomColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -188,7 +219,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         val six = requireActivity().findViewById<RadioButton>(R.id.six)
         val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
 
-        val daysWorked = DaysWorkedPerWeek(requireContext())
+        val daysWorked = DaysWorkedPerWeekData(requireContext())
 
         when {
             daysWorked.loadDaysWorked() == 1 -> {
@@ -341,7 +372,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             yesButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 dialog.dismiss()
-                DaysWorkedPerWeek(requireContext()).setDaysWorked(number)
+                DaysWorkedPerWeekData(requireContext()).setDaysWorked(number)
 
                 when (number) {
                     1 -> {
@@ -420,8 +451,8 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
 
                 snackbar.setAction(getString(R.string.undo)) {
                     Vibrate().vibration(requireContext())
-                    HistoryAutomaticDeletion(requireContext()).setHistoryDeletionState(false)
-                    DaysWorkedPerWeek(requireContext()).setDaysWorked(7)
+                    HistoryAutomaticDeletionData(requireContext()).setHistoryDeletionState(false)
+                    DaysWorkedPerWeekData(requireContext()).setDaysWorked(7)
 
                     for (i in 1..undoValues["count"]!!.toInt()) {
                         dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["date"].toString().toLong(), undoValues["breakTime"].toString())
@@ -443,9 +474,9 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 dialog.dismiss()
-                DaysWorkedPerWeek(requireContext()).setDaysWorked(DaysWorkedPerWeek(requireContext()).loadDaysWorked())
+                DaysWorkedPerWeekData(requireContext()).setDaysWorked(DaysWorkedPerWeekData(requireContext()).loadDaysWorked())
 
-                when (DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
+                when (DaysWorkedPerWeekData(requireContext()).loadDaysWorked()) {
                     1 -> {
                         one.isChecked = true
                         two.isChecked = false
@@ -516,7 +547,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             dialog.show()
         }
         else {
-            DaysWorkedPerWeek(requireContext()).setDaysWorked(number)
+            DaysWorkedPerWeekData(requireContext()).setDaysWorked(number)
             when (number) {
                 1 -> {
                     one.isChecked = true
@@ -671,7 +702,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
     }
 
     private fun reset() {
-        val daysWorked = DaysWorkedPerWeek(requireContext())
+        val daysWorked = DaysWorkedPerWeekData(requireContext())
 
         if (daysWorked.loadDaysWorked() != 7) {
             Vibrate().vibration(requireContext())

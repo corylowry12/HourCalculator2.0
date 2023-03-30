@@ -1,6 +1,5 @@
 package com.cory.hourcalculator.intents
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.*
 import android.media.ExifInterface
@@ -23,10 +22,13 @@ import androidx.palette.graphics.Palette
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.TimeCardDBHelper
+import com.cory.hourcalculator.sharedprefs.ColoredNavBarData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.MatchImageViewContentsBackgroundData
+import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.ortiz.touchview.TouchImageView
 
 

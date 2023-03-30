@@ -1,13 +1,10 @@
 package com.cory.hourcalculator.fragments
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -23,10 +20,12 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 
 
@@ -162,6 +161,9 @@ class BackgroundColorFragment : Fragment() {
             view.findViewById<MaterialCardView>(R.id.darkThemeCardViewBackgroundColor)
         val followSystemThemeCardView =
             view.findViewById<MaterialCardView>(R.id.followSystemThemeCardViewBackgroundColor)
+        val moreColorBackgroundCardView =
+            view.findViewById<MaterialCardView>(R.id.moreColorBackgroundCardView)
+
         lightThemeCardView.shapeAppearanceModel = lightThemeCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
@@ -178,6 +180,14 @@ class BackgroundColorFragment : Fragment() {
             .build()
         followSystemThemeCardView.shapeAppearanceModel =
             followSystemThemeCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(0f)
+                .setBottomLeftCornerSize(0f)
+                .build()
+        moreColorBackgroundCardView.shapeAppearanceModel =
+            moreColorBackgroundCardView.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -244,6 +254,34 @@ class BackgroundColorFragment : Fragment() {
                 followSystemThemeButton!!
             )
         }
+
+        val moreColorBackgroundSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.moreColorBackgroundSwitch)
+
+        if (MoreColorfulBackgroundData(requireContext()).loadMoreColorfulBackground()) {
+            moreColorBackgroundSwitch?.isChecked = true
+            moreColorBackgroundSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else {
+            moreColorBackgroundSwitch?.isChecked = false
+            moreColorBackgroundSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        moreColorBackgroundCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            moreColorBackgroundSwitch.isChecked = !moreColorBackgroundSwitch.isChecked
+            MoreColorfulBackgroundData(requireContext()).setMoreColorfulBackground(requireActivity().findViewById<MaterialSwitch>(R.id.moreColorBackgroundSwitch).isChecked)
+
+            if (moreColorBackgroundSwitch.isChecked) {
+                moreColorBackgroundSwitch?.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                moreColorBackgroundSwitch?.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+
+            updateCustomColorChange(false)
+        }
     }
 
     private fun changeToFollowSystem(
@@ -252,12 +290,20 @@ class BackgroundColorFragment : Fragment() {
         amoledThemeButton: RadioButton?,
         followSystemThemeButton: RadioButton
     ) {
-        Vibrate().vibration(requireContext())
-        darkThemeData.setDarkModeState(3)
-        lightThemeButton?.isChecked = false
-        amoledThemeButton?.isChecked = false
-        followSystemThemeButton.isChecked = true
-        updateCustomColorChange(true)
+        if (darkThemeData.loadDarkModeState() == 3) {
+            Toast.makeText(
+                requireContext(),
+                "Follow system theme already enabled",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Vibrate().vibration(requireContext())
+            darkThemeData.setDarkModeState(3)
+            lightThemeButton?.isChecked = false
+            amoledThemeButton?.isChecked = false
+            followSystemThemeButton.isChecked = true
+            updateCustomColorChange(true)
+        }
     }
 
     private fun changeToDark(
@@ -348,6 +394,8 @@ class BackgroundColorFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.darkThemeCardViewBackgroundColor)
         val followSystemThemeCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.followSystemThemeCardViewBackgroundColor)
+        val moreColorBackgroundCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.moreColorBackgroundCardView)
 
         lightThemeCardView.setCardBackgroundColor(
             Color.parseColor(
@@ -370,6 +418,29 @@ class BackgroundColorFragment : Fragment() {
                 ).generateCardColor()
             )
         )
+        moreColorBackgroundCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
+
+        val moreColorBackgroundSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.moreColorBackgroundSwitch)
+
+        val switchStates = arrayOf(
+            intArrayOf(-android.R.attr.state_checked), // unchecked
+            intArrayOf(android.R.attr.state_checked)  // checked
+        )
+        val switchColors = intArrayOf(
+            Color.parseColor("#e7dfec"),
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        )
+
+        moreColorBackgroundSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        moreColorBackgroundSwitch.trackTintList = ColorStateList(switchStates, switchColors)
 
         val topAppBarBackgroundColorFragment =
             requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarBackgroundColorFragment)

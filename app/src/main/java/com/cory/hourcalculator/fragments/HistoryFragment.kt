@@ -32,6 +32,7 @@ import com.cory.hourcalculator.adapters.CustomAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -112,6 +113,7 @@ class HistoryFragment : Fragment() {
         val wagesData = WagesData(requireContext())
         val dbHandler = DBHelper(requireContext(), null)
         if (dbHandler.getCount() > 0) {
+            calculateWages()
             infoDialog = BottomSheetDialog(requireContext())
             val infoLayout =
                 layoutInflater.inflate(R.layout.info_bottom_sheet, null)
@@ -830,13 +832,9 @@ class HistoryFragment : Fragment() {
 
         }
 
-        var y = 0.0
-
         dataList.clear()
         val cursor = dbHandler.getAllRow(requireContext())
         cursor!!.moveToFirst()
-
-        val containsColonArray = arrayListOf<String>()
 
         while (!cursor.isAfterLast) {
             val map = HashMap<String, String>()
@@ -848,43 +846,11 @@ class HistoryFragment : Fragment() {
             map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
             dataList.add(map)
 
-            val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
-            containsColonArray.add(
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
-            )
-
-            var decimalTime: Double
-            if (array.contains(":")) {
-                val (hours, minutes) = array.split(":")
-                val decimal =
-                    (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
-                        .toString().drop(2)
-                try {
-                    decimalTime = "$hours.$decimal".toDouble()
-                    y += decimalTime
-
-                } catch (e: java.lang.NumberFormatException) {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.error_calculating_hours),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                containsColon = true
-
-            } else {
-                y += array.toDouble()
-            }
-
-
-
-            output = String.format("%.2f", y)
-            outputWages = output
-
             cursor.moveToNext()
 
         }
+
+        calculateWages()
 
         if (dataList.isNotEmpty()) {
             for (i in 0 until dataList.count()) {
@@ -963,7 +929,7 @@ class HistoryFragment : Fragment() {
 
         }
 
-        listView?.adapter?.notifyItemInserted(ItemPosition(requireContext()).loadPosition())
+        listView?.adapter?.notifyItemInserted(ItemPositionData(requireContext()).loadPosition())
         listView?.adapter?.notifyItemRangeChanged(0, dataList.count())
         //customAdapter.updateCornerRadius()
     }
@@ -983,7 +949,7 @@ class HistoryFragment : Fragment() {
 
     @SuppressLint("Range")
     private fun calculateWages() {
-
+        outputWages = ""
         val dbHandler = DBHelper(requireContext(), null)
 
         var y = 0.0
@@ -1016,6 +982,7 @@ class HistoryFragment : Fragment() {
             }
 
             output = String.format("%.2f", y)
+            outputWages = output
             cursor.moveToNext()
 
         }

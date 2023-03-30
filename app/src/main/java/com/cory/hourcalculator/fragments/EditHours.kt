@@ -29,7 +29,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
-import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -37,7 +37,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
@@ -153,7 +152,7 @@ class EditHours : Fragment() {
                     dialog.setCancelable(true)
                     /*val alert = MaterialAlertDialogBuilder(
                         requireContext(),
-                        AccentColor(requireContext()).alertTheme()
+                        AccentColorData(requireContext()).alertTheme()
                     )
                     alert.setCancelable(false)
                     alert.setTitle(getString(R.string.delete))
@@ -226,7 +225,7 @@ class EditHours : Fragment() {
                 Vibrate().vibration(requireContext())
                 val datePicker = DatePickerDialog(
                     requireContext(),
-                    AccentColor(requireContext()).dateDialogTheme(requireContext())
+                    AccentColorData(requireContext()).dateDialogTheme(requireContext())
                 )
                 datePicker.setCancelable(false)
 
@@ -395,7 +394,7 @@ class EditHours : Fragment() {
         if (timeEditHourData.loadInTimeBool() || timeEditHourData.loadOutTimeBool() || timeEditHourData.loadBreakTimeBool() || timeEditHourData.loadDateBool()) {
             val alert = MaterialAlertDialogBuilder(
                 context,
-                AccentColor(context).alertTheme()
+                AccentColorData(context).alertTheme()
             )
             alert.setCancelable(false)
             alert.setTitle(context.getString(R.string.pending_changes))
@@ -525,7 +524,7 @@ class EditHours : Fragment() {
         if (inTimeBool || outTimeBool || breakTimeBool || dateChangedBool) {
             val alert = MaterialAlertDialogBuilder(
                 requireContext(),
-                AccentColor(requireContext()).alertTheme()
+                AccentColorData(requireContext()).alertTheme()
             )
             alert.setCancelable(false)
             alert.setTitle(getString(R.string.pending_changes))
@@ -565,7 +564,7 @@ class EditHours : Fragment() {
         val saveButton = activity?.findViewById<Button>(R.id.saveButton)
         val dateChip = activity?.findViewById<Chip>(R.id.dateChipEdit)
 
-        val id = IdData(requireContext()).loadID()
+        val id = arguments!!.getInt("id") //IdData(requireContext()).loadID()
 
         dataList.clear()
         val cursor = dbHandler.getRow(id.toString())
@@ -648,11 +647,11 @@ class EditHours : Fragment() {
             dateChip?.text = day
         }
 
-        val calculationType = CalculationType(requireContext())
+        val calculationTypeData = CalculationTypeData(requireContext())
 
         saveButton?.setOnClickListener {
 
-            if (calculationType.loadCalculationState()) {
+            if (calculationTypeData.loadCalculationState()) {
                 calculate(idMap, day, 0)
             } else {
                 calculateTime(idMap, day, 0)
@@ -661,8 +660,8 @@ class EditHours : Fragment() {
 
         saveButton?.setOnLongClickListener {
 
-            if (LongPressCalculateButtonEnabled(requireContext()).loadLongClick()) {
-                if (calculationType.loadCalculationState()) {
+            if (LongPressCalculateButtonData(requireContext()).loadLongClick()) {
+                if (calculationTypeData.loadCalculationState()) {
                     calculateTime(idMap, day, 1)
                 } else {
                     calculate(idMap, day, 1)

@@ -1,6 +1,5 @@
 package com.cory.hourcalculator.fragments
 
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.BlendMode
@@ -17,23 +16,56 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.LinkData
+import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class VersionInfoFragment : Fragment() {
 
     private var package_name = "com.android.chrome"
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateCustomTheme()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -164,7 +196,7 @@ class VersionInfoFragment : Fragment() {
         val materialSubtitle = view.findViewById<TextView>(R.id.materialSubtitle)
 
         materialDependencyCardView.setOnClickListener {
-            LinkClass(requireContext()).setLink(materialSubtitle.text.toString())
+            LinkData(requireContext()).setLink(materialSubtitle.text.toString())
             openCustomTab()
         }
 
@@ -178,40 +210,40 @@ class VersionInfoFragment : Fragment() {
         val googleAdsSubtitle = view.findViewById<TextView>(R.id.googleAdsSubtitle)
 
         googleAdsDependencyCardView.setOnClickListener {
-            LinkClass(requireContext()).setLink(googleAdsSubtitle.text.toString())
+            LinkData(requireContext()).setLink(googleAdsSubtitle.text.toString())
             openCustomTab()
         }
 
         val firebaseAnalyticsSubtitle = view.findViewById<TextView>(R.id.firebaseAnalyticsSubtitle)
 
         firebaseAnalyticsDependencyCardView.setOnClickListener {
-            LinkClass(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
+            LinkData(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
             openCustomTab()
         }
 
         val firebaseCrashlyticsSubtitle = view.findViewById<TextView>(R.id.firebaseCrashlyticsSubtitle)
 
         firebaseCrashlyticsDependencyCardView.setOnClickListener {
-            LinkClass(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
+            LinkData(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
             openCustomTab()
         }
 
         val firebasePerfSubtitle = view.findViewById<TextView>(R.id.firebasePerfSubtitle)
 
         firebasePerformanceMonitoringDependencyCardView.setOnClickListener {
-            LinkClass(requireContext()).setLink(firebasePerfSubtitle.text.toString())
+            LinkData(requireContext()).setLink(firebasePerfSubtitle.text.toString())
             openCustomTab()
         }
 
         val inAppReviewSubtitle = view.findViewById<TextView>(R.id.inAppReviewSubtitle)
 
         inAppReviewDependencyCardView.setOnClickListener {
-            LinkClass(requireContext()).setLink(inAppReviewSubtitle.text.toString())
+            LinkData(requireContext()).setLink(inAppReviewSubtitle.text.toString())
             openCustomTab()
         }
     }
 
-    fun updateCustomTheme() {
+    private fun updateCustomTheme() {
         requireActivity().findViewById<CoordinatorLayout>(R.id.coordinatorLayoutVersionInfo).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
 
         val versionHeadingCardView = requireActivity().findViewById<MaterialCardView>(R.id.versionHeadingCardView)
@@ -254,6 +286,8 @@ class VersionInfoFragment : Fragment() {
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
+        collapsingToolbarLayout?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             collapsingToolbarLayout?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
         }
@@ -280,7 +314,7 @@ class VersionInfoFragment : Fragment() {
         if (this.isPackageInstalled(package_name)) {
             // if chrome is available use chrome custom tabs
             customBuilder.intent.setPackage(package_name)
-            customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            customBuilder.launchUrl(requireContext(), Uri.parse(LinkData(requireContext()).loadLink()))
         } else {
             Toast.makeText(requireContext(), getString(R.string.there_was_an_error), Toast.LENGTH_SHORT).show()
         }

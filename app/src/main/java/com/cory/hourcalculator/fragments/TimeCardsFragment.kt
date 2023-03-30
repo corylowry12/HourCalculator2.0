@@ -23,9 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.TimeCardCustomAdapter
-import com.cory.hourcalculator.classes.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
 import com.cory.hourcalculator.classes.CustomColorGenerator
-import com.cory.hourcalculator.classes.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
@@ -42,6 +42,39 @@ class TimeCardsFragment : Fragment() {
     private lateinit var timeCardCustomAdapter: TimeCardCustomAdapter
 
     private lateinit var recyclerViewState: Parcelable
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateCustomTheme()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(
+                            R.style.Theme_AMOLED
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -314,6 +347,9 @@ class TimeCardsFragment : Fragment() {
                 ).generateTopAppBarColor()
             )
         )
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
+            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)

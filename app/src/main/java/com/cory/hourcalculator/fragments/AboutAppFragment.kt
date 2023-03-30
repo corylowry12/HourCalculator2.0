@@ -1,6 +1,5 @@
 package com.cory.hourcalculator.fragments
 
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.BlendMode
@@ -23,6 +22,7 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -36,6 +36,32 @@ class AboutAppFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateCustomColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -74,28 +100,11 @@ class AboutAppFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
-        versionNumberTextView.text = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        versionNumberTextView.text = "VersionData: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
         updateCustomColor()
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAboutApp)
-
-        val navigationDrawable = topAppBar?.navigationIcon
-        navigationDrawable?.mutate()
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -141,7 +150,7 @@ class AboutAppFragment : Fragment() {
 
         reportABug?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
+            LinkData(requireContext()).setLink("https://github.com/corylowry12/HourCalculator2.0/issues")
             openCustomTab()
         }
 
@@ -152,7 +161,7 @@ class AboutAppFragment : Fragment() {
         val githubLogoButton = activity?.findViewById<MaterialButton>(R.id.githubLogoButton)
         githubLogoButton?.setOnClickListener {
             Vibrate().vibration(requireContext())
-            LinkClass(requireContext()).setLink("https://github.com/corylowry12/")
+            LinkData(requireContext()).setLink("https://github.com/corylowry12/")
             openCustomTab()
         }
     }
@@ -170,7 +179,7 @@ class AboutAppFragment : Fragment() {
         if (this.isPackageInstalled(packageName)) {
             // if chrome is available use chrome custom tabs
             customBuilder.intent.setPackage(packageName)
-            customBuilder.launchUrl(requireContext(), Uri.parse(LinkClass(requireContext()).loadLink()))
+            customBuilder.launchUrl(requireContext(), Uri.parse(LinkData(requireContext()).loadLink()))
         } else {
             Toast.makeText(requireContext(), getString(R.string.there_was_an_error), Toast.LENGTH_SHORT).show()
         }
@@ -224,6 +233,8 @@ class AboutAppFragment : Fragment() {
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
 
+        collapsingToolbarLayout?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             collapsingToolbarLayout?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
         }
@@ -232,6 +243,25 @@ class AboutAppFragment : Fragment() {
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
             collapsingToolbarLayout?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAboutApp)
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        }
+        else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
     }
 

@@ -1,15 +1,12 @@
 package com.cory.hourcalculator.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,20 +15,16 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
-import com.cory.hourcalculator.intents.MainActivity
-import com.google.android.material.appbar.AppBarLayout
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlin.math.abs
 
 class AppearanceFragment : Fragment() {
 
@@ -121,24 +114,6 @@ class AppearanceFragment : Fragment() {
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
-        }
-
-
-        val nestedScrollView = view.findViewById<NestedScrollView>(R.id.nestedScrollViewAppearance)
-        val appBar = view.findViewById<AppBarLayout>(R.id.appBarLayoutAppearance)
-
-        nestedScrollView.setOnScrollChangeListener { _, scrollX, _, _, _ ->
-
-            AppearanceScrollPosition(requireContext()).setScroll(scrollX)
-
-        }
-
-        appBar.addOnOffsetChangedListener { _, verticalOffset ->
-            if (abs(verticalOffset) - appBar.totalScrollRange == 0) {
-                AppearanceScrollPosition(requireContext()).setCollapsed(false)
-            } else {
-                AppearanceScrollPosition(requireContext()).setCollapsed(true)
-            }
         }
 
         val themeCardView =
@@ -239,7 +214,7 @@ class AppearanceFragment : Fragment() {
             openFragment(ChooseAppIconFragment())
         }
 
-        val accentColor = AccentColor(requireContext())
+        val accentColorData = AccentColorData(requireContext())
 
         val coloredNavBarSwitch = view.findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)
         val coloredNavBarData = ColoredNavBarData(requireContext())
@@ -258,7 +233,7 @@ class AppearanceFragment : Fragment() {
 
         coloredNavigationBarCardView.setOnClickListener {
             coloredNavBarSwitch.isChecked = !coloredNavBarSwitch.isChecked
-            toggleColoredNavBar(coloredNavBarSwitch.isChecked, coloredNavBarData, accentColor)
+            toggleColoredNavBar(coloredNavBarSwitch.isChecked, coloredNavBarData, accentColorData)
         }
 
         coloredNavigationBarCardView.setOnLongClickListener {
@@ -386,7 +361,7 @@ class AppearanceFragment : Fragment() {
     private fun toggleColoredNavBar(
         isChecked: Boolean,
         coloredNavBarData: ColoredNavBarData,
-        accentColor: AccentColor
+        accentColorData: AccentColorData
     ) {
         Vibrate().vibration(requireContext())
         if (isChecked) {

@@ -20,15 +20,15 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -44,6 +44,9 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.ImageViewActivity
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -149,19 +152,29 @@ class TimeCardItemInfoFragment : Fragment() {
                         layoutInflater.inflate(R.layout.add_photo_bottom_sheet, null)
                     dialog.setContentView(addAPhotoLayout)
 
+                    val removePhotoCardView = addAPhotoLayout.findViewById<MaterialCardView>(R.id.removePhotoCardView)
                     val selectAPhotoCardView =
                         addAPhotoLayout.findViewById<MaterialCardView>(R.id.selectAPhotoCardView)
                     val takeAPhotoCardView =
                         addAPhotoLayout.findViewById<MaterialCardView>(R.id.addAPhotoCardView)
 
+                    removePhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
                     selectAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
                     takeAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
-                    selectAPhotoCardView.shapeAppearanceModel =
-                        selectAPhotoCardView.shapeAppearanceModel
+                    removePhotoCardView.shapeAppearanceModel =
+                        removePhotoCardView.shapeAppearanceModel
                             .toBuilder()
                             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
                             .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
+                            .build()
+                    selectAPhotoCardView.shapeAppearanceModel =
+                        selectAPhotoCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
                             .setBottomRightCornerSize(0f)
                             .setBottomLeftCornerSize(0f)
                             .build()
@@ -173,6 +186,56 @@ class TimeCardItemInfoFragment : Fragment() {
                             .setBottomRightCornerSize(28f)
                             .setBottomLeftCornerSize(28f)
                             .build()
+
+                    if (requireActivity().findViewById<ImageView>(R.id.timeCardImage).visibility == View.GONE) {
+                        removePhotoCardView.visibility = View.GONE
+                        val layoutParams: ViewGroup.MarginLayoutParams =
+                            selectAPhotoCardView.layoutParams as MarginLayoutParams
+                        layoutParams.setMargins(0, 15, 0, 0)
+                        selectAPhotoCardView.requestLayout()
+
+                        selectAPhotoCardView.shapeAppearanceModel =
+                            selectAPhotoCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                    }
+
+                    removePhotoCardView.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        val deleteImageDialog = BottomSheetDialog(requireContext())
+                        val deleteImageDialogLayout =
+                            layoutInflater.inflate(R.layout.delete_image_bottom_sheet, null)
+
+                        deleteImageDialog.setContentView(deleteImageDialogLayout)
+
+                        val infoCardView =
+                            deleteImageDialogLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+                        val yesButton = deleteImageDialogLayout.findViewById<Button>(R.id.yesButton)
+                        val noButton = deleteImageDialogLayout.findViewById<Button>(R.id.noButton)
+
+                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+                        yesButton.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            dialog.dismiss()
+                            deleteImageDialog.dismiss()
+                            TimeCardDBHelper(requireContext(), null).addImage(id, "")
+                            loadIntoList(id)
+                            Toast.makeText(requireContext(), "Image Deleted", Toast.LENGTH_SHORT).show()
+                        }
+                        noButton.setOnClickListener {
+                            Vibrate().vibration(requireContext())
+                            deleteImageDialog.dismiss()
+                            loadIntoList(id)
+                        }
+                        deleteImageDialog.show()
+                    }
 
                     selectAPhotoCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
@@ -295,6 +358,155 @@ class TimeCardItemInfoFragment : Fragment() {
                 "transition_image"
             )
             startActivity(intent, options.toBundle())
+        }
+
+        imageView?.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val dialog = BottomSheetDialog(requireContext())
+            val addAPhotoLayout =
+                layoutInflater.inflate(R.layout.add_photo_bottom_sheet, null)
+            dialog.setContentView(addAPhotoLayout)
+
+            val removePhotoCardView =
+                addAPhotoLayout.findViewById<MaterialCardView>(R.id.removePhotoCardView)
+            val selectAPhotoCardView =
+                addAPhotoLayout.findViewById<MaterialCardView>(R.id.selectAPhotoCardView)
+            val takeAPhotoCardView =
+                addAPhotoLayout.findViewById<MaterialCardView>(R.id.addAPhotoCardView)
+
+            removePhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            selectAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            takeAPhotoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+            removePhotoCardView.shapeAppearanceModel =
+                removePhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            selectAPhotoCardView.shapeAppearanceModel =
+                selectAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            takeAPhotoCardView.shapeAppearanceModel =
+                takeAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+
+            if (imageView.visibility == View.GONE) {
+                removePhotoCardView.visibility = View.GONE
+                val layoutParams: ViewGroup.MarginLayoutParams =
+                    selectAPhotoCardView.layoutParams as MarginLayoutParams
+                layoutParams.setMargins(0, 15, 0, 0)
+                selectAPhotoCardView.requestLayout()
+
+                selectAPhotoCardView.shapeAppearanceModel =
+                    selectAPhotoCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+            }
+
+            removePhotoCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                val deleteImageDialog = BottomSheetDialog(requireContext())
+                val deleteImageDialogLayout =
+                    layoutInflater.inflate(R.layout.delete_image_bottom_sheet, null)
+
+                deleteImageDialog.setContentView(deleteImageDialogLayout)
+
+                val infoCardView =
+                    deleteImageDialogLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+                val yesButton = deleteImageDialogLayout.findViewById<Button>(R.id.yesButton)
+                val noButton = deleteImageDialogLayout.findViewById<Button>(R.id.noButton)
+
+                infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+                yesButton.setOnClickListener {
+                    Vibrate().vibration(requireContext())
+                    dialog.dismiss()
+                    deleteImageDialog.dismiss()
+                    TimeCardDBHelper(requireContext(), null).addImage(id, "")
+                    loadIntoList(id)
+                    Toast.makeText(requireContext(), "Image Deleted", Toast.LENGTH_SHORT).show()
+                }
+                noButton.setOnClickListener {
+                    Vibrate().vibration(requireContext())
+                    deleteImageDialog.dismiss()
+                    loadIntoList(id)
+                }
+                deleteImageDialog.show()
+            }
+
+            selectAPhotoCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                val pickerIntent = Intent(Intent.ACTION_PICK)
+                pickerIntent.type = "image/*"
+
+                showImagePickerAndroid13.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+                dialog.dismiss()
+            }
+            takeAPhotoCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                list = listOf(
+                    android.Manifest.permission.CAMERA
+                )
+
+                managePermissions =
+                    ManagePermissions(
+                        requireActivity(),
+                        list,
+                        1
+                    )
+                //Toast.makeText(requireContext(), managePermissions.checkPermissions(requireContext()).toString(), Toast.LENGTH_SHORT).show()
+                if (managePermissions.checkPermissions(requireContext())) {
+
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                        var photFile: File? = null
+
+                        try {
+                            photFile = createImageFile()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        if (photFile != null) {
+                            val photoUri = FileProvider.getUriForFile(
+                                requireContext(),
+                                "com.cory.hourcalculator.FileProvider",
+                                photFile!!
+                            )
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                            showCamera.launch(intent)
+                        }
+                    }
+                    dialog.dismiss()
+                } else {
+                    managePermissions.showAlert(requireContext())
+                }
+            }
+            dialog.show()
+        return@setOnLongClickListener true
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

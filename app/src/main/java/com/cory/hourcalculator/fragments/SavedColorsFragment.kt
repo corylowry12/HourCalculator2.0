@@ -15,10 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.adapters.PatchNotesAdapter
 import com.cory.hourcalculator.adapters.SavedColorsAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -70,7 +70,7 @@ class SavedColorsFragment : Fragment() {
         val savedColorsRecyclerView = requireActivity().findViewById<RecyclerView>(R.id.savedColorRecyclerView)
         savedColorsRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
         savedColorsRecyclerView.adapter =
-            SavedColorsAdapter(requireContext(), UserAddedColors(requireContext()).read(), this)
+            SavedColorsAdapter(requireContext(), UserAddedColorsData(requireContext()).read(), this)
     }
 
     fun updateCustomColor() {

@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -22,6 +21,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -29,10 +29,40 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class HistorySettingsFragment : Fragment() {
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateCustomColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,48 +97,6 @@ class HistorySettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val toggleHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
-        val historyDeletionCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
-        val historyDeleteAllOnLimitReachedCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
-        val numberOfDaysCardView = requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
-        val openHoursForEditingCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
-
-        toggleHistoryCardView.shapeAppearanceModel = toggleHistoryCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        historyDeletionCardView.shapeAppearanceModel = historyDeletionCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        historyDeleteAllOnLimitReachedCardView.shapeAppearanceModel = historyDeleteAllOnLimitReachedCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        numberOfDaysCardView.shapeAppearanceModel = numberOfDaysCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        openHoursForEditingCardView.shapeAppearanceModel = openHoursForEditingCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(28f)
-            .setBottomLeftCornerSize(28f)
-            .build()
 
         val dialog = BottomSheetDialog(requireContext())
 
@@ -198,6 +186,57 @@ class HistorySettingsFragment : Fragment() {
     }
 
     private fun main() {
+
+        val toggleHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
+        val historyDeletionCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
+        val historyDeleteAllOnLimitReachedCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
+        val numberOfDaysCardView = requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
+        val openHoursForEditingCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
+        val showWagesInHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowWagesInHistory)
+
+        toggleHistoryCardView.shapeAppearanceModel = toggleHistoryCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        historyDeletionCardView.shapeAppearanceModel = historyDeletionCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        historyDeleteAllOnLimitReachedCardView.shapeAppearanceModel = historyDeleteAllOnLimitReachedCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        numberOfDaysCardView.shapeAppearanceModel = numberOfDaysCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        openHoursForEditingCardView.shapeAppearanceModel = openHoursForEditingCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        showWagesInHistoryCardView.shapeAppearanceModel = showWagesInHistoryCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
         val historyToggleData = HistoryToggleData(requireContext())
         val toggleHistory = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
 
@@ -209,8 +248,9 @@ class HistorySettingsFragment : Fragment() {
             toggleHistory?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        toggleHistory?.setOnClickListener {
+        toggleHistoryCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            toggleHistory.isChecked = !toggleHistory.isChecked
             if (toggleHistory.isChecked) {
                 toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             } else {
@@ -252,7 +292,7 @@ class HistorySettingsFragment : Fragment() {
                 }
                 dialog.show()
                 toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                HistoryAutomaticDeletion(requireContext()).setHistoryDeletionState(false)
+                HistoryAutomaticDeletionData(requireContext()).setHistoryDeletionState(false)
                 requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked = false
                 activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
                     ContextCompat.getDrawable(
@@ -268,8 +308,8 @@ class HistorySettingsFragment : Fragment() {
             MainActivity().runOnUiThread(runnable)
         }
 
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
-        val daysWorked = DaysWorkedPerWeek(requireContext())
+        val historyDeletion = HistoryAutomaticDeletionData(requireContext())
+        val daysWorked = DaysWorkedPerWeekData(requireContext())
 
         if (historyDeletion.loadHistoryDeletionState()) {
             activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.isChecked =
@@ -286,7 +326,7 @@ class HistorySettingsFragment : Fragment() {
         requireActivity().findViewById<TextView>(R.id.numberOfEntriesTextView).text =
             daysWorked.loadDaysWorked().toString()
 
-        activity?.findViewById<MaterialCardView>(R.id.historyDeletionCardView)
+        historyDeletionCardView
             ?.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 if (HistoryToggleData(requireContext()).loadHistoryState()) {
@@ -325,7 +365,7 @@ class HistorySettingsFragment : Fragment() {
             deleteAllOnLimitReachedSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView).setOnClickListener {
+        historyDeleteAllOnLimitReachedCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             deleteAllOnLimitReachedSwitch.isChecked = !deleteAllOnLimitReachedSwitch.isChecked
             DeleteAllOnLimitReachedData(requireContext()).setDeleteAllState(deleteAllOnLimitReachedSwitch.isChecked)
@@ -338,9 +378,7 @@ class HistorySettingsFragment : Fragment() {
             }
         }
 
-        val daysWorkedCardView =
-            requireActivity().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
-        daysWorkedCardView.setOnClickListener {
+        numberOfDaysCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (!historyDeletion.loadHistoryDeletionState()) {
                 Toast.makeText(
@@ -362,7 +400,7 @@ class HistorySettingsFragment : Fragment() {
             }
         }
 
-        val historyClickable = ClickableHistoryEntry(requireContext())
+        val historyClickable = ClickableHistoryEntryData(requireContext())
         val historyClickableSwitch = activity?.findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
 
         if (historyClickable.loadHistoryItemClickable()) {
@@ -373,14 +411,38 @@ class HistorySettingsFragment : Fragment() {
             historyClickableSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        historyClickableSwitch?.setOnClickListener {
+        openHoursForEditingCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
+            historyClickableSwitch!!.isChecked = !historyClickableSwitch.isChecked
             historyClickable.setHistoryItemClickable(historyClickableSwitch.isChecked)
             if (historyClickableSwitch.isChecked) {
                 historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             }
             else {
                 historyClickableSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
+        val showWagesInHistoryData = ShowWagesInHistoryData(requireContext())
+        val showWagesInHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch)
+
+        if (showWagesInHistoryData.loadShowWages()) {
+            showWagesInHistorySwitch?.isChecked = true
+            showWagesInHistorySwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!showWagesInHistoryData.loadShowWages()) {
+            showWagesInHistorySwitch?.isChecked = false
+            showWagesInHistorySwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        showWagesInHistoryCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            showWagesInHistorySwitch.isChecked = !showWagesInHistorySwitch.isChecked
+            showWagesInHistoryData.setShowWages(showWagesInHistorySwitch.isChecked)
+            if (showWagesInHistorySwitch.isChecked) {
+                showWagesInHistorySwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            }
+            else {
+                showWagesInHistorySwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
         }
     }
@@ -391,11 +453,11 @@ class HistorySettingsFragment : Fragment() {
 
         val dbHandler = DBHelper(requireContext(), null)
 
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
+        val historyDeletion = HistoryAutomaticDeletionData(requireContext())
 
         val greaterThan =
-            dbHandler.getCount() - DaysWorkedPerWeek(requireContext()).loadDaysWorked()
-        if (dbHandler.getCount() > DaysWorkedPerWeek(requireContext()).loadDaysWorked()) {
+            dbHandler.getCount() - DaysWorkedPerWeekData(requireContext()).loadDaysWorked()
+        if (dbHandler.getCount() > DaysWorkedPerWeekData(requireContext()).loadDaysWorked()) {
 
             val dialog = BottomSheetDialog(requireContext())
             val historySettingsWarningBottomSheet = LayoutInflater.from(context)
@@ -475,8 +537,8 @@ class HistorySettingsFragment : Fragment() {
     }
 
     private fun reset() {
-        val historyDeletion = HistoryAutomaticDeletion(requireContext())
-        val daysWorked = DaysWorkedPerWeek(requireContext())
+        val historyDeletion = HistoryAutomaticDeletionData(requireContext())
+        val daysWorked = DaysWorkedPerWeekData(requireContext())
 
         if (historyDeletion.loadHistoryDeletionState() || daysWorked.loadDaysWorked() != 7) {
                 Vibrate().vibration(requireContext())
@@ -503,17 +565,20 @@ class HistorySettingsFragment : Fragment() {
         val historyDeleteAllOnLimitReached = requireView().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
         val numberOfDaysCardView = requireView().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
         val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
+        val showWagesInHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowWagesInHistory)
 
         toggleHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historyDeletionCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historyDeleteAllOnLimitReached.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         numberOfDaysCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         clickableHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        showWagesInHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val toggleHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch)
         val toggleHistoryDeletion = requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
         val toggleDeleteAllSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historyDeleteAllOnLimitSwitch)
         val clickableHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
+        val showWagesInHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -533,6 +598,8 @@ class HistorySettingsFragment : Fragment() {
         toggleDeleteAllSwitch.trackTintList = ColorStateList(states, colors)
         clickableHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         clickableHistorySwitch.trackTintList = ColorStateList(states, colors)
+        showWagesInHistorySwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        showWagesInHistorySwitch.trackTintList = ColorStateList(states, colors)
 
         val collapsingToolbarHistorySettings = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)
         collapsingToolbarHistorySettings.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))

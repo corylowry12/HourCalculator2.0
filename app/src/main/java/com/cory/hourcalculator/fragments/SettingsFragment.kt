@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
@@ -25,12 +24,14 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.AccentColorData
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.VersionData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
-import com.google.android.play.core.review.ReviewManagerFactory
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class SettingsFragment : Fragment() {
 
@@ -207,7 +208,7 @@ class SettingsFragment : Fragment() {
             openFragment(PatchNotesFragment())
         }
 
-        if (Version(requireContext()).loadVersion() != BuildConfig.VERSION_NAME) {
+        if (VersionData(requireContext()).loadVersion() != BuildConfig.VERSION_NAME) {
             patchNotesChevron?.setImageResource(R.drawable.baseline_priority_high_24)
             patchNotesChevron?.setColorFilter(
                 ContextCompat.getColor(
@@ -253,7 +254,7 @@ class SettingsFragment : Fragment() {
         Vibrate().vibration(requireContext())
 
         val alert =
-            MaterialAlertDialogBuilder(requireContext(), AccentColor(requireContext()).alertTheme())
+            MaterialAlertDialogBuilder(requireContext(), AccentColorData(requireContext()).alertTheme())
         alert.setTitle(getString(R.string.warning))
         alert.setMessage(getString(R.string.would_you_like_to_delete_all_app_data))
         alert.setPositiveButton(getString(R.string.yes)) { _, _ ->

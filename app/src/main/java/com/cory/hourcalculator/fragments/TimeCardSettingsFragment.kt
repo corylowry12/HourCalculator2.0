@@ -20,6 +20,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
@@ -28,6 +29,40 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 
 class TimeCardSettingsFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateCustomColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(
+                            R.style.Theme_AMOLED
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,11 +153,11 @@ class TimeCardSettingsFragment : Fragment() {
             }
         }
 
-        val defaultTimeCardName = DefaultTimeCardName(requireContext())
+        val defaultTimeCardNameData = DefaultTimeCardNameData(requireContext())
         val defaultNameEditText = activity?.findViewById<TextInputEditText>(R.id.defaultTimeCardName)
 
         val editable =
-            Editable.Factory.getInstance().newEditable(defaultTimeCardName.loadDefaultName())
+            Editable.Factory.getInstance().newEditable(defaultTimeCardNameData.loadDefaultName())
         defaultNameEditText?.text = editable
 
         defaultNameEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
@@ -131,7 +166,7 @@ class TimeCardSettingsFragment : Fragment() {
                 return@OnKeyListener true
             }
             if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                defaultTimeCardName.setDefaultName(defaultNameEditText.text.toString())
+                defaultTimeCardNameData.setDefaultName(defaultNameEditText.text.toString())
                 hideKeyboard(defaultNameEditText)
                 return@OnKeyListener true
             }
@@ -141,7 +176,7 @@ class TimeCardSettingsFragment : Fragment() {
         defaultNameEditText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString() != "") {
-                    defaultTimeCardName.setDefaultName(s.toString())
+                    defaultTimeCardNameData.setDefaultName(s.toString())
                 }
             }
 
@@ -149,7 +184,7 @@ class TimeCardSettingsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                defaultTimeCardName.setDefaultName(s.toString())
+                defaultTimeCardNameData.setDefaultName(s.toString())
             }
         })
     }

@@ -15,7 +15,6 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,6 +22,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -32,7 +32,8 @@ class HomeFragment : Fragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        updateCustomTheme()
+
+       requireActivity().recreate()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +104,7 @@ class HomeFragment : Fragment() {
 
 
         val breakTextView = requireActivity().findViewById<TextView>(R.id.textViewBreakHomeFragment)
-        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
+        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityData(requireContext())
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
             breakTextBox?.visibility = View.GONE
@@ -115,41 +116,41 @@ class HomeFragment : Fragment() {
             breakTextViewInput?.visibility = View.VISIBLE
         }
 
-        val dateData = DateData(requireContext())
-        if (dateData.loadMinutes1() != "") {
-            timePickerInTime.minute = dateData.loadMinutes1()!!.toInt()
+        val timePickersData = TimePickersData(requireContext())
+        if (timePickersData.loadMinutes1() != "") {
+            timePickerInTime.minute = timePickersData.loadMinutes1()!!.toInt()
         } else {
-            dateData.setMinutes1(timePickerInTime.minute.toString())
+            timePickersData.setMinutes1(timePickerInTime.minute.toString())
         }
-        if (dateData.loadHours1() != "") {
-            timePickerInTime.hour = dateData.loadHours1()!!.toInt()
+        if (timePickersData.loadHours1() != "") {
+            timePickerInTime.hour = timePickersData.loadHours1()!!.toInt()
         } else {
-            dateData.setHours1(timePickerInTime.hour.toString())
+            timePickersData.setHours1(timePickerInTime.hour.toString())
         }
 
         if (OutTimeData(requireContext()).loadOutTimeState()) {
-            if (dateData.loadMinutes2() != "") {
-                timePickerOutTime.minute = dateData.loadMinutes2()!!.toInt()
+            if (timePickersData.loadMinutes2() != "") {
+                timePickerOutTime.minute = timePickersData.loadMinutes2()!!.toInt()
             } else {
-                dateData.setMinutes2(timePickerOutTime.minute.toString())
+                timePickersData.setMinutes2(timePickerOutTime.minute.toString())
             }
-            if (dateData.loadHours2() != "") {
-                timePickerOutTime.hour = dateData.loadHours2()!!.toInt()
+            if (timePickersData.loadHours2() != "") {
+                timePickerOutTime.hour = timePickersData.loadHours2()!!.toInt()
             } else {
-                dateData.setHours2(timePickerOutTime.hour.toString())
+                timePickersData.setHours2(timePickerOutTime.hour.toString())
             }
         }
 
         timePickerInTime.setOnTimeChangedListener { _, hourOfDay, minute ->
             Vibrate().vibrationTimePickers(requireContext())
-            dateData.setMinutes1(minute.toString())
-            dateData.setHours1(hourOfDay.toString())
+            timePickersData.setMinutes1(minute.toString())
+            timePickersData.setHours1(hourOfDay.toString())
         }
 
         timePickerOutTime?.setOnTimeChangedListener { _, hourOfDay, minute ->
             Vibrate().vibrationTimePickers(requireContext())
-            dateData.setMinutes2(minute.toString())
-            dateData.setHours2(hourOfDay.toString())
+            timePickersData.setMinutes2(minute.toString())
+            timePickersData.setHours2(hourOfDay.toString())
         }
 
         val constraintLayout =
@@ -164,7 +165,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        val calculationType = CalculationType(requireContext())
+        val calculationTypeData = CalculationTypeData(requireContext())
 
         calculateButton?.setOnClickListener {
 
@@ -175,7 +176,7 @@ class HomeFragment : Fragment() {
                 breakTextBox?.clearFocus()
             }
 
-            if (calculationType.loadCalculationState()) {
+            if (calculationTypeData.loadCalculationState()) {
                 calculate(0)
             } else {
                 calculateTime(0)
@@ -183,14 +184,14 @@ class HomeFragment : Fragment() {
         }
 
         calculateButton?.setOnLongClickListener {
-            if (LongPressCalculateButtonEnabled(requireContext()).loadLongClick()) {
+            if (LongPressCalculateButtonData(requireContext()).loadLongClick()) {
                 val imm =
                     requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 if (imm.isAcceptingText) {
                     imm.hideSoftInputFromWindow(constraintLayout?.windowToken, 0)
                     breakTextBox?.clearFocus()
                 }
-                if (calculationType.loadCalculationState()) {
+                if (calculationTypeData.loadCalculationState()) {
                     calculateTime(1)
                 } else {
                     calculate(1)
@@ -296,6 +297,8 @@ class HomeFragment : Fragment() {
 
         val inTimePicker = view?.findViewById<TimePicker>(R.id.timePickerInTimeHomeFragment)
         val outTimePicker = view?.findViewById<TimePicker>(R.id.timePickerOutTimeHomeFragment)
+
+        inTimePicker?.requestLayout()
 
         val inTimeHours = inTimePicker?.hour
         var inTimeMinutes = inTimePicker?.minute.toString()
@@ -446,12 +449,12 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            val daysWorked = DaysWorkedPerWeek(requireContext())
-            val historyAutomaticDeletion = HistoryAutomaticDeletion(requireContext())
+            val daysWorked = DaysWorkedPerWeekData(requireContext())
+            val historyAutomaticDeletionData = HistoryAutomaticDeletionData(requireContext())
             val historyDeletion = HistoryDeletion(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
 
-            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
+            if (historyAutomaticDeletionData.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
                     .toString().toInt()
             ) {
                 historyDeletion.deletion()
@@ -623,12 +626,12 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            val daysWorked = DaysWorkedPerWeek(requireContext())
-            val historyAutomaticDeletion = HistoryAutomaticDeletion(requireContext())
+            val daysWorked = DaysWorkedPerWeekData(requireContext())
+            val historyAutomaticDeletionData = HistoryAutomaticDeletionData(requireContext())
             val historyDeletion = HistoryDeletion(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
 
-            if (historyAutomaticDeletion.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
+            if (historyAutomaticDeletionData.loadHistoryDeletionState() && dbHandler.getCount() > daysWorked.loadDaysWorked()
                     .toString().toInt()
             ) {
                 historyDeletion.deletion()

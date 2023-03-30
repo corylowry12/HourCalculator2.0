@@ -21,12 +21,12 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.fragments.*
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -80,21 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
-        val dataList = ArrayList<HashMap<String, String>>()
-
-        for (i in 0 until UserAddedColors(this).loadColors()!!.count()) {
-            val colors = kotlin.collections.HashMap<String, String>()
-            colors["name"] = ""
-            colors["hex"] = UserAddedColors(this).loadColors()!!.elementAt(i)
-            dataList.add(colors)
-        }
-
-        UserAddedColors(this).insert(dataList)
-        UserAddedColors(this).clear()
-
-        if (GenerateARandomColorData(this).loadGenerateARandomColorOnAppLaunch()) {
-            CustomColorGenerator(this).generateARandomColor()
-        }
+        CustomColorGenerator(this).generateARandomColor()
 
         if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
             if (isComponentEnabled("com.cory.hourcalculator.SplashScreenNoIcon") == 1) {
@@ -284,6 +270,18 @@ class MainActivity : AppCompatActivity() {
         bottomNav.itemTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavTextColor()))
         bottomNav.itemRippleColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
         bottomNav.itemActiveIndicatorColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
+
+        val historyBadge =
+            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+        val timeCardBadge =
+            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+        val settingsBadge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+
+        historyBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+        historyBadge.badgeTextColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeTextColor())
+        timeCardBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+        timeCardBadge.badgeTextColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeTextColor())
+        settingsBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
     }
 
     private fun replaceFragment(fragment: Fragment, goingToTab: Int) {
@@ -445,21 +443,13 @@ class MainActivity : AppCompatActivity() {
         timeCardBadge.isVisible = true
         historyBadge.number = dbHandler.getCount()
         timeCardBadge.number = TimeCardDBHelper(this, null).getCount()
-            historyBadge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
-            timeCardBadge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
+
     }
 
     fun changeSettingsBadge() {
         val badge =
             findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
-        if (Version(this).loadVersion() != BuildConfig.VERSION_NAME) {
-            badge.isVisible = true
-
-            badge.backgroundColor = ContextCompat.getColor(this, R.color.redBadgeColor)
-
-        } else {
-            badge.isVisible = false
-        }
+        badge.isVisible = VersionData(this).loadVersion() != BuildConfig.VERSION_NAME
     }
 
     fun toggleHistory() {
@@ -491,10 +481,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("CutPasteId")
     fun updateCustomColor() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
-        val badge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
-        val timeCardBadge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
 
         updateBottomNavCustomColor()
 
@@ -519,18 +505,12 @@ class MainActivity : AppCompatActivity() {
                         R.color.darkThemeBackground
                     )
                 )
-                badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-                badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
-                timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
-                badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
@@ -541,8 +521,6 @@ class MainActivity : AppCompatActivity() {
                                 R.color.white
                             )
                         )
-                        badge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
-                        timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.white)
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                             mainConstraint.setBackgroundColor(
@@ -551,8 +529,6 @@ class MainActivity : AppCompatActivity() {
                                     R.color.black
                                 )
                             )
-                            badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                            timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         mainConstraint.setBackgroundColor(
@@ -561,8 +537,6 @@ class MainActivity : AppCompatActivity() {
                                 R.color.black
                             )
                         )
-                        badge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
-                        timeCardBadge.badgeTextColor = ContextCompat.getColor(this, R.color.black)
                     }
                 }
             }

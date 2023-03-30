@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -38,6 +39,32 @@ class AppSettingsFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateCustomColor()
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -77,38 +104,7 @@ class AppSettingsFragment : Fragment() {
 
         updateCustomColor()
 
-
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
-
-        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
-        resetDrawable?.mutate()
-
-        val navigationDrawable = topAppBar?.navigationIcon
-        navigationDrawable?.mutate()
-
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-        } else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-        }
 
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -289,7 +285,7 @@ class AppSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
-        val calculationData = CalculationType(requireContext())
+        val calculationData = CalculationTypeData(requireContext())
 
         val calculationTypeSwitch =
             activity?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
@@ -341,7 +337,7 @@ class AppSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
-        val longClickEnabled = LongPressCalculateButtonEnabled(requireContext())
+        val longClickEnabled = LongPressCalculateButtonData(requireContext())
 
         val longClickEnabledSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
@@ -443,7 +439,7 @@ class AppSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
-        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityClass(requireContext())
+        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityData(requireContext())
         val toggleBreakTextBox = activity?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
 
         if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
@@ -589,13 +585,13 @@ class AppSettingsFragment : Fragment() {
         val toggleBreakTextBox = view?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
         val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
 
-        CalculationType(requireContext()).setCalculationState(true)
+        CalculationTypeData(requireContext()).setCalculationState(true)
         VibrationData(requireContext()).setVibrationState(true)
         HistoryToggleData(requireContext()).setHistoryToggle(true)
-        BreakTextBoxVisibilityClass(requireContext()).setVisibility(0)
+        BreakTextBoxVisibilityData(requireContext()).setVisibility(0)
         WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
         OutTimeData(requireContext()).setOutTimeState(true)
-        ClickableHistoryEntry(requireContext()).setHistoryItemClickable(true)
+        ClickableHistoryEntryData(requireContext()).setHistoryItemClickable(true)
 
         setOutTimeSwitch?.isChecked = true
         calculationTypeSwitch?.isChecked = true
@@ -747,6 +743,9 @@ class AppSettingsFragment : Fragment() {
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         wagesEditText.setTextIsSelectable(false)
 
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
+            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
                 ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
@@ -756,6 +755,38 @@ class AppSettingsFragment : Fragment() {
             val id = typedValue.resourceId
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
                 ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
+
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
     }
 
