@@ -1,49 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="colorPrimary">#26a69a</color>
 
     <color name="darkThemeBackground">#383B3C</color>
 
-    <color name="colorAccent">#26A69A</color>
-
-    <color name="darkRed">#B71C1C</color>
     <color name="darkTeal">#00766c</color>
-    <color name="darkPink">#bf5f82</color>
-
-    <color name="pinkIcon">#F97DBC</color>
-    <color name="redIcon">#C01D1E</color>
-
-    <color name="googleItemIndicatorColor" tools:targetApi="s">@android:color/system_accent2_600</color>
-    <color name="googleItemIndicatorColor_light" tools:targetApi="s">@android:color/system_accent2_300</color>
-
-    <color name="colorPrimaryLightAppBar">#64d8cb</color>
-    <color name="colorPrimaryPinkAppBar">#ffc1e3</color>
-    <color name="colorPrimaryOrangeAppBar">#FA986B</color>
-    <color name="colorPrimaryRedAppBar">#ff6659</color>
-    <color name="colorPrimaryPixelAppBar" tools:targetApi="s">@android:color/system_accent1_200</color>
 
     <color name="colorPrimaryLightDialog">#8FC5BF</color>
-    <color name="pinkDialog">#FFB8E0</color>
-    <color name="orangeDialog">#FDB492</color>
-    <color name="redDialog">#FA9890</color>
-    <color name="systemAccentDialog" tools:targetApi="s">@android:color/system_accent1_100</color>
 
-    <color name="cardPink">#FDAFD9</color>
-    <color name="cardTeal">#59C5B9</color>
-    <color name="cardOrange">#FA986B</color>
-    <color name="cardRed">#EF9A9A</color>
-    <color name="cardSystem" tools:targetApi="s">@android:color/system_accent1_200</color>
-
-    <color name="pinkAccent">#f48fb1</color>
-    <color name="orangeAccent">#FA773B</color>
-    <color name="darkOrangeAccent">#C65E2F</color>
     <color name="redAccent">#E53935</color>
-
-    <color name="systemAccent" tools:targetApi="s">@android:color/system_accent1_400</color>
-    <color name="systemAccentDark" tools:targetApi="s">@android:color/system_accent1_500</color>
-
-    <color name="systemAccentGoogleDark" tools:targetApi="s">@android:color/system_neutral2_800</color>
-    <color name="systemAccentGoogleDark_light" tools:targetApi="s">@android:color/system_neutral2_100</color>
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
@@ -51,29 +15,4 @@
     <color name="darkMenuBackground">#2C353A</color>
     <color name="lightMenuBackground">#FFFFFF</color>
 
-    <color name="redBadgeColor">#D36C6C</color>
-    <color name="lightRedBadgeColor">#B71C1C</color>
-
-    <color name="tealNavBarIconTint">#005A4B</color>
-    <color name="pinkNavBarIconTint">#6E394D</color>
-    <color name="orangeNavBarIconTint">#802C00</color>
-    <color name="redNavBarIconTint">#7C1B1B</color>
-    <color name="systemNavBarIconTint" tools:targetApi="s">@android:color/system_accent1_900</color>
-    <color name="historyActionBarIconTint" tools:targetApi="s">@android:color/system_accent1_600</color>
-
-    <color name="colorPrimaryPatchNotesCardView_teal">#8ED1C9</color>
-    <color name="colorPrimaryPatchNotesCardView_pink">#FFCFEA</color>
-    <color name="colorPrimaryPatchNotesCardView_orange">#FFC0A3</color>
-    <color name="colorPrimaryPatchNotesCardView_red">#FFAAA2</color>
-    <color name="colorPrimaryPatchNotesCardView_system" tools:targetApi="s">@android:color/system_accent1_200</color>
-    <color name="colorPrimaryPatchNotesCardView_system_followGoogle" tools:targetApi="s">@android:color/system_accent2_100</color>
-    <color name="colorPrimaryPatchNotesCardView_system_followGoogle_light" tools:targetApi="s">@android:color/system_accent2_100</color>
-
-    <color name="navBarGoogleLight" tools:targetApi="s">@android:color/system_neutral2_100</color>
-    <color name="navBarGoogle" tools:targetApi="s">@android:color/system_neutral2_800</color>
-
-    <color name="patchNotesBadgeColor">#807F7F</color>
-
-    <color name="green">#1A9E1A</color>
-    <color name="red">#D32222</color>
 </resources>

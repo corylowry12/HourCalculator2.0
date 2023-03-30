@@ -72,126 +72,6 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
-    <style name="pink_accent">
-        <item name="radioButtonTheme">@style/RadioButtonPink</item>
-        <item name="colorPrimary">@color/pinkAccent</item>
-        <item name="colorAccent">@color/pinkAccent</item>
-        <item name="colorPrimaryDark">@color/darkPink</item>
-        <item name="appBarBackground">@color/pinkAccent</item>
-        <item name="cardBackground">@color/cardPink</item>
-        <item name="selectedTint">@color/pinkAccent</item>
-        <item name="bottomNavIconTint">@color/pinkNavBarIconTint</item>
-        <item name="bottomNavTextColor">@color/pinkNavBarIconTint</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_pink</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@color/pinkNavBarIconTint</item>
-    </style>
-
-    <style name="transparent_accent">
-        <item name="radioButtonTheme">@style/RadioButtonTeal</item>
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorAccent">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@android:color/transparent</item>
-        <item name="appBarBackground">@android:color/transparent</item>
-        <item name="cardBackground">@android:color/transparent</item>
-        <item name="selectedTint">@android:color/transparent</item>
-        <item name="bottomNavIconTint">@android:color/transparent</item>
-        <item name="bottomNavTextColor">@android:color/transparent</item>
-        <item name="patchNotesCardBackground">@android:color/transparent</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@android:color/transparent</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
-    <style name="teal_accent">
-        <item name="radioButtonTheme">@style/RadioButtonTeal</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimaryDark">@color/darkTeal</item>
-        <item name="appBarBackground">@color/colorPrimary</item>
-        <item name="cardBackground">@color/cardTeal</item>
-        <item name="selectedTint">@color/colorPrimary</item>
-        <item name="bottomNavIconTint">@color/tealNavBarIconTint</item>
-        <item name="bottomNavTextColor">@color/tealNavBarIconTint</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_teal</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@color/tealNavBarIconTint</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
-    <style name="orange_accent">
-        <item name="radioButtonTheme">@style/RadioButtonOrange</item>
-        <item name="colorPrimary">@color/orangeAccent</item>
-        <item name="colorAccent">@color/orangeAccent</item>
-        <item name="colorPrimaryDark">@color/darkOrangeAccent</item>
-        <item name="appBarBackground">@color/orangeAccent</item>
-        <item name="cardBackground">@color/cardOrange</item>
-        <item name="selectedTint">@color/orangeAccent</item>
-        <item name="bottomNavIconTint">@color/orangeNavBarIconTint</item>
-        <item name="bottomNavTextColor">@color/orangeNavBarIconTint</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_orange</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@color/orangeNavBarIconTint</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
-    <style name="red_accent">
-        <item name="radioButtonTheme">@style/RadioButtonRed</item>
-        <item name="colorPrimary">@color/redAccent</item>
-        <item name="colorAccent">@color/redAccent</item>
-        <item name="colorPrimaryDark">@color/darkRed</item>
-        <item name="appBarBackground">@color/redAccent</item>
-        <item name="cardBackground">@color/cardRed</item>
-        <item name="selectedTint">@color/redAccent</item>
-        <item name="bottomNavIconTint">@color/redNavBarIconTint</item>
-        <item name="bottomNavTextColor">@color/redNavBarIconTint</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_red</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@color/redNavBarIconTint</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
-    <style name="system_accent">
-        <item name="radioButtonTheme">@style/RadioButtonMaterialYou</item>
-        <item name="colorPrimary">@color/systemAccent</item>
-        <item name="colorAccent">@color/systemAccent</item>
-        <item name="colorPrimaryDark">@color/systemAccentDark</item>
-        <item name="appBarBackground">@color/systemAccent</item>
-        <item name="cardBackground">@color/cardSystem</item>
-        <item name="selectedTint">@color/systemAccent</item>
-        <item name="bottomNavIconTint">@color/systemNavBarIconTint</item>
-        <item name="bottomNavTextColor">@color/systemNavBarIconTint</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_system</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@color/historyActionBarIconTint</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
-    <style name="system_accent_google_light">
-        <item name="radioButtonTheme">@style/RadioButtonMaterialYouGoogle</item>
-        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_100</item>
-        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_100</item>
-        <item name="colorPrimaryDark" tools:targetApi="s">@color/systemAccentGoogleDark_light</item>
-        <item name="appBarBackground" tools:targetApi="s">@android:color/system_neutral2_100</item>
-        <item name="cardBackground" tools:targetApi="s">@android:color/system_accent2_100</item>
-        <item name="selectedTint">@color/systemAccent</item>
-        <item name="bottomNavIconTint" tools:targetApi="s">@android:color/system_accent2_800</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_system_followGoogle_light</item>
-        <item name="bottomNavTextColor" tools:targetApi="s">@android:color/system_accent2_800</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@android:color/system_accent2_800</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
-    <style name="system_accent_google">
-        <item name="radioButtonTheme">@style/RadioButtonMaterialYouGoogle</item>
-        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="colorPrimaryDark" tools:targetApi="s">@android:color/system_neutral2_900</item>
-        <item name="appBarBackground" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="cardBackground" tools:targetApi="s">@android:color/system_accent2_300</item>
-        <item name="selectedTint">@color/systemAccent</item>
-        <item name="bottomNavIconTint" tools:targetApi="s">@android:color/system_accent2_100</item>
-        <item name="patchNotesCardBackground">@color/colorPrimaryPatchNotesCardView_system_followGoogle</item>
-        <item name="bottomNavTextColor" tools:targetApi="s">@android:color/system_accent2_100</item>
-        <item name="historyActionBarIconTint" tools:targetApi="s">@android:color/system_accent2_100</item>
-        <item name="SystemAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-    </style>
-
     <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorControlNormal">#000000</item>
         <item name="colorPrimary">@color/darkTeal</item>
@@ -202,65 +82,8 @@
         <item name="android:backgroundDimAmount">0.70</item>
     </style>
 
-    <style name="AlertDialogStylePink" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorPrimary">@color/darkPink</item>
-        <item name="colorSecondary">@android:color/black</item>
-        <item name="colorSurface">@color/pinkDialog</item>
-        <item name="colorOnSurface">@android:color/black</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
-    <style name="AlertDialogStyleOrange" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorPrimary">@color/darkOrangeAccent</item>
-        <item name="colorSecondary">@android:color/black</item>
-        <item name="colorSurface">@color/orangeDialog</item>
-        <item name="colorOnSurface">@android:color/black</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
-    <style name="AlertDialogStyleRed" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorPrimary">@color/darkRed</item>
-        <item name="colorSecondary">@android:color/black</item>
-        <item name="colorSurface">@color/redDialog</item>
-        <item name="colorOnSurface">@android:color/black</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
-    <style name="AlertDialogStyleSystemAccent" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorPrimary">@color/systemAccentDark</item>
-        <item name="colorSecondary">@android:color/black</item>
-        <item name="colorSurface">@color/systemAccentDialog</item>
-        <item name="colorOnSurface">@android:color/black</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
-    <style name="AlertDialogStyleSystemAccentGoogle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="colorSecondary">@android:color/black</item>
-        <item name="colorSurface" tools:targetApi="s">@android:color/system_neutral2_100</item>
-        <item name="colorOnSurface">@android:color/black</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
     <style name="overflowDotStyle">
         <item name="android:src">@drawable/ic_baseline_more_vert_24</item>
-    </style>
-
-    <style name="datePickerLight" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="backgroundColorDialog">@color/white</item>
-        <item name="android:windowBackground">@drawable/date_picker</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
     </style>
 
     <style name="datePickerNew" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
@@ -291,68 +114,6 @@
         <item name="android:textColorPrimary">#D5D5D5</item>
     </style>
 
-    <style name="datePickerDark" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="backgroundColorDialog">@color/darkThemeBackground</item>
-        <item name="android:windowBackground">@drawable/date_picker</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
-    <style name="datePickerGoogleLight" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="backgroundColorDialog">@color/white</item>
-        <item name="android:windowBackground">@drawable/date_picker</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_600</item>
-        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_600</item>
-    </style>
-
-    <style name="datePickerGoogleDark" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="backgroundColorDialog">@color/darkThemeBackground</item>
-        <item name="android:windowBackground">@drawable/date_picker</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-        <item name="colorPrimary" tools:targetApi="s">@android:color/system_neutral2_300</item>
-        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_300</item>
-    </style>
-
-    <style name="RadioButtonTeal" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@android:color/transparent</item>
-        <item name="colorAccent">@color/darkTeal</item>
-        <item name="android:textColorSecondary">#a9a9a9</item>
-        <item name="colorControlNormal">#000000</item>
-    </style>
-
-    <style name="RadioButtonPink" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/pinkAccent</item>
-        <item name="android:textColorSecondary">#a9a9a9</item>
-        <item name="colorControlNormal">#000000</item>
-    </style>
-
-    <style name="RadioButtonOrange" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/darkOrangeAccent</item>
-        <item name="android:textColorSecondary">#a9a9a9</item>
-        <item name="colorControlNormal">#000000</item>
-    </style>
-
-    <style name="RadioButtonRed" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/darkRed</item>
-        <item name="android:textColorSecondary">#a9a9a9</item>
-        <item name="colorControlNormal">#000000</item>
-    </style>
-
-    <style name="RadioButtonMaterialYou" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/systemAccentDark</item>
-        <item name="android:textColorSecondary">#a9a9a9</item>
-        <item name="colorControlNormal">#000000</item>
-    </style>
-
-    <style name="RadioButtonMaterialYouGoogle" parent="Theme.AppCompat.Light">
-        <item name="colorAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="android:textColorSecondary">#a9a9a9</item>
-        <item name="colorControlNormal">#000000</item>
-    </style>
-
     <style name="Widget.App.Button.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton" >
         <item name="iconPadding">0dp</item>
         <item name="android:insetTop">0dp</item>
@@ -379,15 +140,6 @@
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_dialog</item>
-    </style>
-
-    <style name="switchStyle" parent="@style/Widget.Material3.CompoundButton.MaterialSwitch">
-        <item name="colorControlHighlight">@android:color/transparent</item>
-        <item name="colorControlActivated">@android:color/transparent</item>
-        <item name="colorPrimaryContainer">@android:color/white</item>
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorAccent">@android:color/transparent</item>
-        <item name="colorOnSurface">@android:color/transparent</item>
     </style>
 
 </resources>
