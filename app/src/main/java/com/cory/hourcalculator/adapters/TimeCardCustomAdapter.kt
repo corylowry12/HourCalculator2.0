@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
@@ -26,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.math.RoundingMode
 
@@ -38,8 +38,7 @@ class TimeCardCustomAdapter(
         var name: TextView = itemView.findViewById(R.id.row_name)
         var week: TextView = itemView.findViewById(R.id.row_week)
         var totalHours: TextView = itemView.findViewById(R.id.row_total_hours)
-        var countChip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
-
+        var countChip : Chip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
         fun bind(position: Int) {
 
             itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
@@ -170,11 +169,13 @@ class TimeCardCustomAdapter(
                     .inflate(R.layout.time_card_options_bottom_sheet, null)
                 dialog.setContentView(timeCardOptionsLayout)
 
+                val renameCardView = timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.renameCardView)
                 val deleteCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteCardView)
                 val deleteAllCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteAllCardView)
 
+                renameCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
                 deleteCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
                 deleteAllCardView.setCardBackgroundColor(
                     Color.parseColor(
@@ -184,11 +185,17 @@ class TimeCardCustomAdapter(
                     )
                 )
 
-
-                deleteCardView.shapeAppearanceModel = deleteCardView.shapeAppearanceModel
+                renameCardView.shapeAppearanceModel = renameCardView.shapeAppearanceModel
                     .toBuilder()
                     .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
                     .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+                deleteCardView.shapeAppearanceModel = deleteCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
                     .setBottomRightCornerSize(0f)
                     .setBottomLeftCornerSize(0f)
                     .build()
@@ -200,6 +207,98 @@ class TimeCardCustomAdapter(
                     .setBottomLeftCornerSize(28f)
                     .build()
 
+                renameCardView.setOnClickListener {
+                    Vibrate().vibration(context)
+                    dialog.dismiss()
+                    val renameDialog = BottomSheetDialog(context)
+                    val renameLayout = LayoutInflater.from(context)
+                        .inflate(R.layout.rename_bottom_sheet, null)
+                    renameDialog.setContentView(renameLayout)
+                    renameDialog.setCancelable(false)
+
+                    val editText = renameLayout.findViewById<TextInputEditText>(R.id.renameTextInputEditText)
+                    val renameButton = renameLayout.findViewById<Button>(R.id.renameButton)
+                    val cancelButton = renameLayout.findViewById<Button>(R.id.cancelButton)
+                    val renameBottomSheetCardView = renameLayout.findViewById<MaterialCardView>(R.id.renameCardView)
+
+                    renameBottomSheetCardView.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(context).generateCardColor()
+                        )
+                    )
+                    renameButton.setBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                context
+                            ).generateCustomColorPrimary()
+                        )
+                    )
+                    cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    
+                    editText.setText(dataList[holder.adapterPosition]["name"])
+                    
+                    renameButton.setOnClickListener {
+                        Vibrate().vibration(context)
+                        TimeCardDBHelper(context, null).updateName(editText.text.toString(), dataList[holder.adapterPosition]["id"]!!)
+                        dataList.clear()
+                        val cursor = TimeCardDBHelper(context, null).getAllRow(context)
+                        cursor!!.moveToFirst()
+
+                        while (!cursor.isAfterLast) {
+                            val map = HashMap<String, String>()
+                            map["id"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))
+                            try {
+                                map["name"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_NAME))
+                            } catch (e: java.lang.NullPointerException) {
+                                e.printStackTrace()
+                                map["name"] = ""
+                            }
+                            map["totalHours"] =
+                                cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
+                            map["week"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_WEEK))
+                            try {
+                                map["image"] =
+                                    cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_IMAGE))
+                            } catch (e: NullPointerException) {
+                                e.printStackTrace()
+                                map["image"] = ""
+                            }
+                            map["count"] =
+                                TimeCardsItemDBHelper(context, null).getCountForItemID(
+                                    map["id"].toString().toInt()
+                                ).toString()
+
+                            if (map["week"]!!.contains("-") && !map["week"]!!.contains(" - ")) {
+                                TimeCardDBHelper(context, null).updateWeek(
+                                    map["week"]!!.replace(
+                                        "-",
+                                        " - "
+                                    ), map["id"]!!
+                                )
+                                map["week"] = map["week"]!!.replace("-", " - ")
+                            }
+
+                            if (map["count"]!!.toInt() == 1) {
+                                if (map["week"]!!.contains("-")) {
+                                    val (first, last) = map["week"]!!.split("-")
+                                    TimeCardDBHelper(context, null).updateWeek(first, map["id"]!!)
+                                    map["week"] = first
+                                }
+                            }
+
+                            dataList.add(map)
+
+                            cursor.moveToNext()
+                        }
+                        notifyItemChanged(holder.adapterPosition)
+                        renameDialog.dismiss()
+                    }
+                    cancelButton.setOnClickListener { 
+                        Vibrate().vibration(context)
+                        renameDialog.dismiss()
+                    }
+                    renameDialog.show()
+                }
                 deleteCardView.setOnClickListener {
                     Vibrate().vibration(context)
                     dialog.dismiss()
