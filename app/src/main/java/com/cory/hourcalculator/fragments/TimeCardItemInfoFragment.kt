@@ -189,7 +189,7 @@ class TimeCardItemInfoFragment : Fragment() {
 
                     if (requireActivity().findViewById<ImageView>(R.id.timeCardImage).visibility == View.GONE) {
                         removePhotoCardView.visibility = View.GONE
-                        val layoutParams: ViewGroup.MarginLayoutParams =
+                        val layoutParams: MarginLayoutParams =
                             selectAPhotoCardView.layoutParams as MarginLayoutParams
                         layoutParams.setMargins(0, 15, 0, 0)
                         selectAPhotoCardView.requestLayout()
@@ -405,7 +405,7 @@ class TimeCardItemInfoFragment : Fragment() {
 
             if (imageView.visibility == View.GONE) {
                 removePhotoCardView.visibility = View.GONE
-                val layoutParams: ViewGroup.MarginLayoutParams =
+                val layoutParams: MarginLayoutParams =
                     selectAPhotoCardView.layoutParams as MarginLayoutParams
                 layoutParams.setMargins(0, 15, 0, 0)
                 selectAPhotoCardView.requestLayout()
