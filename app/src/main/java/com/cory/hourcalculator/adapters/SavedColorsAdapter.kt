@@ -1,9 +1,7 @@
 package com.cory.hourcalculator.adapters
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.fragments.SavedColorsFragment
-import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.GenerateARandomColorData
+import com.cory.hourcalculator.sharedprefs.MaterialYouData
+import com.cory.hourcalculator.sharedprefs.UserAddedColorsData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 
 class SavedColorsAdapter(private val context: Context,
 private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsFragment
@@ -87,7 +86,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
                 }
             }
 
-            if (!MaterialYouEnabled(context).loadMaterialYou()) {
+            if (!MaterialYouData(context).loadMaterialYou()) {
                 if (CustomColorGenerator(context).loadCustomHex() == "#${dataList[position]["hex"]}") {
                     savedColorCardView.strokeWidth = 7
                 } else {
@@ -110,7 +109,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             Vibrate().vibration(context)
             val dialog = BottomSheetDialog(context)
             val renameLayout = LayoutInflater.from(context)
-                .inflate(R.layout.rename_color_bottom_sheet, null)
+                .inflate(R.layout.rename_bottom_sheet, null)
             dialog.setContentView(renameLayout)
             dialog.setCancelable(true)
 
@@ -138,10 +137,10 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             renameButton.setOnClickListener {
                 Vibrate().vibration(context)
                 dialog.dismiss()
-                val addedColors = UserAddedColors(context).read()
+                val addedColors = UserAddedColorsData(context).read()
                 dataList.clear()
 
-                for (i in 0 until UserAddedColors(context).read().count()) {
+                for (i in 0 until UserAddedColorsData(context).read().count()) {
                     val allColors = HashMap<String, String>()
                     if (i == holder.adapterPosition) {
                         try {
@@ -162,8 +161,8 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
                     allColors["hex"] = addedColors[i]["hex"].toString()
                     dataList.add(allColors)
                 }
-                UserAddedColors(context).clearHash()
-                UserAddedColors(context).insert(dataList)
+                UserAddedColorsData(context).clearHash()
+                UserAddedColorsData(context).insert(dataList)
                 notifyDataSetChanged()
             }
             cancelButton.setOnClickListener {
@@ -180,29 +179,29 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             notifyDataSetChanged()
 
             GenerateARandomColorData(context).setGenerateARandomColorOnAppLaunch(false)
-            MaterialYouEnabled(context).setMaterialYouState(false)
+            MaterialYouData(context).setMaterialYouState(false)
             newFragment.updateCustomColor()
         }
 
         savedColorCardView.setOnLongClickListener {
             Vibrate().vibration(context)
             /*val allColors = mutableSetOf<String>()
-            val colorsSet = UserAddedColors(context).loadColors()
-            for (i in 0 until UserAddedColors(context).loadColors()!!.count()) {
+            val colorsSet = UserAddedColorsData(context).loadColors()
+            for (i in 0 until UserAddedColorsData(context).loadColors()!!.count()) {
                 allColors.add(colorsSet!!.elementAt(i))
             }
             allColors.remove(holder.itemView.findViewById<TextView>(R.id.savedColorTitle).text.toString().drop(1))
-            UserAddedColors(context).clear()
-            UserAddedColors(context).addColor(allColors)
+            UserAddedColorsData(context).clear()
+            UserAddedColorsData(context).addColor(allColors)
             dataList.clear()
-            for (i in 0 until UserAddedColors(context).loadColors()!!.count()) {
-                dataList.add(UserAddedColors(context).loadColors()!!.elementAt(i))
+            for (i in 0 until UserAddedColorsData(context).loadColors()!!.count()) {
+                dataList.add(UserAddedColorsData(context).loadColors()!!.elementAt(i))
             }*/
 
-            val addedColors = UserAddedColors(context).read()
+            val addedColors = UserAddedColorsData(context).read()
             dataList.clear()
 
-            for (i in 0 until UserAddedColors(context).read().count()) {
+            for (i in 0 until UserAddedColorsData(context).read().count()) {
                 val allColors = HashMap<String, String>()
                 try {
                     allColors["name"] = addedColors[i]["name"].toString()
@@ -214,7 +213,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             }
             dataList.removeAt(holder.adapterPosition)
             notifyItemRemoved(holder.adapterPosition)
-            UserAddedColors(context).insert(dataList)
+            UserAddedColorsData(context).insert(dataList)
             Toast.makeText(context, "Color Deleted", Toast.LENGTH_SHORT).show()
 
             if (dataList.isEmpty()) {
