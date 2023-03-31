@@ -605,7 +605,7 @@ class HistoryFragment : Fragment() {
             val collapsingToolbarLayout =
                 requireView().findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
 
-            dateDescending.setOnClickListener {
+            dateDescendingCardView.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 sortDialog.dismiss()
                 listView?.scrollToPosition(0)
@@ -631,7 +631,7 @@ class HistoryFragment : Fragment() {
                 ).show()
             }
 
-            dateAscending.setOnClickListener {
+            dateAscendingCardView.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 sortDialog.dismiss()
                 listView?.scrollToPosition(0)
@@ -657,7 +657,7 @@ class HistoryFragment : Fragment() {
                 ).show()
             }
 
-            totalDescending.setOnClickListener {
+            totalDescendingCardView.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 sortDialog.dismiss()
                 listView?.scrollToPosition(0)
@@ -683,7 +683,7 @@ class HistoryFragment : Fragment() {
                 ).show()
             }
 
-            totalAscending.setOnClickListener {
+            totalAscendingCardView.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 sortDialog.dismiss()
                 listView?.scrollToPosition(0)
@@ -1022,7 +1022,12 @@ class HistoryFragment : Fragment() {
             loadIntoList()
         }, 500)
 
+        //requireActivity().findViewById<AppBarLayout>(R.id.appBarLayoutHistory).setExpanded(true, true)
+
         saveState()
+
+        hideNavigationIcon()
+        hideOptionsIcon()
 
     }
 

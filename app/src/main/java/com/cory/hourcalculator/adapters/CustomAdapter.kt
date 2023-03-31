@@ -195,18 +195,24 @@ class CustomAdapter(
                                     .toDouble()
                             )
                         }"
-                    } catch (e: java.lang.NumberFormatException) {
+                    } catch (e: java.lang.Exception) {
                         e.printStackTrace()
+                        wages.text = "Wages: Error"
                     }
 
                 } else {
-                    wages.text = "Wages: $${
-                        String.format(
-                            "%.2f",
-                            dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
-                                .toDouble()
-                        )
-                    }"
+                    try {
+                        wages.text = "Wages: $${
+                            String.format(
+                                "%.2f",
+                                dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
+                                    .toDouble()
+                            )
+                        }"
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                        wages.text = "Wages: Error"
+                    }
                 }
             }
             else {
@@ -609,18 +615,18 @@ class CustomAdapter(
                 }
         }
 
-        checkBox.setOnLongClickListener {
+        /*checkBox.setOnLongClickListener {
             Vibrate().vibration(context)
             longClickSelectAll(holder)
 
             return@setOnLongClickListener true
-        }
+        }*/
 
-        checkBox.setOnClickListener {
+        /*checkBox.setOnClickListener {
             holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked =
                 !holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked
             clickEntryWhenCheckboxVisible(holder)
-        }
+        }*/
 
         holder.itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView).setOnClickListener {
             Vibrate().vibration(context)

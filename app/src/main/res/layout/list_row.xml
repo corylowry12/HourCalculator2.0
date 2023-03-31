@@ -36,7 +36,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible"
-                android:button="@drawable/checkbox_rounded"/>
+                android:button="@drawable/checkbox_rounded"
+                android:background="@null"
+                android:clickable="false"/>
 
             <TextView
                 android:id="@+id/row_in"

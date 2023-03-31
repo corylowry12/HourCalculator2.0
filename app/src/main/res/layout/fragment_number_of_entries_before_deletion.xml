@@ -74,7 +74,8 @@
                         android:textColor="?attr/settingsTextColor"
                         android:minHeight="48dp"
                         android:theme="?attr/radioButtonTheme"
-                        android:clickable="false" />
+                        android:clickable="false"
+                        android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -103,7 +104,8 @@
                     android:textColor="?attr/settingsTextColor"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -131,7 +133,8 @@
                     android:textColor="?attr/settingsTextColor"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -159,7 +162,8 @@
                     android:textColor="?attr/settingsTextColor"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -187,7 +191,8 @@
                     android:textColor="?attr/settingsTextColor"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -215,7 +220,8 @@
                     android:textColor="?attr/settingsTextColor"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -243,7 +249,8 @@
                     android:textColor="?attr/settingsTextColor"
                     android:minHeight="48dp"
                     android:theme="?attr/radioButtonTheme"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:background="@null"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 

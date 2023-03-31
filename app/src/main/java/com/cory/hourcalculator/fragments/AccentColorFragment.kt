@@ -388,7 +388,8 @@ class AccentColorFragment : Fragment() {
                 optionsDialog.dismiss()
                 if (UserAddedColorsData(requireContext()).read().count() >= 2) {
                     GenerateARandomColorMethodData(requireContext()).setGenerateARandomColorMethod(1)
-                    val contains = UserAddedColorsData(requireContext()).read().filter { it.containsValue(CustomColorGenerator(requireContext()).loadRandomHex()) }
+                    val contains = UserAddedColorsData(requireContext()).read().filter { it.containsValue(CustomColorGenerator(requireContext()).loadRandomHex().drop(1)) }
+
                     if (CustomColorGenerator(requireContext()).loadRandomHex() == "" || contains.isEmpty()) {
                         CustomColorGenerator(requireContext()).generateARandomColor()
                     }

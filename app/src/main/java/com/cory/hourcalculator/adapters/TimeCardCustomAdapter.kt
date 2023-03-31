@@ -21,6 +21,7 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.WagesData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -38,6 +39,7 @@ class TimeCardCustomAdapter(
         var name: TextView = itemView.findViewById(R.id.row_name)
         var week: TextView = itemView.findViewById(R.id.row_week)
         var totalHours: TextView = itemView.findViewById(R.id.row_total_hours)
+        val wages: TextView = itemView.findViewById(R.id.row_time_card_wages)
         var countChip : Chip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
         fun bind(position: Int) {
 
@@ -85,6 +87,19 @@ class TimeCardCustomAdapter(
             //outputColon = "$wholeNumber" + ":$minute"
 
             totalHours.text = "Total: $totalHoursRounded/$wholeNumber:$minute"
+
+            try {
+                wages.text = "Wages: $${
+                    String.format(
+                        "%.2f",
+                        dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
+                            .toDouble()
+                    )
+                }"
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                wages.text = "Wages: Error"
+            }
 
             if (dataItem["count"]!!.toInt() > 1) {
                 week.text = "Week: ${dataItem["week"]}"

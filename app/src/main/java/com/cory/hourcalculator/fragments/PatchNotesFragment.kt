@@ -59,14 +59,13 @@ class PatchNotesFragment : Fragment() {
                                             "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view", "Added a toast message when entry is automatically deleted")
 
-    private var bugFixesArrayInternal = arrayOf("Fixed issue where if you enabled material you theming it would update the custom color circle image", "Fixed issue where hint text color in the rename item bottom sheet was purple", "Fixed issue where wages wouldn't update if you viewed info and then deleted some items",
-                                                "Fixed issue where if you saved colors and restarted the app, the colors would be gone")
+    private var bugFixesArrayInternal = arrayOf("Fixed issue where if you repeatedly swapped between random color and saved color generation, it would pick a different saved color each time", "Fixed issue where if multi-select checkbox was visible and you clicked delete all in the menu, the icons in the top bar wouldnt hide in history",
+                                                "Fixed issue with crashing when showing wages in each history item under certain conditions", "Fixed issue with wages being blank in each history item if it encountered an error while calculating")
 
-    private var newFeaturesArrayInternal = arrayOf("Added the ability to rename a time card entry without entering the time card info view and changing the text box", "Added ability to change the badge color on the bottom navigation view (the icon that shows the number of items in history and time cards) to match the accent color", "Added the ability to remove a photo without viewing the photo first",
-                                                    "Added the ability to manage a photo in the time card view just by long pressing on it", "Added ability to make background be more colorful, instead of being white/black, it'll be a light or dark shade of whatever accent color is chosen", "Added option to generate a random color from saved colors (only if you have saved more than 2)")
+    private var newFeaturesArrayInternal = arrayOf("Added wages text to show in each time card entry")
 
-    private var enhancementsArrayInternal = arrayOf("Removed ability to save color by long pressing the pick a custom color card", "App will now generate a random color every time the app is launched whether its enabled or not, it just won't set the color if its disabled", "Accent color custom hex code text view will now show if a color is saved and if you have named it," +
-                                                    " it will show the name")
+    private var enhancementsArrayInternal = arrayOf("Tweaked the button animation and improved clicking radius for the sorting bottom sheet in the history view", "Tweaked animations when clicking the multi-select checkboxes in the history view",
+                                                    "Renamed the \"Add Photo\" bottom sheet to be \"Image Options\"", "Tweaked the bottom padding on the saved colors list", "Tweaked animation when changing the Number of Days settings")
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)

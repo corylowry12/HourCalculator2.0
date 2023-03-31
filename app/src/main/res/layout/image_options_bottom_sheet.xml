@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        android:text="Add Photo"
+        android:text="Image Options"
         android:textColor="?attr/textColor"
         style="@style/TextAppearance.Material3.HeadlineMedium"/>
 

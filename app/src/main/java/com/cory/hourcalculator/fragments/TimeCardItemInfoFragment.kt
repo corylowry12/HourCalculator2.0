@@ -149,7 +149,7 @@ class TimeCardItemInfoFragment : Fragment() {
                     Vibrate().vibration(requireContext())
                     val dialog = BottomSheetDialog(requireContext())
                     val addAPhotoLayout =
-                        layoutInflater.inflate(R.layout.add_photo_bottom_sheet, null)
+                        layoutInflater.inflate(R.layout.image_options_bottom_sheet, null)
                     dialog.setContentView(addAPhotoLayout)
 
                     val removePhotoCardView = addAPhotoLayout.findViewById<MaterialCardView>(R.id.removePhotoCardView)
@@ -364,7 +364,7 @@ class TimeCardItemInfoFragment : Fragment() {
             Vibrate().vibration(requireContext())
             val dialog = BottomSheetDialog(requireContext())
             val addAPhotoLayout =
-                layoutInflater.inflate(R.layout.add_photo_bottom_sheet, null)
+                layoutInflater.inflate(R.layout.image_options_bottom_sheet, null)
             dialog.setContentView(addAPhotoLayout)
 
             val removePhotoCardView =
