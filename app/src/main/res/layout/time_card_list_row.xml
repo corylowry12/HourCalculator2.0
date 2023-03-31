@@ -66,6 +66,19 @@
                 app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
                 tools:ignore="HardcodedText" />
 
+            <TextView
+                android:id="@+id/row_time_card_wages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_total_hours"
+                android:text="Wages"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/row_total_hours"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
+                tools:ignore="HardcodedText" />
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/timeCardItemInfoCountChip"
                 style="@style/Widget.Material3.Chip.Filter"
