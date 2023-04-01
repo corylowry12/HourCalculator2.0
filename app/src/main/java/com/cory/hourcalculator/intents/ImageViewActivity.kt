@@ -33,8 +33,6 @@ import com.ortiz.touchview.TouchImageView
 
 
 class ImageViewActivity : AppCompatActivity() {
-
-    var themeSelection = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,37 +40,31 @@ class ImageViewActivity : AppCompatActivity() {
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
                 setTheme(R.style.Theme_DarkTheme)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 setTheme(R.style.Theme_MyApplication)
-                themeSelection = false
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 setTheme(R.style.Theme_AMOLED)
-                themeSelection = true
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         setTheme(R.style.Theme_MyApplication)
-                        themeSelection = false
                     }
                     Configuration.UI_MODE_NIGHT_YES -> {
                         setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         setTheme(R.style.Theme_AMOLED)
-                        themeSelection = true
                     }
                 }
             }
         }
         setContentView(R.layout.activity_image_view)
 
-        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        //window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         val imageView = findViewById<TouchImageView>(R.id.touchImageView)
         val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
@@ -272,7 +264,7 @@ class ImageViewActivity : AppCompatActivity() {
                     Color.parseColor("#000000")
             }
 
-            this@ImageViewActivity.window.statusBarColor = Color.parseColor(CustomColorGenerator(this@ImageViewActivity).generateBackgroundColor())
+            this@ImageViewActivity.window.statusBarColor = color
             val invertedColor = Color.rgb(
                 255 - vSwatch.red, 255 - vSwatch.green,
                 255 - vSwatch.blue
