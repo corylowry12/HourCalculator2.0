@@ -60,7 +60,7 @@ class PatchNotesFragment : Fragment() {
                                             "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view", "Added a toast message when entry is automatically deleted")
 
     private var bugFixesArrayInternal = arrayOf("Fixed issue where if you repeatedly swapped between random color and saved color generation, it would pick a different saved color each time", "Fixed issue where if multi-select checkbox was visible and you clicked delete all in the menu, the icons in the top bar wouldnt hide in history",
-                                                "Fixed issue with crashing when showing wages in each history item under certain conditions", "Fixed issue with wages being blank in each history item if it encountered an error while calculating")
+                                                "Fixed issue with crashing when showing wages in each history item under certain conditions", "Fixed issue with wages being blank in each history item if it encountered an error while calculating", "Fixed issue where gallery items would be really tall if you had more than 2 items shown")
 
     private var newFeaturesArrayInternal = arrayOf("Added wages text to show in each time card entry")
 
