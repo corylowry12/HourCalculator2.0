@@ -34,7 +34,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.math.RoundingMode
@@ -150,14 +149,7 @@ class EditHours : Fragment() {
 
                     dialog.setContentView(deleteAllLayout)
                     dialog.setCancelable(true)
-                    /*val alert = MaterialAlertDialogBuilder(
-                        requireContext(),
-                        AccentColorData(requireContext()).alertTheme()
-                    )
-                    alert.setCancelable(false)
-                    alert.setTitle(getString(R.string.delete))
-                    alert.setMessage(getString(R.string.would_you_like_to_delete_history))
-                    alert.setPositiveButton(getString(R.string.yes)) { _, _ ->*/
+
                     yesButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         val dbHandler = DBHelper(requireContext(), null)
@@ -392,16 +384,34 @@ class EditHours : Fragment() {
         val timeEditHourData = TimeEditHourData(context)
 
         if (timeEditHourData.loadInTimeBool() || timeEditHourData.loadOutTimeBool() || timeEditHourData.loadBreakTimeBool() || timeEditHourData.loadDateBool()) {
-            val alert = MaterialAlertDialogBuilder(
-                context,
-                AccentColorData(context).alertTheme()
-            )
-            alert.setCancelable(false)
-            alert.setTitle(context.getString(R.string.pending_changes))
-            alert.setMessage(context.getString(R.string.you_have_pending_changes))
-            alert.setPositiveButton(context.getString(R.string.yes)) { _, _ ->
-                Vibrate().vibration(context)
+            val dialog = BottomSheetDialog(requireContext())
+            val deleteAllLayout = layoutInflater.inflate(R.layout.pending_changes_bottom_sheet, null)
+            dialog.setContentView(deleteAllLayout)
+            dialog.setCancelable(false)
 
+            val infoCardView =
+                deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+            val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
+            val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+
+
+            infoCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(requireContext()).generateCardColor()
+                )
+            )
+            yesButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        requireContext()
+                    ).generateCustomColorPrimary()
+                )
+            )
+            noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(context)
+                dialog.dismiss()
                 val timePickerInTime2 = (context as AppCompatActivity).findViewById<TimePicker>(R.id.timePickerInTimeEdit)
                 val timePickerOutTime2 = (context).findViewById<TimePicker>(R.id.timePickerOutTimeEdit)
 
@@ -504,11 +514,12 @@ class EditHours : Fragment() {
                 }
 
             }
-            alert.setNegativeButton(context.getString(R.string.no)) { _, _ ->
+            noButton.setOnClickListener {
                 Vibrate().vibration(context)
+                dialog.dismiss()
                 (context as AppCompatActivity).supportFragmentManager.popBackStack()
             }
-            alert.show()
+            dialog.show()
         }
         else {
             (context as AppCompatActivity).supportFragmentManager.popBackStack()
@@ -522,15 +533,34 @@ class EditHours : Fragment() {
             e.printStackTrace()
         }
         if (inTimeBool || outTimeBool || breakTimeBool || dateChangedBool) {
-            val alert = MaterialAlertDialogBuilder(
-                requireContext(),
-                AccentColorData(requireContext()).alertTheme()
+            val dialog = BottomSheetDialog(requireContext())
+            val deleteAllLayout = layoutInflater.inflate(R.layout.pending_changes_bottom_sheet, null)
+            dialog.setContentView(deleteAllLayout)
+            dialog.setCancelable(false)
+
+            val infoCardView =
+                deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+            val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
+            val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+
+
+            infoCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(requireContext()).generateCardColor()
+                )
             )
-            alert.setCancelable(false)
-            alert.setTitle(getString(R.string.pending_changes))
-            alert.setMessage(getString(R.string.you_have_pending_changes))
-            alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            yesButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        requireContext()
+                    ).generateCustomColorPrimary()
+                )
+            )
+            noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
+                dialog.dismiss()
                 calculate(idMap, day, 0)
                 Toast.makeText(
                     requireContext(),
@@ -538,8 +568,9 @@ class EditHours : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+            noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
+                dialog.dismiss()
                 activity?.supportFragmentManager?.popBackStack()
                 Toast.makeText(
                     requireContext(),
@@ -547,7 +578,7 @@ class EditHours : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            alert.show()
+            dialog.show()
         } else {
             activity?.supportFragmentManager?.popBackStack()
         }
