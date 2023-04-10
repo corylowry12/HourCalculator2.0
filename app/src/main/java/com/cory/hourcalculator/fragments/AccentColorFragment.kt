@@ -11,11 +11,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.blue
@@ -28,6 +24,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -103,23 +100,11 @@ class AccentColorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*val addedColors = UserAddedColorsData(requireContext()).read()
-        val dataList = ArrayList<HashMap<String, String>>()
-
-        for (i in 0 until UserAddedColorsData(requireContext()).read().count()) {
-            val allColors = HashMap<String, String>()
-            try {
-                allColors["name"] = addedColors[i]["name"].toString()
-            } catch (e: java.lang.Exception) {
-                allColors["name"] = ""
-            }
-            allColors["hex"] = addedColors[i]["hex"].toString()
-            dataList.add(allColors)
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
         }
-
-        val alert = MaterialAlertDialogBuilder(requireContext())
-        alert.setMessage(addedColors.toString())
-        alert.show()*/
+        MainActivity().runOnUiThread(runnable)
 
         val topAppBarAccent = view.findViewById<MaterialToolbar>(R.id.materialToolBarAccentColorFragment)
 
@@ -163,7 +148,7 @@ class AccentColorFragment : Fragment() {
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Accent Color Settings?"
-                    /*if (resources.getBoolean(R.bool.isTablet)) {
+                    if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
                         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -171,7 +156,7 @@ class AccentColorFragment : Fragment() {
                         bottomSheetBehavior.skipCollapsed = true
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
-                    }*/
+                    }
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -412,6 +397,16 @@ class AccentColorFragment : Fragment() {
             customColorPickerDialog.setContentView(customColorPickerLayout)
             customColorPickerDialog.setCancelable(false)
 
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    customColorPickerDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             val customColor = Color.parseColor(CustomColorGenerator(requireContext()).loadCustomHex())
             var redValue = customColor.red
             var greenValue = customColor.green
@@ -521,6 +516,65 @@ class AccentColorFragment : Fragment() {
                 activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 updateCustomColorChange()
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = "#$hex"
+            }
+
+            selectButton.setOnLongClickListener {
+                Vibrate().vibration(requireContext())
+                customColorPickerDialog.dismiss()
+                CustomColorGenerator(requireContext()).setCustomHex("#$hex")
+                MaterialYouData(requireContext()).setMaterialYouState(false)
+                GenerateARandomColorData(requireContext()).setGenerateARandomColorOnAppLaunch(false)
+                activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.isChecked = false
+                activity?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.isChecked = false
+                activity?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                updateCustomColorChange()
+                requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = "#$hex"
+
+                val addedColors = UserAddedColorsData(requireContext()).read()
+                val dataList = ArrayList<HashMap<String, String>>()
+
+                for (i in 0 until UserAddedColorsData(requireContext()).read().count()) {
+                    val allColors = HashMap<String, String>()
+                    try {
+                        allColors["name"] = addedColors[i]["name"].toString()
+                    } catch (e: java.lang.Exception) {
+                        allColors["name"] = ""
+                    }
+                    allColors["hex"] = addedColors[i]["hex"].toString()
+                    dataList.add(allColors)
+                }
+                val contains = dataList.filter { it.containsValue(CustomColorGenerator(requireContext()).loadCustomHex().drop(1)) }
+
+                if (contains.isEmpty()) {
+                    val newColor = HashMap<String, String>()
+                    newColor["name"] = ""
+                    newColor["hex"] =
+                        requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text.drop(
+                            1
+                        ).toString()
+                    dataList.add(newColor)
+                    UserAddedColorsData(requireContext()).insert(dataList)
+                }
+
+                if (contains.isEmpty()) {
+                    Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
+                    requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                        CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
+                }
+                else {
+                    Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+                    if (contains[0]["name"] == "") {
+                        requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                            CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
+                    }
+                    else {
+                        requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                            CustomColorGenerator(requireContext()).loadCustomHex() + " (${contains[0]["name"]})"
+                    }
+                }
+                requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColorsData(requireContext()).read().count().toString()
+                return@setOnLongClickListener true
             }
             cancelSelectButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
@@ -718,7 +772,7 @@ class AccentColorFragment : Fragment() {
         material2Switch.trackTintList = ColorStateList(states, colors)
 
         val runnable = Runnable {
-            (context as MainActivity).updateBottomNavCustomColor()
+            (context as MainActivity).updateCustomColor()
         }
         MainActivity().runOnUiThread(runnable)
 
