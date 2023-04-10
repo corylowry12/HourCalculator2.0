@@ -105,8 +105,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/outlinedTextFieldEdit"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/click_on_me"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -120,11 +120,10 @@
             android:layout_below="@id/dateChipEdit"
             android:layout_alignStart="@+id/textView2"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:hapticFeedbackEnabled="true"
-            android:text="@string/update"
-            android:textSize="12sp" />
+            android:text="@string/update" />
 
         <TextView
             android:id="@+id/outputTextViewEdit"
