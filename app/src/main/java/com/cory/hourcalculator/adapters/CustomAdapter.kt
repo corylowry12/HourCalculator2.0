@@ -9,6 +9,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -197,7 +199,12 @@ class CustomAdapter(
                         }"
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
-                        wages.text = "Wages: Error"
+                        if (WagesData(context).loadWageAmount() == "") {
+                            wages.text = "Wages: Must Set Wages"
+                        }
+                        else {
+                            wages.text = "Wages: Error"
+                        }
                     }
 
                 } else {
@@ -211,7 +218,12 @@ class CustomAdapter(
                         }"
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
-                        wages.text = "Wages: Error"
+                        if (WagesData(context).loadWageAmount() == "") {
+                            wages.text = "Wages: Must Set Wages"
+                        }
+                        else {
+                            wages.text = "Wages: Error"
+                        }
                     }
                 }
             }
@@ -566,6 +578,55 @@ class CustomAdapter(
     @SuppressLint("Range")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         setAnimation(holder.itemView, position)
+
+        holder.itemView.findViewById<TextView>(R.id.row_wages).setOnLongClickListener {
+            val dialog = BottomSheetDialog(context)
+            val updateWagesLayout = LayoutInflater.from(context)
+                .inflate(R.layout.update_wages_bottom_sheet, null)
+            dialog.setContentView(updateWagesLayout)
+            dialog.setCancelable(true)
+
+            val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
+            val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
+            val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
+            val updateWagesCardView = updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
+
+            editText.textCursorDrawable = null
+
+            updateWagesCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(context).generateCardColor()
+                )
+            )
+            updateWagesButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        context
+                    ).generateCustomColorPrimary()
+                )
+            )
+            cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+            editText.setText(WagesData(context).loadWageAmount())
+
+            updateWagesButton.setOnClickListener {
+                Vibrate().vibration(context)
+                WagesData(context).setWageAmount(editText.text.toString())
+                notifyDataSetChanged()
+                dialog.dismiss()
+            }
+            cancelButton.setOnClickListener {
+                Vibrate().vibration(context)
+                dialog.dismiss()
+            }
+
+            if (holder.itemView.findViewById<TextView>(R.id.row_wages).text.toString().contains("Error") ||
+                holder.itemView.findViewById<TextView>(R.id.row_wages).text.toString().contains("Must")) {
+                dialog.show()
+                return@setOnLongClickListener true
+            }
+            return@setOnLongClickListener false
+        }
 
         val dbHandler = DBHelper(context, null)
         val listItems = arrayOf(
