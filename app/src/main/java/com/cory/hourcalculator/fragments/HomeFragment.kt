@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
        val darkThemeData = DarkThemeData(requireContext())
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                requireActivity().setTheme(R.style.Theme_DarkTheme)
+                //requireActivity().setTheme(R.style.Theme_DarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 requireActivity().setTheme(R.style.Theme_MyApplication)

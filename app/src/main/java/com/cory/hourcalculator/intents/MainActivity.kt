@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         val darkThemeData = DarkThemeData(this)
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                setTheme(R.style.Theme_DarkTheme)
+                //setTheme(R.style.Theme_DarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 setTheme(R.style.Theme_MyApplication)

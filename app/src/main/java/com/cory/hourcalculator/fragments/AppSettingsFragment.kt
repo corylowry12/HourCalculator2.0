@@ -43,7 +43,7 @@ class AppSettingsFragment : Fragment() {
         val darkThemeData = DarkThemeData(requireContext())
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                activity?.setTheme(R.style.Theme_DarkTheme)
+                //activity?.setTheme(R.style.Theme_DarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
@@ -74,7 +74,7 @@ class AppSettingsFragment : Fragment() {
         val darkThemeData = DarkThemeData(requireContext())
         when {
             darkThemeData.loadDarkModeState() == 1 -> {
-                activity?.setTheme(R.style.Theme_DarkTheme)
+                //activity?.setTheme(R.style.Theme_DarkTheme)
             }
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
