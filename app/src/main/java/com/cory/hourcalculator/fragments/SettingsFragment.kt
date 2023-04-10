@@ -118,6 +118,7 @@ class SettingsFragment : Fragment() {
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val wageSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.wageSettingsCardView)
         val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
@@ -146,6 +147,13 @@ class SettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         timeCardSettingsCardView.shapeAppearanceModel = timeCardSettingsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        wageSettingsCardView.shapeAppearanceModel = wageSettingsCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -205,6 +213,10 @@ class SettingsFragment : Fragment() {
 
         timeCardSettingsCardView.setOnClickListener {
             openFragment(TimeCardSettingsFragment())
+        }
+
+        wageSettingsCardView.setOnClickListener {
+            Toast.makeText(requireContext(), "Theres nothing here", Toast.LENGTH_SHORT).show()
         }
 
         animationSettingsCardView.setOnClickListener {
@@ -334,6 +346,7 @@ class SettingsFragment : Fragment() {
         val appSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.appSettingsCardView)
         val historySettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.historySettingsCardView)
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
+        val wageSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.wageSettingsCardView)
         val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
@@ -344,6 +357,7 @@ class SettingsFragment : Fragment() {
         appSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historySettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        wageSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         animationSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardGalleryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         patchNotesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
