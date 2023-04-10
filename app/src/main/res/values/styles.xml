@@ -7,7 +7,6 @@
         <item name="settingsTextColor">@android:color/black</item>
         <item name="popupMenuBackground">@color/lightMenuBackground</item>
         <item name="followSystem">@android:color/white</item>
-        <item name="android:actionOverflowButtonStyle">@style/overflowDotStyle</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:listPopupWindowStyle">@style/listPopupWindowLight</item>
         <item name="actionOverflowMenuStyle">@style/PopupMenuLightActionbar</item>
@@ -18,23 +17,6 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-    </style>
-
-    <style name="Theme.DarkTheme" parent="ThemeOverlay.MaterialComponents.Dark">
-        <item name="backgroundColor">@color/darkThemeBackground</item>
-        <item name="textColor">@android:color/white</item>
-        <item name="settingsTextColor">@android:color/black</item>
-        <item name="popupMenuBackground">@color/darkMenuBackground</item>
-        <item name="followSystem">@android:color/black</item>
-        <item name="android:actionOverflowButtonStyle">@style/overflowDotStyle</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
-        <item name="android:listPopupWindowStyle">@style/listPopupWindowDark</item>
-        <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
-        <item name="SystemAccent" tools:targetApi="s">@android:color/system_neutral2_800</item>
-        <item name="settingsIconTint">#000000</item>
-        <item name="historyItemMenuTint">#000000</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="listPopupWindowDark" parent="Widget.Material3.PopupMenu.ListPopupWindow">
@@ -60,7 +42,6 @@
         <item name="settingsTextColor">@android:color/black</item>
         <item name="popupMenuBackground">@color/darkMenuBackground</item>
         <item name="followSystem">@android:color/black</item>
-        <item name="android:actionOverflowButtonStyle">@style/overflowDotStyle</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <item name="android:listPopupWindowStyle">@style/listPopupWindowDark</item>
         <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
@@ -70,20 +51,6 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-    </style>
-
-    <style name="AlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorPrimary">@color/darkTeal</item>
-        <item name="colorSecondary">@android:color/black</item>
-        <item name="colorSurface">@color/colorPrimaryLightDialog</item>
-        <item name="colorOnSurface">@android:color/black</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
-
-    <style name="overflowDotStyle">
-        <item name="android:src">@drawable/ic_baseline_more_vert_24</item>
     </style>
 
     <style name="datePickerNew" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
