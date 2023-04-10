@@ -80,6 +80,7 @@ class GalleryCustomAdapter( private val context: Context,
         }
 
         holder.itemView.findViewById<MaterialCardView>(R.id.galleryCard).setOnLongClickListener {
+            Vibrate().vibration(context)
             val runnable = Runnable {
                 (context as MainActivity).openTimeCardInfoView(dataList[position]["id"].toString(),  dataList[position]["name"].toString())
             }
