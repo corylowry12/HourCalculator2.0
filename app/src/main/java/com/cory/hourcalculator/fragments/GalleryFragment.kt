@@ -14,7 +14,9 @@ import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.GalleryCustomAdapter
 import com.cory.hourcalculator.classes.*
@@ -25,6 +27,7 @@ import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import java.io.File
 
 class GalleryFragment : Fragment() {
 
@@ -152,8 +155,9 @@ class GalleryFragment : Fragment() {
             map["name"] =
                 cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_NAME))
 
-            dataList.add(map)
-
+            if (File(map["image"].toString()).exists()) {
+                dataList.add(map)
+            }
             cursor.moveToNext()
         }
 
