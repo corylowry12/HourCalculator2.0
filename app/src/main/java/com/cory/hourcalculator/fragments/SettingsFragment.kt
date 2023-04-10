@@ -1,7 +1,9 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -12,23 +14,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.database.TimeCardDBHelper
+import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.MainActivity
-import com.cory.hourcalculator.sharedprefs.AccentColorData
-import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
-import com.cory.hourcalculator.sharedprefs.DarkThemeData
-import com.cory.hourcalculator.sharedprefs.VersionData
+import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
@@ -36,6 +42,9 @@ import com.google.android.material.shape.CornerFamily
 class SettingsFragment : Fragment() {
 
     private var scrollPosition = 0
+
+    private val iconDisableArray = arrayListOf<String>()
+    private var iconEnableID = ""
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -79,27 +88,28 @@ class SettingsFragment : Fragment() {
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 3
-            //(activity as MainActivity).setActiveTab(3)
+            (activity as MainActivity).setActiveTab(3)
         }
 
         MainActivity().runOnUiThread(runnable)
 
         activity?.window?.setBackgroundDrawable(null)
 
-            updateCustomColor()
+        updateCustomColor()
 
         val inputManager: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
-        main()
+            main()
 
-        val nestedScrollView = view.findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
+            val nestedScrollView =
+                view.findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
 
-        nestedScrollView.setOnScrollChangeListener { _, scrollX, _, _, _ ->
+            nestedScrollView.setOnScrollChangeListener { _, scrollX, _, _, _ ->
 
-            scrollPosition = scrollX
-        }
+                scrollPosition = scrollX
+            }
     }
 
     private fun main() {
@@ -197,6 +207,10 @@ class SettingsFragment : Fragment() {
             openFragment(TimeCardSettingsFragment())
         }
 
+        animationSettingsCardView.setOnClickListener {
+            openFragment(AnimationSettingsFragment())
+        }
+
         timeCardGalleryCardView.setOnClickListener {
             openFragment(GalleryFragment())
         }
@@ -253,17 +267,50 @@ class SettingsFragment : Fragment() {
     private fun showDeleteDataAlert() {
         Vibrate().vibration(requireContext())
 
-        val alert =
-            MaterialAlertDialogBuilder(requireContext(), AccentColorData(requireContext()).alertTheme())
-        alert.setTitle(getString(R.string.warning))
-        alert.setMessage(getString(R.string.would_you_like_to_delete_all_app_data))
-        alert.setPositiveButton(getString(R.string.yes)) { _, _ ->
+        val dialog = BottomSheetDialog(requireContext())
+        val deleteAllLayout = layoutInflater.inflate(R.layout.delete_all_app_data_bottom_sheet, null)
+        dialog.setContentView(deleteAllLayout)
+        dialog.setCancelable(false)
+
+        val infoCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+        val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
+        val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+
+        infoCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(requireContext()).generateCardColor()
+            )
+        )
+        yesButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+        yesButton.setOnClickListener {
             Vibrate().vibration(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
             requireContext().getSharedPreferences("file", 0).edit().clear().apply()
             requireContext().cacheDir.deleteRecursively()
             dbHandler.deleteAll()
+            TimeCardDBHelper(requireContext(), null).deleteAll()
+            TimeCardsItemDBHelper(requireContext(), null).deleteAll()
             Toast.makeText(requireContext(), getString(R.string.app_data_cleared), Toast.LENGTH_LONG).show()
+            iconDisableArray.clear()
+            iconEnableID = "com.cory.hourcalculator.SplashScreenNoIcon"
+            iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+            iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+            iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+            iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+            iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+            iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+            iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+            changeIcons()
+            ChosenAppIconData(requireContext()).setChosenAppIcon("teal")
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent =
                     requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
@@ -272,11 +319,13 @@ class SettingsFragment : Fragment() {
                 startActivity(intent)
                 activity?.finish()
             }, 1500)
+            dialog.dismiss()
         }
-        alert.setNegativeButton(getString(R.string.no)) { _, _ ->
+        noButton.setOnClickListener {
             Vibrate().vibration(requireContext())
+            dialog.dismiss()
         }
-        alert.show()
+        dialog.show()
     }
 
     private fun updateCustomColor() {
@@ -316,5 +365,26 @@ class SettingsFragment : Fragment() {
             val id = typedValue.resourceId
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutSettings)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
+    }
+
+    private fun changeIcons() {
+        for (i in 0 until iconDisableArray.count()) {
+            requireContext().packageManager?.setComponentEnabledSetting(
+                ComponentName(
+                    BuildConfig.APPLICATION_ID,
+                    iconDisableArray.elementAt(i)
+                ),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
+        requireContext().packageManager?.setComponentEnabledSetting(
+            ComponentName(
+                BuildConfig.APPLICATION_ID,
+                iconEnableID
+            ),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 }
