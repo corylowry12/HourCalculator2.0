@@ -30,6 +30,7 @@ import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.TimeCardRecyclerViewLoadingAnimationData
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -117,9 +118,11 @@ class TimeCardsFragment : Fragment() {
 
         val recyclerViewTimeCards = view.findViewById<RecyclerView>(R.id.timeCardsRecyclerView)
 
-        val animation =
-            AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
-        recyclerViewTimeCards?.layoutAnimation = animation
+        if (TimeCardRecyclerViewLoadingAnimationData(requireContext()).loadTimeCardRecyclerViewLoadingAnimation()) {
+            val animation =
+                AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
+            recyclerViewTimeCards?.layoutAnimation = animation
+        }
 
         val runnable = Runnable {
             (activity as MainActivity).currentTab = 2
