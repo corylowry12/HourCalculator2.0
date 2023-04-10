@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:overScrollMode="always"
-        android:paddingBottom="25dp"
+        android:paddingBottom="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -57,7 +57,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:foreground="?attr/selectableItemBackground">
 
