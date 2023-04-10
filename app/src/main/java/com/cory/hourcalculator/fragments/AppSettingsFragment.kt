@@ -102,6 +102,12 @@ class AppSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
         updateCustomColor()
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAppSettings)
@@ -177,6 +183,8 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
         val vibrationCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
+        val showPatchNotesOnAppLaunchCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowPatchNotesOnAppLaunch)
         val breakTextBoxCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
         val clearBreakTextBoxCardView =
@@ -206,6 +214,13 @@ class AppSettingsFragment : Fragment() {
                 .setBottomLeftCornerSize(0f)
                 .build()
         vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        showPatchNotesOnAppLaunchCardView.shapeAppearanceModel = showPatchNotesOnAppLaunchCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -439,6 +454,57 @@ class AppSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
+        val showPatchNotesOnAppLaunchData = ShowPatchNotesOnAppLaunchData(requireContext())
+        val showPatchNotesOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showPatchNotesOnAppLaunchSwitch)
+
+        if (showPatchNotesOnAppLaunchData.loadShowPatchNotesOnAppLaunch()) {
+            showPatchNotesOnAppLaunchSwitch?.isChecked = true
+            showPatchNotesOnAppLaunchSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!showPatchNotesOnAppLaunchData.loadShowPatchNotesOnAppLaunch()) {
+            showPatchNotesOnAppLaunchSwitch?.isChecked = false
+            showPatchNotesOnAppLaunchSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+
+        showPatchNotesOnAppLaunchCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            showPatchNotesOnAppLaunchSwitch!!.isChecked = !showPatchNotesOnAppLaunchSwitch.isChecked
+            showPatchNotesOnAppLaunchData.setShowPatchNotesOnAppLaunch(showPatchNotesOnAppLaunchSwitch.isChecked)
+            if (showPatchNotesOnAppLaunchSwitch.isChecked) {
+                showPatchNotesOnAppLaunchSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                showPatchNotesOnAppLaunchSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
+        showPatchNotesOnAppLaunchCardView.setOnLongClickListener {
+            Vibrate().vibration(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the update patch notes will show on app launch after an update.\n\n" +
+                        "When disabled the update patch notes will not show on app launch after an update."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val breakTextBoxVisiblityClass = BreakTextBoxVisibilityData(requireContext())
         val toggleBreakTextBox = activity?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
 
@@ -646,6 +712,8 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewDisableLongPress)
         val vibrationCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
+        val showPatchNotesOnAppLaunchCardView =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowPatchNotesOnAppLaunch)
         val breakTextBoxCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
         val clearBreakTextBoxCardView =
@@ -674,6 +742,13 @@ class AppSettingsFragment : Fragment() {
                 ).generateCardColor()
             )
         )
+        showPatchNotesOnAppLaunchCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
         breakTextBoxCardView.setCardBackgroundColor(
             Color.parseColor(
                 CustomColorGenerator(
@@ -696,6 +771,7 @@ class AppSettingsFragment : Fragment() {
         val toggleLongPressingCalculateSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
         val vibrationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+        val showPatchNotesOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showPatchNotesOnAppLaunchSwitch)
         val breakTextBoxSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
         val clearBreakTextBoxSwitch =
@@ -722,6 +798,9 @@ class AppSettingsFragment : Fragment() {
         vibrationSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         vibrationSwitch.trackTintList = ColorStateList(states, colors)
+        showPatchNotesOnAppLaunchSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        showPatchNotesOnAppLaunchSwitch.trackTintList = ColorStateList(states, colors)
         breakTextBoxSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         breakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
