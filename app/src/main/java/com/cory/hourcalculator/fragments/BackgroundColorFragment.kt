@@ -88,6 +88,12 @@ class BackgroundColorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
         val topAppBarBackgroundColorFragment =
             view.findViewById<MaterialToolbar>(R.id.materialToolBarBackgroundColorFragment)
         topAppBarBackgroundColorFragment?.setNavigationOnClickListener {
