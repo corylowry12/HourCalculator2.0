@@ -7,13 +7,6 @@ import com.cory.hourcalculator.R
 
 class AccentColorData(context: Context) {
 
-    private var sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("file", Context.MODE_PRIVATE)
-
-    fun alertTheme(): Int {
-        return R.style.AlertDialogStyle
-    }
-
     fun dateDialogTheme(context: Context): Int {
         val darkThemeData = DarkThemeData(context)
         when (darkThemeData.loadDarkModeState()) {
