@@ -21,6 +21,7 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.ShowWagesInTimeCardData
 import com.cory.hourcalculator.sharedprefs.WagesData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -84,21 +85,29 @@ class TimeCardCustomAdapter(
                 minute = "0$minute"
             }
 
-            //outputColon = "$wholeNumber" + ":$minute"
-
             totalHours.text = "Total: $totalHoursRounded/$wholeNumber:$minute"
 
-            try {
-                wages.text = "Wages: $${
-                    String.format(
-                        "%.2f",
-                        dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
-                            .toDouble()
-                    )
-                }"
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                wages.text = "Wages: Error"
+            if (!ShowWagesInTimeCardData(context).loadShowWages()) {
+                wages.visibility = View.GONE
+            }
+            else {
+                try {
+                    wages.text = "Wages: $${
+                        String.format(
+                            "%.2f",
+                            dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
+                                .toDouble()
+                        )
+                    }"
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    if (WagesData(context).loadWageAmount() == "") {
+                        wages.text = "Wages: Must Set Wages"
+                    }
+                    else {
+                        wages.text = "Wages: Error"
+                    }
+                }
             }
 
             if (dataItem["count"]!!.toInt() > 1) {
@@ -160,6 +169,54 @@ class TimeCardCustomAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).setOnLongClickListener {
+            val dialog = BottomSheetDialog(context)
+            val updateWagesLayout = LayoutInflater.from(context)
+                .inflate(R.layout.update_wages_bottom_sheet, null)
+            dialog.setContentView(updateWagesLayout)
+            dialog.setCancelable(true)
+
+            val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
+            val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
+            val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
+            val updateWagesCardView = updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
+
+            editText.textCursorDrawable = null
+
+            updateWagesCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(context).generateCardColor()
+                )
+            )
+            updateWagesButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        context
+                    ).generateCustomColorPrimary()
+                )
+            )
+            cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+            editText.setText(WagesData(context).loadWageAmount())
+
+            updateWagesButton.setOnClickListener {
+                Vibrate().vibration(context)
+                WagesData(context).setWageAmount(editText.text.toString())
+                notifyDataSetChanged()
+                dialog.dismiss()
+            }
+            cancelButton.setOnClickListener {
+                Vibrate().vibration(context)
+                dialog.dismiss()
+            }
+
+            if (holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).text.toString().contains("Error") ||
+                holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).text.toString().contains("Must")) {
+                dialog.show()
+                return@setOnLongClickListener true
+            }
+            return@setOnLongClickListener false
+        }
 
         holder.itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setOnClickListener {
             Vibrate().vibration(context)
@@ -249,6 +306,8 @@ class TimeCardCustomAdapter(
                         )
                     )
                     cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+                    editText.textCursorDrawable = null
                     
                     editText.setText(dataList[holder.adapterPosition]["name"])
                     
