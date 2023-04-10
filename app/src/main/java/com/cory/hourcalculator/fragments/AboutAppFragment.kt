@@ -22,11 +22,13 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.CornerFamily
 import com.google.android.play.core.review.ReviewManagerFactory
 
 class AboutAppFragment : Fragment() {
@@ -99,8 +101,40 @@ class AboutAppFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
+        val cardView1 = requireActivity().findViewById<MaterialCardView>(R.id.cardView1)
+        val cardView2 = requireActivity().findViewById<MaterialCardView>(R.id.cardView2)
+        val cardView3 = requireActivity().findViewById<MaterialCardView>(R.id.cardView3)
+
+        cardView1.shapeAppearanceModel = cardView1.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        cardView2.shapeAppearanceModel = cardView2.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        cardView3.shapeAppearanceModel = cardView3.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
-        versionNumberTextView.text = "VersionData: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        versionNumberTextView.text = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
         updateCustomColor()
 
