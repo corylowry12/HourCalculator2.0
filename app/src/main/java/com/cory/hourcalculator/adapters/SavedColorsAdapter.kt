@@ -119,6 +119,8 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             val cancelButton = renameLayout.findViewById<Button>(R.id.cancelButton)
             val renameCardView = renameLayout.findViewById<MaterialCardView>(R.id.renameCardView)
 
+            editText.textCursorDrawable = null
+
             renameCardView.setCardBackgroundColor(
                 Color.parseColor(
                     CustomColorGenerator(context).generateCardColor()
