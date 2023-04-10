@@ -282,9 +282,11 @@ class HistoryFragment : Fragment() {
         activity?.window?.setBackgroundDrawable(null)
 
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
-        val animation =
-            AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
-        listView?.layoutAnimation = animation
+        if (HistoryRecyclerViewLoadingAnimationData(requireContext()).loadHistoryRecyclerViewLoadingAnimation()) {
+            val animation =
+                AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
+            listView?.layoutAnimation = animation
+        }
 
         val inputManager: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -303,8 +305,6 @@ class HistoryFragment : Fragment() {
                         layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
 
                     historyOptionsDialog.setContentView(historyOptions)
-                    //val exportSelected = historyOptions.findViewById<ConstraintLayout>(R.id.exportSelectedConstraint)
-                    //val deleteSelected = historyOptions.findViewById<ConstraintLayout>(R.id.deleteSelectedConstraint)
 
                     val exportCardView =
                         historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
