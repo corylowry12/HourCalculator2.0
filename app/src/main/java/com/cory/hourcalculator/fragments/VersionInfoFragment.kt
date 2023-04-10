@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.LinkData
@@ -100,6 +101,12 @@ class VersionInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
 
         updateCustomTheme()
 
@@ -205,7 +212,6 @@ class VersionInfoFragment : Fragment() {
 
         versionNumber.text = BuildConfig.VERSION_NAME
         buildNumber.text = BuildConfig.VERSION_CODE.toString()
-
 
         val googleAdsSubtitle = view.findViewById<TextView>(R.id.googleAdsSubtitle)
 
