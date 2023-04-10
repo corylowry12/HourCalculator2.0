@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.AppIconAdapter
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
@@ -100,6 +101,12 @@ class ChooseAppIconFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
 
         customColorChange()
 
