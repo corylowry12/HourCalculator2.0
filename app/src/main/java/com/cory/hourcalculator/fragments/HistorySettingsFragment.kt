@@ -187,6 +187,12 @@ class HistorySettingsFragment : Fragment() {
 
     private fun main() {
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
         val toggleHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistory)
         val historyDeletionCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeletionCardView)
         val historyDeleteAllOnLimitReachedCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyDeleteAllOnLimitCardView)
