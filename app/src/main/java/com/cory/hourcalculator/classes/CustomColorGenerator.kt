@@ -75,49 +75,44 @@ class CustomColorGenerator(context: Context) {
                 when {
                     darkTheme.loadDarkModeState() == 0 -> {
                         return "#${
-                            Integer.toHexString(
+                            this.lighten(
                                 ContextCompat.getColor(
-                                    insideContext, android.R.color.system_neutral2_200
-                                ) and 0x00ffffff
-                            )
+                                    insideContext, android.R.color.system_accent3_50
+                                ), 0.8)
                         }"
                     }
                     darkTheme.loadDarkModeState() == 2 -> {
                         return "#${
-                            Integer.toHexString(
+                            this.darken(
                                 ContextCompat.getColor(
                                     insideContext, android.R.color.system_accent3_900
-                                ) and 0x00ffffff
-                            )
+                                ), 0.4)
                         }"
                     }
                     darkTheme.loadDarkModeState() == 3 -> {
                         when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                             Configuration.UI_MODE_NIGHT_NO -> {
                                 return "#${
-                                    Integer.toHexString(
+                                    this.lighten(
                                         ContextCompat.getColor(
-                                            insideContext, android.R.color.system_neutral2_200
-                                        ) and 0x00ffffff
-                                    )
+                                            insideContext, android.R.color.system_accent3_50
+                                        ), 0.8)
                                 }"
                             }
                             Configuration.UI_MODE_NIGHT_YES -> {
                                 return "#${
-                                    Integer.toHexString(
+                                    this.darken(
                                         ContextCompat.getColor(
                                             insideContext, android.R.color.system_accent3_900
-                                        ) and 0x00ffffff
-                                    )
+                                        ), 0.4)
                                 }"
                             }
                             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                                 return "#${
-                                    Integer.toHexString(
+                                    this.darken(
                                         ContextCompat.getColor(
                                             insideContext, android.R.color.system_accent3_900
-                                        ) and 0x00ffffff
-                                    )
+                                        ), 0.4)
                                 }"
                             }
                         }
@@ -128,29 +123,29 @@ class CustomColorGenerator(context: Context) {
                 when {
                     darkTheme.loadDarkModeState() == 0 -> {
                         return "#${
-                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.85)
+                            this.lighten(Color.parseColor(this.loadCustomHex()), 0.9)
                         }"
                     }
                     darkTheme.loadDarkModeState() == 2 -> {
                         return "#${
-                            this.darken(Color.parseColor(this.loadCustomHex()), 0.8)
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.85)
                         }"
                     }
                     darkTheme.loadDarkModeState() == 3 -> {
                         when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                             Configuration.UI_MODE_NIGHT_NO -> {
                                 return "#${
-                                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.85)
+                                    this.lighten(Color.parseColor(this.loadCustomHex()), 0.9)
                                 }"
                             }
                             Configuration.UI_MODE_NIGHT_YES -> {
                                 return "#${
-                                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8)
+                                    this.darken(Color.parseColor(this.loadCustomHex()), 0.85)
                                 }"
                             }
                             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                                 return "#${
-                                    this.darken(Color.parseColor(this.loadCustomHex()), 0.8)
+                                    this.darken(Color.parseColor(this.loadCustomHex()), 0.85)
                                 }"
                             }
                         }
@@ -219,8 +214,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_neutral2_100
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_100
+                            ) 
                         )
                     }"
                 }
@@ -228,8 +223,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_neutral2_800
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_800
+                            ) 
                         )
                     }"
                 }
@@ -239,8 +234,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_100
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_100
+                                    ) 
                                 )
                             }"
                         }
@@ -248,8 +243,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -258,7 +253,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_neutral2_800
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -314,8 +309,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_neutral2_100
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_100
+                            ) 
                         )
                     }"
                 }
@@ -323,8 +318,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_neutral2_800
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_800
+                            ) 
                         )
                     }"
                 }
@@ -334,8 +329,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_100
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_100
+                                    ) 
                                 )
                             }"
                         }
@@ -343,8 +338,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -352,8 +347,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -408,8 +403,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_50
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_neutral2_50
+                            ) 
                         )
                     }"
                 }
@@ -418,7 +413,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_neutral2_300
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -428,8 +423,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_50
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_neutral2_50
+                                    ) 
                                 )
                             }"
                         }
@@ -438,7 +433,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_neutral2_300
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -447,7 +442,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_neutral2_300
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -498,7 +493,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_50
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -507,7 +502,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_neutral2_200
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -518,7 +513,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_50
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -527,7 +522,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_neutral2_200
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -536,7 +531,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_neutral2_200
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -556,8 +551,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_600
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_neutral2_600
+                            ) 
                         )
                     }"
                 }
@@ -565,8 +560,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_100
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_neutral2_100
+                            ) 
                         )
                     }"
                 }
@@ -577,7 +572,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_600
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -585,8 +580,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_neutral2_100
+                                    ) 
                                 )
                             }"
                         }
@@ -595,7 +590,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -651,8 +646,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_300
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_300
+                            ) 
                         )
                     }"
                 }
@@ -660,8 +655,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_600
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_600
+                            ) 
                         )
                     }"
                 }
@@ -671,8 +666,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_300
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_300
+                                    ) 
                                 )
                             }"
                         }
@@ -680,8 +675,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_600
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_600
+                                    ) 
                                 )
                             }"
                         }
@@ -689,8 +684,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_600
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_600
+                                    ) 
                                 )
                             }"
                         }
@@ -747,7 +742,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_600
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -756,7 +751,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_100
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -767,7 +762,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_600
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -776,7 +771,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -785,7 +780,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -842,7 +837,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_700
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -851,7 +846,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_100
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -862,7 +857,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_700
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -871,7 +866,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -880,7 +875,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -937,7 +932,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_700
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -946,7 +941,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_100
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -957,7 +952,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_700
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -966,7 +961,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -975,7 +970,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -1032,7 +1027,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_400
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -1041,7 +1036,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_400
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -1052,7 +1047,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_400
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -1061,7 +1056,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_400
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -1070,7 +1065,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_400
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -1095,8 +1090,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_200
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_200
+                            ) 
                         )
                     }"
                 }
@@ -1104,8 +1099,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_800
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_800
+                            ) 
                         )
                     }"
                 }
@@ -1115,8 +1110,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_200
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_200
+                                    ) 
                                 )
                             }"
                         }
@@ -1124,8 +1119,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -1133,8 +1128,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -1153,8 +1148,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_neutral2_100
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_100
+                            ) 
                         )
                     }"
                 }
@@ -1162,8 +1157,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_neutral2_800
-                            ) and 0x00ffffff
+                                insideContext, android.R.color.system_accent3_800
+                            ) 
                         )
                     }"
                 }
@@ -1173,8 +1168,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_100
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_100
+                                    ) 
                                 )
                             }"
                         }
@@ -1182,8 +1177,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -1191,8 +1186,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_neutral2_800
-                                    ) and 0x00ffffff
+                                        insideContext, android.R.color.system_accent3_800
+                                    ) 
                                 )
                             }"
                         }
@@ -1249,8 +1244,8 @@ class CustomColorGenerator(context: Context) {
                         return "#${
                             Integer.toHexString(
                                 ContextCompat.getColor(
-                                    insideContext, android.R.color.system_accent2_200
-                                ) and 0x00ffffff
+                                    insideContext, android.R.color.system_accent3_200
+                                ) 
                             )
                         }"
                     }
@@ -1259,7 +1254,7 @@ class CustomColorGenerator(context: Context) {
                             Integer.toHexString(
                                 ContextCompat.getColor(
                                     insideContext, android.R.color.system_accent2_700
-                                ) and 0x00ffffff
+                                ) 
                             )
                         }"
                     }
@@ -1269,8 +1264,8 @@ class CustomColorGenerator(context: Context) {
                                 return "#${
                                     Integer.toHexString(
                                         ContextCompat.getColor(
-                                            insideContext, android.R.color.system_accent2_200
-                                        ) and 0x00ffffff
+                                            insideContext, android.R.color.system_accent3_200
+                                        ) 
                                     )
                                 }"
                             }
@@ -1279,7 +1274,7 @@ class CustomColorGenerator(context: Context) {
                                     Integer.toHexString(
                                         ContextCompat.getColor(
                                             insideContext, android.R.color.system_accent2_700
-                                        ) and 0x00ffffff
+                                        ) 
                                     )
                                 }"
                             }
@@ -1288,7 +1283,7 @@ class CustomColorGenerator(context: Context) {
                                     Integer.toHexString(
                                         ContextCompat.getColor(
                                             insideContext, android.R.color.system_accent2_700
-                                        ) and 0x00ffffff
+                                        ) 
                                     )
                                 }"
                             }
@@ -1346,7 +1341,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_100
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -1355,7 +1350,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_800
-                            ) and 0x00ffffff
+                            ) 
                         )
                     }"
                 }
@@ -1366,7 +1361,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -1375,7 +1370,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_800
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
@@ -1384,7 +1379,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_800
-                                    ) and 0x00ffffff
+                                    ) 
                                 )
                             }"
                         }
