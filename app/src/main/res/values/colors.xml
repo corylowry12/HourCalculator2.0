@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <color name="darkThemeBackground">#383B3C</color>
-
     <color name="redAccent">#E53935</color>
 
     <color name="black">#000000</color>
