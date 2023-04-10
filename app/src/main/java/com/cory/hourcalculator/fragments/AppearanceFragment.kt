@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -71,6 +73,12 @@ class AppearanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
         val currentSelectedBackgroundColorCardView = requireView().findViewById<MaterialCardView>(R.id.currentSelectedThemeCardView)
         val darkThemeData = DarkThemeData(requireContext())
         when {
@@ -123,6 +131,7 @@ class AppearanceFragment : Fragment() {
         val appIconCardView = requireActivity().findViewById<MaterialCardView>(R.id.appIconCardView)
         val coloredNavigationBarCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.navbarCardView)
+
         val coloredMenuTintCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.coloredMenuTintCardView)
         val coloredTitleBarTextCardView =
@@ -244,7 +253,7 @@ class AppearanceFragment : Fragment() {
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the systems navigation bar will match the accent color that is chosen.\n" +
+                "When enabled the systems navigation bar will match the accent color that is chosen.\n\n" +
                         "When disabled the navigation bar will be black."
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
