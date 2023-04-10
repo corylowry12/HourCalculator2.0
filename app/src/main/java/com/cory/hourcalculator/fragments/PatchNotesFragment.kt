@@ -39,35 +39,6 @@ class PatchNotesFragment : Fragment() {
     private lateinit var bugFixesAdapter: PatchNotesAdapter
     private lateinit var newFeaturesAdapter: PatchNotesAdapter
     private lateinit var enhancementsAdapter: PatchNotesAdapter
-
-    private var bugFixesArray = arrayOf("Fixed issue where when resetting \'App Settings\' to default it would uncheck the Vibration switch even though vibration is enabled after resetting", "Fixed issue with there being no vibration when long clicking items in history view",
-                                        "Fixed issue with there being no vibration when clicking \"Hide\" to hide checkboxes", "Fixed issue with there being no vibration when clicking \"Report A Bug\" in the about app view", "Fixed issue with the shape of the floating action button in the history view",
-                                        "Fixed crashing when trying to leave the edit hour view if there were pending changes and you clicked yes to save them", "Fixed issue with title and menu buttons not being centered properly in title bars",
-                                        "Fixed issue with github button in about view still using built in web view instead of custom tab", "Fixed issue when hitting back button and the bottom nav bar wouldn't change selected tab",
-                                        "Fixed issue where if you went to edit an entry and the in time or out time hours were equal to 12, it would change it to 11", "Fixed issue with deleting selected not working properly if you deleted multiple entries in quick succession one at a time",
-                                        "Fixed some issues with weird splash screen logos on certain devices", "Fixed issue with there being not vibration when clicking the view repo button in the about app view", "Fixed issue where the date would be December 31st, 1969 when undoing hour deletion in the history settings view")
-
-    private var newFeaturesArray = arrayOf("Added the ability to click on the history tab when the history view is active and scroll to the top", "Added the ability to calculate in time or decimal format depending on which is enabled by long pressing the calculate button (eg. if decimal format is enabled, long pressing will calculate in time format)",
-                                            "Added the ability to click on an hour entry and open it to edit it (disabled by default, to enable go to Settings->App Settings->Open hour for editing on history item click)", "Added a toggle to change menu item tint to match the theme")
-
-    private var enhancementsArray = arrayOf("Enabling and disabling history will now use a switch instead of radio buttons", "The switches in the settings will now have an icon based on their value", "Converted dialogs throughout the app to be Bottom Sheets",
-                                            "Made the entire view clickable when selecting an app icon instead of just the check box", "Made the entire view clickable when selecting multiple hours to delete, it will function the same way as the checkbox (clicking will select and long clicking will select all)",
-                                            "App will now show \"Error\" if there was a problem calculating wages", "App will now calculate hours via the info dialog in the history view to show HOURS:MINUTES if there is no decimal time stored",
-                                            "Optimizations when launching the app", "Optimizations in switching tabs", "Improved the quality of the app icon logos in the Appearance Settings view", "Status bar will now match the color of the theme and will change color based on scroll position",
-                                            "App icon radio buttons will no be checked if you click the icon but not the radio button", "App will no longer let you go to another tab when edit view is visible to prevent accidentally leaving and losing edited data",
-                                            "Adjusted left and right margins for the output text view on the home view", "App will now only use custom tabs instead of the previous built in web view", "Custom tabs will now match the accent color of the app", "Changed red 1 logo when there was a new update in patch notes setting item",
-                                            "Updated themed icon to match the other regular icons", "Changed the chip color in the patch notes and time cards view to match the theming better", "Delete menu item in the edit view is now an icon instead of a drop down menu",
-                                            "Removed auto icon theming, you will now just have to manually pick an app icon, this way the app doesn't have to restart every time you change a theme", "Major refactor of code to optimize the history view", "Added a toast message when entry is automatically deleted")
-
-    private var bugFixesArrayInternal = arrayOf("Fixed issue where if you repeatedly swapped between random color and saved color generation, it would pick a different saved color each time", "Fixed issue where if multi-select checkbox was visible and you clicked delete all in the menu, the icons in the top bar wouldnt hide in history",
-                                                "Fixed issue with crashing when showing wages in each history item under certain conditions", "Fixed issue with wages being blank in each history item if it encountered an error while calculating", "Fixed issue where gallery items would be really tall if you had more than 2 items shown",
-                                                "Fixed issue where gallery items were up against one another if you had multiple rows stored")
-
-    private var newFeaturesArrayInternal = arrayOf("Added wages text to show in each time card entry")
-
-    private var enhancementsArrayInternal = arrayOf("Tweaked the button animation and improved clicking radius for the sorting bottom sheet in the history view", "Tweaked animations when clicking the multi-select checkboxes in the history view",
-                                                    "Renamed the \"Add Photo\" bottom sheet to be \"Image Options\"", "Tweaked the bottom padding on the saved colors list", "Tweaked animation when changing the Number of Days settings")
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
@@ -139,6 +110,12 @@ class PatchNotesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
         updateCustomTheme()
         val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
@@ -151,38 +128,38 @@ class PatchNotesFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
         if (BuildConfig.FLAVOR == "Internal") {
-            bugFixesAdapter = PatchNotesAdapter(requireContext(), bugFixesArrayInternal)
-            newFeaturesAdapter = PatchNotesAdapter(requireContext(), newFeaturesArrayInternal)
-            enhancementsAdapter = PatchNotesAdapter(requireContext(), enhancementsArrayInternal)
+            bugFixesAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().bugFixesArrayInternal)
+            newFeaturesAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().newFeaturesArrayInternal)
+            enhancementsAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().enhancementsArrayInternal)
         }
         else {
-            bugFixesAdapter = PatchNotesAdapter(requireContext(), bugFixesArray)
-            newFeaturesAdapter = PatchNotesAdapter(requireContext(), newFeaturesArray)
-            enhancementsAdapter = PatchNotesAdapter(requireContext(), enhancementsArray)
+            bugFixesAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().bugFixesArray)
+            newFeaturesAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().newFeaturesArray)
+            enhancementsAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().enhancementsArray)
         }
 
         val bugFixesChip = requireView().findViewById<Chip>(R.id.bugFixesChip)
         if (BuildConfig.FLAVOR == "Internal") {
-            bugFixesChip.text = bugFixesArrayInternal.count().toString()
+            bugFixesChip.text = PatchNotesChanges().bugFixesArrayInternal.count().toString()
         }
         else {
-            bugFixesChip.text = bugFixesArray.count().toString()
+            bugFixesChip.text = PatchNotesChanges().bugFixesArray.count().toString()
         }
 
         val newFeaturesChip = requireView().findViewById<Chip>(R.id.newFeaturesChip)
         if (BuildConfig.FLAVOR == "Internal") {
-            newFeaturesChip.text = newFeaturesArrayInternal.count().toString()
+            newFeaturesChip.text = PatchNotesChanges().newFeaturesArrayInternal.count().toString()
         }
         else {
-            newFeaturesChip.text = newFeaturesArray.count().toString()
+            newFeaturesChip.text = PatchNotesChanges().newFeaturesArray.count().toString()
         }
 
         val enhancementsChip = requireView().findViewById<Chip>(R.id.enhancementsChip)
         if (BuildConfig.FLAVOR == "Internal") {
-            enhancementsChip.text = enhancementsArrayInternal.count().toString()
+            enhancementsChip.text = PatchNotesChanges().enhancementsArrayInternal.count().toString()
         }
         else {
-            enhancementsChip.text = enhancementsArray.count().toString()
+            enhancementsChip.text = PatchNotesChanges().enhancementsArray.count().toString()
         }
 
         val bugFixesConstraint = requireView().findViewById<ConstraintLayout>(R.id.bugFixesConstraint)
@@ -261,10 +238,10 @@ class PatchNotesFragment : Fragment() {
 
         VersionData(requireContext()).setVersion(BuildConfig.VERSION_NAME)
 
-        val runnable = Runnable {
+        val changeSettingsBadgeRunnable = Runnable {
             (context as MainActivity).changeSettingsBadge()
         }
-        MainActivity().runOnUiThread(runnable)
+        MainActivity().runOnUiThread(changeSettingsBadgeRunnable)
     }
 
     private fun updateCustomTheme(): MaterialToolbar? {
