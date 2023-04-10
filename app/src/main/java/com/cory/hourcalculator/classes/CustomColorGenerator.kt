@@ -69,6 +69,7 @@ class CustomColorGenerator(context: Context) {
     }
 
     fun generateBackgroundColor() : String {
+        //DARK GRAY COLOR #383B3C
         val darkTheme = DarkThemeData(insideContext)
         if (MoreColorfulBackgroundData(insideContext).loadMoreColorfulBackground()) {
             if (MaterialYouData(insideContext).loadMaterialYou()) {
