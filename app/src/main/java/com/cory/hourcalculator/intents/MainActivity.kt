@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,8 +16,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
+import com.cory.hourcalculator.adapters.PatchNotesAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.database.TimeCardDBHelper
@@ -26,10 +30,13 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.splitinstall.d
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -79,6 +86,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         setContentView(R.layout.activity_main)
+
+        updateCustomColor()
 
         CustomColorGenerator(this).generateARandomColor()
 
@@ -133,6 +142,7 @@ class MainActivity : AppCompatActivity() {
 
         changeBadgeNumber()
         changeSettingsBadge()
+        openPatchNotesOnAppLaunch()
 
         toggleHistory()
 
@@ -452,6 +462,14 @@ class MainActivity : AppCompatActivity() {
         badge.isVisible = VersionData(this).loadVersion() != BuildConfig.VERSION_NAME
     }
 
+    private fun openPatchNotesOnAppLaunch() {
+        if (VersionData(this).loadVersion() != BuildConfig.VERSION_NAME) {
+            if (ShowPatchNotesOnAppLaunchData(this).loadShowPatchNotesOnAppLaunch()) {
+                replaceFragment(PatchNotesFragment(), 3)
+            }
+        }
+    }
+
     fun toggleHistory() {
         val historyToggleData = HistoryToggleData(this)
 
@@ -481,7 +499,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("CutPasteId")
     fun updateCustomColor() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
-
+        mainConstraint.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBackgroundColor()))
         updateBottomNavCustomColor()
 
         if (ColoredNavBarData(this).loadNavBar()) {
@@ -496,52 +514,9 @@ class MainActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        val darkThemeData = DarkThemeData(this)
-        when {
-            darkThemeData.loadDarkModeState() == 1 -> {
-                mainConstraint.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.darkThemeBackground
-                    )
-                )
-            }
-            darkThemeData.loadDarkModeState() == 0 -> {
-                mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            }
-            darkThemeData.loadDarkModeState() == 2 -> {
-                mainConstraint.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
-            }
-            darkThemeData.loadDarkModeState() == 3 -> {
-                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> {
-                        mainConstraint.setBackgroundColor(
-                            ContextCompat.getColor(
-                                this,
-                                R.color.white
-                            )
-                        )
-                    }
-                    Configuration.UI_MODE_NIGHT_YES -> {
-                            mainConstraint.setBackgroundColor(
-                                ContextCompat.getColor(
-                                    this,
-                                    R.color.black
-                                )
-                            )
-                    }
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                        mainConstraint.setBackgroundColor(
-                            ContextCompat.getColor(
-                                this,
-                                R.color.black
-                            )
-                        )
-                    }
-                }
-            }
-        }
+        mainConstraint.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBackgroundColor()))
 
+        val darkThemeData = DarkThemeData(this)
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
