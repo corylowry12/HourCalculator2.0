@@ -14,7 +14,7 @@ class BottomNavBadgeColorData(context: Context) {
     }
 
     fun loadColor(): Boolean {
-        val state = sharedPreferences.getBoolean("bottomNavBadgeColor", false)
+        val state = sharedPreferences.getBoolean("bottomNavBadgeColor", true)
         return (state)
     }
 }
