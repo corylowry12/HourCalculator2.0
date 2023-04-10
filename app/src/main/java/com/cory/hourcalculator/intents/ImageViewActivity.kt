@@ -20,7 +20,8 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.palette.graphics.Palette
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.classes.CustomColorGenerator
+import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.sharedprefs.ColoredNavBarData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
@@ -63,8 +64,9 @@ class ImageViewActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_image_view)
 
-        //window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         val imageView = findViewById<TouchImageView>(R.id.touchImageView)
         val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
@@ -85,8 +87,7 @@ class ImageViewActivity : AppCompatActivity() {
             Vibrate().vibration(this)
             if (viewImageMaterialToolbar.visibility == View.GONE) {
                 viewImageMaterialToolbar.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 viewImageMaterialToolbar.visibility = View.GONE
             }
             return@setOnLongClickListener true
@@ -124,9 +125,9 @@ class ImageViewActivity : AppCompatActivity() {
             Vibrate().vibration(this)
             imageView.resetZoom()
             if (ColoredNavBarData(this).loadNavBar()) {
-                this@ImageViewActivity.window.navigationBarColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor())
-            }
-            else {
+                this@ImageViewActivity.window.navigationBarColor =
+                    Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor())
+            } else {
                 this@ImageViewActivity.window.navigationBarColor =
                     Color.parseColor("#000000")
             }
@@ -162,9 +163,9 @@ class ImageViewActivity : AppCompatActivity() {
                         Vibrate().vibration(this)
                         deleteImageDialog.dismiss()
                         if (ColoredNavBarData(this).loadNavBar()) {
-                            this@ImageViewActivity.window.navigationBarColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor())
-                        }
-                        else {
+                            this@ImageViewActivity.window.navigationBarColor =
+                                Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor())
+                        } else {
                             this@ImageViewActivity.window.navigationBarColor =
                                 Color.parseColor("#000000")
                         }
@@ -235,9 +236,9 @@ class ImageViewActivity : AppCompatActivity() {
                 //imageView.setZoom(1f)
                 imageView.resetZoom()
                 if (ColoredNavBarData(this@ImageViewActivity).loadNavBar()) {
-                    this@ImageViewActivity.window.navigationBarColor = Color.parseColor(CustomColorGenerator(this@ImageViewActivity).generateBottomNavBackgroundColor())
-                }
-                else {
+                    this@ImageViewActivity.window.navigationBarColor =
+                        Color.parseColor(CustomColorGenerator(this@ImageViewActivity).generateBottomNavBackgroundColor())
+                } else {
                     this@ImageViewActivity.window.navigationBarColor =
                         Color.parseColor("#000000")
                 }
@@ -256,15 +257,9 @@ class ImageViewActivity : AppCompatActivity() {
                     vSwatch.blue
                 )
 
-            if (ColoredNavBarData(this).loadNavBar()) {
-                this@ImageViewActivity.window.navigationBarColor = color
-            }
-            else {
-                this@ImageViewActivity.window.navigationBarColor =
-                    Color.parseColor("#000000")
-            }
-
+            this@ImageViewActivity.window.navigationBarColor = color
             this@ImageViewActivity.window.statusBarColor = color
+
             val invertedColor = Color.rgb(
                 255 - vSwatch.red, 255 - vSwatch.green,
                 255 - vSwatch.blue
@@ -274,24 +269,27 @@ class ImageViewActivity : AppCompatActivity() {
                 val imageViewConstraint =
                     findViewById<ConstraintLayout>(R.id.imageViewConstraint)
                 imageViewConstraint.setBackgroundColor(color)
-                findViewById<MaterialToolbar>(R.id.viewImageToolBar).setNavigationIconTint(invertedColor)
+                findViewById<MaterialToolbar>(R.id.viewImageToolBar).setNavigationIconTint(
+                    invertedColor
+                )
 
                 val viewImageMaterialToolbar = findViewById<MaterialToolbar>(R.id.viewImageToolBar)
 
-                val deleteImageDrawable = viewImageMaterialToolbar.menu.findItem(R.id.deleteImage).icon
+                val deleteImageDrawable =
+                    viewImageMaterialToolbar.menu.findItem(R.id.deleteImage).icon
                 deleteImageDrawable!!.mutate()
 
                 val navigationDrawable = viewImageMaterialToolbar?.navigationIcon
                 navigationDrawable?.mutate()
 
                 deleteImageDrawable.colorFilter = BlendModeColorFilter(
-                        invertedColor,
-                        BlendMode.SRC_ATOP
-                    )
-                    navigationDrawable?.colorFilter = BlendModeColorFilter(
-                        invertedColor,
-                        BlendMode.SRC_ATOP
-                    )
+                    invertedColor,
+                    BlendMode.SRC_ATOP
+                )
+                navigationDrawable?.colorFilter = BlendModeColorFilter(
+                    invertedColor,
+                    BlendMode.SRC_ATOP
+                )
 
             } catch (e: NullPointerException) {
                 e.printStackTrace()
