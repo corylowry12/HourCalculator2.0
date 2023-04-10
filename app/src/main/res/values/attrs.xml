@@ -33,4 +33,6 @@
 
     <attr name="radioButtonTheme" format="color" />
 
+    <bool name="isTablet">false</bool>
+
 </resources>
