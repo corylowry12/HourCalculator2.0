@@ -14,7 +14,7 @@ class MoreColorfulBackgroundData(context: Context) {
     }
 
     fun loadMoreColorfulBackground(): Boolean {
-        val state = sharedPreferences.getBoolean("moreColorfulBackgroundData", false)
+        val state = sharedPreferences.getBoolean("moreColorfulBackgroundData", true)
         return (state)
     }
 }
