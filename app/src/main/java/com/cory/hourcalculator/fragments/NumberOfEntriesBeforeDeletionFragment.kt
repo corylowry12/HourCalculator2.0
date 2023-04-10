@@ -102,6 +102,12 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val runnable = Runnable {
+            (activity as MainActivity).currentTab = 3
+            (activity as MainActivity).setActiveTab(3)
+        }
+        MainActivity().runOnUiThread(runnable)
+
         val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarNumberOfDaysBeforeDeletion)
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
