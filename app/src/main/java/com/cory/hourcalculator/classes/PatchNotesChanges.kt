@@ -57,33 +57,15 @@ class PatchNotesChanges {
     )
 
     var bugFixesArrayInternal = arrayOf(
-        "Fixed issue where if you had an image stored in time cards and deleted that image from the device, it would show a blank image in gallery",
-        "Fixed issue with break text box not being positioned correctly on certain devices",
-        "Fixed issue with the background color nto being set properly around the ad on certain devices",
-        "Fixed issue with the delete app data item in the settings not deleting all app data",
-        "Fixed issue with the text box in the time card settings view for default name being the wrong color",
-        "Fixed issue with the cursor in the text box when renaming something being the wrong color"
+        "No new bug fixes"
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "Added where patch notes will show on app launch after an update",
-        "Added ability to save a custom color by long clicking on the select button when choosing a custom color",
-        "Added wages when viewing a time card entry",
-        "Added wages to be shown in the time card info view",
-        "Added the ability " +
-                "to update wages if there is an error doing the calculation by long pressing the wages text view on any of the entries"
+        "Added option to calculate overtime when showing wages in info bottom sheet in the history view"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Reworked the color generation when material you is enabled",
-        "Made background darker when material you and colorful background are enabled",
-        "Specific animations will now be disabled by default as you will have better performance with them disabled",
-        "App will now tell you to go set wages if wages are shown and wages are not set",
-        "Delete app data will now use a bottom sheet instead of a dialog",
-        "Dialog asking to confirm pending changes when trying to leave the edit entry view will now be a bottom sheet instead of a dialog",
-        "Tweaked width of the save button when editing an entry",
-        "Tweaked text size of the save button when editing an entry",
-        "Updated width of the date button when editing an entry"
+        "Moved wages to its own section"
     )
 
 
