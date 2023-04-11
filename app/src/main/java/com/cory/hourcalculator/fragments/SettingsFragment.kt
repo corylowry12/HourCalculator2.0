@@ -216,7 +216,7 @@ class SettingsFragment : Fragment() {
         }
 
         wageSettingsCardView.setOnClickListener {
-            Toast.makeText(requireContext(), "Theres nothing here", Toast.LENGTH_SHORT).show()
+            openFragment(WageSettingsFragment())
         }
 
         animationSettingsCardView.setOnClickListener {
