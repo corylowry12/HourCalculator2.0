@@ -14,7 +14,7 @@ class CalculateOvertimeInHistoryData(context: Context) {
     }
 
     fun loadCalculateOvertimeInHistoryState(): Boolean {
-        val state = sharedPreferences.getBoolean("calculateOvertimeInHistory", false)
+        val state = sharedPreferences.getBoolean("calculateOvertimeInHistory", true)
         return (state)
     }
 }
