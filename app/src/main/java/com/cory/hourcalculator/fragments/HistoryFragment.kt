@@ -182,13 +182,27 @@ class HistoryFragment : Fragment() {
 
             if (wagesData.loadWageAmount() != "") {
                 try {
-                    val wages =
-                        outputWages.toDouble() * wagesData.loadWageAmount().toString()
-                            .toDouble()
-                    val wagesRounded = String.format("%.2f", wages)
                     totalHours.text = "Total Hours: $output/$outputColon"
                     numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
-                    wagesTextView.text = "Wages: $$wagesRounded"
+                    if (CalculateOvertimeInHistoryData(requireContext()).loadCalculateOvertimeInHistoryState() && outputWages.toDouble() > 40) {
+                        val overFourty = outputWages.toDouble() - 40
+                        val timeHalf = overFourty * (wagesData.loadWageAmount().toString()
+                            .toDouble() * 1.5)
+                        val wages =
+                            (40 * wagesData.loadWageAmount().toString()
+                                .toDouble()) + timeHalf
+                        Toast.makeText(requireContext(), (wagesData.loadWageAmount().toString()
+                            .toDouble() * 1.5).toString(), Toast.LENGTH_SHORT).show()
+                        val wagesRounded = String.format("%.2f", wages)
+                        wagesTextView.text = "Wages: $$wagesRounded"
+                    }
+                    else {
+                        val wages =
+                            outputWages.toDouble() * wagesData.loadWageAmount().toString()
+                                .toDouble()
+                        val wagesRounded = String.format("%.2f", wages)
+                        wagesTextView.text = "Wages: $$wagesRounded"
+                    }
                 } catch (e: NumberFormatException) {
                     e.printStackTrace()
                     totalHours.text = "Total Hours: $output/$outputColon"
@@ -978,8 +992,10 @@ class HistoryFragment : Fragment() {
                 y += array.toDouble()
             }
 
+
             output = String.format("%.2f", y)
             outputWages = output
+
             cursor.moveToNext()
 
         }
