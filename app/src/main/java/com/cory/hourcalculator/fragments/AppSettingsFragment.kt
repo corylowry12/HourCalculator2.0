@@ -189,7 +189,6 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
         val clearBreakTextBoxCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewClearBreakTextBox)
-        val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
         outTimeCardView.shapeAppearanceModel = outTimeCardView.shapeAppearanceModel
             .toBuilder()
@@ -235,13 +234,6 @@ class AppSettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         clearBreakTextBoxCardView.shapeAppearanceModel = clearBreakTextBoxCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -605,41 +597,6 @@ class AppSettingsFragment : Fragment() {
             infoDialog.show()
             return@setOnLongClickListener true
         }
-
-        val wagesData = WagesData(requireContext())
-        val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
-
-        val editable =
-            Editable.Factory.getInstance().newEditable(wagesData.loadWageAmount().toString())
-        wagesEditText?.text = editable
-
-        wagesEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
-            if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
-                hideKeyboard(wagesEditText)
-                return@OnKeyListener true
-            }
-            if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                wagesData.setWageAmount(wagesEditText.text.toString())
-                hideKeyboard(wagesEditText)
-                return@OnKeyListener true
-            }
-            false
-        })
-
-        wagesEditText?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString() != "") {
-                    wagesData.setWageAmount(s.toString())
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                wagesData.setWageAmount(s.toString())
-            }
-        })
     }
 
     private fun reset() {
@@ -649,13 +606,13 @@ class AppSettingsFragment : Fragment() {
         val vibrationSwitch = view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
         val toggleHistory = view?.findViewById<MaterialSwitch>(R.id.historySwitch)
         val toggleBreakTextBox = view?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
-        val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
+        //val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
 
         CalculationTypeData(requireContext()).setCalculationState(true)
         VibrationData(requireContext()).setVibrationState(true)
         HistoryToggleData(requireContext()).setHistoryToggle(true)
         BreakTextBoxVisibilityData(requireContext()).setVisibility(0)
-        WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
+        //WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
         OutTimeData(requireContext()).setOutTimeState(true)
         ClickableHistoryEntryData(requireContext()).setHistoryItemClickable(true)
 
@@ -664,7 +621,7 @@ class AppSettingsFragment : Fragment() {
         vibrationSwitch?.isChecked = true
         toggleHistory?.isChecked = true
         toggleBreakTextBox?.isChecked = true
-        wagesEditText?.setText(getString(R.string.wages_default))
+        //wagesEditText?.setText(getString(R.string.wages_default))
 
         setOutTimeSwitch?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
@@ -718,7 +675,6 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
         val clearBreakTextBoxCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewClearBreakTextBox)
-        val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
 
         outTimeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         calculationTypeCardView.setCardBackgroundColor(
@@ -763,7 +719,6 @@ class AppSettingsFragment : Fragment() {
                 ).generateCardColor()
             )
         )
-        wagesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val outTimeSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
         val setCalculationTypeSwitch =
@@ -807,20 +762,6 @@ class AppSettingsFragment : Fragment() {
         clearBreakTextBoxSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         clearBreakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
-
-        val wagesEditText = requireActivity().findViewById<TextInputEditText>(R.id.Wages)
-        val wagesTextInputEditText =
-            activity?.findViewById<TextInputLayout>(R.id.outlinedTextFieldWages)
-
-        wagesTextInputEditText?.boxStrokeColor = Color.parseColor("#000000")
-        wagesTextInputEditText?.hintTextColor =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        wagesEditText.textCursorDrawable = null
-        wagesTextInputEditText?.defaultHintTextColor =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        wagesEditText.highlightColor =
-            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-        wagesEditText.setTextIsSelectable(false)
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
             ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
@@ -866,22 +807,6 @@ class AppSettingsFragment : Fragment() {
                 ContextCompat.getColor(requireContext(), id),
                 BlendMode.SRC_ATOP
             )
-        }
-    }
-
-    private fun hideKeyboard(wagesEditText: TextInputEditText) {
-        val inputManager: InputMethodManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val focusedView = activity?.currentFocus
-
-        if (focusedView != null) {
-            inputManager.hideSoftInputFromWindow(
-                focusedView.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
-            if (wagesEditText.hasFocus()) {
-                wagesEditText.clearFocus()
-            }
         }
     }
 }
