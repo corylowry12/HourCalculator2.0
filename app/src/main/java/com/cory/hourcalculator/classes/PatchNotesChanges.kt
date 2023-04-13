@@ -61,11 +61,15 @@ class PatchNotesChanges {
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "Added option to calculate overtime when showing wages in info bottom sheet in the history view"
+        "Added option to calculate overtime when showing wages in info bottom sheet in the history view",
+        "Added vibration settings to enable/disable different vibration settings independently"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Moved wages to its own section"
+        "Moved wages to it's own section",
+        "Reworded the sort methods when sorting in history",
+        "Reworded some of the settings items",
+        "Badge text color in the bottom navigation bar will always be white now"
     )
 
 
