@@ -1,8 +1,11 @@
 package com.cory.hourcalculator.fragments
 
 import android.content.res.ColorStateList
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +17,11 @@ import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.cory.hourcalculator.sharedprefs.VibrationData
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -34,6 +41,13 @@ class VibrationSettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         updateCustomColor()
+
+        val toolbar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarVibrationSettings)
+
+        toolbar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
+        }
 
         val vibrationOnClickCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnClick)
         val vibrationOnTimePickerCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnTimePickerChange)
@@ -132,6 +146,16 @@ class VibrationSettingsFragment : Fragment() {
     fun updateCustomColor() {
         requireActivity().findViewById<CoordinatorLayout>(R.id.vibrationSettingsCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
 
+        val collapsingToolbarLayout =
+            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutVibrationSettings)
+        collapsingToolbarLayout.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+
         val vibrateOnClickSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
         val vibrateOnTimePickerChangeSwitch =
@@ -158,5 +182,40 @@ class VibrationSettingsFragment : Fragment() {
 
         vibrationOnClickCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         vibrationOnTimePickerChangeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutVibrationSettings)
+            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
+        if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutVibrationSettings)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutVibrationSettings)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+        }
+
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarVibrationSettings)
+
+        val navigationDrawable = topAppBar?.navigationIcon
+        navigationDrawable?.mutate()
+
+        if (MenuTintData(requireContext()).loadMenuTint()) {
+
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val id = typedValue.resourceId
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+        }
     }
 }
