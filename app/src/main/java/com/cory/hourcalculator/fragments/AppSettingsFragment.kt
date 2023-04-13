@@ -129,7 +129,7 @@ class AppSettingsFragment : Fragment() {
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                        "Would you like to reset App Settings?"
+                        getString(R.string.would_you_like_to_reset_app_settings)
                     val yesResetButton =
                         resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
                     val cancelResetButton =
@@ -212,13 +212,6 @@ class AppSettingsFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-        vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
         showPatchNotesOnAppLaunchCardView.shapeAppearanceModel = showPatchNotesOnAppLaunchCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -234,6 +227,13 @@ class AppSettingsFragment : Fragment() {
             .setBottomLeftCornerSize(0f)
             .build()
         clearBreakTextBoxCardView.shapeAppearanceModel = clearBreakTextBoxCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -382,56 +382,6 @@ class AppSettingsFragment : Fragment() {
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled you can long click on the calculate button and calculate time format in the opposite format of what is enabled.\n\n" +
                         "When disabled you will not be able to long click the calculate button to calculate time in another format."
-            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
-
-            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-
-            yesButton.setOnClickListener {
-                Vibrate().vibration(requireContext())
-                infoDialog.dismiss()
-            }
-            infoDialog.show()
-            return@setOnLongClickListener true
-        }
-
-        val vibrationData = VibrationData(requireContext())
-        val toggleVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
-
-        if (vibrationData.loadVibrationState()) {
-            toggleVibration?.isChecked = true
-            toggleVibration?.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!vibrationData.loadVibrationState()) {
-            toggleVibration?.isChecked = false
-            toggleVibration?.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-        }
-
-        vibrationCardView?.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            toggleVibration!!.isChecked = !toggleVibration.isChecked
-            vibrationData.setVibrationState(toggleVibration.isChecked)
-            if (toggleVibration.isChecked) {
-                toggleVibration.thumbIconDrawable =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-            } else {
-                toggleVibration.thumbIconDrawable =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-            }
-        }
-
-        vibrationCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
-            val infoDialog = BottomSheetDialog(requireContext())
-            val infoAboutSettingLayout =
-                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
-            infoDialog.setContentView(infoAboutSettingLayout)
-            infoDialog.setCancelable(true)
-            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the app will vibrate every time a button is clicked.\n\n" +
-                        "When disabled the app will not vibrate every time a button is clicked."
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -597,6 +547,20 @@ class AppSettingsFragment : Fragment() {
             infoDialog.show()
             return@setOnLongClickListener true
         }
+
+        vibrationCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+            transaction?.replace(R.id.fragment_container, VibrationSettingsFragment())?.addToBackStack(null)
+            transaction?.commit()
+        }
     }
 
     private fun reset() {
@@ -609,7 +573,6 @@ class AppSettingsFragment : Fragment() {
         //val wagesEditText = view?.findViewById<TextInputEditText>(R.id.Wages)
 
         CalculationTypeData(requireContext()).setCalculationState(true)
-        VibrationData(requireContext()).setVibrationState(true)
         HistoryToggleData(requireContext()).setHistoryToggle(true)
         BreakTextBoxVisibilityData(requireContext()).setVisibility(0)
         //WagesData(requireContext()).setWageAmount(getString(R.string.wages_default))
@@ -725,7 +688,6 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
         val toggleLongPressingCalculateSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
-        val vibrationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
         val showPatchNotesOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showPatchNotesOnAppLaunchSwitch)
         val breakTextBoxSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
@@ -750,9 +712,6 @@ class AppSettingsFragment : Fragment() {
         toggleLongPressingCalculateSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         toggleLongPressingCalculateSwitch.trackTintList = ColorStateList(states, colors)
-        vibrationSwitch.thumbIconTintList =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        vibrationSwitch.trackTintList = ColorStateList(states, colors)
         showPatchNotesOnAppLaunchSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         showPatchNotesOnAppLaunchSwitch.trackTintList = ColorStateList(states, colors)
