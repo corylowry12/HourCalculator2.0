@@ -191,14 +191,14 @@ class HistoryFragment : Fragment() {
                         val wages =
                             (40 * wagesData.loadWageAmount().toString()
                                 .toDouble()) + timeHalf
-                        val wagesRounded = String.format("%.2f", wages)
+                        val wagesRounded = String.format("%,.2f", wages)
                         wagesTextView.text = "Wages: $$wagesRounded"
                     }
                     else {
                         val wages =
                             outputWages.toDouble() * wagesData.loadWageAmount().toString()
                                 .toDouble()
-                        val wagesRounded = String.format("%.2f", wages)
+                        val wagesRounded = String.format("%,.2f", wages)
                         wagesTextView.text = "Wages: $$wagesRounded"
                     }
                 } catch (e: NumberFormatException) {
