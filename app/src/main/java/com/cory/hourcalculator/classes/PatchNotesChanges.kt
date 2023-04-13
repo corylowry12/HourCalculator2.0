@@ -69,7 +69,9 @@ class PatchNotesChanges {
         "Moved wages to it's own section",
         "Reworded the sort methods when sorting in history",
         "Reworded some of the settings items",
-        "Badge text color in the bottom navigation bar will always be white now"
+        "Badge text color in the bottom navigation bar will always be white now",
+        "Added a scrolling animation to time cards, the same one that happens when you scroll in history",
+        "App will now show commas in wages if wages is big enough to need commas"
     )
 
 
