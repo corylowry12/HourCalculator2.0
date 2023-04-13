@@ -69,6 +69,13 @@ class WageSettingsFragment : Fragment() {
 
         updateCustomColor()
 
+        val toolbar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarWageSettings)
+
+        toolbar?.setNavigationOnClickListener {
+            Vibrate().vibration(requireContext())
+            activity?.supportFragmentManager?.popBackStack()
+        }
+
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
         val calculateOvertimeInHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculateOvertimeInHistory)
 
