@@ -134,7 +134,7 @@ class AboutAppFragment : Fragment() {
             .build()
 
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
-        versionNumberTextView.text = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        versionNumberTextView.text = getString(R.string.version_number_about, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
 
         updateCustomColor()
 
@@ -147,25 +147,26 @@ class AboutAppFragment : Fragment() {
 
         val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
 
-        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "teal" || ChosenAppIconData(requireContext()).loadChosenAppIcon() == "material you") {
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.teal) || ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(
+                        R.string.material_you)) {
             autoIcon.setImageResource(R.drawable.hourcalclogoteal)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "pink") {
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.pink)) {
             autoIcon.setImageResource(R.drawable.hourcalclogopink)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "orange") {
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.orange)) {
             autoIcon.setImageResource(R.drawable.hourcalclogoorange)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "red") {
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.red)) {
             autoIcon.setImageResource(R.drawable.hourcalclogored)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "blue") {
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.blue)) {
             autoIcon.setImageResource(R.drawable.hourcalclogoblue)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "og") {
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.og)) {
             autoIcon.setImageResource(R.drawable.hourcalculatorlogoyellowgradient)
         }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "snow falling") {
+        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.snow_falling)) {
             autoIcon.setImageResource(R.drawable.hourcalclogo_christmas)
         }
 
