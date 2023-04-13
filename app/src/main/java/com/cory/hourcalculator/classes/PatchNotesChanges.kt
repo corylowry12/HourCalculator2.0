@@ -61,17 +61,11 @@ class PatchNotesChanges {
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "Added option to calculate overtime when showing wages in info bottom sheet in the history view",
-        "Added vibration settings to enable/disable different vibration settings independently"
+        "No new features"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Moved wages to it's own section",
-        "Reworded the sort methods when sorting in history",
-        "Reworded some of the settings items",
-        "Badge text color in the bottom navigation bar will always be white now",
-        "Added a scrolling animation to time cards, the same one that happens when you scroll in history",
-        "App will now show commas in wages if wages is big enough to need commas"
+        "Tweaked some more material you colors"
     )
 
 
