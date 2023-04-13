@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
@@ -195,35 +194,29 @@ class AppearanceFragment : Fragment() {
             openFragment(AccentColorFragment())
         }
 
-        val appIconImageTextView = activity?.findViewById<TextView>(R.id.appIconImageTextView)
         val appIconImageView =
             activity?.findViewById<ImageView>(R.id.currentSelectedAppIconImageView)
 
-        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "auto") {
-            appIconImageTextView?.text = "App Icon (*)"
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.teal)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogoteal)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "teal") {
-            appIconImageView?.setImageResource(R.drawable.hourcalclogoteal)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "pink") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.pink)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogopink)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "orange") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.orange)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogoorange)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "red") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.red)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogored)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "blue") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.blue)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogoblue)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "og") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.og)) {
             appIconImageView?.setImageResource(R.drawable.hourcalculatorlogoyellowgradient)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "snow falling") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.snow_falling)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogo_christmas)
-        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == "material you") {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.material_you)) {
             appIconImageView?.setImageResource(R.drawable.hourcalclogoteal)
         }
         appIconCardView?.setOnClickListener {
             openFragment(ChooseAppIconFragment())
         }
-
-        val accentColorData = AccentColorData(requireContext())
 
         val coloredNavBarSwitch = view.findViewById<MaterialSwitch>(R.id.coloredNavBarSwitch)
         val coloredNavBarData = ColoredNavBarData(requireContext())
@@ -242,7 +235,7 @@ class AppearanceFragment : Fragment() {
 
         coloredNavigationBarCardView.setOnClickListener {
             coloredNavBarSwitch.isChecked = !coloredNavBarSwitch.isChecked
-            toggleColoredNavBar(coloredNavBarSwitch.isChecked, coloredNavBarData, accentColorData)
+            toggleColoredNavBar(coloredNavBarSwitch.isChecked, coloredNavBarData)
         }
 
         coloredNavigationBarCardView.setOnLongClickListener {
@@ -253,8 +246,7 @@ class AppearanceFragment : Fragment() {
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the systems navigation bar will match the accent color that is chosen.\n\n" +
-                        "When disabled the navigation bar will be black."
+                getString(R.string.colored_nav_bar_info)
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -369,8 +361,7 @@ class AppearanceFragment : Fragment() {
 
     private fun toggleColoredNavBar(
         isChecked: Boolean,
-        coloredNavBarData: ColoredNavBarData,
-        accentColorData: AccentColorData
+        coloredNavBarData: ColoredNavBarData
     ) {
         Vibrate().vibration(requireContext())
         if (isChecked) {
