@@ -13,7 +13,7 @@ class Vibrate {
         val vibrationData = VibrationData(context)
 
         val vibrator: Vibrator
-        if (vibrationData.loadVibrationState()) {
+        if (vibrationData.loadVibrationOnClickState()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -34,7 +34,7 @@ class Vibrate {
         val vibrationData = VibrationData(context)
 
         val vibrator: Vibrator
-        if (vibrationData.loadVibrationState()) {
+        if (vibrationData.loadVibrationOnClickState()) {
             val pattern = longArrayOf(0, 50, 15, 50)
             vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(pattern, -1)
@@ -45,7 +45,7 @@ class Vibrate {
         val vibrationData = VibrationData(context)
 
         val vibrator: Vibrator
-        if (vibrationData.loadVibrationState()) {
+        if (vibrationData.loadVibrationOnTimePickerChangeState()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
