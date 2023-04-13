@@ -147,7 +147,7 @@ class AccentColorFragment : Fragment() {
 
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Accent Color Settings?"
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = getString(R.string.would_you_like_to_reset_accent_color_settings)
                     if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
@@ -257,10 +257,10 @@ class AccentColorFragment : Fragment() {
             else {
                 bottomNavBadgeColorSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            val runnable = Runnable {
+            val updateBottomNavColor = Runnable {
                 (context as MainActivity).updateBottomNavCustomColor()
             }
-            MainActivity().runOnUiThread(runnable)
+            MainActivity().runOnUiThread(updateBottomNavColor)
         }
 
         val generateARandomColorOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
@@ -290,11 +290,11 @@ class AccentColorFragment : Fragment() {
 
         if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 0) {
             requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
-                "Generate a random color on app launch"
+                getString(R.string.generate_a_random_color_on_app_launch)
         }
         else if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 1) {
             requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
-                "Pick a random color on app launch from saved colors"
+                getString(R.string.pick_a_random_color_on_app_launch_from_saved_colors)
         }
         val generateARandomColorOptionsCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewRandomColorOptionsCardView)
 
@@ -366,7 +366,7 @@ class AccentColorFragment : Fragment() {
                 GenerateARandomColorMethodData(requireContext()).setGenerateARandomColorMethod(0)
                 updateCustomColorChange()
                 requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
-                    "Generate a random color on app launch"
+                    getString(R.string.generate_a_random_color_on_app_launch)
             }
             randomColorFromSavedCardView.setOnClickListener {
                 Vibrate().vibration(requireContext())
@@ -380,10 +380,10 @@ class AccentColorFragment : Fragment() {
                     }
                     updateCustomColorChange()
                     requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
-                        "Pick a random color on app launch from saved colors"
+                        getString(R.string.pick_a_random_color_on_app_launch_from_saved_colors)
                 }
                 else {
-                    Toast.makeText(requireContext(), "You must have more than 2 colors saved", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.must_have_more_than_two_colors_saved_warning), Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -461,7 +461,7 @@ class AccentColorFragment : Fragment() {
                 blueSlider.value = blue.toFloat()
             }
 
-            redSlider.addOnChangeListener { slider, value, fromUser ->
+            redSlider.addOnChangeListener { slider, _, _ ->
                 redValue = slider.value.toInt()
                 hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
                 hexadecimalTextView.text = hex
@@ -475,7 +475,7 @@ class AccentColorFragment : Fragment() {
                     hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
                 }
             }
-            greenSlider.addOnChangeListener { slider, value, fromUser ->
+            greenSlider.addOnChangeListener { slider, _, _ ->
                 greenValue = slider.value.toInt()
                 hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
                 hexadecimalTextView.text = hex
@@ -489,7 +489,7 @@ class AccentColorFragment : Fragment() {
                     hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
                 }
             }
-            blueSlider.addOnChangeListener { slider, value, fromUser ->
+            blueSlider.addOnChangeListener { slider, _, _ ->
                 blueValue = slider.value.toInt()
                 hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
                 hexadecimalTextView.text = hex
@@ -558,12 +558,12 @@ class AccentColorFragment : Fragment() {
                 }
 
                 if (contains.isEmpty()) {
-                    Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.color_saved), Toast.LENGTH_SHORT).show()
                     requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
                         CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
                 }
                 else {
-                    Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.color_already_saved), Toast.LENGTH_SHORT).show()
                     if (contains[0]["name"] == "") {
                         requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
                             CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
@@ -616,12 +616,12 @@ class AccentColorFragment : Fragment() {
             }
 
             if (contains.isEmpty()) {
-                Toast.makeText(requireContext(), "Color Saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.color_saved), Toast.LENGTH_SHORT).show()
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
                     CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
             }
             else {
-                Toast.makeText(requireContext(), "Color Already Saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.color_already_saved), Toast.LENGTH_SHORT).show()
                 if (contains[0]["name"] == "") {
                     requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
                         CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
@@ -638,7 +638,7 @@ class AccentColorFragment : Fragment() {
         viewSavedColorsCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (UserAddedColorsData(requireContext()).read().isEmpty()) {
-                Toast.makeText(requireContext(), "Must save a color first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.must_save_a_color_first), Toast.LENGTH_SHORT).show()
             }
             else {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
