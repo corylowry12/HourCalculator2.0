@@ -129,4 +129,28 @@
     <string name="hour_calculated_in_decimal_format">Hour calculated in decimal format</string>
     <string name="time_cards">Time Cards</string>
     <string name="would_you_like_to_hide_checkboxes">Would you like to hide checkboxes?</string>
+    <string name="version_number_about">Version: %s (%s)</string>
+    <string name="teal">teal</string>
+    <string name="material_you">material you</string>
+    <string name="pink">pink</string>
+    <string name="orange">orange</string>
+    <string name="red">red</string>
+    <string name="blue">blue</string>
+    <string name="og">og</string>
+    <string name="snow_falling">snow falling</string>
+    <string name="would_you_like_to_reset_accent_color_settings">Would you like to reset Accent Color Settings?</string>
+    <string name="generate_a_random_color_on_app_launch">Generate a random color on app launch</string>
+    <string name="pick_a_random_color_on_app_launch_from_saved_colors">Pick a random color on app launch from saved colors</string>
+    <string name="must_have_more_than_two_colors_saved_warning">You must have more than 2 colors saved</string>
+    <string name="color_saved">Color Saved</string>
+    <string name="color_already_saved">Color Already Saved</string>
+    <string name="must_save_a_color_first">Must save a color first</string>
+    <string name="colored_nav_bar_info">When enabled the systems navigation bar will match the accent color that is chosen.\n\nWhen disabled the navigation bar will be black.</string>
+    <string name="this_icon_is_already_enabled">This icon is already enabled</string>
+    <string name="would_you_like_to_reset_app_settings">Would you like to reset App Settings?</string>
+    <string name="would_you_like_to_reset_background_color_settings">Would you like to reset Background Color Settings?</string>
+    <string name="follow_system_theme_already_enabled">Follow system theme already enabled</string>
+    <string name="sort_by_least_hours">Sort by Least Hours</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
