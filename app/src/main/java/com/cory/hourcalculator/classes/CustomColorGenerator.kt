@@ -742,8 +742,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_600
-                            ) 
+                                insideContext, android.R.color.system_neutral2_600
+                            )
                         )
                     }"
                 }
@@ -751,8 +751,8 @@ class CustomColorGenerator(context: Context) {
                     return "#${
                         Integer.toHexString(
                             ContextCompat.getColor(
-                                insideContext, android.R.color.system_accent2_100
-                            ) 
+                                insideContext, android.R.color.system_neutral2_100
+                            )
                         )
                     }"
                 }
@@ -763,7 +763,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_600
-                                    ) 
+                                    )
                                 )
                             }"
                         }
@@ -771,8 +771,8 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, android.R.color.system_accent2_100
-                                    ) 
+                                        insideContext, android.R.color.system_neutral2_100
+                                    )
                                 )
                             }"
                         }
@@ -781,7 +781,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) 
+                                    )
                                 )
                             }"
                         }
