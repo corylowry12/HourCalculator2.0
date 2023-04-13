@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -30,11 +31,17 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.math.RoundingMode
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class TimeCardCustomAdapter(
     private val context: Context,
     private val dataList: ArrayList<HashMap<String, String>>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var lastPosition = -1
 
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var name: TextView = itemView.findViewById(R.id.row_name)
@@ -92,13 +99,13 @@ class TimeCardCustomAdapter(
             }
             else {
                 try {
-                    wages.text = "Wages: $${
-                        String.format(
-                            "%.2f",
-                            dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
-                                .toDouble()
-                        )
-                    }"
+                    val wagesFormatted =  String.format(
+                        "%,.2f",
+                        dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
+                            .toDouble()
+                    )
+
+                    wages.text = "Wages: $${wagesFormatted}"
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                     if (WagesData(context).loadWageAmount() == "") {
@@ -169,6 +176,8 @@ class TimeCardCustomAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        setAnimation(holder.itemView, position)
+
         holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).setOnLongClickListener {
             val dialog = BottomSheetDialog(context)
             val updateWagesLayout = LayoutInflater.from(context)
@@ -477,5 +486,14 @@ class TimeCardCustomAdapter(
                 return@setOnLongClickListener true
             }
         (holder as TimeCardCustomAdapter.ViewHolder).bind(position)
+    }
+
+    private fun setAnimation(viewToAnimate: View, position: Int) {
+
+        if (position > lastPosition) {
+            val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in_recycler_view)
+            viewToAnimate.startAnimation(animation)
+            lastPosition = position
+        }
     }
 }
