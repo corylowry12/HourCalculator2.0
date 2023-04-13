@@ -191,8 +191,6 @@ class HistoryFragment : Fragment() {
                         val wages =
                             (40 * wagesData.loadWageAmount().toString()
                                 .toDouble()) + timeHalf
-                        Toast.makeText(requireContext(), (wagesData.loadWageAmount().toString()
-                            .toDouble() * 1.5).toString(), Toast.LENGTH_SHORT).show()
                         val wagesRounded = String.format("%.2f", wages)
                         wagesTextView.text = "Wages: $$wagesRounded"
                     }
