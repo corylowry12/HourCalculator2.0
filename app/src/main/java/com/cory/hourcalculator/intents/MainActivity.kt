@@ -288,9 +288,9 @@ class MainActivity : AppCompatActivity() {
         val settingsBadge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
 
         historyBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
-        historyBadge.badgeTextColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeTextColor())
+        historyBadge.badgeTextColor = Color.parseColor("#ffffff")
         timeCardBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
-        timeCardBadge.badgeTextColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeTextColor())
+        timeCardBadge.badgeTextColor = Color.parseColor("#ffffff")
         settingsBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
     }
 
