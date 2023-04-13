@@ -192,7 +192,7 @@ class CustomAdapter(
                         val wagesFormat = String.format("%.2f", wagesDecimal)
                         wages.text = "Wages: $${
                             String.format(
-                                "%.2f",
+                                "%,.2f",
                                 wagesFormat.toDouble() * WagesData(context).loadWageAmount()!!
                                     .toDouble()
                             )
@@ -211,7 +211,7 @@ class CustomAdapter(
                     try {
                         wages.text = "Wages: $${
                             String.format(
-                                "%.2f",
+                                "%,.2f",
                                 dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
                                     .toDouble()
                             )
