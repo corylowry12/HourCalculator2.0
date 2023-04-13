@@ -33,7 +33,7 @@ class BackgroundColorFragment : Fragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        updateCustomColorChange(true)
+        updateCustomColorChange()
 
         val followSystemCardView = activity?.findViewById<MaterialCardView>(R.id.followSystemCardView)
 
@@ -101,7 +101,7 @@ class BackgroundColorFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        updateCustomColorChange(false)
+        updateCustomColorChange()
 
         topAppBarBackgroundColorFragment.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -135,7 +135,7 @@ class BackgroundColorFragment : Fragment() {
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                        "Would you like to reset Background Color Settings?"
+                        getString(R.string.would_you_like_to_reset_background_color_settings)
                     /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
@@ -286,7 +286,7 @@ class BackgroundColorFragment : Fragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
 
-            updateCustomColorChange(false)
+            updateCustomColorChange()
         }
     }
 
@@ -299,7 +299,7 @@ class BackgroundColorFragment : Fragment() {
         if (darkThemeData.loadDarkModeState() == 3) {
             Toast.makeText(
                 requireContext(),
-                "Follow system theme already enabled",
+                getString(R.string.follow_system_theme_already_enabled),
                 Toast.LENGTH_SHORT
             ).show()
         } else {
@@ -308,7 +308,7 @@ class BackgroundColorFragment : Fragment() {
             lightThemeButton?.isChecked = false
             amoledThemeButton?.isChecked = false
             followSystemThemeButton.isChecked = true
-            updateCustomColorChange(true)
+            updateCustomColorChange()
         }
     }
 
@@ -330,7 +330,7 @@ class BackgroundColorFragment : Fragment() {
             lightThemeButton?.isChecked = false
             followSystemThemeButton?.isChecked = false
             amoledThemeButton.isChecked = true
-            updateCustomColorChange(true)
+            updateCustomColorChange()
         }
     }
 
@@ -352,7 +352,7 @@ class BackgroundColorFragment : Fragment() {
             amoledThemeButton?.isChecked = false
             followSystemThemeButton?.isChecked = false
             lightThemeButton.isChecked = true
-            updateCustomColorChange(true)
+            updateCustomColorChange()
         }
     }
 
@@ -366,33 +366,12 @@ class BackgroundColorFragment : Fragment() {
         followSystemRadioButton?.isChecked = true
 
         DarkThemeData(requireContext()).setDarkModeState(3)
-        updateCustomColorChange(true)
+        updateCustomColorChange()
     }
 
-    private fun updateCustomColorChange(animate: Boolean) {
+    private fun updateCustomColorChange() {
 
-        /*if (animate) {
-
-            var color = Color.TRANSPARENT
-            val background = requireActivity().findViewById<CoordinatorLayout>(R.id.backgroundColorCoordinatorLayout).background
-            if (background is ColorDrawable) {
-                color = background.color
-            }
-            val colorTo = Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor())
-            var hex = String.format("#%06X", color).drop(1)
-            val hexLong = hex.toLong(16)
-
-            val anim = ValueAnimator()
-            anim.setIntValues(hexLong.toInt(), colorTo)
-            anim.setEvaluator(ArgbEvaluator())
-            anim.addUpdateListener { valueAnimator -> requireView().setBackgroundColor((valueAnimator.animatedValue as Int)!!) }
-
-            anim.duration = 250
-            anim.start()
-        }
-        else {*/
-            requireActivity().findViewById<CoordinatorLayout>(R.id.backgroundColorCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
-        //}
+        requireActivity().findViewById<CoordinatorLayout>(R.id.backgroundColorCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
 
         val lightThemeCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.lightThemeCardViewBackgroundColor)
