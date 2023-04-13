@@ -119,7 +119,7 @@ class AppIconAdapter(val context: Context,
         holder.itemView.findViewById<MaterialCardView>(R.id.cardViewAppIcon).setOnClickListener {
             Vibrate().vibration(context)
             if (holder.itemView.findViewById<TextView>(R.id.icon_name).text.toString().lowercase() == ChosenAppIconData(context).loadChosenAppIcon()) {
-                Toast.makeText(context, "This icon is already enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.this_icon_is_already_enabled), Toast.LENGTH_SHORT).show()
             }
             else {
                 val dialog = BottomSheetDialog(context)
@@ -151,7 +151,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("teal")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.teal))
                             restartApplication()
                         }
                         1 -> {
@@ -165,7 +165,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("pink")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.pink))
                             restartApplication()
                         }
                         2 -> {
@@ -179,7 +179,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("orange")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.orange))
                             restartApplication()
                         }
                         3 -> {
@@ -193,7 +193,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("red")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.red))
                             restartApplication()
                         }
                         4 -> {
@@ -207,7 +207,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("blue")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.blue))
                             restartApplication()
                         }
                         5 -> {
@@ -222,7 +222,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("og")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.og))
                             restartApplication()
                         }
                         6 -> {
@@ -236,7 +236,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("snow falling")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.snow_falling))
                             restartApplication()
                         }
                         dataList.count() - 1 -> {
@@ -250,7 +250,7 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
-                            ChosenAppIconData(context).setChosenAppIcon("material you")
+                            ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.material_you))
                             restartApplication()
                         }
                     }
