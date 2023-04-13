@@ -144,7 +144,7 @@
                         android:id="@+id/toggleLongPressingCalculateSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Toggle Long Pressing Calculate Button"
+                        android:text="Long Pressing Calculate Button to Calculate Time in the Opposite Format"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -156,45 +156,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewVibration"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewDisableLongPress"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp"
-                android:foreground="?attr/selectableItemBackground">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="10dp"
-                    android:background="@null">
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/vibrationSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/toggle_vibration"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:background="@null"
-                        android:clickable="false"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewShowPatchNotesOnAppLaunch"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewVibration"
+                android:layout_below="@id/cardViewDisableLongPress"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
@@ -247,7 +213,7 @@
                         android:id="@+id/breakTextBoxSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="@string/toggle_break_text_box"
+                        android:text="Break Text Box"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -290,6 +256,63 @@
                         android:background="@null"
                         android:clickable="false"
                         />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewVibration"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/cardViewClearBreakTextBox"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintVibrationSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/vibrationImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/baseline_vibration_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/vibrationSettings"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:paddingEnd="5dp"
+                        android:text="Vibration Settings"
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintEnd_toStartOf="@id/vibrationSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/vibrationImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/vibrationSettingsChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
