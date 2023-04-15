@@ -18,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="PrivateResource"
         tools:visibility="visible"
+        android:hapticFeedbackEnabled="false"
         android:foreground="?attr/selectableItemBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
