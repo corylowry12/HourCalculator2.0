@@ -12,9 +12,9 @@ class Vibrate {
     fun vibration(context: Context) {
         val vibrationData = VibrationData(context)
 
-        val vibrator: Vibrator
+        //val vibrator: Vibrator
         if (vibrationData.loadVibrationOnClickState()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibrator = vibratorManager.defaultVibrator
@@ -24,8 +24,28 @@ class Vibrate {
             } else {
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator.vibrate(2)
-            }
+            }*/
+            context.getSystemService(Vibrator::class.java).vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+        }
+    }
 
+    fun vibrateOnLongClick(context: Context) {
+        val vibrationData = VibrationData(context)
+
+        val vibrator: Vibrator
+        if (vibrationData.loadVibrationOnLongClickState()) {
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vibratorManager =
+                    context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                vibrator = vibratorManager.defaultVibrator
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(35, VibrationEffect.DEFAULT_AMPLITUDE)
+                )
+            } else {
+                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.vibrate(2)
+            }*/
+            context.getSystemService(Vibrator::class.java).vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
         }
     }
 
@@ -34,7 +54,7 @@ class Vibrate {
         val vibrationData = VibrationData(context)
 
         val vibrator: Vibrator
-        if (vibrationData.loadVibrationOnClickState()) {
+        if (vibrationData.loadVibrationOnErrorState()) {
             val pattern = longArrayOf(0, 50, 15, 50)
             vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(pattern, -1)
@@ -46,17 +66,17 @@ class Vibrate {
 
         val vibrator: Vibrator
         if (vibrationData.loadVibrationOnTimePickerChangeState()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibrator = vibratorManager.defaultVibrator
                 vibrator.vibrate(
                     VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
                 )
-            } else {
-                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator.vibrate(1)
-            }
+            //} else {
+               // vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                //vibrator.vibrate(1)
+           // }
         }
     }
 }
