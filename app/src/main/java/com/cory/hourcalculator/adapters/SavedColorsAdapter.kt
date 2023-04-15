@@ -187,7 +187,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
         }
 
         savedColorCardView.setOnLongClickListener {
-            Vibrate().vibration(context)
+            Vibrate().vibrateOnLongClick(context)
 
             if (GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
                 if (CustomColorGenerator(context).loadRandomHex() == "#${dataList[holder.adapterPosition]["hex"]}") {
