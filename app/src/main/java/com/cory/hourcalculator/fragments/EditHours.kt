@@ -105,6 +105,20 @@ class EditHours : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
+
+        val constraintLayout =
+            requireActivity().findViewById<CoordinatorLayout>(R.id.editHoursCoordinatorLayout)
+
+        constraintLayout?.setOnClickListener {
+            val imm =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (imm.isAcceptingText) {
+                imm.hideSoftInputFromWindow(constraintLayout.windowToken, 0)
+                breakTimeEditText?.clearFocus()
+            }
+        }
+
         activity?.window?.decorView?.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
@@ -200,6 +214,7 @@ class EditHours : Fragment() {
             val dateChip = activity?.findViewById<Chip>(R.id.dateChipEdit)
 
             dateChip?.setOnLongClickListener {
+                Vibrate().vibrateOnLongClick(requireContext())
                 val calendar = Calendar.getInstance()
                 val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a")
                 val day4 = calendar.timeInMillis
@@ -285,8 +300,6 @@ class EditHours : Fragment() {
                     datePicker.dismiss()
                 }
             }
-
-            val breakTimeEditText = activity?.findViewById<TextInputEditText>(R.id.breakTimeEdit)
 
             breakTimeEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
                 if (i == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_DOWN) {
@@ -375,7 +388,11 @@ class EditHours : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    exit()
+                    if (breakTimeEditText!!.hasFocus()) {
+                        breakTimeEditText.clearFocus()
+                    } else {
+                        exit()
+                    }
                 }
             })
     }
@@ -690,7 +707,7 @@ class EditHours : Fragment() {
         }
 
         saveButton?.setOnLongClickListener {
-
+            Vibrate().vibrateOnLongClick(requireContext())
             if (LongPressCalculateButtonData(requireContext()).loadLongClick()) {
                 if (calculationTypeData.loadCalculationState()) {
                     calculateTime(idMap, day, 1)
