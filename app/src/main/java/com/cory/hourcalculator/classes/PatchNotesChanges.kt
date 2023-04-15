@@ -57,15 +57,24 @@ class PatchNotesChanges {
     )
 
     var bugFixesArrayInternal = arrayOf(
-        "No new bug fixes"
+        "Fixed issue with resetting settings in the background color view not resetting the colorful background setting",
+        "Fixed issues throughout the app where if you were editing data in a text box and clicked the back button, it would leave the view",
+        "Fixed issue with time cards being sorted wrong"
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "No new features"
+        "Added toggle for history scrolling animation",
+        "Added toggle for time card scrolling animation",
+        "Added toggle for opening image animation"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Tweaked some more material you colors"
+        "Tweaked some more material you colors",
+        "Time Card Info view will now show \"Minute(s)\" by the break time",
+        "Clearing break text automatically after successful calculation will now be enabled by default",
+        "Tweaked vibration strength",
+        "Tweaked active tab indicator color in the bottom navigation bar for dark theme",
+        "Tweaked material you colors"
     )
 
 
