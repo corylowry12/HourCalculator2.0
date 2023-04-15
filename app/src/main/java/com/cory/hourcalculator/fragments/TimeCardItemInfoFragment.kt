@@ -44,6 +44,7 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.ImageViewActivity
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
@@ -345,23 +346,27 @@ class TimeCardItemInfoFragment : Fragment() {
                 TimeCardDBHelper(requireContext(), null).updateName(s.toString(), id)
             }
         })
-        //loadIntoList(id)
 
         val imageView = activity?.findViewById<ImageView>(R.id.timeCardImage)
         imageView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             val intent = Intent(requireContext(), ImageViewActivity::class.java)
             intent.putExtra("id", id)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                requireActivity(),
-                imageView,
-                "transition_image"
-            )
-            startActivity(intent, options.toBundle())
+            if (AnimationData(requireContext()).loadImageAnimation()) {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(),
+                    imageView,
+                    "transition_image"
+                )
+                startActivity(intent, options.toBundle())
+            }
+            else {
+              startActivity(intent)
+            }
         }
 
         imageView?.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val dialog = BottomSheetDialog(requireContext())
             val addAPhotoLayout =
                 layoutInflater.inflate(R.layout.image_options_bottom_sheet, null)
@@ -509,11 +514,15 @@ class TimeCardItemInfoFragment : Fragment() {
         return@setOnLongClickListener true
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(
+        requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    activity?.supportFragmentManager?.popBackStack()
+                    if (timeCardInfoNameTextInput!!.hasFocus()) {
+                        timeCardInfoNameTextInput.clearFocus()
+                    } else {
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
                 }
             })
     }
