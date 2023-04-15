@@ -81,7 +81,7 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
     fun getAllRow(context: Context): Cursor? {
         val db = this.writableDatabase
 
-        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY week asc", null)
+        return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY week desc", null)
     }
 
     fun updateName(name: String, id: String) {
