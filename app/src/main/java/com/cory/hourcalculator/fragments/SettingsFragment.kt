@@ -93,23 +93,9 @@ class SettingsFragment : Fragment() {
 
         MainActivity().runOnUiThread(runnable)
 
-        activity?.window?.setBackgroundDrawable(null)
-
         updateCustomColor()
 
-        val inputManager: InputMethodManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
-
             main()
-
-            val nestedScrollView =
-                view.findViewById<NestedScrollView>(R.id.nestedScrollViewSettings)
-
-            nestedScrollView.setOnScrollChangeListener { _, scrollX, _, _, _ ->
-
-                scrollPosition = scrollX
-            }
     }
 
     private fun main() {
