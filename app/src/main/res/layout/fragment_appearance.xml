@@ -241,6 +241,7 @@
                 android:layout_marginStart="10dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -276,6 +277,7 @@
                 android:layout_marginStart="10dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -311,6 +313,7 @@
                 android:layout_marginStart="10dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
                 android:layout_marginEnd="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
