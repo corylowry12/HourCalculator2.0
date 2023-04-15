@@ -11,20 +11,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
-import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
@@ -85,7 +80,10 @@ class AnimationSettingsFragment : Fragment() {
         updateCustomColor()
 
         val historyRecyclerViewLoadingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyListLoadingAnimationCardView)
+        val historyRecyclerViewScrollingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyScrollingAnimationCardView)
         val timeCardRecyclerViewLoadingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardListLoadingAnimationCardView)
+        val timeCardRecyclerViewScrollingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardScrollingAnimationCardView)
+        val imageLoadingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageLoadingAnimationCardView)
 
         historyRecyclerViewLoadingAnimationCardView.shapeAppearanceModel = historyRecyclerViewLoadingAnimationCardView.shapeAppearanceModel
             .toBuilder()
@@ -94,7 +92,28 @@ class AnimationSettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
+        historyRecyclerViewScrollingAnimationCardView.shapeAppearanceModel = historyRecyclerViewScrollingAnimationCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
         timeCardRecyclerViewLoadingAnimationCardView.shapeAppearanceModel = timeCardRecyclerViewLoadingAnimationCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        timeCardRecyclerViewScrollingAnimationCardView.shapeAppearanceModel = timeCardRecyclerViewScrollingAnimationCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        imageLoadingAnimationCardView.shapeAppearanceModel = imageLoadingAnimationCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -102,13 +121,13 @@ class AnimationSettingsFragment : Fragment() {
             .setBottomLeftCornerSize(28f)
             .build()
 
-        val historyLoadingAnimation = HistoryRecyclerViewLoadingAnimationData(requireContext())
+        val animationData = AnimationData(requireContext())
         val toggleHistoryLoadingAnimation = requireActivity().findViewById<MaterialSwitch>(R.id.historyListLoadingAnimationSwitch)
 
-        if (historyLoadingAnimation.loadHistoryRecyclerViewLoadingAnimation()) {
+        if (animationData.loadHistoryRecyclerViewLoadingAnimation()) {
             toggleHistoryLoadingAnimation?.isChecked = true
             toggleHistoryLoadingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!historyLoadingAnimation.loadHistoryRecyclerViewLoadingAnimation()) {
+        } else if (!animationData.loadHistoryRecyclerViewLoadingAnimation()) {
             toggleHistoryLoadingAnimation?.isChecked = false
             toggleHistoryLoadingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
@@ -121,16 +140,36 @@ class AnimationSettingsFragment : Fragment() {
             } else {
                 toggleHistoryLoadingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            historyLoadingAnimation.setHistoryRecyclerViewLoadingAnimation(toggleHistoryLoadingAnimation.isChecked)
+            animationData.setHistoryRecyclerViewLoadingAnimation(toggleHistoryLoadingAnimation.isChecked)
         }
 
-        val timeCardLoadingAnimation = TimeCardRecyclerViewLoadingAnimationData(requireContext())
+        val toggleHistoryScrollingAnimation = requireActivity().findViewById<MaterialSwitch>(R.id.historyScrollingAnimationSwitch)
+
+        if (animationData.loadHistoryScrollingAnimation()) {
+            toggleHistoryScrollingAnimation?.isChecked = true
+            toggleHistoryScrollingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!animationData.loadHistoryScrollingAnimation()) {
+            toggleHistoryScrollingAnimation?.isChecked = false
+            toggleHistoryScrollingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        historyRecyclerViewScrollingAnimationCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            toggleHistoryScrollingAnimation.isChecked = !toggleHistoryScrollingAnimation.isChecked
+            if (toggleHistoryScrollingAnimation.isChecked) {
+                toggleHistoryScrollingAnimation.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                toggleHistoryScrollingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+            animationData.setHistoryScrollingLoadingAnimation(toggleHistoryScrollingAnimation.isChecked)
+        }
+
         val toggleTimeCardLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardListLoadingAnimationSwitch)
 
-        if (timeCardLoadingAnimation.loadTimeCardRecyclerViewLoadingAnimation()) {
+        if (animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
             toggleTimeCardLoadingAnimationSwitch?.isChecked = true
             toggleTimeCardLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!timeCardLoadingAnimation.loadTimeCardRecyclerViewLoadingAnimation()) {
+        } else if (!animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
             toggleTimeCardLoadingAnimationSwitch?.isChecked = false
             toggleTimeCardLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
@@ -143,7 +182,49 @@ class AnimationSettingsFragment : Fragment() {
             } else {
                 toggleTimeCardLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
-            timeCardLoadingAnimation.setTimeCardRecyclerViewLoadingAnimation(toggleTimeCardLoadingAnimationSwitch.isChecked)
+            animationData.setTimeCardRecyclerViewLoadingAnimation(toggleTimeCardLoadingAnimationSwitch.isChecked)
+        }
+
+        val toggleTimeCardScrollingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardScrollingAnimationSwitch)
+
+        if (animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
+            toggleTimeCardScrollingAnimationSwitch?.isChecked = true
+            toggleTimeCardScrollingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
+            toggleTimeCardScrollingAnimationSwitch?.isChecked = false
+            toggleTimeCardScrollingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        timeCardRecyclerViewScrollingAnimationCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            toggleTimeCardScrollingAnimationSwitch.isChecked = !toggleTimeCardScrollingAnimationSwitch.isChecked
+            if (toggleTimeCardScrollingAnimationSwitch.isChecked) {
+                toggleTimeCardScrollingAnimationSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                toggleTimeCardScrollingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+            animationData.setTimeCardsScrollingLoadingAnimation(toggleTimeCardScrollingAnimationSwitch.isChecked)
+        }
+
+        val imageLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.imageLoadingAnimationSwitch)
+
+        if (animationData.loadImageAnimation()) {
+            imageLoadingAnimationSwitch?.isChecked = true
+            imageLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!animationData.loadImageAnimation()) {
+            imageLoadingAnimationSwitch?.isChecked = false
+            imageLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        imageLoadingAnimationCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            imageLoadingAnimationSwitch.isChecked = !imageLoadingAnimationSwitch.isChecked
+            if (imageLoadingAnimationSwitch.isChecked) {
+                imageLoadingAnimationSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                imageLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+            animationData.setImageAnimation(imageLoadingAnimationSwitch.isChecked)
         }
     }
 
@@ -152,11 +233,21 @@ class AnimationSettingsFragment : Fragment() {
 
         val historyRecyclerViewLoadingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyListLoadingAnimationCardView)
         historyRecyclerViewLoadingAnimationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val historyRecyclerViewScrollingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.historyScrollingAnimationCardView)
+        historyRecyclerViewScrollingAnimationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         val timeCardRecyclerViewLoadingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardListLoadingAnimationCardView)
         timeCardRecyclerViewLoadingAnimationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val timeCardRecyclerViewScrollingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardScrollingAnimationCardView)
+        timeCardRecyclerViewScrollingAnimationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        val imageLoadingAnimationCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageLoadingAnimationCardView)
+        imageLoadingAnimationCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val toggleHistoryLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historyListLoadingAnimationSwitch)
+        val toggleHistoryScrollingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historyScrollingAnimationSwitch)
         val timeCardLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardListLoadingAnimationSwitch)
+        val timeCardScrollingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardScrollingAnimationSwitch)
+        val imageLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.imageLoadingAnimationSwitch)
+
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
             intArrayOf(android.R.attr.state_checked)  // checked
@@ -169,8 +260,14 @@ class AnimationSettingsFragment : Fragment() {
 
         toggleHistoryLoadingAnimationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         toggleHistoryLoadingAnimationSwitch.trackTintList = ColorStateList(states, colors)
+        toggleHistoryScrollingAnimationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        toggleHistoryScrollingAnimationSwitch.trackTintList = ColorStateList(states, colors)
         timeCardLoadingAnimationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         timeCardLoadingAnimationSwitch.trackTintList = ColorStateList(states, colors)
+        timeCardScrollingAnimationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        timeCardScrollingAnimationSwitch.trackTintList = ColorStateList(states, colors)
+        imageLoadingAnimationSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        imageLoadingAnimationSwitch.trackTintList = ColorStateList(states, colors)
 
         val collapsingToolbarAnimationSettings = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAnimationSettings)
         collapsingToolbarAnimationSettings.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
