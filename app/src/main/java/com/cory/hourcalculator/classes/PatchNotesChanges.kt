@@ -59,7 +59,8 @@ class PatchNotesChanges {
     var bugFixesArrayInternal = arrayOf(
         "Fixed issue with resetting settings in the background color view not resetting the colorful background setting",
         "Fixed issues throughout the app where if you were editing data in a text box and clicked the back button, it would leave the view",
-        "Fixed issue with time cards being sorted wrong"
+        "Fixed issue with time cards being sorted wrong",
+        "Fixed issue with there being a double vibration when long clicking certain ui elements"
     )
 
     var newFeaturesArrayInternal = arrayOf(
