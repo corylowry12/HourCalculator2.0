@@ -28,4 +28,26 @@ class VibrationData(context: Context) {
         val state = sharedPreferences.getBoolean("VibrationOnTimePickerChange", true)
         return (state)
     }
+
+    fun setVibrationOnLongClickState(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("VibrationOnLongClick", state)
+        editor.apply()
+    }
+
+    fun loadVibrationOnLongClickState(): Boolean {
+        val state = sharedPreferences.getBoolean("VibrationOnLongClick", false)
+        return (state)
+    }
+
+    fun setVibrationOnErrorState(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("VibrationOnError", state)
+        editor.apply()
+    }
+
+    fun loadVibrationOnErrorState(): Boolean {
+        val state = sharedPreferences.getBoolean("VibrationOnError", true)
+        return (state)
+    }
 }
