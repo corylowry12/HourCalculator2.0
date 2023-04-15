@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,6 +85,41 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewVibrationOnLongClick"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
+                android:layout_below="@id/cardViewVibrationOnClick"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp"
+                    android:background="@null">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/vibrationOnLongClickSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Vibration On Long Click"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewVibrationOnTimePickerChange"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
@@ -91,7 +127,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                android:layout_below="@id/cardViewVibrationOnClick"
+                android:hapticFeedbackEnabled="false"
+                android:layout_below="@id/cardViewVibrationOnLongClick"
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,6 +145,41 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Vibration On Time Picker Change"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@null"
+                        android:clickable="false"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewVibrationOnCalculationError"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
+                android:layout_below="@id/cardViewVibrationOnTimePickerChange"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="10dp"
+                    android:background="@null">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/vibrationOnCalculationErrorSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Vibration On Calculation Error"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
