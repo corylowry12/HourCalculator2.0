@@ -314,6 +314,30 @@ class HistorySettingsFragment : Fragment() {
             MainActivity().runOnUiThread(runnable)
         }
 
+        toggleHistoryCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the history tab in the bottom navigation view will be shown and history will be stored\n\n" +
+                        "When disabled the history tab in the bottom navigation view will not be shown and history will not be stored"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val historyDeletion = HistoryAutomaticDeletionData(requireContext())
         val daysWorked = DaysWorkedPerWeekData(requireContext())
 
@@ -360,6 +384,30 @@ class HistorySettingsFragment : Fragment() {
                 }
             }
 
+        historyDeletionCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled history will automatically be deleted and not allow you to get over whatever limit you have set\n\n" +
+                        "When disabled history will not be automatically be deleted"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val deleteAllOnLimitReachedSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.historyDeleteAllOnLimitSwitch)
 
         if (DeleteAllOnLimitReachedData(requireContext()).loadDeleteAllState()) {
@@ -382,6 +430,30 @@ class HistorySettingsFragment : Fragment() {
             else {
                 deleteAllOnLimitReachedSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+        }
+
+        historyDeleteAllOnLimitReachedCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will automatically delete all history when the limit is reached\n\n" +
+                        "When disabled the app will not automatically delete history"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         numberOfDaysCardView.setOnClickListener {
@@ -429,6 +501,30 @@ class HistorySettingsFragment : Fragment() {
             }
         }
 
+        openHoursForEditingCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled each history item will be clickable to automatically open for editing\n\n" +
+                        "When disabled each history item will not be clickable"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val showWagesInHistoryData = ShowWagesInHistoryData(requireContext())
         val showWagesInHistorySwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch)
 
@@ -450,6 +546,30 @@ class HistorySettingsFragment : Fragment() {
             else {
                 showWagesInHistorySwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+        }
+
+        showWagesInHistoryCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled each history item will show wages based on the number of hours that is calculated for that entry and the wages that are stored\n\n" +
+                        "When disabled each history item will not show wages"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
     }
 
