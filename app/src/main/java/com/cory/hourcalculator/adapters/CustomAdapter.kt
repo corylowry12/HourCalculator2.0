@@ -577,9 +577,12 @@ class CustomAdapter(
 
     @SuppressLint("Range")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        setAnimation(holder.itemView, position)
+        if (AnimationData(context).loadHistoryScrollingAnimation()) {
+            setAnimation(holder.itemView, position)
+        }
 
         holder.itemView.findViewById<TextView>(R.id.row_wages).setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(context)
             val dialog = BottomSheetDialog(context)
             val updateWagesLayout = LayoutInflater.from(context)
                 .inflate(R.layout.update_wages_bottom_sheet, null)
@@ -650,7 +653,7 @@ class CustomAdapter(
         if (!checkBoxVisible) {
             holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory)
                 .setOnLongClickListener {
-                    Vibrate().vibration(context)
+                    Vibrate().vibrateOnLongClick(context)
                     longClick(inTime, outTime, breakTime, totalHours, day, checkBox, holder)
                     true
                 }
@@ -665,7 +668,7 @@ class CustomAdapter(
         } else {
             holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory)
                 .setOnLongClickListener {
-                    Vibrate().vibration(context)
+                    Vibrate().vibrateOnLongClick(context)
                     longClickSelectAll(holder)
                     return@setOnLongClickListener true
                 }
