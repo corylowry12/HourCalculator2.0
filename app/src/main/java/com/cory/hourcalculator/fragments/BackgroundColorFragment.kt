@@ -288,6 +288,30 @@ class BackgroundColorFragment : Fragment() {
 
             updateCustomColorChange()
         }
+
+        moreColorBackgroundCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the background color will be a light/dark shade of your accent color\n\n" +
+                        "When disabled the background color will be white/black"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
     }
 
     private fun changeToFollowSystem(
@@ -360,13 +384,23 @@ class BackgroundColorFragment : Fragment() {
         val lightThemeRadioButton = view?.findViewById<RadioButton>(R.id.lightTheme)
         val darkThemeRadioButton = view?.findViewById<RadioButton>(R.id.blackTheme)
         val followSystemRadioButton = view?.findViewById<RadioButton>(R.id.followSystem)
+        val moreColorfulBackgroundSwitch = view?.findViewById<MaterialSwitch>(R.id.moreColorBackgroundSwitch)
 
         lightThemeRadioButton?.isChecked = false
         darkThemeRadioButton?.isChecked = false
         followSystemRadioButton?.isChecked = true
+        moreColorfulBackgroundSwitch?.isChecked = true
 
         DarkThemeData(requireContext()).setDarkModeState(3)
+        MoreColorfulBackgroundData(requireContext()).setMoreColorfulBackground(true)
         updateCustomColorChange()
+
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.reset_to_default),
+            Toast.LENGTH_LONG
+        )
+            .show()
     }
 
     private fun updateCustomColorChange() {
