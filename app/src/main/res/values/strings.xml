@@ -153,4 +153,6 @@
     <string name="sort_by_least_hours">Sort by Least Hours</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="reset_to_default">Reset to default</string>
+    <string name="you_must_save_and_exit_editing_to_leave_the_view">You must save and exit editing to leave the view</string>
 </resources>
