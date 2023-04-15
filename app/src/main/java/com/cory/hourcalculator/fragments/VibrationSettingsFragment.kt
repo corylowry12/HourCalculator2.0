@@ -50,7 +50,9 @@ class VibrationSettingsFragment : Fragment() {
         }
 
         val vibrationOnClickCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnClick)
+        val vibrationOnLongClickCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnLongClick)
         val vibrationOnTimePickerCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnTimePickerChange)
+        val vibrationOnErrorCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnCalculationError)
 
         vibrationOnClickCardView.shapeAppearanceModel = vibrationOnClickCardView.shapeAppearanceModel
             .toBuilder()
@@ -59,7 +61,21 @@ class VibrationSettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
+        vibrationOnLongClickCardView.shapeAppearanceModel = vibrationOnLongClickCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
         vibrationOnTimePickerCardView.shapeAppearanceModel = vibrationOnTimePickerCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        vibrationOnErrorCardView.shapeAppearanceModel = vibrationOnErrorCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -117,6 +133,31 @@ class VibrationSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
+        val toggleVibrationOnLongClick = requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnLongClickSwitch)
+
+        if (vibrationData.loadVibrationOnLongClickState()) {
+            toggleVibrationOnLongClick?.isChecked = true
+            toggleVibrationOnLongClick?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!vibrationData.loadVibrationOnLongClickState()) {
+            toggleVibrationOnLongClick?.isChecked = false
+            toggleVibrationOnLongClick?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        vibrationOnLongClickCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            toggleVibrationOnLongClick!!.isChecked = !toggleVibrationOnLongClick.isChecked
+            vibrationData.setVibrationOnLongClickState(toggleVibrationOnLongClick.isChecked)
+            if (toggleVibrationOnLongClick.isChecked) {
+                toggleVibrationOnLongClick.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                toggleVibrationOnLongClick.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
         val toggleTimePickerVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationOnTimePickerChangeSwitch)
 
         if (vibrationData.loadVibrationOnTimePickerChangeState()) {
@@ -141,6 +182,31 @@ class VibrationSettingsFragment : Fragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
         }
+
+        val toggleCalculationErrorVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationOnCalculationErrorSwitch)
+
+        if (vibrationData.loadVibrationOnErrorState()) {
+            toggleCalculationErrorVibration?.isChecked = true
+            toggleCalculationErrorVibration?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        } else if (!vibrationData.loadVibrationOnErrorState()) {
+            toggleCalculationErrorVibration?.isChecked = false
+            toggleCalculationErrorVibration?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
+
+        vibrationOnErrorCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            toggleCalculationErrorVibration!!.isChecked = !toggleCalculationErrorVibration.isChecked
+            vibrationData.setVibrationOnErrorState(toggleCalculationErrorVibration.isChecked)
+            if (toggleCalculationErrorVibration.isChecked) {
+                toggleCalculationErrorVibration.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                toggleCalculationErrorVibration.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
     }
 
     fun updateCustomColor() {
@@ -158,8 +224,12 @@ class VibrationSettingsFragment : Fragment() {
 
         val vibrateOnClickSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+        val vibrateOnLongClickSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnLongClickSwitch)
         val vibrateOnTimePickerChangeSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnTimePickerChangeSwitch)
+        val vibrateOnCalculationErrorSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnCalculationErrorSwitch)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -173,15 +243,25 @@ class VibrationSettingsFragment : Fragment() {
         vibrateOnClickSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         vibrateOnClickSwitch.trackTintList = ColorStateList(states, colors)
+        vibrateOnLongClickSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        vibrateOnLongClickSwitch.trackTintList = ColorStateList(states, colors)
         vibrateOnTimePickerChangeSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         vibrateOnTimePickerChangeSwitch.trackTintList = ColorStateList(states, colors)
+        vibrateOnCalculationErrorSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        vibrateOnCalculationErrorSwitch.trackTintList = ColorStateList(states, colors)
 
         val vibrationOnClickCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnClick)
+        val vibrationOnLongClickCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnLongClick)
         val vibrationOnTimePickerChangeCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnTimePickerChange)
+        val vibrationOnCalculationErrorCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnCalculationError)
 
         vibrationOnClickCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        vibrationOnLongClickCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         vibrationOnTimePickerChangeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        vibrationOnCalculationErrorCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutVibrationSettings)
             ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
