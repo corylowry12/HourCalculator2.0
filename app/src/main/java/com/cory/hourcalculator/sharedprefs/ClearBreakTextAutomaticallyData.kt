@@ -14,7 +14,7 @@ class ClearBreakTextAutomaticallyData(context: Context) {
     }
 
     fun loadClearAutomatically(): Boolean {
-        val state = sharedPreferences.getBoolean("clearAutomatically", false)
+        val state = sharedPreferences.getBoolean("clearAutomatically", true)
         return (state)
     }
 }
