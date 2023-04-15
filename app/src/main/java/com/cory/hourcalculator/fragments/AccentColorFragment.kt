@@ -263,6 +263,30 @@ class AccentColorFragment : Fragment() {
             MainActivity().runOnUiThread(updateBottomNavColor)
         }
 
+        bottomNavBadgeColorCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the badges in the bottom navigation view that show history/time card count will match the theme\n\n" +
+                        "When disabled the badges in the bottom navigation view that show history/time card count will be red"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val generateARandomColorOnAppLaunchSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
 
         if (GenerateARandomColorData(requireContext()).loadGenerateARandomColorOnAppLaunch()) {
@@ -286,6 +310,30 @@ class AccentColorFragment : Fragment() {
             }
 
             updateCustomColorChange()
+        }
+
+        generateARandomColorCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will generate and set a random color on app launch\n\n" +
+                        "When disabled the app will be set to whatever theme you have chosen"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         if (GenerateARandomColorMethodData(requireContext()).loadGenerateARandomColorMethod() == 0) {
@@ -519,7 +567,7 @@ class AccentColorFragment : Fragment() {
             }
 
             selectButton.setOnLongClickListener {
-                Vibrate().vibration(requireContext())
+                Vibrate().vibrateOnLongClick(requireContext())
                 customColorPickerDialog.dismiss()
                 CustomColorGenerator(requireContext()).setCustomHex("#$hex")
                 MaterialYouData(requireContext()).setMaterialYouState(false)
@@ -676,6 +724,30 @@ class AccentColorFragment : Fragment() {
                 materialYouStyle2Switch?.isChecked = false
                 materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+        }
+
+        followGoogleAppsCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will generate a color palette that matches your wallpaper\n\n" +
+                        "When disabled the app will be set to whatever color you have chosen"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
     }
 
