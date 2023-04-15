@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +24,7 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInTimeCardData
 import com.cory.hourcalculator.sharedprefs.WagesData
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,6 +33,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
+import java.lang.Exception
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
@@ -176,7 +180,9 @@ class TimeCardCustomAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        setAnimation(holder.itemView, position)
+        if (AnimationData(context).loadTimeCardsScrollingAnimation()) {
+            setAnimation(holder.itemView, position)
+        }
 
         holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).setOnLongClickListener {
             val dialog = BottomSheetDialog(context)
@@ -185,39 +191,42 @@ class TimeCardCustomAdapter(
             dialog.setContentView(updateWagesLayout)
             dialog.setCancelable(true)
 
-            val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
-            val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
-            val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
-            val updateWagesCardView = updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
+                    val editText =
+                        updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
+                    val updateWagesButton =
+                        updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
+                    val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
+                    val updateWagesCardView =
+                        updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
 
-            editText.textCursorDrawable = null
+                    editText.textCursorDrawable = null
 
-            updateWagesCardView.setCardBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(context).generateCardColor()
-                )
-            )
-            updateWagesButton.setBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(
-                        context
-                    ).generateCustomColorPrimary()
-                )
-            )
-            cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+                    updateWagesCardView.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(context).generateCardColor()
+                        )
+                    )
+                    updateWagesButton.setBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                context
+                            ).generateCustomColorPrimary()
+                        )
+                    )
+                    cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
 
-            editText.setText(WagesData(context).loadWageAmount())
+                    editText.setText(WagesData(context).loadWageAmount())
 
-            updateWagesButton.setOnClickListener {
-                Vibrate().vibration(context)
-                WagesData(context).setWageAmount(editText.text.toString())
-                notifyDataSetChanged()
-                dialog.dismiss()
-            }
-            cancelButton.setOnClickListener {
-                Vibrate().vibration(context)
-                dialog.dismiss()
-            }
+                    updateWagesButton.setOnClickListener {
+                        Vibrate().vibration(context)
+                        WagesData(context).setWageAmount(editText.text.toString())
+                        notifyDataSetChanged()
+                        dialog.dismiss()
+                    }
+                    cancelButton.setOnClickListener {
+                        Vibrate().vibration(context)
+                        dialog.dismiss()
+                    }
 
             if (holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).text.toString().contains("Error") ||
                 holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).text.toString().contains("Must")) {
@@ -244,7 +253,7 @@ class TimeCardCustomAdapter(
 
         holder.itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
             .setOnLongClickListener {
-                Vibrate().vibration(context)
+                Vibrate().vibrateOnLongClick(context)
                 val dialog = BottomSheetDialog(context)
                 val timeCardOptionsLayout = LayoutInflater.from(context)
                     .inflate(R.layout.time_card_options_bottom_sheet, null)
@@ -319,61 +328,19 @@ class TimeCardCustomAdapter(
                     editText.textCursorDrawable = null
                     
                     editText.setText(dataList[holder.adapterPosition]["name"])
+
+                    editText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
+                        if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
+                            rename(editText, holder)
+                            renameDialog.dismiss()
+                            return@OnKeyListener true
+                        }
+                        false
+                    })
                     
                     renameButton.setOnClickListener {
                         Vibrate().vibration(context)
-                        TimeCardDBHelper(context, null).updateName(editText.text.toString(), dataList[holder.adapterPosition]["id"]!!)
-                        dataList.clear()
-                        val cursor = TimeCardDBHelper(context, null).getAllRow(context)
-                        cursor!!.moveToFirst()
-
-                        while (!cursor.isAfterLast) {
-                            val map = HashMap<String, String>()
-                            map["id"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))
-                            try {
-                                map["name"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_NAME))
-                            } catch (e: java.lang.NullPointerException) {
-                                e.printStackTrace()
-                                map["name"] = ""
-                            }
-                            map["totalHours"] =
-                                cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
-                            map["week"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_WEEK))
-                            try {
-                                map["image"] =
-                                    cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_IMAGE))
-                            } catch (e: NullPointerException) {
-                                e.printStackTrace()
-                                map["image"] = ""
-                            }
-                            map["count"] =
-                                TimeCardsItemDBHelper(context, null).getCountForItemID(
-                                    map["id"].toString().toInt()
-                                ).toString()
-
-                            if (map["week"]!!.contains("-") && !map["week"]!!.contains(" - ")) {
-                                TimeCardDBHelper(context, null).updateWeek(
-                                    map["week"]!!.replace(
-                                        "-",
-                                        " - "
-                                    ), map["id"]!!
-                                )
-                                map["week"] = map["week"]!!.replace("-", " - ")
-                            }
-
-                            if (map["count"]!!.toInt() == 1) {
-                                if (map["week"]!!.contains("-")) {
-                                    val (first, last) = map["week"]!!.split("-")
-                                    TimeCardDBHelper(context, null).updateWeek(first, map["id"]!!)
-                                    map["week"] = first
-                                }
-                            }
-
-                            dataList.add(map)
-
-                            cursor.moveToNext()
-                        }
-                        notifyItemChanged(holder.adapterPosition)
+                        rename(editText, holder)
                         renameDialog.dismiss()
                     }
                     cancelButton.setOnClickListener { 
@@ -486,6 +453,67 @@ class TimeCardCustomAdapter(
                 return@setOnLongClickListener true
             }
         (holder as TimeCardCustomAdapter.ViewHolder).bind(position)
+    }
+
+    private fun rename(
+        editText: TextInputEditText,
+        holder: RecyclerView.ViewHolder
+    ) {
+        TimeCardDBHelper(context, null).updateName(
+            editText.text.toString(),
+            dataList[holder.adapterPosition]["id"]!!
+        )
+        dataList.clear()
+        val cursor = TimeCardDBHelper(context, null).getAllRow(context)
+        cursor!!.moveToFirst()
+
+        while (!cursor.isAfterLast) {
+            val map = HashMap<String, String>()
+            map["id"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID))
+            try {
+                map["name"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_NAME))
+            } catch (e: java.lang.NullPointerException) {
+                e.printStackTrace()
+                map["name"] = ""
+            }
+            map["totalHours"] =
+                cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_TOTAL))
+            map["week"] = cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_WEEK))
+            try {
+                map["image"] =
+                    cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_IMAGE))
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+                map["image"] = ""
+            }
+            map["count"] =
+                TimeCardsItemDBHelper(context, null).getCountForItemID(
+                    map["id"].toString().toInt()
+                ).toString()
+
+            if (map["week"]!!.contains("-") && !map["week"]!!.contains(" - ")) {
+                TimeCardDBHelper(context, null).updateWeek(
+                    map["week"]!!.replace(
+                        "-",
+                        " - "
+                    ), map["id"]!!
+                )
+                map["week"] = map["week"]!!.replace("-", " - ")
+            }
+
+            if (map["count"]!!.toInt() == 1) {
+                if (map["week"]!!.contains("-")) {
+                    val (first, last) = map["week"]!!.split("-")
+                    TimeCardDBHelper(context, null).updateWeek(first, map["id"]!!)
+                    map["week"] = first
+                }
+            }
+
+            dataList.add(map)
+
+            cursor.moveToNext()
+        }
+        notifyItemChanged(holder.adapterPosition)
     }
 
     private fun setAnimation(viewToAnimate: View, position: Int) {
