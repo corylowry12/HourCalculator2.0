@@ -47,7 +47,15 @@ class TimeCardItemCustomAdapter(
 
             inTime.text = "In Time: ${dataItem["inTime"]}"
             outTime.text = "Out Time: ${dataItem["outTime"]}"
-            breakTime.text = "Break Time: ${dataItem["breakTime"]}"
+
+            if (dataItem["breakTime"] == "1") {
+                breakTime.text =
+                    context.getString(R.string.break_time_adapter_singular, dataItem["breakTime"])
+            } else {
+                breakTime.text =
+                    context.getString(R.string.break_time_adapter_plural, dataItem["breakTime"])
+            }
+
             totalHours.text = "Total: ${dataItem["totalHours"]}"
             day.text = "Date: $dateString"
 
@@ -152,6 +160,7 @@ class TimeCardItemCustomAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.findViewById<TextView>(R.id.row_time_card_item_info_wages).setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(context)
             val dialog = BottomSheetDialog(context)
             val updateWagesLayout = LayoutInflater.from(context)
                 .inflate(R.layout.update_wages_bottom_sheet, null)
