@@ -124,11 +124,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        
-        val context = this
+
         val runnable = Runnable {
-                MobileAds.initialize(context)
-                val adView = AdView(context)
+                MobileAds.initialize(this)
+                val adView = AdView(this)
                 adView.adUnitId = GoogleAdsKey().API_KEY
                 val mAdView = findViewById<AdView>(R.id.adView)
                 val adRequest = AdRequest.Builder().build()
@@ -137,8 +136,6 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread(runnable)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-
-        updateBottomNavCustomColor()
 
         changeBadgeNumber()
         changeSettingsBadge()
@@ -157,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                             bottomNav.menu.findItem(R.id.history).isChecked = true
                             Toast.makeText(
                                 this,
-                                "You must save and exit editing to leave the view",
+                                getString(R.string.you_must_save_and_exit_editing_to_leave_the_view),
                                 Toast.LENGTH_SHORT
                             ).show()
                             return@setOnItemSelectedListener false
@@ -198,7 +195,7 @@ class MainActivity : AppCompatActivity() {
                     if (currentFragment.toString().startsWith("EditHours", true)) {
                         bottomNav.menu.findItem(R.id.timeCards).isChecked = false
                         bottomNav.menu.findItem(R.id.history).isChecked = true
-                        Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,     getString(R.string.you_must_save_and_exit_editing_to_leave_the_view), Toast.LENGTH_SHORT).show()
                         return@setOnItemSelectedListener false
                     }
                     else if (currentFragment.toString().startsWith("Time", true) && (!currentFragment.toString().contains("Info") && !currentFragment.toString().contains("Settings"))) {
@@ -251,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                     if (currentFragment.toString().startsWith("EditHours", true)) {
                         bottomNav.menu.findItem(R.id.ic_home).isChecked = false
                         bottomNav.menu.findItem(R.id.history).isChecked = true
-                        Toast.makeText(this, "You must save and exit editing to leave the view", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,     getString(R.string.you_must_save_and_exit_editing_to_leave_the_view), Toast.LENGTH_SHORT).show()
                         return@setOnItemSelectedListener false
                     }
                     else {
