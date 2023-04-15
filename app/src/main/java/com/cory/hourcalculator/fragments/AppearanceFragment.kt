@@ -239,7 +239,7 @@ class AppearanceFragment : Fragment() {
         }
 
         coloredNavigationBarCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val infoDialog = BottomSheetDialog(requireContext())
             val infoAboutSettingLayout =
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
@@ -288,6 +288,30 @@ class AppearanceFragment : Fragment() {
             setColoredMenuItemTint(topAppBar)
         }
 
+        coloredMenuTintCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the navigation arrow and the menu items will be colored to match the theme\n\n" +
+                        "When disabled the navigation arrow and the menu items will be colored white or black depending on if the app is light or dark mode"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val coloredTitleBarTextSwitch =
             view.findViewById<MaterialSwitch>(R.id.coloredTitleBarTextSwitch)
         val coloredTitleBarData = ColoredTitleBarTextData(requireContext())
@@ -328,6 +352,30 @@ class AppearanceFragment : Fragment() {
                     )
                 )
             }
+        }
+
+        coloredTitleBarTextCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the title bar text will match the theme when collapsed\n\n" +
+                        "When disabled the title bar text will be white or black depending on if the app is in light or dark mode"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         activity?.onBackPressedDispatcher?.addCallback(
