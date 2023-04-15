@@ -294,7 +294,7 @@ class HistoryFragment : Fragment() {
         activity?.window?.setBackgroundDrawable(null)
 
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
-        if (HistoryRecyclerViewLoadingAnimationData(requireContext()).loadHistoryRecyclerViewLoadingAnimation()) {
+        if (AnimationData(requireContext()).loadHistoryRecyclerViewLoadingAnimation()) {
             val animation =
                 AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
             listView?.layoutAnimation = animation
