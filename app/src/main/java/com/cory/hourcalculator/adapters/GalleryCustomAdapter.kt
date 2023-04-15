@@ -24,6 +24,7 @@ import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.intents.ImageViewActivity
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -66,21 +67,26 @@ class GalleryCustomAdapter( private val context: Context,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         holder.itemView.findViewById<MaterialCardView>(R.id.galleryCard).setOnClickListener {
-            Vibrate().vibration(context)
+            Vibrate().vibrateOnLongClick(context)
             val intent = Intent(context, ImageViewActivity::class.java)
             intent.putExtra("id", dataList[position]["id"])
             intent.putExtra("name", dataList[position]["name"])
             intent.putExtra("gallery", true)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                (context as AppCompatActivity),
-                holder.itemView.findViewById(R.id.galleryImage),
-                "transition_image"
-            )
-            context.startActivity(intent, options.toBundle())
+            if (AnimationData(context).loadImageAnimation()) {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    (context as AppCompatActivity),
+                    holder.itemView.findViewById(R.id.galleryImage),
+                    "transition_image"
+                )
+                context.startActivity(intent, options.toBundle())
+            }
+            else {
+                context.startActivity(intent)
+            }
         }
 
         holder.itemView.findViewById<MaterialCardView>(R.id.galleryCard).setOnLongClickListener {
-            Vibrate().vibration(context)
+            Vibrate().vibrateOnLongClick(context)
             val runnable = Runnable {
                 (context as MainActivity).openTimeCardInfoView(dataList[position]["id"].toString(),  dataList[position]["name"].toString())
             }
