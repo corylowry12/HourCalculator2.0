@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -17,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
@@ -168,7 +171,7 @@ class HomeFragment : Fragment() {
         val calculationTypeData = CalculationTypeData(requireContext())
 
         calculateButton?.setOnClickListener {
-
+            Vibrate().vibration(requireContext())
             val imm =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             if (imm.isAcceptingText) {
@@ -184,6 +187,7 @@ class HomeFragment : Fragment() {
         }
 
         calculateButton?.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
             if (LongPressCalculateButtonData(requireContext()).loadLongClick()) {
                 val imm =
                     requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -651,7 +655,7 @@ class HomeFragment : Fragment() {
         outTimeTotal: String,
         breakTime: String
     ) {
-        Vibrate().vibration(requireContext())
+
         if (HistoryToggleData(requireContext()).loadHistoryState()) {
             val dbHandler = DBHelper(requireContext(), null)
 
