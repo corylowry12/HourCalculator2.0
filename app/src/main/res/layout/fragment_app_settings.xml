@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,6 +94,7 @@
                 android:layout_below="@id/cardViewSetOutTime"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
@@ -129,6 +131,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,6 +167,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -197,6 +201,7 @@
                 android:layout_below="@id/cardViewShowPatchNotesOnAppLaunch"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
@@ -232,6 +237,7 @@
                 android:layout_below="@id/cardViewBreakTextBox"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
+                android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_marginEnd="10dp">
 
@@ -267,6 +273,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
+                android:hapticFeedbackEnabled="false"
                 android:layout_below="@id/cardViewClearBreakTextBox"
                 android:foreground="?attr/selectableItemBackground">
 
