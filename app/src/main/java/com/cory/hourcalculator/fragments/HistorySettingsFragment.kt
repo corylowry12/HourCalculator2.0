@@ -26,6 +26,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
@@ -286,11 +287,11 @@ class HistorySettingsFragment : Fragment() {
                     val dbHandler = DBHelper(requireContext(), null)
                     dbHandler.deleteAll()
                     Toast.makeText(requireContext(), getString(R.string.history_deleted), Toast.LENGTH_SHORT).show()
-                    val runnable = Runnable {
+                    val changeBadgeNumber = Runnable {
                         (context as MainActivity).changeBadgeNumber()
                     }
 
-                    MainActivity().runOnUiThread(runnable)
+                    MainActivity().runOnUiThread(changeBadgeNumber)
                 }
                 noButton.setOnClickListener {
                     Vibrate().vibration(requireContext())
@@ -307,11 +308,11 @@ class HistorySettingsFragment : Fragment() {
                     )
             }
             historyToggleData.setHistoryToggle(toggleHistory.isChecked)
-            val runnable = Runnable {
+            val toggleHistoryRunnable = Runnable {
                 (context as MainActivity).toggleHistory()
             }
 
-            MainActivity().runOnUiThread(runnable)
+            MainActivity().runOnUiThread(toggleHistoryRunnable)
         }
 
         toggleHistoryCardView.setOnLongClickListener {
@@ -353,7 +354,7 @@ class HistorySettingsFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
-        requireActivity().findViewById<TextView>(R.id.numberOfEntriesTextView).text =
+        requireActivity().findViewById<Chip>(R.id.daysWorkedChip).text =
             daysWorked.loadDaysWorked().toString()
 
         historyDeletionCardView
@@ -674,7 +675,7 @@ class HistorySettingsFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 historyDeletion.setHistoryDeletionState(false)
                 daysWorked.setDaysWorked(7)
-            requireActivity().findViewById<TextView>(R.id.numberOfEntriesTextView).text =
+            requireActivity().findViewById<Chip>(R.id.daysWorkedChip).text =
                 daysWorked.loadDaysWorked().toString()
                 toggleHistoryAutomaticDeletion?.isChecked = false
 
@@ -692,6 +693,13 @@ class HistorySettingsFragment : Fragment() {
         val numberOfDaysCardView = requireView().findViewById<MaterialCardView>(R.id.numberOfDaysCardView)
         val clickableHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
         val showWagesInHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowWagesInHistory)
+
+        requireActivity().findViewById<Chip>(R.id.daysWorkedChip).closeIconTint =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireActivity()).generateBottomNavTextColor()))
+        requireActivity().findViewById<Chip>(R.id.daysWorkedChip).chipBackgroundColor =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireActivity()).generateChipBackgroundColor()))
+        requireActivity().findViewById<Chip>(R.id.daysWorkedChip)
+            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
 
         toggleHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         historyDeletionCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
