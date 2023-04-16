@@ -352,14 +352,13 @@ class TimeCardCustomAdapter(
                 deleteCardView.setOnClickListener {
                     Vibrate().vibration(context)
                     dialog.dismiss()
-                    val dialog = BottomSheetDialog(context)
+                    val deleteDialog = BottomSheetDialog(context)
                     val deleteEntryLayout =
                         LayoutInflater.from(context)
                             .inflate(R.layout.delete_single_time_card_entry_bottom_sheet, null)
-                    dialog.window?.navigationBarColor =
-                        ContextCompat.getColor(context, R.color.black)
-                    dialog.setContentView(deleteEntryLayout)
-                    dialog.setCancelable(true)
+
+                    deleteDialog.setContentView(deleteEntryLayout)
+                    deleteDialog.setCancelable(true)
 
                     val yesButton = deleteEntryLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteEntryLayout.findViewById<Button>(R.id.noButton)
@@ -384,7 +383,6 @@ class TimeCardCustomAdapter(
                             null
                         ).deleteRow(dataList[position]["id"].toString())
                         TimeCardsItemDBHelper(context, null).deleteAllItemRow(
-                            context,
                             dataList[position]["id"].toString()
                         )
                         dataList.removeAt(holder.adapterPosition)
@@ -394,15 +392,15 @@ class TimeCardCustomAdapter(
                             (context as MainActivity).saveTimeCardState()
                         }
                         MainActivity().runOnUiThread(runnable)
-                        dialog.dismiss()
+                        deleteDialog.dismiss()
                         Toast.makeText(context, "Entry Deleted", Toast.LENGTH_SHORT).show()
                     }
                     noButton.setOnClickListener {
                         Vibrate().vibration(context)
-                        dialog.dismiss()
+                        deleteDialog.dismiss()
                     }
 
-                    dialog.show()
+                    deleteDialog.show()
                 }
                 deleteAllCardView.setOnClickListener {
                     Vibrate().vibration(context)
@@ -464,7 +462,7 @@ class TimeCardCustomAdapter(
             dataList[holder.adapterPosition]["id"]!!
         )
         dataList.clear()
-        val cursor = TimeCardDBHelper(context, null).getAllRow(context)
+        val cursor = TimeCardDBHelper(context, null).getAllRow()
         cursor!!.moveToFirst()
 
         while (!cursor.isAfterLast) {
@@ -503,7 +501,7 @@ class TimeCardCustomAdapter(
 
             if (map["count"]!!.toInt() == 1) {
                 if (map["week"]!!.contains("-")) {
-                    val (first, last) = map["week"]!!.split("-")
+                    val (first, _) = map["week"]!!.split("-")
                     TimeCardDBHelper(context, null).updateWeek(first, map["id"]!!)
                     map["week"] = first
                 }
