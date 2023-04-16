@@ -134,16 +134,10 @@ class TimeCardsFragment : Fragment() {
         timeCardCustomAdapter = TimeCardCustomAdapter(requireContext(), dataList)
         linearLayoutManager = LinearLayoutManager(requireContext())
 
-        activity?.window?.setBackgroundDrawable(null)
-
         loadIntoList()
 
         val floatingActionButtonTimeCards =
             view.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
-        floatingActionButtonTimeCards?.backgroundTintList =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavBackgroundColor()))
-        floatingActionButtonTimeCards?.imageTintList =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
 
         recyclerViewTimeCards?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -218,12 +212,9 @@ class TimeCardsFragment : Fragment() {
     private fun loadIntoList() {
 
         val dbHandler = TimeCardDBHelper(requireActivity().applicationContext, null)
-        //val cursor = dbHandler.getAllImages(requireContext())
-        //cursor.moveToFirst()
-        //Toast.makeText(requireContext(), cursor.count.toString(), Toast.LENGTH_SHORT).show()
 
         dataList.clear()
-        val cursor = dbHandler.getAllRow(requireContext())
+        val cursor = dbHandler.getAllRow()
         cursor!!.moveToFirst()
 
         val noEntriesStoredTextView =
@@ -269,13 +260,13 @@ class TimeCardsFragment : Fragment() {
                 map["week"] = map["week"]!!.replace("-", " - ")
             }
 
-            if (map["count"]!!.toInt() == 1) {
-                if (map["week"]!!.contains("-")) {
-                    val (first, last) = map["week"]!!.split("-")
-                    TimeCardDBHelper(requireContext(), null).updateWeek(first, map["id"]!!)
-                    map["week"] = first
-                }
-            }
+            //if (map["count"]!!.toInt() == 1) {
+                //if (map["week"]!!.contains("-")) {
+                    //val (first, last) = map["week"]!!.split("-")
+                   // TimeCardDBHelper(requireContext(), null).updateWeek(first, map["id"]!!)
+                    //map["week"] = first
+                //}
+            //}
 
             dataList.add(map)
 
@@ -343,16 +334,17 @@ class TimeCardsFragment : Fragment() {
                 ).generateTopAppBarColor()
             )
         )
-        collapsingToolbarLayout?.setStatusBarScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
+
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
             ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
+        val floatingActionButtonTimeCards =
+            requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
+        floatingActionButtonTimeCards?.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavBackgroundColor()))
+        floatingActionButtonTimeCards?.imageTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarTimeCards)
