@@ -36,7 +36,7 @@ class VibrationData(context: Context) {
     }
 
     fun loadVibrationOnLongClickState(): Boolean {
-        val state = sharedPreferences.getBoolean("VibrationOnLongClick", false)
+        val state = sharedPreferences.getBoolean("VibrationOnLongClick", true)
         return (state)
     }
 
