@@ -72,13 +72,13 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         return db.rawQuery("SELECT $COLUMN_IMAGE FROM $TABLE_NAME WHERE $COLUMN_ID=$id", null)
     }
 
-    fun getAllImages(context: Context) : Cursor {
+    fun getAllImages() : Cursor {
         val db = this.writableDatabase
 
         return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_IMAGE IS NOT null AND TRIM($COLUMN_IMAGE) != ''", null)
     }
 
-    fun getAllRow(context: Context): Cursor? {
+    fun getAllRow(): Cursor? {
         val db = this.writableDatabase
 
         return db.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY week desc", null)
@@ -100,12 +100,6 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         val db = this.writableDatabase
 
         db.update(TABLE_NAME, values, "$COLUMN_ID=?", arrayOf(id))
-    }
-
-    fun getLastRow(context: Context): Cursor? {
-        val db = this.writableDatabase
-
-        return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
     }
 
     fun getLatestRowID() : Cursor? {
