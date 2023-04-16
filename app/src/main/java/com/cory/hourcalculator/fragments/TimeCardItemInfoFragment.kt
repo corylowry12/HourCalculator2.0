@@ -117,7 +117,7 @@ class TimeCardItemInfoFragment : Fragment() {
 
         updateCustomColor()
 
-        var list = listOf<String>()
+        var list: List<String>
         list = if (Build.VERSION.SDK_INT >= 33) {
             listOf(
                 android.Manifest.permission.CAMERA,
@@ -263,7 +263,7 @@ class TimeCardItemInfoFragment : Fragment() {
                                 1
                             )
                         //Toast.makeText(requireContext(), managePermissions.checkPermissions(requireContext()).toString(), Toast.LENGTH_SHORT).show()
-                        if (managePermissions.checkPermissions(requireContext())) {
+                        if (managePermissions.checkPermissions()) {
 
                             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                             if (intent.resolveActivity(requireActivity().packageManager) != null) {
@@ -483,7 +483,7 @@ class TimeCardItemInfoFragment : Fragment() {
                         1
                     )
                 //Toast.makeText(requireContext(), managePermissions.checkPermissions(requireContext()).toString(), Toast.LENGTH_SHORT).show()
-                if (managePermissions.checkPermissions(requireContext())) {
+                if (managePermissions.checkPermissions()) {
 
                     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     if (intent.resolveActivity(requireActivity().packageManager) != null) {
@@ -537,7 +537,7 @@ class TimeCardItemInfoFragment : Fragment() {
         val dbHandler = TimeCardsItemDBHelper(requireActivity().applicationContext, null)
 
         timeCardItemInfoDataList.clear()
-        val cursor = dbHandler.getAllRow(requireContext(), id)
+        val cursor = dbHandler.getAllRow(id)
         cursor!!.moveToFirst()
 
 
@@ -586,7 +586,7 @@ class TimeCardItemInfoFragment : Fragment() {
     private val showImagePickerAndroid13 =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 
-            var imageStream: InputStream? = null
+            val imageStream: InputStream?
             try {
                 imageStream =
                     activity?.contentResolver?.openInputStream(
@@ -610,7 +610,7 @@ class TimeCardItemInfoFragment : Fragment() {
         }
 
     private fun getRealPathFromURI(contentURI: Uri): String {
-        var result = ""
+        val result: String
         val cursor = requireActivity().contentResolver?.query(contentURI, null, null, null, null)
         if (cursor == null) {
             result = contentURI.path.toString()
@@ -673,16 +673,16 @@ class TimeCardItemInfoFragment : Fragment() {
                 m,
                 true
             )
-            val bitmap = rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
             MediaScannerConnection.scanFile(requireContext(), arrayOf(image.toString()), null, null)
 
             this.image = image.toString()
 
-            Toast.makeText(requireContext(), "Picture taken and added", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.picture_taken_and_added), Toast.LENGTH_SHORT).show()
             TimeCardDBHelper(requireContext(), null).addImage(id, image.toString())
             loadIntoList(id)
         } else {
-            Toast.makeText(requireContext(), "Adding image failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.adding_image_failed), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -735,13 +735,6 @@ class TimeCardItemInfoFragment : Fragment() {
             requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
 
         collapsingToolbarLayout.setContentScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
-        collapsingToolbarLayout.setStatusBarScrimColor(
             Color.parseColor(
                 CustomColorGenerator(
                     requireContext()
