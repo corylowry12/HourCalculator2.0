@@ -58,15 +58,13 @@ class TimeCardsItemDBHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM $TABLE_NAME WHERE $COLUMN_ITEM_ID=$id", null).toInt()
     }
 
-    fun getAllRow(context: Context, id: String): Cursor? {
+    fun getAllRow(id: String): Cursor? {
         val db = this.writableDatabase
-        val sortData = SortData(context)
-        val sortType = sortData.loadSortState()
 
         return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ITEM_ID=$id ORDER BY date asc", null)
     }
 
-    fun deleteAllItemRow(context: Context, id: String) {
+    fun deleteAllItemRow(id: String) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id))
         db.close()
