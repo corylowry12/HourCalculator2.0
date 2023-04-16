@@ -382,6 +382,10 @@ class HomeFragment : Fragment() {
                     if (withBreak.toInt() < 0) {
                         hoursWithBreak -= 1
                         withBreak = (withBreak.toInt() + 60).toString()
+                        if (withBreak.toInt() < 0) {
+                            hoursWithBreak -= 1
+                            withBreak = (60 + withBreak.toInt()).toString()
+                        }
                     }
 
                     if (hoursWithBreak < 0) {
