@@ -78,7 +78,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/row_total_hours"
                 app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
-                tools:ignore="HardcodedText"
                 android:foreground="?attr/selectableItemBackground"/>
 
             <com.google.android.material.chip.Chip
