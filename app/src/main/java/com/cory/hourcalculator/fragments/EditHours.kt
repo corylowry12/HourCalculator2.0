@@ -232,7 +232,7 @@ class EditHours : Fragment() {
                 Vibrate().vibration(requireContext())
                 val datePicker = DatePickerDialog(
                     requireContext(),
-                    AccentColorData(requireContext()).dateDialogTheme(requireContext())
+                    DateDialogTheme().dateDialogTheme(requireContext())
                 )
                 datePicker.setCancelable(false)
 
@@ -579,11 +579,6 @@ class EditHours : Fragment() {
                 Vibrate().vibration(requireContext())
                 dialog.dismiss()
                 calculate(idMap, day, 0)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.hour_is_updated),
-                    Toast.LENGTH_SHORT
-                ).show()
             }
             noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
@@ -805,6 +800,10 @@ class EditHours : Fragment() {
                     if (withBreak.toInt() < 0) {
                         hoursWithBreak -= 1
                         withBreak = (withBreak.toInt() + 60).toString()
+                        if (withBreak.toInt() < 0) {
+                            hoursWithBreak -= 1
+                            withBreak = (60 + withBreak.toInt()).toString()
+                        }
                     }
 
                     if (diffHours < 0) {
