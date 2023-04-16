@@ -81,7 +81,7 @@ class ImageViewActivity : AppCompatActivity() {
         }
 
         val id = intent.getStringExtra("id")
-        val name = intent.getStringExtra("name")
+        //val name = intent.getStringExtra("name")
 
         imageView.setOnLongClickListener {
             Vibrate().vibration(this)
