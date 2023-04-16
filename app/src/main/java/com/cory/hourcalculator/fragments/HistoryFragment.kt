@@ -1,7 +1,6 @@
 package com.cory.hourcalculator.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
@@ -15,7 +14,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
@@ -50,8 +48,8 @@ class HistoryFragment : Fragment() {
     private var outputWages: String = ""
     private val dataList = ArrayList<HashMap<String, String>>()
 
-    lateinit var infoDialog: BottomSheetDialog
-    lateinit var sortDialog: BottomSheetDialog
+    private lateinit var infoDialog: BottomSheetDialog
+    private lateinit var sortDialog: BottomSheetDialog
 
     private lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -291,18 +289,12 @@ class HistoryFragment : Fragment() {
 
         linearLayoutManager = LinearLayoutManager(requireContext())
 
-        activity?.window?.setBackgroundDrawable(null)
-
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
         if (AnimationData(requireContext()).loadHistoryRecyclerViewLoadingAnimation()) {
             val animation =
                 AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.listview_animation)
             listView?.layoutAnimation = animation
         }
-
-        val inputManager: InputMethodManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 
         updateCustomTheme()
 
@@ -753,13 +745,7 @@ class HistoryFragment : Fragment() {
                 ).generateTopAppBarColor()
             )
         )
-        collapsingToolbarLayout?.setStatusBarScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
                 ?.setCollapsedTitleTextColor(
