@@ -269,7 +269,6 @@ class CustomAdapter(
 
         val map = HashMap<String, String>()
         val cursor = dbHandler.getAllRow(context)
-        val timeCardCursor = timeCardDBHandler.getLastRow(context)
 
         var totalHours = 0.0
         val weekArray = arrayListOf<String>()
@@ -324,8 +323,8 @@ class CustomAdapter(
             //val week = "${sortedList.first()}-${sortedList.last()}"
 
             val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            var firstDateString = ""
-            var lastDateString = ""
+            val firstDateString: String
+            val lastDateString: String
             if (sortedList.count() > 1) {
                 firstDateString = formatter.format(sortedList.first().toString().toLong())
                 lastDateString = formatter.format(sortedList.last().toString().toLong())
