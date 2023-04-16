@@ -134,7 +134,7 @@ class GalleryFragment : Fragment() {
         val dbHandler = TimeCardDBHelper(requireActivity().applicationContext, null)
 
         dataList.clear()
-        val cursor = dbHandler.getAllImages(requireContext())
+        val cursor = dbHandler.getAllImages()
         cursor.moveToFirst()
 
         val noEntriesStoredTextView =
