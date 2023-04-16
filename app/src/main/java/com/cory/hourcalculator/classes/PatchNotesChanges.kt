@@ -60,7 +60,9 @@ class PatchNotesChanges {
         "Fixed issue with resetting settings in the background color view not resetting the colorful background setting",
         "Fixed issues throughout the app where if you were editing data in a text box and clicked the back button, it would leave the view",
         "Fixed issue with time cards being sorted wrong",
-        "Fixed issue with there being a double vibration when long clicking certain ui elements"
+        "Fixed issue with there being a double vibration when long clicking certain ui elements",
+        "Fixed issue in some views where if you scrolled and left the view and came back to it, the top bar wouldnt be collapsed",
+        "Fixed issue where if you were calculating in time format and the break time was too big, it would show a negative minute value"
     )
 
     var newFeaturesArrayInternal = arrayOf(
@@ -70,12 +72,13 @@ class PatchNotesChanges {
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Tweaked some more material you colors",
         "Time Card Info view will now show \"Minute(s)\" by the break time",
         "Clearing break text automatically after successful calculation will now be enabled by default",
         "Tweaked vibration strength",
         "Tweaked active tab indicator color in the bottom navigation bar for dark theme",
-        "Tweaked material you colors"
+        "Tweaked material you colors",
+        "Tweaked the style of the collapsing title bar, it will now be taller with bigger text",
+        "The number of days worked text that shows the setting in history settings is now a chip instead of a text view"
     )
 
 
