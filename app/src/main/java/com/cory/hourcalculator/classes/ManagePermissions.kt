@@ -17,7 +17,7 @@ import com.google.android.material.shape.CornerFamily
 class ManagePermissions(private val activity: Activity, private val list: List<String>, private val code:Int) {
 
     // Check permissions at runtime
-    fun checkPermissions(context: Context) : Boolean {
+    fun checkPermissions() : Boolean {
         return isPermissionsGranted() == PackageManager.PERMISSION_GRANTED
     }
 
@@ -34,7 +34,7 @@ class ManagePermissions(private val activity: Activity, private val list: List<S
 
 
     // Find the first denied permission
-    private fun deniedPermission(context : Context): String {
+    private fun deniedPermission(): String {
         for (permission in list) {
             if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED) return permission
         }
@@ -73,37 +73,18 @@ class ManagePermissions(private val activity: Activity, private val list: List<S
         okCardView.setOnClickListener {
             Vibrate().vibration(context)
             bottomSheetDialog.dismiss()
-            requestPermissions(context)
+            requestPermissions()
         }
         cancelCardView.setOnClickListener {
             Vibrate().vibration(context)
             bottomSheetDialog.dismiss()
         }
         bottomSheetDialog.show()
-
-
-        /*val builder = MaterialAlertDialogBuilder(context, R.style.AlertDialogStyle).create()
-        val layout =
-            LayoutInflater.from(context).inflate(R.layout.need_app_permissions_dialog_layout, null)
-        builder.setView(layout)
-        builder.setCancelable(false)
-        val okButton = layout.findViewById<Button>(R.id.needPermissionsDialogOKButton)
-        val cancelButton = layout.findViewById<Button>(R.id.cancelNeedPermissionsDialog)
-        okButton.setOnClickListener {
-            builder.dismiss()
-            requestPermissions(context)
-        }
-        cancelButton.setOnClickListener {
-            builder.dismiss()
-            Toast.makeText(context, context.getString(R.string.permission_not_granted), Toast.LENGTH_SHORT)
-                    .show()
-        }
-        builder.show()*/
         }
 
     // Request the permissions at run time
-    private fun requestPermissions(context: Context) {
-        val permission = deniedPermission(context)
+    private fun requestPermissions() {
+        //val permission = deniedPermission()
         ActivityCompat.requestPermissions(activity, list.toTypedArray(), code)
 
     }
