@@ -26,9 +26,16 @@ import com.google.android.material.appbar.MaterialToolbar
 
 class ChooseAppIconFragment : Fragment() {
 
+    private val appIconDataList = ArrayList<HashMap<String, String>>()
+
+    private lateinit var gridLayoutManager: GridLayoutManager
+
+    private lateinit var appIconAdapter: AppIconAdapter
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         customColorChange()
+        appIconAdapter.updateCardColor()
 
         val darkThemeData = DarkThemeData(requireContext())
         when {
@@ -58,12 +65,6 @@ class ChooseAppIconFragment : Fragment() {
             }
         }
     }
-
-    private val appIconDataList = ArrayList<HashMap<String, String>>()
-
-    private lateinit var gridLayoutManager: GridLayoutManager
-
-    private lateinit var appIconAdapter: AppIconAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
