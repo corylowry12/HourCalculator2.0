@@ -9,18 +9,21 @@
     tools:context=".fragments.AppSettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutAppSettings"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayoutAppSettings"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:expandedTitleMarginBottom="28dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleCollapseMode="scale">
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineMedium"
+            app:expandedTitleMarginBottom="24dp"
+            app:titleCollapseMode="scale"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBarAppSettings"
@@ -33,9 +36,7 @@
                 app:layout_collapseMode="pin"
                 app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor"
-                app:title="App Settings"
-                app:titleCentered="true" />
+                app:title="@string/app_settings" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -194,74 +195,60 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewBreakTextBox"
+                android:id="@+id/cardViewBreakTimeSettings"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:hapticFeedbackEnabled="false"
                 android:layout_below="@id/cardViewShowPatchNotesOnAppLaunch"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="1dp"
-                android:hapticFeedbackEnabled="false"
-                android:foreground="?attr/selectableItemBackground"
-                android:layout_marginEnd="10dp">
+                android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintBreakTimeSettings"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                   android:background="@null"
-                    android:paddingStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
+                    android:layout_height="match_parent">
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/breakTextBoxSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Break Text Box"
-                        android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <ImageView
+                        android:id="@+id/breakTimeSettingsImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/baseline_schedule_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:background="@null"
-                        android:clickable="false"
-                         />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewClearBreakTextBox"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewBreakTextBox"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="1dp"
-                android:hapticFeedbackEnabled="false"
-                android:foreground="?attr/selectableItemBackground"
-                android:layout_marginEnd="10dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:paddingStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="10dp">
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/clearBreakTextBoxSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Clear break text box automatically when time is successfully calculated"
+                    <TextView
+                        android:id="@+id/breakTimeSettingsTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:paddingEnd="5dp"
+                        android:text="Break Time Settings"
                         android:textColor="?attr/settingsTextColor"
-                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@id/breakTimeSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/breakTimeSettingsImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/breakTimeSettingsChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:background="@null"
-                        android:clickable="false"
-                        />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -274,7 +261,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
                 android:hapticFeedbackEnabled="false"
-                android:layout_below="@id/cardViewClearBreakTextBox"
+                android:layout_below="@id/cardViewBreakTimeSettings"
                 android:foreground="?attr/selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
