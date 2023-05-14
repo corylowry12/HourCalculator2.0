@@ -1,6 +1,7 @@
 package com.cory.hourcalculator.fragments
 
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
@@ -18,6 +19,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.cory.hourcalculator.sharedprefs.VibrationData
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -28,6 +30,39 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 
 class VibrationSettingsFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                //activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(
+                            R.style.Theme_AMOLED
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+        updateCustomColor()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -110,7 +145,7 @@ class VibrationSettingsFragment : Fragment() {
         }
 
         vibrationOnClickCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val infoDialog = BottomSheetDialog(requireContext())
             val infoAboutSettingLayout =
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
@@ -158,6 +193,30 @@ class VibrationSettingsFragment : Fragment() {
             }
         }
 
+        vibrationOnLongClickCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will vibrate every time a button is long clicked.\n\n" +
+                        "When disabled the app will not vibrate every time a button is long clicked."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val toggleTimePickerVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationOnTimePickerChangeSwitch)
 
         if (vibrationData.loadVibrationOnTimePickerChangeState()) {
@@ -183,6 +242,30 @@ class VibrationSettingsFragment : Fragment() {
             }
         }
 
+        vibrationOnTimePickerCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will vibrate every time the value for a time picker is changed.\n\n" +
+                        "When disabled the app will not vibrate every time the value for a time picker is changed."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val toggleCalculationErrorVibration = activity?.findViewById<MaterialSwitch>(R.id.vibrationOnCalculationErrorSwitch)
 
         if (vibrationData.loadVibrationOnErrorState()) {
@@ -206,6 +289,30 @@ class VibrationSettingsFragment : Fragment() {
                 toggleCalculationErrorVibration.thumbIconDrawable =
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
+        }
+
+        vibrationOnErrorCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the app will vibrate every time there is an error with a calculation.\n\n" +
+                        "When disabled the app will not vibrate every time there is an error with a calculation."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
     }
 
