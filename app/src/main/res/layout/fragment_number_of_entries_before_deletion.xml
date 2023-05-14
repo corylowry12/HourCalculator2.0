@@ -10,16 +10,18 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayoutNumberOfDaysBeforeDeletion"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:expandedTitleMarginBottom="28dp"
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineMedium"
+            app:expandedTitleMarginBottom="24dp"
             app:titleCollapseMode="scale"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -32,7 +34,6 @@
                 app:layout_collapseMode="pin"
                 app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor"
                 app:title="Number Of Days"
                 app:buttonGravity="center_vertical" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
