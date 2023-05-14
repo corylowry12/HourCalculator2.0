@@ -135,6 +135,10 @@ class VersionInfoFragment : Fragment() {
         val firebaseCrashlyticsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebaseCrashlyticsDependencyCardView)
         val firebasePerformanceMonitoringDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebasePerformanceMonitoringDependencyCardView)
         val inAppReviewDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.inAppReviewDependencyCardView)
+        val chromeCustomTabsCardView = requireActivity().findViewById<MaterialCardView>(R.id.inAppBrowserDependencyCardView)
+        val glideCardView = requireActivity().findViewById<MaterialCardView>(R.id.glideDependencyCardView)
+        val touchImageViewCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewDependencyCardView)
+        val paletteCardView = requireActivity().findViewById<MaterialCardView>(R.id.paletteDependencyCardView)
 
         versionHeadingCardView.shapeAppearanceModel = versionHeadingCardView.shapeAppearanceModel
             .toBuilder()
@@ -196,6 +200,34 @@ class VersionInfoFragment : Fragment() {
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        chromeCustomTabsCardView.shapeAppearanceModel = chromeCustomTabsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        glideCardView.shapeAppearanceModel = glideCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        touchImageViewCardView.shapeAppearanceModel = touchImageViewCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        paletteCardView.shapeAppearanceModel = paletteCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
             .setBottomRightCornerSize(28f)
             .setBottomLeftCornerSize(28f)
             .build()
@@ -247,6 +279,34 @@ class VersionInfoFragment : Fragment() {
             LinkData(requireContext()).setLink(inAppReviewSubtitle.text.toString())
             openCustomTab()
         }
+
+        val chromeCustomTabsSubtitle = view.findViewById<TextView>(R.id.inAppBrowserSubtitle)
+
+        chromeCustomTabsCardView.setOnClickListener {
+            LinkData(requireContext()).setLink(chromeCustomTabsSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val glideSubtitle = view.findViewById<TextView>(R.id.glideSubtitle)
+
+        glideCardView.setOnClickListener {
+            LinkData(requireContext()).setLink(glideSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val touchImageViewSubtitle = view.findViewById<TextView>(R.id.imageViewDependencySubtitle)
+
+        touchImageViewCardView.setOnClickListener {
+            LinkData(requireContext()).setLink(touchImageViewSubtitle.text.toString())
+            openCustomTab()
+        }
+
+        val paletteSubtitle = view.findViewById<TextView>(R.id.paletteDependencySubtitle)
+
+        paletteCardView.setOnClickListener {
+            LinkData(requireContext()).setLink(paletteSubtitle.text.toString())
+            openCustomTab()
+        }
     }
 
     private fun updateCustomTheme() {
@@ -261,6 +321,10 @@ class VersionInfoFragment : Fragment() {
         val firebaseCrashlyticsDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebaseCrashlyticsDependencyCardView)
         val firebasePerformanceMonitoringDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.firebasePerformanceMonitoringDependencyCardView)
         val inAppReviewDependencyCardView = requireActivity().findViewById<MaterialCardView>(R.id.inAppReviewDependencyCardView)
+        val chromeCustomTabsCardView = requireActivity().findViewById<MaterialCardView>(R.id.inAppBrowserDependencyCardView)
+        val glideCardView = requireActivity().findViewById<MaterialCardView>(R.id.glideDependencyCardView)
+        val touchImageViewCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewDependencyCardView)
+        val paletteCardView = requireActivity().findViewById<MaterialCardView>(R.id.paletteDependencyCardView)
 
         versionHeadingCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         buildNumberCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
@@ -271,6 +335,10 @@ class VersionInfoFragment : Fragment() {
         firebaseCrashlyticsDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         firebasePerformanceMonitoringDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         inAppReviewDependencyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        chromeCustomTabsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        glideCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        touchImageViewCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        paletteCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val topAppBarVersionInfo =
             activity?.findViewById<MaterialToolbar>(R.id.topAppBarVersionInfo)
