@@ -10,18 +10,18 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayoutVersionInfo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:statusBarScrim="?attr/colorPrimary"
-            app:expandedTitleMarginBottom="28dp"
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineMedium"
+            app:expandedTitleMarginBottom="24dp"
             app:titleCollapseMode="scale"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -33,7 +33,6 @@
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:navigationIconTint="?attr/textColor"
                 app:title="Version Info"
                 app:buttonGravity="center_vertical"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -579,6 +578,270 @@
 
                     <ImageView
                         android:id="@+id/chevronImageAppReview"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/inAppBrowserDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/inAppBrowserConstraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null">
+
+                    <TextView
+                        android:id="@+id/inAppBrowserHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="5dp"
+                        android:text="Chrome Custom Tabs"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImageInAppBrowser"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/inAppBrowserSubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/inAppBrowserHeading"
+                        android:layout_alignStart="@id/inAppBrowserHeading"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="8dp"
+                        android:text="https://developer.chrome.com/docs/android/custom-tabs/"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImageInAppBrowser"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/inAppBrowserHeading" />
+
+                    <ImageView
+                        android:id="@+id/chevronImageInAppBrowser"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/glideDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/glideConstraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null">
+
+                    <TextView
+                        android:id="@+id/glideHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="5dp"
+                        android:text="Glide"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImageGlide"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/glideSubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/inAppReviewHeading"
+                        android:layout_alignStart="@id/inAppReviewHeading"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="8dp"
+                        android:text="https://github.com/bumptech/glide"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/chevronImageGlide"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/glideHeading" />
+
+                    <ImageView
+                        android:id="@+id/chevronImageGlide"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/imageViewDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/imageViewDependencyConstraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null">
+
+                    <TextView
+                        android:id="@+id/imageViewDependencyHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="5dp"
+                        android:text="Touch Image View"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/imageViewDependencyChevron"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/imageViewDependencySubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imageViewDependencyHeading"
+                        android:layout_alignStart="@id/imageViewDependencyHeading"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="8dp"
+                        android:text="https://github.com/MikeOrtiz/TouchImageView"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/imageViewDependencyChevron"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/imageViewDependencyHeading" />
+
+                    <ImageView
+                        android:id="@+id/imageViewDependencyChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/paletteDependencyCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="1dp"
+                android:foreground="?attr/selectableItemBackground"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/paletteDependencyConstraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null">
+
+                    <TextView
+                        android:id="@+id/paletteDependencyHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="5dp"
+                        android:text="Palette"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/paletteChevron"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/paletteDependencySubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/paletteDependencyHeading"
+                        android:layout_alignStart="@id/inAppReviewHeading"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="8dp"
+                        android:text="https://developer.android.com/develop/ui/views/graphics/palette-colors"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/paletteChevron"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/paletteDependencyHeading" />
+
+                    <ImageView
+                        android:id="@+id/paletteChevron"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="12dp"
