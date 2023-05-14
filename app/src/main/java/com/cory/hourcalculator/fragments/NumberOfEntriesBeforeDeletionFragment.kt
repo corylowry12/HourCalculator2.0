@@ -696,6 +696,8 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
 
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
         }
