@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
@@ -20,11 +22,44 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 
 class AnimationSettingsFragment : Fragment() {
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                //activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
+
+        updateCustomColor()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -143,6 +178,30 @@ class AnimationSettingsFragment : Fragment() {
             animationData.setHistoryRecyclerViewLoadingAnimation(toggleHistoryLoadingAnimation.isChecked)
         }
 
+        historyRecyclerViewLoadingAnimationCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the recycler view in History will animate when being shown\n\n" +
+                        "When disabled the recycler view in History will not animate when being shown"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val toggleHistoryScrollingAnimation = requireActivity().findViewById<MaterialSwitch>(R.id.historyScrollingAnimationSwitch)
 
         if (animationData.loadHistoryScrollingAnimation()) {
@@ -162,6 +221,30 @@ class AnimationSettingsFragment : Fragment() {
                 toggleHistoryScrollingAnimation?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
             animationData.setHistoryScrollingLoadingAnimation(toggleHistoryScrollingAnimation.isChecked)
+        }
+
+        historyRecyclerViewScrollingAnimationCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the recycler view in History will animate when scrolling.\n\n" +
+                        "When disabled the recycler view in History will not animate when scrolling."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
 
         val toggleTimeCardLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardListLoadingAnimationSwitch)
@@ -185,6 +268,30 @@ class AnimationSettingsFragment : Fragment() {
             animationData.setTimeCardRecyclerViewLoadingAnimation(toggleTimeCardLoadingAnimationSwitch.isChecked)
         }
 
+        timeCardRecyclerViewLoadingAnimationCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the recycler view in Time Cards will animate when being shown.\n\n" +
+                        "When disabled the recycler view in Time Cards will not animate when being shown."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val toggleTimeCardScrollingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardScrollingAnimationSwitch)
 
         if (animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
@@ -206,6 +313,30 @@ class AnimationSettingsFragment : Fragment() {
             animationData.setTimeCardsScrollingLoadingAnimation(toggleTimeCardScrollingAnimationSwitch.isChecked)
         }
 
+        timeCardRecyclerViewScrollingAnimationCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the recycler view in Time Cards will animate when scrolling.\n\n" +
+                        "When disabled the recycler view in Time Cards will not animate when scrolling."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         val imageLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.imageLoadingAnimationSwitch)
 
         if (animationData.loadImageAnimation()) {
@@ -225,6 +356,30 @@ class AnimationSettingsFragment : Fragment() {
                 imageLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             }
             animationData.setImageAnimation(imageLoadingAnimationSwitch.isChecked)
+        }
+
+        imageLoadingAnimationCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the image will animate when clicked in Time Cards or Gallery.\n\n" +
+                        "When disabled the image will not animate when clicked in Time Cards or Gallery."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
         }
     }
 
@@ -291,6 +446,8 @@ class AnimationSettingsFragment : Fragment() {
             val id = typedValue.resourceId
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAnimationSettings)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAnimationSettings)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
