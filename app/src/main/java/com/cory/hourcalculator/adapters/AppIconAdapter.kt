@@ -31,6 +31,10 @@ class AppIconAdapter(val context: Context,
     private val iconDisableArray = arrayListOf<String>()
     private var iconEnableID = ""
 
+    fun updateCardColor() {
+        notifyDataSetChanged()
+    }
+
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(position: Int) {
