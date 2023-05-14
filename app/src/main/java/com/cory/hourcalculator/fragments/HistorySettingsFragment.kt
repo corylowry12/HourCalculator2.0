@@ -30,13 +30,15 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
+import java.lang.Exception
 
 class HistorySettingsFragment : Fragment() {
 
+    private lateinit var dialog : BottomSheetDialog
+    private lateinit var historyWarningBottomSheet : BottomSheetDialog
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        updateCustomColor()
 
         val darkThemeData = DarkThemeData(requireContext())
         when {
@@ -63,7 +65,18 @@ class HistorySettingsFragment : Fragment() {
                 }
             }
         }
+        updateCustomColor()
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuItem()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -98,8 +111,6 @@ class HistorySettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val dialog = BottomSheetDialog(requireContext())
 
         val topAppBar =
             activity?.findViewById<MaterialToolbar>(R.id.materialToolBarAutomaticDeletion)
@@ -140,19 +151,32 @@ class HistorySettingsFragment : Fragment() {
             Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
-                    dialog.setContentView(resetSettingsLayout)
-                    dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset History Settings?"
-                    val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    resetMenuItem()
+                    true
+                }
+                else -> true
+            }
+        }
 
-                        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                        yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                        cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        main()
+    }
 
-                    /*if (resources.getBoolean(R.bool.isTablet)) {
+    private fun resetMenuItem() {
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            "Would you like to reset History Settings?"
+        val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+        val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+
+        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+        /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
                         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -162,23 +186,16 @@ class HistorySettingsFragment : Fragment() {
                         bottomSheetBehavior.isDraggable = false
                     }*/
 
-                    yesResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        reset()
-                        dialog.dismiss()
-                    }
-                    cancelResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        dialog.dismiss()
-                    }
-                    dialog.show()
-                    true
-                }
-                else -> true
-            }
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
         }
-
-        main()
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     override fun onResume() {
@@ -262,11 +279,11 @@ class HistorySettingsFragment : Fragment() {
                 toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             } else {
 
-                val dialog = BottomSheetDialog(requireContext())
+                historyWarningBottomSheet = BottomSheetDialog(requireContext())
                 val historySettingsWarningBottomSheet = LayoutInflater.from(context)
                     .inflate(R.layout.history_settings_warning_bottom_sheet, null)
-                dialog.setContentView(historySettingsWarningBottomSheet)
-                dialog.setCancelable(false)
+                historyWarningBottomSheet.setContentView(historySettingsWarningBottomSheet)
+                historyWarningBottomSheet.setCancelable(false)
 
                 val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
                 val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
@@ -283,7 +300,7 @@ class HistorySettingsFragment : Fragment() {
                 noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
                 yesButton.setOnClickListener {
                     Vibrate().vibration(requireContext())
-                    dialog.dismiss()
+                    historyWarningBottomSheet.dismiss()
                     val dbHandler = DBHelper(requireContext(), null)
                     dbHandler.deleteAll()
                     Toast.makeText(requireContext(), getString(R.string.history_deleted), Toast.LENGTH_SHORT).show()
@@ -295,9 +312,9 @@ class HistorySettingsFragment : Fragment() {
                 }
                 noButton.setOnClickListener {
                     Vibrate().vibration(requireContext())
-                    dialog.dismiss()
+                    historyWarningBottomSheet.dismiss()
                 }
-                dialog.show()
+                historyWarningBottomSheet.show()
                 toggleHistory.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 HistoryAutomaticDeletionData(requireContext()).setHistoryDeletionState(false)
                 requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked = false
@@ -765,6 +782,8 @@ class HistorySettingsFragment : Fragment() {
             resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
         }
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
