@@ -137,15 +137,6 @@ class GalleryFragment : Fragment() {
         val cursor = dbHandler.getAllImages()
         cursor.moveToFirst()
 
-        val noEntriesStoredTextView =
-            view?.findViewById<TextView>(R.id.noImagesStoredGallery)
-
-        if (cursor.count > 0) {
-            noEntriesStoredTextView?.visibility = View.GONE
-        } else {
-            noEntriesStoredTextView?.visibility = View.VISIBLE
-        }
-
 
         while (!cursor.isAfterLast) {
             val map = HashMap<String, String>()
@@ -165,6 +156,15 @@ class GalleryFragment : Fragment() {
         val galleryRecyclerView = activity?.findViewById<RecyclerView>(R.id.galleryRecyclerView)
         galleryRecyclerView?.layoutManager = gridLayoutManager
         galleryRecyclerView?.adapter = galleryCustomAdapter
+
+        val noEntriesStoredTextView =
+            view?.findViewById<TextView>(R.id.noImagesStoredGallery)
+
+        if (dataList.isNotEmpty()) {
+            noEntriesStoredTextView?.visibility = View.GONE
+        } else {
+            noEntriesStoredTextView?.visibility = View.VISIBLE
+        }
 
     }
 
