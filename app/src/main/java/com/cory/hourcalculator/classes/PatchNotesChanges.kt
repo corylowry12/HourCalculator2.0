@@ -57,28 +57,28 @@ class PatchNotesChanges {
     )
 
     var bugFixesArrayInternal = arrayOf(
-        "Fixed issue with resetting settings in the background color view not resetting the colorful background setting",
-        "Fixed issues throughout the app where if you were editing data in a text box and clicked the back button, it would leave the view",
-        "Fixed issue with time cards being sorted wrong",
-        "Fixed issue with there being a double vibration when long clicking certain ui elements",
-        "Fixed issue in some views where if you scrolled and left the view and came back to it, the top bar wouldnt be collapsed",
-        "Fixed issue where if you were calculating in time format and the break time was too big, it would show a negative minute value"
+        "Fixed issue with app not changing theme in time cards view when device theme changed",
+        "Fixed issue with app not changing theme in time card info view when device theme changed",
+        "Fixed issue with dialogs not changing theme when device changed theme in time card info view",
+        "Fixed issue with app not changing theme in saved colors view when device theme changed",
+        "Fixed issue with app not changing theme in the app icons view when device theme changed",
+        "Fixed issue with app not changing theme in the vibration settings view when device theme changed",
+        "Fixed issue with dialogs not changing theme in the app settings view when device theme changed",
+        "Fixed issue with history settings not changing theme properly when device theme changed",
+        "Fixed issue with dialogs not changing theme in history settings when device theme changed",
+        "Fixed issue with number of days view not changing theme properly when device theme changed",
+        "Fixed issue with time card settings not changing theme properly when device theme changed",
+        "Fixed issue with wage settings not changing theme properly when device theme changed",
+        "Fixed issue with animation settings not changing theme when device theme changed"
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "Added toggle for history scrolling animation",
-        "Added toggle for time card scrolling animation",
-        "Added toggle for opening image animation"
+        "Added option to show break time in decimal instead of minutes"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Time Card Info view will now show \"Minute(s)\" by the break time",
-        "Clearing break text automatically after successful calculation will now be enabled by default",
-        "Tweaked vibration strength",
-        "Tweaked active tab indicator color in the bottom navigation bar for dark theme",
-        "Tweaked material you colors",
-        "Tweaked the style of the collapsing title bar, it will now be taller with bigger text",
-        "The number of days worked text that shows the setting in history settings is now a chip instead of a text view"
+        "Migrated break time options to their own page in App Settings->Break Time Settings",
+        "Updated dependencies in the Version Info page"
     )
 
 
