@@ -156,12 +156,28 @@ class CustomAdapter(
             inTime.text = context.getString(R.string.in_time_adapter, dataItem["inTime"])
             outTime.text = context.getString(R.string.out_time_adapter, dataItem["outTime"])
 
-            if (dataItem["breakTime"] == "1") {
-                breakTime.text =
-                    context.getString(R.string.break_time_adapter_singular, dataItem["breakTime"])
-            } else {
-                breakTime.text =
-                    context.getString(R.string.break_time_adapter_plural, dataItem["breakTime"])
+            if (ShowBreakTimeInDecimalData(context).loadShowBreakTimeInDecimal()) {
+                try {
+                    val decimal =
+                        (dataItem["breakTime"]!!.toDouble() / 60).toBigDecimal()
+                            .setScale(2, RoundingMode.HALF_EVEN)
+                    breakTime.text = "Break Time: $decimal Hours"
+                } catch (e : Exception) {
+                    e.printStackTrace()
+                    breakTime.text = "Break Time: Error"
+                }
+            }
+            else {
+                if (dataItem["breakTime"] == "1") {
+                    breakTime.text =
+                        context.getString(
+                            R.string.break_time_adapter_singular,
+                            dataItem["breakTime"]
+                        )
+                } else {
+                    breakTime.text =
+                        context.getString(R.string.break_time_adapter_plural, dataItem["breakTime"])
+                }
             }
             if (dataItem["totalHours"] == "1.0") {
                 totalTime.text = context.getString(R.string.total_time_adapter_singular, "1")
