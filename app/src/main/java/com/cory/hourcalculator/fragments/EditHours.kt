@@ -64,11 +64,6 @@ class EditHours : Fragment() {
     var breakTimeBool = false
     private var dateChangedBool = false
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        updateCustomColor()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -111,6 +106,7 @@ class EditHours : Fragment() {
             requireActivity().findViewById<CoordinatorLayout>(R.id.editHoursCoordinatorLayout)
 
         constraintLayout?.setOnClickListener {
+            Vibrate().vibration(requireContext())
             val imm =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             if (imm.isAcceptingText) {
@@ -693,7 +689,7 @@ class EditHours : Fragment() {
         val calculationTypeData = CalculationTypeData(requireContext())
 
         saveButton?.setOnClickListener {
-
+            Vibrate().vibration(requireContext())
             if (calculationTypeData.loadCalculationState()) {
                 calculate(idMap, day, 0)
             } else {
@@ -970,7 +966,6 @@ class EditHours : Fragment() {
         breakTime: String,
         dayOfWeek: String
     ) {
-        Vibrate().vibration(requireContext())
         val dbHandler = DBHelper(requireContext(), null)
 
         val calendar = Calendar.getInstance()
