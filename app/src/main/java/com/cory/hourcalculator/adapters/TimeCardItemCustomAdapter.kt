@@ -27,6 +27,10 @@ class TimeCardItemCustomAdapter(
     private val dataList: ArrayList<HashMap<String, String>>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    fun updateCardColor() {
+        notifyDataSetChanged()
+    }
+
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var inTime: TextView = itemView.findViewById(R.id.row_in_time_card_item_info)
         var outTime: TextView = itemView.findViewById(R.id.row_out_time_card_item_info)
