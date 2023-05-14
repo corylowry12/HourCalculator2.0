@@ -37,8 +37,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import java.lang.Exception
 
 class AppSettingsFragment : Fragment() {
+
+    private lateinit var dialog : BottomSheetDialog
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -73,6 +76,15 @@ class AppSettingsFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuPress()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -131,58 +143,11 @@ class AppSettingsFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        val dialog = BottomSheetDialog(requireContext())
-
         topAppBar?.setOnMenuItemClickListener {
             Vibrate().vibration(requireContext())
             when (it.itemId) {
                 R.id.reset -> {
-
-                    val resetSettingsLayout =
-                        layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
-                    dialog.setContentView(resetSettingsLayout)
-                    dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                        getString(R.string.would_you_like_to_reset_app_settings)
-                    val yesResetButton =
-                        resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton =
-                        resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
-                    resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                        .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                    yesResetButton.setBackgroundColor(
-                        Color.parseColor(
-                            CustomColorGenerator(
-                                requireContext()
-                            ).generateCustomColorPrimary()
-                        )
-                    )
-                    cancelResetButton.setTextColor(
-                        Color.parseColor(
-                            CustomColorGenerator(
-                                requireContext()
-                            ).generateCustomColorPrimary()
-                        )
-                    )
-                    /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
-                    yesResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        reset()
-                        dialog.dismiss()
-                    }
-                    cancelResetButton.setOnClickListener {
-                        Vibrate().vibration(requireContext())
-                        dialog.dismiss()
-                    }
-                    dialog.show()
+                    resetMenuPress()
                     true
                 }
 
@@ -200,10 +165,8 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
         val showPatchNotesOnAppLaunchCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowPatchNotesOnAppLaunch)
-        val breakTextBoxCardView =
-            requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
-        val clearBreakTextBoxCardView =
-            requireActivity().findViewById<MaterialCardView>(R.id.cardViewClearBreakTextBox)
+
+        val breakTimeSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTimeSettings)
 
         outTimeCardView.shapeAppearanceModel = outTimeCardView.shapeAppearanceModel
             .toBuilder()
@@ -235,15 +198,8 @@ class AppSettingsFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-        breakTextBoxCardView.shapeAppearanceModel = breakTextBoxCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        clearBreakTextBoxCardView.shapeAppearanceModel =
-            clearBreakTextBoxCardView.shapeAppearanceModel
+        breakTimeSettingsCardView.shapeAppearanceModel =
+            breakTimeSettingsCardView.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -286,7 +242,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         outTimeCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val infoDialog = BottomSheetDialog(requireContext())
             val infoAboutSettingLayout =
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
@@ -338,7 +294,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         calculationTypeCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val infoDialog = BottomSheetDialog(requireContext())
             val infoAboutSettingLayout =
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
@@ -390,7 +346,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         longClickEnabledCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val infoDialog = BottomSheetDialog(requireContext())
             val infoAboutSettingLayout =
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
@@ -444,7 +400,7 @@ class AppSettingsFragment : Fragment() {
         }
 
         showPatchNotesOnAppLaunchCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
+            Vibrate().vibrateOnLongClick(requireContext())
             val infoDialog = BottomSheetDialog(requireContext())
             val infoAboutSettingLayout =
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
@@ -467,106 +423,19 @@ class AppSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
-        val breakTextBoxVisiblityClass = BreakTextBoxVisibilityData(requireContext())
-        val toggleBreakTextBox = activity?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
-
-        if (breakTextBoxVisiblityClass.loadVisiblity() == 0) {
-            toggleBreakTextBox?.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-            toggleBreakTextBox?.isChecked = true
-        } else if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
-            toggleBreakTextBox?.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-            toggleBreakTextBox?.isChecked = false
-        }
-
-        breakTextBoxCardView?.setOnClickListener {
+        breakTimeSettingsCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-            toggleBreakTextBox!!.isChecked = !toggleBreakTextBox.isChecked
-            if (toggleBreakTextBox.isChecked) {
-                toggleBreakTextBox.thumbIconDrawable =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                breakTextBoxVisiblityClass.setVisibility(0)
-            } else {
-                toggleBreakTextBox.thumbIconDrawable =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                breakTextBoxVisiblityClass.setVisibility(1)
-            }
-        }
 
-        breakTextBoxCardView!!.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
-            val infoDialog = BottomSheetDialog(requireContext())
-            val infoAboutSettingLayout =
-                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
-            infoDialog.setContentView(infoAboutSettingLayout)
-            infoDialog.setCancelable(true)
-            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the break text box on the home screen will be shown.\n\n" +
-                        "When disabled the break text box on the home screen will not be shown."
-            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
-
-            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-
-            yesButton.setOnClickListener {
-                Vibrate().vibration(requireContext())
-                infoDialog.dismiss()
-            }
-            infoDialog.show()
-            return@setOnLongClickListener true
-        }
-
-        val clearBreakTextAutomaticallyData = ClearBreakTextAutomaticallyData(requireContext())
-        val clearBreakTextBoxSwitch =
-            requireActivity().findViewById<MaterialSwitch>(R.id.clearBreakTextBoxSwitch)
-
-        if (clearBreakTextAutomaticallyData.loadClearAutomatically()) {
-            clearBreakTextBoxSwitch.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-            clearBreakTextBoxSwitch.isChecked = true
-        } else if (!clearBreakTextAutomaticallyData.loadClearAutomatically()) {
-            clearBreakTextBoxSwitch.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-            clearBreakTextBoxSwitch.isChecked = false
-        }
-
-        clearBreakTextBoxCardView.setOnClickListener {
-            Vibrate().vibration(requireContext())
-            clearBreakTextBoxSwitch.isChecked = !clearBreakTextBoxSwitch.isChecked
-            if (clearBreakTextBoxSwitch.isChecked) {
-                clearBreakTextBoxSwitch.thumbIconDrawable =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-            } else {
-                clearBreakTextBoxSwitch.thumbIconDrawable =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-            }
-            clearBreakTextAutomaticallyData.setClearAutomatically(clearBreakTextBoxSwitch.isChecked)
-        }
-
-        clearBreakTextBoxCardView.setOnLongClickListener {
-            Vibrate().vibration(requireContext())
-            val infoDialog = BottomSheetDialog(requireContext())
-            val infoAboutSettingLayout =
-                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
-            infoDialog.setContentView(infoAboutSettingLayout)
-            infoDialog.setCancelable(true)
-            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the break time text box will automatically clear after calculation if there is not an error.\n\n" +
-                        "When disabled you will have to manually clear the break text box each time."
-            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
-
-            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-
-            yesButton.setOnClickListener {
-                Vibrate().vibration(requireContext())
-                infoDialog.dismiss()
-            }
-            infoDialog.show()
-            return@setOnLongClickListener true
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+            transaction?.replace(R.id.fragment_container, BreakTimeSettingsFragment())
+                ?.addToBackStack(null)
+            transaction?.commit()
         }
 
         vibrationCardView.setOnClickListener {
@@ -585,13 +454,61 @@ class AppSettingsFragment : Fragment() {
         }
     }
 
+    private fun resetMenuPress() {
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout =
+            layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            getString(R.string.would_you_like_to_reset_app_settings)
+        val yesResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelResetButton.setTextColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
+        }
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     private fun reset() {
         val setOutTimeSwitch = view?.findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
         val calculationTypeSwitch =
             view?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
         val vibrationSwitch = view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
         val toggleHistory = view?.findViewById<MaterialSwitch>(R.id.historySwitch)
-        val toggleBreakTextBox = view?.findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
 
         CalculationTypeData(requireContext()).setCalculationState(true)
         HistoryToggleData(requireContext()).setHistoryToggle(true)
@@ -603,7 +520,6 @@ class AppSettingsFragment : Fragment() {
         calculationTypeSwitch?.isChecked = true
         vibrationSwitch?.isChecked = true
         toggleHistory?.isChecked = true
-        toggleBreakTextBox?.isChecked = true
 
         setOutTimeSwitch?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
@@ -612,8 +528,6 @@ class AppSettingsFragment : Fragment() {
         vibrationSwitch?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         toggleHistory?.thumbIconDrawable =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        toggleBreakTextBox?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
 
         val runnable = Runnable {
@@ -653,10 +567,7 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibration)
         val showPatchNotesOnAppLaunchCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowPatchNotesOnAppLaunch)
-        val breakTextBoxCardView =
-            requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTextBox)
-        val clearBreakTextBoxCardView =
-            requireActivity().findViewById<MaterialCardView>(R.id.cardViewClearBreakTextBox)
+        val breakTimeSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTimeSettings)
 
         outTimeCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         calculationTypeCardView.setCardBackgroundColor(
@@ -687,14 +598,7 @@ class AppSettingsFragment : Fragment() {
                 ).generateCardColor()
             )
         )
-        breakTextBoxCardView.setCardBackgroundColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateCardColor()
-            )
-        )
-        clearBreakTextBoxCardView.setCardBackgroundColor(
+        breakTimeSettingsCardView.setCardBackgroundColor(
             Color.parseColor(
                 CustomColorGenerator(
                     requireContext()
@@ -709,10 +613,6 @@ class AppSettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
         val showPatchNotesOnAppLaunchSwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.showPatchNotesOnAppLaunchSwitch)
-        val breakTextBoxSwitch =
-            requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
-        val clearBreakTextBoxSwitch =
-            requireActivity().findViewById<MaterialSwitch>(R.id.clearBreakTextBoxSwitch)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -735,12 +635,6 @@ class AppSettingsFragment : Fragment() {
         showPatchNotesOnAppLaunchSwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         showPatchNotesOnAppLaunchSwitch.trackTintList = ColorStateList(states, colors)
-        breakTextBoxSwitch.thumbIconTintList =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        breakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
-        clearBreakTextBoxSwitch.thumbIconTintList =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        clearBreakTextBoxSwitch.trackTintList = ColorStateList(states, colors)
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAppSettings)
             ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
