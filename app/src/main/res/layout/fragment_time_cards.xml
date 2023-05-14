@@ -12,7 +12,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutTimeCards"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:liftOnScroll="true"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,9 +22,11 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarTimeCards"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:expandedTitleMarginBottom="28dp"
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineMedium"
+            app:expandedTitleMarginBottom="24dp"
             app:titleCollapseMode="scale"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -35,8 +37,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="Time Cards"
-                app:titleCentered="true" />
+                app:title="@string/time_cards" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
