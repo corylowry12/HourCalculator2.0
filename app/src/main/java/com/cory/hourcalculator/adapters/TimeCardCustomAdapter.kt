@@ -47,6 +47,10 @@ class TimeCardCustomAdapter(
 
     private var lastPosition = -1
 
+    fun updateCardColor() {
+        notifyDataSetChanged()
+    }
+
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var name: TextView = itemView.findViewById(R.id.row_name)
         var week: TextView = itemView.findViewById(R.id.row_week)
