@@ -42,8 +42,8 @@ android {
         Internal {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 157
-            versionName "10.0.0-internal-beta08"
+            versionCode 159
+            versionName "10.0.0-internal-beta10"
         }
 
         Production {
@@ -118,8 +118,6 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
     implementation 'androidx.browser:browser:1.4.0'
-
-    implementation 'com.tbuonomo:dotsindicator:4.2'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
 
