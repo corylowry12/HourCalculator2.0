@@ -8,6 +8,7 @@
     android:layout_marginTop="5dp"
     style="@style/Widget.Material3.CardView.Outlined"
     android:id="@+id/galleryCard"
+    android:hapticFeedbackEnabled="false"
     app:cardBackgroundColor="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
