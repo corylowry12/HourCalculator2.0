@@ -46,7 +46,6 @@ class TimeCardsFragment : Fragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        updateCustomTheme()
 
         val darkThemeData = DarkThemeData(requireContext())
         when {
@@ -75,6 +74,8 @@ class TimeCardsFragment : Fragment() {
                 }
             }
         }
+        timeCardCustomAdapter.updateCardColor()
+        updateCustomTheme()
     }
 
     override fun onCreateView(
