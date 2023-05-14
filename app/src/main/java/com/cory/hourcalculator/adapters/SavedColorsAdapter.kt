@@ -26,6 +26,10 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
 
     lateinit var savedColorCardView: MaterialCardView
 
+    fun updateCardColor() {
+        notifyDataSetChanged()
+    }
+
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var title = itemView.findViewById<TextView>(R.id.savedColorTitle)!!
