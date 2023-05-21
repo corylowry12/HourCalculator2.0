@@ -7,6 +7,7 @@ import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.os.IResultReceiver.Default
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
@@ -32,8 +33,11 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.Exception
 
 class TimeCardSettingsFragment : Fragment() {
+
+    private lateinit var dialog: BottomSheetDialog
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -66,6 +70,15 @@ class TimeCardSettingsFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuPress()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -116,6 +129,18 @@ class TimeCardSettingsFragment : Fragment() {
         topAppBar.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    resetMenuPress()
+                    true
+                }
+
+                else -> true
+            }
         }
 
         val showWagesInTimeCardsCardView = requireActivity().findViewById<MaterialCardView>(R.id.showWagesInTimeCardsCardView)
@@ -386,5 +411,81 @@ class TimeCardSettingsFragment : Fragment() {
                 wagesEditText.clearFocus()
             }
         }
+    }
+
+    private fun resetMenuPress() {
+
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout =
+            layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            "Would you like to reset Time Card settings?"
+        val yesResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelResetButton.setTextColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
+        }
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
+
+    private fun reset() {
+        ShowWagesInTimeCardData(requireContext()).setShowWages(false)
+        MatchImageViewContentsBackgroundData(requireContext()).setMatchImageViewContents(false)
+
+        val showWagesSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInTimeCardsSwitch)
+        val coloredImageBackgroundSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.coloredImageViewBackgroundSwitch)
+
+        showWagesSwitch?.isChecked = false
+        showWagesSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        coloredImageBackgroundSwitch?.isChecked = false
+        coloredImageBackgroundSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        DefaultTimeCardNameData(requireContext()).setDefaultName("")
+        val editable =
+            Editable.Factory.getInstance().newEditable(DefaultTimeCardNameData(requireContext()).loadDefaultName())
+        val defaultNameEditText = requireActivity().findViewById<TextInputEditText>(R.id.defaultTimeCardName)
+        defaultNameEditText?.text = editable
+
+        hideKeyboard(defaultNameEditText)
     }
 }
