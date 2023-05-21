@@ -507,41 +507,28 @@ class AppSettingsFragment : Fragment() {
         val setOutTimeSwitch = view?.findViewById<MaterialSwitch>(R.id.setOutTimeSwitch)
         val calculationTypeSwitch =
             view?.findViewById<MaterialSwitch>(R.id.setCalculationTypeSwitch)
-        val vibrationSwitch = view?.findViewById<MaterialSwitch>(R.id.vibrationSwitch)
-        val toggleHistory = view?.findViewById<MaterialSwitch>(R.id.historySwitch)
+        val longPressCalculateButton = requireActivity().findViewById<MaterialSwitch>(R.id.toggleLongPressingCalculateSwitch)
+        val showPatchNotesOnAppLaunch = requireActivity().findViewById<MaterialSwitch>(R.id.showPatchNotesOnAppLaunchSwitch)
 
         CalculationTypeData(requireContext()).setCalculationState(true)
-        HistoryToggleData(requireContext()).setHistoryToggle(true)
-        BreakTextBoxVisibilityData(requireContext()).setVisibility(0)
         OutTimeData(requireContext()).setOutTimeState(true)
-        ClickableHistoryEntryData(requireContext()).setHistoryItemClickable(true)
+        LongPressCalculateButtonData(requireContext()).setLongClick(true)
+        ShowPatchNotesOnAppLaunchData(requireContext()).setShowPatchNotesOnAppLaunch(true)
 
         setOutTimeSwitch?.isChecked = true
-        calculationTypeSwitch?.isChecked = true
-        vibrationSwitch?.isChecked = true
-        toggleHistory?.isChecked = true
+        calculationTypeSwitch?.isChecked = false
+        longPressCalculateButton?.isChecked = true
+        showPatchNotesOnAppLaunch.isChecked = true
 
         setOutTimeSwitch?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
         calculationTypeSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        longPressCalculateButton?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        vibrationSwitch?.thumbIconDrawable =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        toggleHistory?.thumbIconDrawable =
+        showPatchNotesOnAppLaunch?.thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
 
-        val runnable = Runnable {
-            (context as MainActivity).toggleHistory()
-        }
-
-        MainActivity().runOnUiThread(runnable)
-
-        Toast.makeText(
-            requireContext(),
-            getString(R.string.reset_to_default),
-            Toast.LENGTH_LONG
-        )
-            .show()
     }
 
     private fun updateCustomColor() {
