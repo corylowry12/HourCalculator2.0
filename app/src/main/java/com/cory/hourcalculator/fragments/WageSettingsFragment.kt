@@ -36,8 +36,11 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.Exception
 
 class WageSettingsFragment : Fragment() {
+
+    private lateinit var dialog: BottomSheetDialog
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -68,6 +71,15 @@ class WageSettingsFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuPress()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -113,6 +125,18 @@ class WageSettingsFragment : Fragment() {
         toolbar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        toolbar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    resetMenuPress()
+                    true
+                }
+
+                else -> true
+            }
         }
 
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
@@ -299,16 +323,30 @@ class WageSettingsFragment : Fragment() {
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
         if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
             navigationDrawable?.colorFilter = BlendModeColorFilter(
                 Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                 BlendMode.SRC_ATOP
             )
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+
         } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
             navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            resetDrawable?.colorFilter = BlendModeColorFilter(
                 ContextCompat.getColor(requireContext(), id),
                 BlendMode.SRC_ATOP
             )
@@ -329,5 +367,75 @@ class WageSettingsFragment : Fragment() {
                 wagesEditText.clearFocus()
             }
         }
+    }
+
+    private fun resetMenuPress() {
+
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout =
+            layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            "Would you like to reset Wage settings?"
+        val yesResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelResetButton.setTextColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
+        }
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
+
+    private fun reset() {
+        CalculateOvertimeInHistoryData(requireContext()).setCalculateOvertimeInHistoryState(true)
+
+        val calculateOvertimeSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.calculateOvertimeInHistorySwitch)
+
+        calculateOvertimeSwitch?.isChecked = true
+        calculateOvertimeSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+
+        WagesData(requireContext()).setWageAmount("7.25")
+        val editable =
+            Editable.Factory.getInstance().newEditable(WagesData(requireContext()).loadWageAmount())
+        val wagesEditText = requireActivity().findViewById<TextInputEditText>(R.id.Wages)
+        wagesEditText?.text = editable
+
+        hideKeyboard(wagesEditText)
     }
 }
