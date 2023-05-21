@@ -18,9 +18,12 @@ import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.sharedprefs.BreakTextBoxVisibilityData
+import com.cory.hourcalculator.sharedprefs.ClearBreakTextAutomaticallyData
 import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
+import com.cory.hourcalculator.sharedprefs.ShowBreakTimeInDecimalData
 import com.cory.hourcalculator.sharedprefs.VibrationData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -28,8 +31,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import java.lang.Exception
 
 class VibrationSettingsFragment : Fragment() {
+
+    private lateinit var dialog: BottomSheetDialog
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -62,6 +68,15 @@ class VibrationSettingsFragment : Fragment() {
             }
         }
         updateCustomColor()
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuPress()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onCreateView(
@@ -82,6 +97,18 @@ class VibrationSettingsFragment : Fragment() {
         toolbar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        toolbar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    resetMenuPress()
+                    true
+                }
+
+                else -> true
+            }
         }
 
         val vibrationOnClickCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewVibrationOnClick)
@@ -386,11 +413,18 @@ class VibrationSettingsFragment : Fragment() {
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarVibrationSettings)
 
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
 
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
             navigationDrawable?.colorFilter = BlendModeColorFilter(
                 Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                 BlendMode.SRC_ATOP
@@ -399,10 +433,94 @@ class VibrationSettingsFragment : Fragment() {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
             navigationDrawable?.colorFilter = BlendModeColorFilter(
                 ContextCompat.getColor(requireContext(), id),
                 BlendMode.SRC_ATOP
             )
         }
+    }
+
+    private fun resetMenuPress() {
+
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout =
+            layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            "Would you like to reset Vibration settings?"
+        val yesResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelResetButton.setTextColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
+        }
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
+
+    private fun reset() {
+        VibrationData(requireContext()).setVibrationOnClickState(true)
+        VibrationData(requireContext()).setVibrationOnLongClickState(true)
+        VibrationData(requireContext()).setVibrationOnTimePickerChangeState(true)
+        VibrationData(requireContext()).setVibrationOnErrorState(true)
+
+        val vibrateOnClickSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.vibrationSwitch)
+        val vibrateOnLongClickSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnLongClickSwitch)
+        val vibrateOnTimePickerChangeSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnTimePickerChangeSwitch)
+        val vibrateOnCalculationErrorSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.vibrationOnCalculationErrorSwitch)
+
+        vibrateOnClickSwitch?.isChecked = true
+        vibrateOnClickSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        vibrateOnLongClickSwitch?.isChecked = true
+        vibrateOnLongClickSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        vibrateOnCalculationErrorSwitch?.isChecked = true
+        vibrateOnCalculationErrorSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        vibrateOnTimePickerChangeSwitch?.isChecked = true
+        vibrateOnTimePickerChangeSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
     }
 }
