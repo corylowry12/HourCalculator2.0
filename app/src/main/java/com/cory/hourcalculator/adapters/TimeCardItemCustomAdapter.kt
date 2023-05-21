@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
+import com.cory.hourcalculator.sharedprefs.ShowBreakTimeInDecimalData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInHistoryData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInTimeCardData
 import com.cory.hourcalculator.sharedprefs.WagesData
@@ -52,12 +53,28 @@ class TimeCardItemCustomAdapter(
             inTime.text = "In Time: ${dataItem["inTime"]}"
             outTime.text = "Out Time: ${dataItem["outTime"]}"
 
-            if (dataItem["breakTime"] == "1") {
-                breakTime.text =
-                    context.getString(R.string.break_time_adapter_singular, dataItem["breakTime"])
-            } else {
-                breakTime.text =
-                    context.getString(R.string.break_time_adapter_plural, dataItem["breakTime"])
+            if (ShowBreakTimeInDecimalData(context).loadShowBreakTimeInDecimal()) {
+                try {
+                    val decimal =
+                        (dataItem["breakTime"]!!.toDouble() / 60).toBigDecimal()
+                            .setScale(2, RoundingMode.HALF_EVEN)
+                    breakTime.text = "Break Time: $decimal Hours"
+                } catch (e : Exception) {
+                    e.printStackTrace()
+                    breakTime.text = "Break Time: Error"
+                }
+            }
+            else {
+                if (dataItem["breakTime"] == "1") {
+                    breakTime.text =
+                        context.getString(
+                            R.string.break_time_adapter_singular,
+                            dataItem["breakTime"]
+                        )
+                } else {
+                    breakTime.text =
+                        context.getString(R.string.break_time_adapter_plural, dataItem["breakTime"])
+                }
             }
 
             totalHours.text = "Total: ${dataItem["totalHours"]}"
