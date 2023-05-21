@@ -681,25 +681,36 @@ class HistorySettingsFragment : Fragment() {
     }
 
     private fun reset() {
-        val historyDeletion = HistoryAutomaticDeletionData(requireContext())
-        val daysWorked = DaysWorkedPerWeekData(requireContext())
 
-        if (historyDeletion.loadHistoryDeletionState() || daysWorked.loadDaysWorked() != 7) {
-                Vibrate().vibration(requireContext())
-                val toggleHistoryAutomaticDeletion =
-                    activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)
-            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                historyDeletion.setHistoryDeletionState(false)
-                daysWorked.setDaysWorked(7)
-            requireActivity().findViewById<Chip>(R.id.daysWorkedChip).text =
-                daysWorked.loadDaysWorked().toString()
-                toggleHistoryAutomaticDeletion?.isChecked = false
+        HistoryToggleData(requireContext()).setHistoryToggle(true)
+        requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch).isChecked = true
+        requireActivity().findViewById<MaterialSwitch>(R.id.historySwitch).thumbIconDrawable =  ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
 
+        HistoryAutomaticDeletionData(requireContext()).setHistoryDeletionState(false)
+        requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).isChecked = false
+        requireActivity().findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch).thumbIconDrawable =  ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        DeleteAllOnLimitReachedData(requireContext()).setDeleteAllState(false)
+        requireActivity().findViewById<MaterialSwitch>(R.id.historyDeleteAllOnLimitSwitch).isChecked = false
+        requireActivity().findViewById<MaterialSwitch>(R.id.historyDeleteAllOnLimitSwitch).thumbIconDrawable =  ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        DaysWorkedPerWeekData(requireContext()).setDaysWorked(7)
+        requireActivity().findViewById<Chip>(R.id.daysWorkedChip).text = DaysWorkedPerWeekData(requireContext()).loadDaysWorked().toString()
+
+        ClickableHistoryEntryData(requireContext()).setHistoryItemClickable(false)
+        requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch).isChecked = false
+        requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch).thumbIconDrawable =  ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        ShowWagesInHistoryData(requireContext()).setShowWages(false)
+        requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch).isChecked = false
+        requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch).thumbIconDrawable =  ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        val runnable = Runnable {
+            (context as MainActivity).toggleHistory()
         }
-        else {
-            Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()
-        }
+
+        MainActivity().runOnUiThread(runnable)
+
     }
 
     private fun updateCustomColor() {
