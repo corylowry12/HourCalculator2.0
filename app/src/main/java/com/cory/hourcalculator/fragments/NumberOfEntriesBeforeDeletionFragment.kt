@@ -42,20 +42,25 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -63,6 +68,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,20 +78,25 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -108,7 +119,8 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         }
         MainActivity().runOnUiThread(runnable)
 
-        val topAppBar = requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarNumberOfDaysBeforeDeletion)
+        val topAppBar =
+            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarNumberOfDaysBeforeDeletion)
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
@@ -119,17 +131,40 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                 R.id.reset -> {
                     Vibrate().vibration(requireContext())
                     val dialog = BottomSheetDialog(requireContext())
-                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    val resetSettingsLayout =
+                        layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to reset Number of Days Worked Settings?"
-                    val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
-                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
-                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                        "Would you like to reset Number of Days Worked Settings?"
+                    val infoCardView =
+                        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                    val yesResetButton =
+                        resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton =
+                        resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
 
-                    infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
-                    yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-                    cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    infoCardView.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                requireContext()
+                            ).generateCardColor()
+                        )
+                    )
+                    yesResetButton.setBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                requireContext()
+                            ).generateCustomColorPrimary()
+                        )
+                    )
+                    cancelResetButton.setTextColor(
+                        Color.parseColor(
+                            CustomColorGenerator(
+                                requireContext()
+                            ).generateCustomColorPrimary()
+                        )
+                    )
 
                     /*if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
@@ -153,6 +188,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     dialog.show()
                     true
                 }
+
                 else -> true
             }
         }
@@ -231,21 +267,27 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             daysWorked.loadDaysWorked() == 1 -> {
                 one?.isChecked = true
             }
+
             daysWorked.loadDaysWorked() == 2 -> {
                 two?.isChecked = true
             }
+
             daysWorked.loadDaysWorked() == 3 -> {
                 three?.isChecked = true
             }
+
             daysWorked.loadDaysWorked() == 4 -> {
                 four?.isChecked = true
             }
+
             daysWorked.loadDaysWorked() == 5 -> {
                 five?.isChecked = true
             }
+
             daysWorked.loadDaysWorked() == 6 -> {
                 six?.isChecked = true
             }
+
             daysWorked.loadDaysWorked() == 7 -> {
                 seven?.isChecked = true
             }
@@ -254,7 +296,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         oneCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 1) {
-                Toast.makeText(requireContext(), getString(R.string.one_entry_already_enabled), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.one_entry_already_enabled),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 greaterThan(1)
@@ -264,7 +310,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         twoCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 2) {
-                Toast.makeText(requireContext(), getString(R.string.two_entries_already_enabled), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.two_entries_already_enabled),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 greaterThan(2)
@@ -287,7 +337,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         fourCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 4) {
-                Toast.makeText(requireContext(), getString(R.string.four_entries_already_enabled), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.four_entries_already_enabled),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 greaterThan(4)
@@ -297,7 +351,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         fiveCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 5) {
-                Toast.makeText(requireContext(), getString(R.string.five_entries_already_enabled), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.five_entries_already_enabled),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 greaterThan(5)
@@ -307,7 +365,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         sixCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             if (daysWorked.loadDaysWorked() == 6) {
-                Toast.makeText(requireContext(), getString(R.string.six_entries_already_enabled), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.six_entries_already_enabled),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 greaterThan(6)
@@ -328,7 +390,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         }
     }
 
-    private fun greaterThan (number: Int) {
+    private fun greaterThan(number: Int) {
 
         val one = requireActivity().findViewById<RadioButton>(R.id.one)
         val two = requireActivity().findViewById<RadioButton>(R.id.two)
@@ -350,9 +412,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             dialog.setContentView(historySettingsWarningBottomSheet)
             dialog.setCancelable(false)
 
-            val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
+            val title =
+                historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
             val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
-            val infoCardView = historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
+            val infoCardView =
+                historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
             val yesButton = historySettingsWarningBottomSheet.findViewById<Button>(R.id.yesButton)
             val noButton =
                 historySettingsWarningBottomSheet.findViewById<Button>(R.id.cancelButton)
@@ -360,9 +424,9 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             title.text = "Warning"
 
             if (DeleteAllOnLimitReachedData(requireContext()).loadDeleteAllState()) {
-                body.text = "The number of hours stored is greater than the number allowed to be stored. Would you like to delete all entries?"
-            }
-            else {
+                body.text =
+                    "The number of hours stored is greater than the number allowed to be stored. Would you like to delete all entries?"
+            } else {
                 if (greaterThan > 1) {
                     body.text = getString(R.string.history_deletion_multiple, greaterThan)
                 } else {
@@ -390,6 +454,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     2 -> {
                         one.isChecked = false
                         two.isChecked = true
@@ -399,6 +464,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     3 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -408,6 +474,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     4 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -417,6 +484,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     5 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -426,6 +494,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     6 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -435,6 +504,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = true
                         seven.isChecked = false
                     }
+
                     7 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -452,7 +522,11 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                 }
                 MainActivity().runOnUiThread(runnable)
 
-                val snackbar = Snackbar.make(requireView(), "$greaterThan Entries Deleted", Snackbar.LENGTH_LONG)
+                val snackbar = Snackbar.make(
+                    requireView(),
+                    "$greaterThan Entries Deleted",
+                    Snackbar.LENGTH_LONG
+                )
                 snackbar.duration = 5000
 
                 snackbar.setAction(getString(R.string.undo)) {
@@ -461,7 +535,13 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     DaysWorkedPerWeekData(requireContext()).setDaysWorked(7)
 
                     for (i in 1..undoValues["count"]!!.toInt()) {
-                        dbHandler.insertRow(undoValues["inTime"].toString(), undoValues["outTime"].toString(), undoValues["totalHours"].toString(), undoValues["date"].toString().toLong(), undoValues["breakTime"].toString())
+                        dbHandler.insertRow(
+                            undoValues["inTime"].toString(),
+                            undoValues["outTime"].toString(),
+                            undoValues["totalHours"].toString(),
+                            undoValues["date"].toString().toLong(),
+                            undoValues["breakTime"].toString()
+                        )
                     }
 
                     MainActivity().runOnUiThread(runnable)
@@ -473,14 +553,22 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
                 )
                 snackbar.apply {
-                    snackbar.view.background = ResourcesCompat.getDrawable(context.resources, R.drawable.snackbar_corners, context.theme)
+                    snackbar.view.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.snackbar_corners,
+                        context.theme
+                    )
                 }
                 snackbar.show()
             }
             noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 dialog.dismiss()
-                DaysWorkedPerWeekData(requireContext()).setDaysWorked(DaysWorkedPerWeekData(requireContext()).loadDaysWorked())
+                DaysWorkedPerWeekData(requireContext()).setDaysWorked(
+                    DaysWorkedPerWeekData(
+                        requireContext()
+                    ).loadDaysWorked()
+                )
 
                 when (DaysWorkedPerWeekData(requireContext()).loadDaysWorked()) {
                     1 -> {
@@ -492,6 +580,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     2 -> {
                         one.isChecked = false
                         two.isChecked = true
@@ -501,6 +590,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     3 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -510,6 +600,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     4 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -519,6 +610,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     5 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -528,6 +620,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = false
                         seven.isChecked = false
                     }
+
                     6 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -537,6 +630,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         six.isChecked = true
                         seven.isChecked = false
                     }
+
                     7 -> {
                         one.isChecked = false
                         two.isChecked = false
@@ -551,8 +645,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                 activity?.supportFragmentManager?.popBackStack()
             }
             dialog.show()
-        }
-        else {
+        } else {
             DaysWorkedPerWeekData(requireContext()).setDaysWorked(number)
             when (number) {
                 1 -> {
@@ -564,6 +657,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     six.isChecked = false
                     seven.isChecked = false
                 }
+
                 2 -> {
                     one.isChecked = false
                     two.isChecked = true
@@ -573,6 +667,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     six.isChecked = false
                     seven.isChecked = false
                 }
+
                 3 -> {
                     one.isChecked = false
                     two.isChecked = false
@@ -582,6 +677,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     six.isChecked = false
                     seven.isChecked = false
                 }
+
                 4 -> {
                     one.isChecked = false
                     two.isChecked = false
@@ -591,6 +687,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     six.isChecked = false
                     seven.isChecked = false
                 }
+
                 5 -> {
                     one.isChecked = false
                     two.isChecked = false
@@ -600,6 +697,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     six.isChecked = false
                     seven.isChecked = false
                 }
+
                 6 -> {
                     one.isChecked = false
                     two.isChecked = false
@@ -609,6 +707,7 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                     six.isChecked = true
                     seven.isChecked = false
                 }
+
                 7 -> {
                     one.isChecked = false
                     two.isChecked = false
@@ -623,7 +722,8 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
     }
 
     private fun updateCustomColor() {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.numberOfEntriesBeforeDeletionCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        requireActivity().findViewById<CoordinatorLayout>(R.id.numberOfEntriesBeforeDeletionCoordinatorLayout)
+            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val oneCardView = requireView().findViewById<MaterialCardView>(R.id.oneCardView)
         oneCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         val twoCardView = requireView().findViewById<MaterialCardView>(R.id.twoCardView)
@@ -639,17 +739,30 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         val sevenCardView = requireView().findViewById<MaterialCardView>(R.id.sevenCardView)
         sevenCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
-        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        val collapsingToolbarLayout =
+            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
+        collapsingToolbarLayout.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
 
         val one = requireActivity().findViewById<RadioButton>(R.id.one)
-       val two = requireActivity().findViewById<RadioButton>(R.id.two)
-       val three = requireActivity().findViewById<RadioButton>(R.id.three)
-       val four = requireActivity().findViewById<RadioButton>(R.id.four)
-       val five = requireActivity().findViewById<RadioButton>(R.id.five)
-       val six = requireActivity().findViewById<RadioButton>(R.id.six)
-       val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
+        val two = requireActivity().findViewById<RadioButton>(R.id.two)
+        val three = requireActivity().findViewById<RadioButton>(R.id.three)
+        val four = requireActivity().findViewById<RadioButton>(R.id.four)
+        val five = requireActivity().findViewById<RadioButton>(R.id.five)
+        val six = requireActivity().findViewById<RadioButton>(R.id.six)
+        val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -679,61 +792,62 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         navigationDrawable?.mutate()
 
         if (MenuTintData(requireContext()).loadMenuTint()) {
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-        }
-        else {
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
 
-        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
+            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-        }
-        else {
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
+                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutNumberOfDaysBeforeDeletion)
+                ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
     }
 
     private fun reset() {
         val daysWorked = DaysWorkedPerWeekData(requireContext())
 
-        if (daysWorked.loadDaysWorked() != 7) {
-            Vibrate().vibration(requireContext())
-            daysWorked.setDaysWorked(7)
+        daysWorked.setDaysWorked(7)
 
-            val one = requireActivity().findViewById<RadioButton>(R.id.one)
-            val two = requireActivity().findViewById<RadioButton>(R.id.two)
-            val three = requireActivity().findViewById<RadioButton>(R.id.three)
-            val four = requireActivity().findViewById<RadioButton>(R.id.four)
-            val five = requireActivity().findViewById<RadioButton>(R.id.five)
-            val six = requireActivity().findViewById<RadioButton>(R.id.six)
-            val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
+        val one = requireActivity().findViewById<RadioButton>(R.id.one)
+        val two = requireActivity().findViewById<RadioButton>(R.id.two)
+        val three = requireActivity().findViewById<RadioButton>(R.id.three)
+        val four = requireActivity().findViewById<RadioButton>(R.id.four)
+        val five = requireActivity().findViewById<RadioButton>(R.id.five)
+        val six = requireActivity().findViewById<RadioButton>(R.id.six)
+        val seven = requireActivity().findViewById<RadioButton>(R.id.seven)
 
-            one.isChecked = false
-            two.isChecked = false
-            three.isChecked = false
-            four.isChecked = false
-            five.isChecked = false
-            six.isChecked = false
-            seven.isChecked = true
-        }
-        else {
-            Toast.makeText(requireContext(), getString(R.string.already_default_settings), Toast.LENGTH_SHORT).show()
-        }
+        one.isChecked = false
+        two.isChecked = false
+        three.isChecked = false
+        four.isChecked = false
+        five.isChecked = false
+        six.isChecked = false
+        seven.isChecked = true
     }
 }
