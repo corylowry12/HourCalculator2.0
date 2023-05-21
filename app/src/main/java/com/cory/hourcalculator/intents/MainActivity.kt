@@ -91,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 
         CustomColorGenerator(this).generateARandomColor()
 
-        if (ChosenAppIconData(this).loadChosenAppIcon() == "auto") {
             if (isComponentEnabled("com.cory.hourcalculator.SplashScreenNoIcon") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("teal")
             }
@@ -107,7 +106,6 @@ class MainActivity : AppCompatActivity() {
             else if (isComponentEnabled("com.cory.hourcalculator.MaterialYou") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("material you")
             }
-        }
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
