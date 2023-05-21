@@ -6,6 +6,7 @@ import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,8 +27,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.textfield.TextInputEditText
+import java.lang.Exception
 
 class AnimationSettingsFragment : Fragment() {
+
+    private lateinit var dialog: BottomSheetDialog
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -59,6 +64,15 @@ class AnimationSettingsFragment : Fragment() {
         }
 
         updateCustomColor()
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuPress()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onCreateView(
@@ -110,6 +124,18 @@ class AnimationSettingsFragment : Fragment() {
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    resetMenuPress()
+                    true
+                }
+
+                else -> true
+            }
         }
 
         updateCustomColor()
@@ -434,17 +460,33 @@ class AnimationSettingsFragment : Fragment() {
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
+        val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
         if (MenuTintData(requireContext()).loadMenuTint()) {
+            val typedValue = TypedValue()
+            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
             navigationDrawable?.colorFilter = BlendModeColorFilter(
                 Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                 BlendMode.SRC_ATOP
             )
-        }
-        else {
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                BlendMode.SRC_ATOP
+            )
+
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
+            resetDrawable?.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                BlendMode.SRC_ATOP
+            )
         }
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAnimationSettings)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
@@ -458,5 +500,91 @@ class AnimationSettingsFragment : Fragment() {
             val id = typedValue.resourceId
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAnimationSettings)?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
+    }
+
+    private fun resetMenuPress() {
+
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout =
+            layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            "Would you like to reset Animation settings?"
+        val yesResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelResetButton.setTextColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
+        }
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
+
+    private fun reset() {
+        AnimationData(requireContext()).setHistoryRecyclerViewLoadingAnimation(false)
+        AnimationData(requireContext()).setHistoryScrollingLoadingAnimation(false)
+        AnimationData(requireContext()).setTimeCardRecyclerViewLoadingAnimation(false)
+        AnimationData(requireContext()).setTimeCardsScrollingLoadingAnimation(false)
+        AnimationData(requireContext()).setImageAnimation(true)
+
+        val historyListLoadingAnimation =
+            requireActivity().findViewById<MaterialSwitch>(R.id.historyListLoadingAnimationSwitch)
+        val historyListScrollingAnimation =
+            requireActivity().findViewById<MaterialSwitch>(R.id.historyScrollingAnimationSwitch)
+        val timeCardListLoadingAnimation =
+            requireActivity().findViewById<MaterialSwitch>(R.id.timeCardListLoadingAnimationSwitch)
+        val timeCardListScrollingAnimation =
+            requireActivity().findViewById<MaterialSwitch>(R.id.timeCardScrollingAnimationSwitch)
+        val imageOpeningAnimation =
+            requireActivity().findViewById<MaterialSwitch>(R.id.imageLoadingAnimationSwitch)
+
+        historyListLoadingAnimation?.isChecked = false
+        historyListLoadingAnimation?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        historyListScrollingAnimation?.isChecked = false
+        historyListScrollingAnimation?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        timeCardListLoadingAnimation?.isChecked = false
+        timeCardListLoadingAnimation?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        timeCardListScrollingAnimation?.isChecked = false
+        timeCardListScrollingAnimation?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        imageOpeningAnimation?.isChecked = true
+        imageOpeningAnimation?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
     }
 }
