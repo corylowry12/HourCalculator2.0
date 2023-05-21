@@ -452,6 +452,11 @@ class TimeCardItemInfoFragment : Fragment() {
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
+            try {
+                dialog.dismiss()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
             deleteImageDialog.dismiss()
             TimeCardDBHelper(requireContext(), null).addImage(id, "")
             loadIntoList(id)
@@ -547,7 +552,7 @@ class TimeCardItemInfoFragment : Fragment() {
             removePhotoCardView.visibility = View.GONE
             val layoutParams: MarginLayoutParams =
                 selectAPhotoCardView.layoutParams as MarginLayoutParams
-            layoutParams.setMargins(0, 15, 0, 0)
+            layoutParams.setMargins(0, 25, 0, 0)
             selectAPhotoCardView.requestLayout()
 
             selectAPhotoCardView.shapeAppearanceModel =
