@@ -90,7 +90,8 @@ class PatchNotesChanges {
 
     var enhancementsArrayInternal = arrayOf(
         "Migrated break time options to their own page in App Settings->Break Time Settings",
-        "Updated dependencies in the Version Info page"
+        "Updated dependencies in the Version Info page",
+        "Break time in time card info view will now show break time in decimal format if its enabled"
     )
 
 
