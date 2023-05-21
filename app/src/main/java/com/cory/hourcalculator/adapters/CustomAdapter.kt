@@ -268,7 +268,6 @@ class CustomAdapter(
         val timeCardDBHandler = TimeCardDBHelper(context, null)
         val timeCardItemDBHandler = TimeCardsItemDBHelper(context, null)
 
-        Vibrate().vibration(context)
         val saveState = Runnable {
             (context as MainActivity).saveState()
 
