@@ -30,8 +30,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import java.lang.Exception
 
 class BreakTimeSettingsFragment : Fragment() {
+
+    private lateinit var dialog : BottomSheetDialog
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -64,6 +67,15 @@ class BreakTimeSettingsFragment : Fragment() {
             }
         }
         updateCustomColor()
+
+        try {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                resetMenuPress()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onCreateView(
@@ -108,6 +120,18 @@ class BreakTimeSettingsFragment : Fragment() {
         topAppBar?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        topAppBar?.setOnMenuItemClickListener {
+            Vibrate().vibration(requireContext())
+            when (it.itemId) {
+                R.id.reset -> {
+                    resetMenuPress()
+                    true
+                }
+
+                else -> true
+            }
         }
 
         updateCustomColor()
@@ -295,6 +319,80 @@ class BreakTimeSettingsFragment : Fragment() {
             infoDialog.show()
             return@setOnLongClickListener true
         }
+    }
+
+    private fun resetMenuPress() {
+
+        dialog = BottomSheetDialog(requireContext())
+        val resetSettingsLayout =
+            layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+        dialog.setContentView(resetSettingsLayout)
+        dialog.setCancelable(false)
+        resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
+            "Would you like to reset Break Time settings?"
+        val yesResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+        val cancelResetButton =
+            resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+        resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        yesResetButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelResetButton.setTextColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCustomColorPrimary()
+            )
+        )
+        /*if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }*/
+        yesResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            reset()
+            dialog.dismiss()
+        }
+        cancelResetButton.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
+
+    private fun reset() {
+        BreakTextBoxVisibilityData(requireContext()).setVisibility(0)
+        ClearBreakTextAutomaticallyData(requireContext()).setClearAutomatically(true)
+        ShowBreakTimeInDecimalData(requireContext()).setShowBreakTimeInDecimal(false)
+
+        val breakTextBoxSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.breakTextBoxSwitch)
+        val clearBreakTextBoxSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.clearBreakTextBoxSwitch)
+        val showBreakTimeInDecimalSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.showBreakInDecimalSwitch)
+
+        breakTextBoxSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        breakTextBoxSwitch?.isChecked = true
+        clearBreakTextBoxSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        clearBreakTextBoxSwitch?.isChecked = true
+        showBreakTimeInDecimalSwitch?.thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        showBreakTimeInDecimalSwitch?.isChecked = false
     }
 
     private fun updateCustomColor() {
