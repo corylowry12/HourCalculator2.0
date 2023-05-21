@@ -524,6 +524,9 @@ class AppearanceFragment : Fragment() {
             )
         }
 
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)
+            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAppearance)
                 ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
