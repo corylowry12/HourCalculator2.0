@@ -764,10 +764,21 @@ class AccentColorFragment : Fragment() {
             view?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
 
+        BottomNavBadgeColorData(requireContext()).setColor(true)
+        view?.findViewById<MaterialSwitch>(R.id.bottomNavBadgeSettingSwitch)?.isChecked = true
+        view?.findViewById<MaterialSwitch>(R.id.bottomNavBadgeSettingSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+
         GenerateARandomColorData(requireContext()).setGenerateARandomColorOnAppLaunch(false)
+        GenerateARandomColorMethodData(requireContext()).setGenerateARandomColorMethod(0)
         view?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.isChecked = false
         view?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
 
+        requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
+            getString(R.string.generate_a_random_color_on_app_launch)
+
+        UserAddedColorsData(requireContext()).clear()
+        UserAddedColorsData(requireContext()).clearHash()
+        requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColorsData(requireContext()).read().count().toString()
         updateCustomColorChange()
     }
 
