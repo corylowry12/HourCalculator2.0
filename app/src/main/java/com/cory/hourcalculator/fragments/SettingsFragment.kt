@@ -1,5 +1,6 @@
 package com.cory.hourcalculator.fragments
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -297,7 +298,7 @@ class SettingsFragment : Fragment() {
             dbHandler.deleteAll()
             TimeCardDBHelper(requireContext(), null).deleteAll()
             TimeCardsItemDBHelper(requireContext(), null).deleteAll()
-            Toast.makeText(requireContext(), getString(R.string.app_data_cleared), Toast.LENGTH_LONG).show()
+
             iconDisableArray.clear()
             iconEnableID = "com.cory.hourcalculator.SplashScreenNoIcon"
             iconDisableArray.add("com.cory.hourcalculator.SplashPink")
@@ -308,15 +309,8 @@ class SettingsFragment : Fragment() {
             iconDisableArray.add("com.cory.hourcalculator.SplashOG")
             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
             changeIcons()
-            ChosenAppIconData(requireContext()).setChosenAppIcon("teal")
-            Handler(Looper.getMainLooper()).postDelayed({
-                val intent =
-                    requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
-                intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                activity?.finish()
-            }, 1500)
+            ChosenAppIconData(requireContext()).setChosenAppIcon(getString(R.string.teal))
+            restartApplication()
             dialog.dismiss()
         }
         noButton.setOnClickListener {
@@ -368,6 +362,14 @@ class SettingsFragment : Fragment() {
     }
 
     private fun changeIcons() {
+        requireContext().packageManager?.setComponentEnabledSetting(
+            ComponentName(
+                BuildConfig.APPLICATION_ID,
+                iconEnableID
+            ),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
         for (i in 0 until iconDisableArray.count()) {
             requireContext().packageManager?.setComponentEnabledSetting(
                 ComponentName(
@@ -378,13 +380,16 @@ class SettingsFragment : Fragment() {
                 PackageManager.DONT_KILL_APP
             )
         }
-        requireContext().packageManager?.setComponentEnabledSetting(
-            ComponentName(
-                BuildConfig.APPLICATION_ID,
-                iconEnableID
-            ),
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-            PackageManager.DONT_KILL_APP
-        )
+    }
+
+    private fun restartApplication() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent =
+                requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
+            intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            requireContext().startActivity(intent)
+            (context as Activity).finish()
+        }, 1000)
     }
 }
