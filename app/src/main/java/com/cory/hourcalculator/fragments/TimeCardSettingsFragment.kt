@@ -289,7 +289,7 @@ class TimeCardSettingsFragment : Fragment() {
         defaultNameEditText.setTextIsSelectable(false)
 
         val editable =
-            Editable.Factory.getInstance().newEditable(defaultTimeCardNameData.loadDefaultName())
+            Editable.Factory.getInstance().newEditable(defaultTimeCardNameData.loadDefaultName().trim())
         defaultNameEditText?.text = editable
 
         defaultNameEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
@@ -298,7 +298,7 @@ class TimeCardSettingsFragment : Fragment() {
                 return@OnKeyListener true
             }
             if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                defaultTimeCardNameData.setDefaultName(defaultNameEditText.text.toString())
+                defaultTimeCardNameData.setDefaultName(defaultNameEditText.text.toString().trim())
                 hideKeyboard(defaultNameEditText)
                 return@OnKeyListener true
             }
@@ -308,7 +308,7 @@ class TimeCardSettingsFragment : Fragment() {
         defaultNameEditText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString() != "") {
-                    defaultTimeCardNameData.setDefaultName(s.toString())
+                    defaultTimeCardNameData.setDefaultName(s.toString().trim())
                 }
             }
 
@@ -316,7 +316,7 @@ class TimeCardSettingsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                defaultTimeCardNameData.setDefaultName(s.toString())
+                defaultTimeCardNameData.setDefaultName(s.toString().trim())
             }
         })
     }
