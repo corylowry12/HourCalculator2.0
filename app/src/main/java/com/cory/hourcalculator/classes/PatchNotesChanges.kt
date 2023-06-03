@@ -57,41 +57,18 @@ class PatchNotesChanges {
     )
 
     var bugFixesArrayInternal = arrayOf(
-        "Fixed issue with app not changing theme in time cards view when device theme changed",
-        "Fixed issue with app not changing theme in time card info view when device theme changed",
-        "Fixed issue with dialogs not changing theme when device changed theme in time card info view",
-        "Fixed issue with app not changing theme in saved colors view when device theme changed",
-        "Fixed issue with app not changing theme in the app icons view when device theme changed",
-        "Fixed issue with app not changing theme in the vibration settings view when device theme changed",
-        "Fixed issue with dialogs not changing theme in the app settings view when device theme changed",
-        "Fixed issue with history settings not changing theme properly when device theme changed",
-        "Fixed issue with dialogs not changing theme in history settings when device theme changed",
-        "Fixed issue with number of days view not changing theme properly when device theme changed",
-        "Fixed issue with time card settings not changing theme properly when device theme changed",
-        "Fixed issue with wage settings not changing theme properly when device theme changed",
-        "Fixed issue with animation settings not changing theme when device theme changed",
-        "Fixed issues with Accent Color settings not resetting properly when resetting using the reset button",
-        "Fixed issues with vibration occurring twice when resetting settings",
-        "Fixed issues with reset button in history settings view not resetting properly",
-        "Fixed issues when resetting app settings",
-        "Fixed issue with double vibration when clicking the export button",
-        "Fixed issue with the select/take image dialog not disappearing in the time card info view under certain conditions",
-        "Fixed issue with app crashing when you would delete all app data and had an icon other than teal selected"
+        "Fixed issue with bottom nav bar colors being different when light theme vs light theme (follow system) when material you is enabled",
+        "Fixed issue with app saving spaces when renaming colors",
+        "Fixed issue with app saving spaces when renaming time cards",
+        "Fixed issue with app saving spaces when setting default time card name"
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "Added option to show break time in decimal instead of minutes",
-        "Added reset button to break time settings",
-        "Added reset button to vibration settings",
-        "Added reset button to time card settings",
-        "Added reset button to wage settings",
-        "Added reset button to animation settings"
+        "No new features"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Migrated break time options to their own page in App Settings->Break Time Settings",
-        "Updated dependencies in the Version Info page",
-        "Break time in time card info view will now show break time in decimal format if its enabled"
+        "Upped character limit to time card default name from 5 to 15"
     )
 
 
