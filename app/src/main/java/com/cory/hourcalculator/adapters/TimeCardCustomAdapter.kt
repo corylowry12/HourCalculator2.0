@@ -331,7 +331,7 @@ class TimeCardCustomAdapter(
 
                     editText.textCursorDrawable = null
                     
-                    editText.setText(dataList[holder.adapterPosition]["name"])
+                    editText.setText(dataList[holder.adapterPosition]["name"]?.trim())
 
                     editText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
                         if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
@@ -462,7 +462,7 @@ class TimeCardCustomAdapter(
         holder: RecyclerView.ViewHolder
     ) {
         TimeCardDBHelper(context, null).updateName(
-            editText.text.toString(),
+            editText.text.toString().trim(),
             dataList[holder.adapterPosition]["id"]!!
         )
         dataList.clear()
