@@ -828,7 +828,7 @@ class AccentColorFragment : Fragment() {
             }
             else {
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
-                    CustomColorGenerator(requireContext()).loadCustomHex() + " (${contains[0]["name"]})"
+                    CustomColorGenerator(requireContext()).loadCustomHex() + " (${contains[0]["name"]?.trim()})"
             }
         }
 
