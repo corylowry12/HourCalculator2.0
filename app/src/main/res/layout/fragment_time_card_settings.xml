@@ -157,7 +157,7 @@
                         android:hint="Name"
                         android:imeOptions="actionGo"
                         android:inputType="text"
-                        android:maxLength="5"
+                        android:maxLength="15"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp" />
 
