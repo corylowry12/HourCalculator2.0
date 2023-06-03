@@ -139,7 +139,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             )
             cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
 
-            editText.setText(dataList[holder.adapterPosition]["name"].toString())
+            editText.setText(dataList[holder.adapterPosition]["name"].toString().trim())
 
             renameButton.setOnClickListener {
                 Vibrate().vibration(context)
@@ -151,7 +151,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
                     val allColors = HashMap<String, String>()
                     if (i == holder.adapterPosition) {
                         try {
-                            allColors["name"] = editText.text.toString()
+                            allColors["name"] = editText.text.toString().trim()
                         } catch (e: java.lang.Exception) {
                             allColors["name"] = ""
                         }
@@ -159,13 +159,13 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
                     else {
 
                         try {
-                            allColors["name"] = addedColors[i]["name"].toString()
+                            allColors["name"] = addedColors[i]["name"].toString().trim()
                         } catch (e: java.lang.Exception) {
                             allColors["name"] = ""
                         }
 
                     }
-                    allColors["hex"] = addedColors[i]["hex"].toString()
+                    allColors["hex"] = addedColors[i]["hex"].toString().trim()
                     dataList.add(allColors)
                 }
                 UserAddedColorsData(context).clearHash()
