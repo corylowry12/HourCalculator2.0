@@ -49,7 +49,7 @@ android {
         Production {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 134
+            versionCode 165
             versionName "10.0.0-production"
         }
     }
