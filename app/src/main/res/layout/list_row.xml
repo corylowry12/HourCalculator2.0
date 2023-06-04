@@ -121,8 +121,6 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/headingTextView"
-                app:layout_constraintBottom_toBottomOf="@id/headingTextView"
                 app:cardCornerRadius="15dp"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:foreground="?attr/selectableItemBackground">

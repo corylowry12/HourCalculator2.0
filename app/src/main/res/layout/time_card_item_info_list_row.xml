@@ -76,7 +76,6 @@
                 android:id="@+id/row_time_card_item_info_wages"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/row_total_hours"
                 android:text="Wages"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
