@@ -304,8 +304,8 @@ class BreakTimeSettingsFragment : Fragment() {
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the break time will be shown in decimal format in History.\n\n" +
-                        "When disabled the break time will be shown in minute format in History."
+                "When enabled the break time will be shown in decimal format in History and Time Cards.\n\n" +
+                        "When disabled the break time will be shown in minute format in History and Time Cards."
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
