@@ -148,7 +148,7 @@ class AccentColorFragment : Fragment() {
 
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
-                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = getString(R.string.would_you_like_to_reset_accent_color_settings)
+
                     if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
@@ -158,6 +158,8 @@ class AccentColorFragment : Fragment() {
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
                     }
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = getString(R.string.would_you_like_to_reset_accent_color_settings)
+
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -271,6 +273,17 @@ class AccentColorFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the badges in the bottom navigation view that show history/time card count will match the theme\n\n" +
                         "When disabled the badges in the bottom navigation view that show history/time card count will be red"
@@ -320,6 +333,17 @@ class AccentColorFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the app will generate and set a random color on app launch\n\n" +
                         "When disabled the app will be set to whatever theme you have chosen"
@@ -354,6 +378,16 @@ class AccentColorFragment : Fragment() {
                 layoutInflater.inflate(R.layout.generate_a_random_color_options_bottom_sheet, null)
             optionsDialog.setContentView(optionsLayout)
             optionsDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    optionsDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
 
             val randomColorCardView = optionsLayout.findViewById<MaterialCardView>(R.id.randomColorCardView)
             val randomColorFromSavedCardView = optionsLayout.findViewById<MaterialCardView>(R.id.fromSavedColorsCardView)
@@ -734,6 +768,17 @@ class AccentColorFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the app will generate a color palette that matches your wallpaper\n\n" +
                         "When disabled the app will be set to whatever color you have chosen"

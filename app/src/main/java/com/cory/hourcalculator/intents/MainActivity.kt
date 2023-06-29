@@ -1,26 +1,25 @@
 package com.cory.hourcalculator.intents
 
+import android.R.attr.enabled
 import android.annotation.SuppressLint
 import android.content.ComponentName
+import android.content.pm.ActivityInfo
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
+import android.view.Gravity
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.adapters.PatchNotesAdapter
 import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.database.TimeCardDBHelper
@@ -30,15 +29,15 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.chip.Chip
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.splitinstall.d
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomNav: NavigationBarView
 
     private val homeFragment = HomeFragment()
     private val historyFragment = HistoryFragment()
@@ -87,9 +86,13 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
+        if (!resources.getBoolean(R.bool.isTablet)) {
+            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
         updateCustomColor()
 
-        CustomColorGenerator(this).generateARandomColor()
+        setNavigationRailGravity()
 
             if (isComponentEnabled("com.cory.hourcalculator.SplashScreenNoIcon") == 1) {
                 ChosenAppIconData(this).setChosenAppIcon("teal")
@@ -133,7 +136,11 @@ class MainActivity : AppCompatActivity() {
         }
         runOnUiThread(runnable)
 
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav = if (resources.getBoolean(R.bool.isTablet)) {
+            findViewById<BottomNavigationView>(R.id.bottom_nav)
+        } else {
+            findViewById<NavigationRailView>(R.id.bottom_nav)
+        }
 
         changeBadgeNumber()
         changeSettingsBadge()
@@ -269,24 +276,54 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateBottomNavCustomColor() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNav.itemIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
-        bottomNav.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor()))
-        bottomNav.itemTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavTextColor()))
-        bottomNav.itemRippleColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
-        bottomNav.itemActiveIndicatorColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
+        if (!resources.getBoolean(R.bool.isTablet)) {
+            val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+            bottomNav.itemIconTintList =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
+            bottomNav.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor()))
+            bottomNav.itemTextColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavTextColor()))
+            bottomNav.itemRippleColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
+            bottomNav.itemActiveIndicatorColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
 
-        val historyBadge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
-        val timeCardBadge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
-        val settingsBadge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+            val historyBadge =
+                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+            val timeCardBadge =
+                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+            val settingsBadge = findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
 
-        historyBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
-        historyBadge.badgeTextColor = Color.parseColor("#ffffff")
-        timeCardBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
-        timeCardBadge.badgeTextColor = Color.parseColor("#ffffff")
-        settingsBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+            historyBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+            historyBadge.badgeTextColor = Color.parseColor("#ffffff")
+            timeCardBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+            timeCardBadge.badgeTextColor = Color.parseColor("#ffffff")
+            settingsBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+        }
+        else {
+            val bottomNav = findViewById<NavigationRailView>(R.id.bottom_nav)
+            bottomNav.itemIconTintList =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
+            bottomNav.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBottomNavBackgroundColor()))
+            bottomNav.itemTextColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavTextColor()))
+            bottomNav.itemRippleColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconTintColor()))
+            bottomNav.itemActiveIndicatorColor =
+                ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
+
+            val historyBadge =
+                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+            val timeCardBadge =
+                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+            val settingsBadge = findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+
+            historyBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+            historyBadge.badgeTextColor = Color.parseColor("#ffffff")
+            timeCardBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+            timeCardBadge.badgeTextColor = Color.parseColor("#ffffff")
+            settingsBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
+        }
     }
 
     private fun replaceFragment(fragment: Fragment, goingToTab: Int) {
@@ -440,21 +477,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeBadgeNumber() {
-        val historyBadge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
-        val timeCardBadge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
-        historyBadge.isVisible = true
-        timeCardBadge.isVisible = true
-        historyBadge.number = dbHandler.getCount()
-        timeCardBadge.number = TimeCardDBHelper(this, null).getCount()
-
+        if (!resources.getBoolean(R.bool.isTablet)) {
+            val historyBadge =
+                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+            val timeCardBadge =
+                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+            historyBadge.isVisible = true
+            timeCardBadge.isVisible = true
+            historyBadge.number = dbHandler.getCount()
+            timeCardBadge.number = TimeCardDBHelper(this, null).getCount()
+        }
+        else {
+            val historyBadge =
+                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+            val timeCardBadge =
+                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+            historyBadge.isVisible = true
+            timeCardBadge.isVisible = true
+            historyBadge.number = dbHandler.getCount()
+            timeCardBadge.number = TimeCardDBHelper(this, null).getCount()
+        }
     }
 
     fun changeSettingsBadge() {
-        val badge =
-            findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
-        badge.isVisible = VersionData(this).loadVersion() != BuildConfig.VERSION_NAME
+        if (!resources.getBoolean(R.bool.isTablet)) {
+            val badge =
+                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+            badge.isVisible = VersionData(this).loadVersion() != BuildConfig.VERSION_NAME
+        }
+        else {
+            val badge =
+                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+            badge.isVisible = VersionData(this).loadVersion() != BuildConfig.VERSION_NAME
+        }
     }
 
     private fun openPatchNotesOnAppLaunch() {
@@ -468,25 +523,55 @@ class MainActivity : AppCompatActivity() {
     fun toggleHistory() {
         val historyToggleData = HistoryToggleData(this)
 
-        findViewById<BottomNavigationView>(R.id.bottom_nav).menu.findItem(R.id.history).isVisible =
-            historyToggleData.loadHistoryState()
+        if (!resources.getBoolean(R.bool.isTablet)) {
+            findViewById<BottomNavigationView>(R.id.bottom_nav).menu.findItem(R.id.history).isVisible =
+                historyToggleData.loadHistoryState()
+        }
+        else {
+            findViewById<NavigationRailView>(R.id.bottom_nav).menu.findItem(R.id.history).isVisible =
+                historyToggleData.loadHistoryState()
+        }
     }
 
     fun setActiveTab(view: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomNav = findViewById<NavigationRailView>(R.id.bottom_nav)
+            when (view) {
+                0 -> {
+                    bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+                }
 
-        when (view) {
-            0 -> {
-                bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+                1 -> {
+                    bottomNav.menu.findItem(R.id.history).isChecked = true
+                }
+
+                2 -> {
+                    bottomNav.menu.findItem(R.id.timeCards).isChecked = true
+                }
+
+                3 -> {
+                    bottomNav.menu.findItem(R.id.settings).isChecked = true
+                }
             }
-            1 -> {
-                bottomNav.menu.findItem(R.id.history).isChecked = true
-            }
-            2 -> {
-                bottomNav.menu.findItem(R.id.timeCards).isChecked = true
-            }
-            3 -> {
-                bottomNav.menu.findItem(R.id.settings).isChecked = true
+        }
+        else {
+            val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+            when (view) {
+                0 -> {
+                    bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+                }
+
+                1 -> {
+                    bottomNav.menu.findItem(R.id.history).isChecked = true
+                }
+
+                2 -> {
+                    bottomNav.menu.findItem(R.id.timeCards).isChecked = true
+                }
+
+                3 -> {
+                    bottomNav.menu.findItem(R.id.settings).isChecked = true
+                }
             }
         }
     }
@@ -495,7 +580,6 @@ class MainActivity : AppCompatActivity() {
     fun updateCustomColor() {
         val mainConstraint = findViewById<ConstraintLayout>(R.id.mainConstraint)
         mainConstraint.setBackgroundColor(Color.parseColor(CustomColorGenerator(this).generateBackgroundColor()))
-        updateBottomNavCustomColor()
 
         if (ColoredNavBarData(this).loadNavBar()) {
             window?.navigationBarColor =
@@ -505,6 +589,8 @@ class MainActivity : AppCompatActivity() {
             window?.navigationBarColor =
                 Color.parseColor("#000000")
         }
+
+        updateBottomNavCustomColor()
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -550,6 +636,24 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun setNavigationRailGravity() {
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            if (NavigationRailMenuGravityData(this).loadNavigationRailPosition() == 0) {
+                val navigationRail = findViewById<NavigationRailView>(R.id.bottom_nav)
+                navigationRail.menuGravity = Gravity.TOP
+            }
+            if (NavigationRailMenuGravityData(this).loadNavigationRailPosition() == 1) {
+                val navigationRail = findViewById<NavigationRailView>(R.id.bottom_nav)
+                navigationRail.menuGravity = Gravity.CENTER
+            }
+            if (NavigationRailMenuGravityData(this).loadNavigationRailPosition() == 2) {
+                val navigationRail = findViewById<NavigationRailView>(R.id.bottom_nav)
+                navigationRail.menuGravity = Gravity.BOTTOM
             }
         }
     }

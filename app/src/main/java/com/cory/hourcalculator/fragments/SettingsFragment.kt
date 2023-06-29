@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -35,6 +36,7 @@ import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -107,6 +109,7 @@ class SettingsFragment : Fragment() {
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
         val wageSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.wageSettingsCardView)
         val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
+        val tabletSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.tabletSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
@@ -154,6 +157,19 @@ class SettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
+        if (resources.getBoolean(R.bool.isTablet)) {
+            tabletSettingsCardView.shapeAppearanceModel =
+                tabletSettingsCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+        }
+        else {
+            tabletSettingsCardView.visibility = View.GONE
+        }
         timeCardGalleryCardView.shapeAppearanceModel = timeCardGalleryCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -208,6 +224,10 @@ class SettingsFragment : Fragment() {
 
         animationSettingsCardView.setOnClickListener {
             openFragment(AnimationSettingsFragment())
+        }
+
+        tabletSettingsCardView.setOnClickListener {
+            openFragment(TabletSettingsFragment())
         }
 
         timeCardGalleryCardView.setOnClickListener {
@@ -271,6 +291,15 @@ class SettingsFragment : Fragment() {
         dialog.setContentView(deleteAllLayout)
         dialog.setCancelable(false)
 
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
         val infoCardView =
             deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
         val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
@@ -328,6 +357,7 @@ class SettingsFragment : Fragment() {
         val timeCardSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.timeCardSettingsCardView)
         val wageSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.wageSettingsCardView)
         val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
+        val tabletSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.tabletSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
@@ -339,6 +369,7 @@ class SettingsFragment : Fragment() {
         timeCardSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         wageSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         animationSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        tabletSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardGalleryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         patchNotesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         aboutCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))

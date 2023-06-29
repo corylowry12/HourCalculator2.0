@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -30,6 +31,7 @@ import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -226,6 +228,16 @@ class WageSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled when viewing total wages, overtime will be calculated if hours are over 40 at 1.5x your hourly wage\n\n" +
                         "When disabled overtime will not be calculated"
@@ -376,6 +388,16 @@ class WageSettingsFragment : Fragment() {
             layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
         dialog.setContentView(resetSettingsLayout)
         dialog.setCancelable(false)
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
         resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
             "Would you like to reset Wage settings?"
         val yesResetButton =

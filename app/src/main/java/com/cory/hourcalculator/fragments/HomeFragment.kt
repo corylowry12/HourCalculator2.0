@@ -36,8 +36,12 @@ class HomeFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-       requireActivity().recreate()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.detach(this)?.commitNow()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.attach(this)?.commitNow()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -265,7 +269,11 @@ class HomeFragment : Fragment() {
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         breakTextViewInput.hintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        breakTextBox.textCursorDrawable = null
+        try {
+            breakTextBox.textCursorDrawable = null
+        } catch (e: NoSuchMethodError) {
+            e.printStackTrace()
+        }
         breakTextBox.highlightColor =
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         breakTextBox.setTextIsSelectable(false)

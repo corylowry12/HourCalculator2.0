@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,6 +25,7 @@ import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -166,6 +168,16 @@ class HistorySettingsFragment : Fragment() {
         val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
         dialog.setContentView(resetSettingsLayout)
         dialog.setCancelable(false)
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
         resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
             "Would you like to reset History Settings?"
         val infoCardView = resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -175,16 +187,6 @@ class HistorySettingsFragment : Fragment() {
         infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-
-        /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
 
         yesResetButton.setOnClickListener {
             Vibrate().vibration(requireContext())
@@ -285,6 +287,16 @@ class HistorySettingsFragment : Fragment() {
                 historyWarningBottomSheet.setContentView(historySettingsWarningBottomSheet)
                 historyWarningBottomSheet.setCancelable(false)
 
+                if (resources.getBoolean(R.bool.isTablet)) {
+                    val bottomSheet =
+                        historyWarningBottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                    val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    bottomSheetBehavior.skipCollapsed = true
+                    bottomSheetBehavior.isHideable = false
+                    bottomSheetBehavior.isDraggable = false
+                }
+
                 val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
                 val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
                 val infoCardView = historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -339,6 +351,16 @@ class HistorySettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the history tab in the bottom navigation view will be shown and history will be stored\n\n" +
                         "When disabled the history tab in the bottom navigation view will not be shown and history will not be stored"
@@ -409,6 +431,16 @@ class HistorySettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled history will automatically be deleted and not allow you to get over whatever limit you have set\n\n" +
                         "When disabled history will not be automatically be deleted"
@@ -457,6 +489,16 @@ class HistorySettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the app will automatically delete all history when the limit is reached\n\n" +
                         "When disabled the app will not automatically delete history"
@@ -526,6 +568,16 @@ class HistorySettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled each history item will be clickable to automatically open for editing\n\n" +
                         "When disabled each history item will not be clickable"
@@ -573,6 +625,16 @@ class HistorySettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled each history item will show wages based on the number of hours that is calculated for that entry and the wages that are stored\n\n" +
                         "When disabled each history item will not show wages"
@@ -609,6 +671,15 @@ class HistorySettingsFragment : Fragment() {
             dialog.setContentView(historySettingsWarningBottomSheet)
             dialog.setCancelable(false)
 
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             val title = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
             val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
             val infoCardView = historySettingsWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)

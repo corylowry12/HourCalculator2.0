@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -23,6 +24,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -211,6 +213,18 @@ class AnimationSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the recycler view in History will animate when being shown\n\n" +
                         "When disabled the recycler view in History will not animate when being shown"
@@ -256,6 +270,18 @@ class AnimationSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the recycler view in History will animate when scrolling.\n\n" +
                         "When disabled the recycler view in History will not animate when scrolling."
@@ -301,6 +327,17 @@ class AnimationSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the recycler view in Time Cards will animate when being shown.\n\n" +
                         "When disabled the recycler view in Time Cards will not animate when being shown."
@@ -320,10 +357,10 @@ class AnimationSettingsFragment : Fragment() {
 
         val toggleTimeCardScrollingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.timeCardScrollingAnimationSwitch)
 
-        if (animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
+        if (animationData.loadTimeCardsScrollingAnimation()) {
             toggleTimeCardScrollingAnimationSwitch?.isChecked = true
             toggleTimeCardScrollingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-        } else if (!animationData.loadTimeCardRecyclerViewLoadingAnimation()) {
+        } else if (!animationData.loadTimeCardsScrollingAnimation()) {
             toggleTimeCardScrollingAnimationSwitch?.isChecked = false
             toggleTimeCardScrollingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
         }
@@ -346,6 +383,17 @@ class AnimationSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the recycler view in Time Cards will animate when scrolling.\n\n" +
                         "When disabled the recycler view in Time Cards will not animate when scrolling."
@@ -391,6 +439,16 @@ class AnimationSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the image will animate when clicked in Time Cards or Gallery.\n\n" +
                         "When disabled the image will not animate when clicked in Time Cards or Gallery."
@@ -509,6 +567,16 @@ class AnimationSettingsFragment : Fragment() {
             layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
         dialog.setContentView(resetSettingsLayout)
         dialog.setCancelable(false)
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
         resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
             "Would you like to reset Animation settings?"
         val yesResetButton =

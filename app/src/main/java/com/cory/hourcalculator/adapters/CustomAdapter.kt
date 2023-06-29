@@ -21,6 +21,7 @@ import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.EditHours
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -112,40 +113,51 @@ class CustomAdapter(
             itemView.findViewById<CheckBox>(R.id.checkbox).buttonTintList =
                 ColorStateList(states, colors)
 
-            if (dataList.count() == 1) {
-                historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                    .setBottomRightCornerSize(28f)
-                    .setBottomLeftCornerSize(28f)
-                    .build()
-            } else if (dataList.count() > 1) {
-                if (position == 0) {
+            if (!context.resources.getBoolean(R.bool.isTablet)) {
+                if (dataList.count() == 1) {
                     historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
                         .toBuilder()
                         .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
                         .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                } else if (position > 0 && position < dataList.count() - 1) {
-                    historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                } else if (position == dataList.count() - 1) {
-                    historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
                         .setBottomRightCornerSize(28f)
                         .setBottomLeftCornerSize(28f)
                         .build()
+                } else if (dataList.count() > 1) {
+                    if (position == 0) {
+                        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
+                            .build()
+                    } else if (position > 0 && position < dataList.count() - 1) {
+                        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
+                            .build()
+                    } else if (position == dataList.count() - 1) {
+                        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                            .setBottomRightCornerSize(28f)
+                            .setBottomLeftCornerSize(28f)
+                            .build()
+                    }
                 }
+            }
+            else {
+                historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 14f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 14f)
+                    .setBottomRightCornerSize(14f)
+                    .setBottomLeftCornerSize(14f)
+                    .build()
             }
 
             val dataItem = dataList[position]
@@ -603,6 +615,16 @@ class CustomAdapter(
             dialog.setContentView(updateWagesLayout)
             dialog.setCancelable(true)
 
+            if (context.resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
             val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
             val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
@@ -915,6 +937,16 @@ class CustomAdapter(
                             .inflate(R.layout.delete_all_bottom_sheet, null)
                         dialog.setContentView(deleteAllLayout)
                         dialog.setCancelable(true)
+
+                        if (context.resources.getBoolean(R.bool.isTablet)) {
+                            val bottomSheet =
+                                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                            bottomSheetBehavior.skipCollapsed = true
+                            bottomSheetBehavior.isHideable = false
+                            bottomSheetBehavior.isDraggable = false
+                        }
 
                         val infoCardView =
                             deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)

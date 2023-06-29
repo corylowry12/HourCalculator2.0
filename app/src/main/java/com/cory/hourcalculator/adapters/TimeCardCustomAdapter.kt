@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInTimeCardData
 import com.cory.hourcalculator.sharedprefs.WagesData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -134,42 +136,56 @@ class TimeCardCustomAdapter(
 
             val timeCardCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
 
-            if (dataList.count() == 1) {
-                timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                    .setBottomRightCornerSize(28f)
-                    .setBottomLeftCornerSize(28f)
-                    .build()
-            } else if (dataList.count() > 1) {
-                if (position == 0) {
+            if (!context.resources.getBoolean(R.bool.isTablet)) {
+                if (dataList.count() == 1) {
                     timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
                         .toBuilder()
                         .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
                         .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                } else if (position > 0 && position < dataList.count() - 1) {
-                    timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                } else if (position == dataList.count() - 1) {
-                    timeCardCardView.shapeAppearanceModel = timeCardCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
                         .setBottomRightCornerSize(28f)
                         .setBottomLeftCornerSize(28f)
                         .build()
+                } else if (dataList.count() > 1) {
+                    if (position == 0) {
+                        timeCardCardView.shapeAppearanceModel =
+                            timeCardCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                    } else if (position > 0 && position < dataList.count() - 1) {
+                        timeCardCardView.shapeAppearanceModel =
+                            timeCardCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
+                    } else if (position == dataList.count() - 1) {
+                        timeCardCardView.shapeAppearanceModel =
+                            timeCardCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(28f)
+                                .setBottomLeftCornerSize(28f)
+                                .build()
+                    }
                 }
             }
-
+            else {
+                timeCardCardView.shapeAppearanceModel =
+                    timeCardCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 14f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 14f)
+                        .setBottomRightCornerSize(14f)
+                        .setBottomLeftCornerSize(14f)
+                        .build()
+            }
         }
     }
 
@@ -194,6 +210,16 @@ class TimeCardCustomAdapter(
                 .inflate(R.layout.update_wages_bottom_sheet, null)
             dialog.setContentView(updateWagesLayout)
             dialog.setCancelable(true)
+
+            if (context.resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
 
                     val editText =
                         updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
@@ -263,6 +289,16 @@ class TimeCardCustomAdapter(
                     .inflate(R.layout.time_card_options_bottom_sheet, null)
                 dialog.setContentView(timeCardOptionsLayout)
 
+                if (context.resources.getBoolean(R.bool.isTablet)) {
+                    val bottomSheet =
+                        dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                    val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    bottomSheetBehavior.skipCollapsed = true
+                    bottomSheetBehavior.isHideable = false
+                    bottomSheetBehavior.isDraggable = false
+                }
+
                 val renameCardView = timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.renameCardView)
                 val deleteCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteCardView)
@@ -309,6 +345,16 @@ class TimeCardCustomAdapter(
                         .inflate(R.layout.rename_bottom_sheet, null)
                     renameDialog.setContentView(renameLayout)
                     renameDialog.setCancelable(false)
+
+                    if (context.resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            renameDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
 
                     val editText = renameLayout.findViewById<TextInputEditText>(R.id.renameTextInputEditText)
                     val renameButton = renameLayout.findViewById<Button>(R.id.renameButton)
@@ -364,6 +410,16 @@ class TimeCardCustomAdapter(
                     deleteDialog.setContentView(deleteEntryLayout)
                     deleteDialog.setCancelable(true)
 
+                    if (context.resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            deleteDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
+
                     val yesButton = deleteEntryLayout.findViewById<Button>(R.id.yesButton)
                     val noButton = deleteEntryLayout.findViewById<Button>(R.id.noButton)
                     val infoCardView =
@@ -414,6 +470,16 @@ class TimeCardCustomAdapter(
                         LayoutInflater.from(context).inflate(R.layout.delete_all_bottom_sheet, null)
                     deleteAllDialog.setContentView(deleteAllLayout)
                     deleteAllDialog.setCancelable(true)
+
+                    if (context.resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            deleteAllDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
 
                     val infoCardView =
                         deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)

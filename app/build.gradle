@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId "com.cory.hourcalculator"
-        minSdk 26
+        minSdk 21
         targetSdk 33
         versionCode 134
         versionName "10.0.0"
@@ -42,8 +42,8 @@ android {
         Internal {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 164
-            versionName "10.0.0-internal-rc05"
+            versionCode 168
+            versionName "10.0.1-beta03"
         }
 
         Production {

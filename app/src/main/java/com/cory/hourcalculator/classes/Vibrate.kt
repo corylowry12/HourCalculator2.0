@@ -1,6 +1,8 @@
 package com.cory.hourcalculator.classes
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -25,7 +27,14 @@ class Vibrate {
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator.vibrate(2)
             }*/
-            context.getSystemService(Vibrator::class.java).vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+            val vibratorManager = context
+                .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibrator = vibratorManager.defaultVibrator
+
+            if (vibrator.hasVibrator()) {
+                context.getSystemService(Vibrator::class.java)
+                    .vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+            }
         }
     }
 
@@ -45,7 +54,14 @@ class Vibrate {
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator.vibrate(2)
             }*/
-            context.getSystemService(Vibrator::class.java).vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
+            val vibratorManager = context
+                .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibrator = vibratorManager.defaultVibrator
+
+            if (vibrator.hasVibrator()) {
+                context.getSystemService(Vibrator::class.java)
+                    .vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
+            }
         }
     }
 
@@ -55,9 +71,15 @@ class Vibrate {
 
         val vibrator: Vibrator
         if (vibrationData.loadVibrationOnErrorState()) {
-            val pattern = longArrayOf(0, 50, 15, 50)
-            vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(pattern, -1)
+            val vibratorManager = context
+                .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibratorCheck = vibratorManager.defaultVibrator
+
+            if (vibratorCheck.hasVibrator()) {
+                val pattern = longArrayOf(0, 50, 15, 50)
+                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.vibrate(pattern, -1)
+            }
         }
     }
 
@@ -73,7 +95,14 @@ class Vibrate {
                 //vibrator.vibrate(
                     //VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
                // )
-            context.getSystemService(Vibrator::class.java).vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
+            val vibratorManager = context
+                .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibrator = vibratorManager.defaultVibrator
+
+            if (vibrator.hasVibrator()) {
+                context.getSystemService(Vibrator::class.java)
+                    .vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
+            }
             //} else {
                // vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 //vibrator.vibrate(1)

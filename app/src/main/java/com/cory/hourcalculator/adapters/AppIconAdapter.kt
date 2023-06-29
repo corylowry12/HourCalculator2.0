@@ -19,6 +19,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.sharedprefs.ChosenAppIconData
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -131,6 +132,16 @@ class AppIconAdapter(val context: Context,
                     .inflate(R.layout.restart_app_icon_warning_bottom_sheet, null)
                 dialog.setContentView(changeAppIconBottomSheet)
                 dialog.setCancelable(true)
+
+                if (context.resources.getBoolean(R.bool.isTablet)) {
+                    val bottomSheet =
+                        dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                    val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    bottomSheetBehavior.skipCollapsed = true
+                    bottomSheetBehavior.isHideable = false
+                    bottomSheetBehavior.isDraggable = false
+                }
 
                 val infoCardView = changeAppIconBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
                 val yesButton = changeAppIconBottomSheet.findViewById<Button>(R.id.yesAppIconButton)

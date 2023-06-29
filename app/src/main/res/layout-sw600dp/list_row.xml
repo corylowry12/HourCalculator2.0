@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewHistory"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hapticFeedbackEnabled="false"
+        android:foreground="?attr/selectableItemBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp">
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="-10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible"
+                android:button="@drawable/checkbox_rounded"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <TextView
+                android:id="@+id/row_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In Time"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_in"
+                android:text="Out Time"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_in"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_break"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_out"
+                android:text="Break"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_out"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_break"
+                android:text="Total"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_break"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_wages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_total"
+                android:text="Wages"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_total"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="HardcodedText"
+                android:foreground="?attr/selectableItemBackground"/>
+
+
+            <TextView
+                android:id="@+id/row_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_wages"
+                android:text="Day"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/row_wages"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/imageViewOptionsCardView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="15dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:foreground="?attr/selectableItemBackground">
+                <ImageButton
+                    android:id="@+id/imageViewOptions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_more_vert_24px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:clickable="false"/>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

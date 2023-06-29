@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +26,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -135,6 +137,16 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
                         layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
                     dialog.setContentView(resetSettingsLayout)
                     dialog.setCancelable(false)
+
+                    if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
                         "Would you like to reset Number of Days Worked Settings?"
                     val infoCardView =
@@ -412,6 +424,15 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
             dialog.setContentView(historySettingsWarningBottomSheet)
             dialog.setCancelable(false)
 
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             val title =
                 historySettingsWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
             val body = historySettingsWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)

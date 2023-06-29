@@ -482,6 +482,78 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tabletSettingsCardView"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintTabletSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/tabletSettingsImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/baseline_tablet_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tabletSettingsHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="5dp"
+                        android:text="Tablet Settings"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@id/tabletSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/tabletSettingsImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tabletSettingsHeading"
+                        android:layout_alignStart="@id/tabletSettingsHeading"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="4dp"
+                        android:text="Customize tablet settings"
+                        android:textColor="?attr/settingsTextColor"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@id/tabletSettingsChevron"
+                        app:layout_constraintStart_toEndOf="@id/tabletSettingsImage"
+                        app:layout_constraintTop_toBottomOf="@id/tabletSettingsHeading" />
+
+                    <ImageView
+                        android:id="@+id/tabletSettingsChevron"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/settingsIconTint"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/galleryCardView"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"

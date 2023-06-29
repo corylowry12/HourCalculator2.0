@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewTimeCard"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="PrivateResource"
+        tools:visibility="visible"
+        android:hapticFeedbackEnabled="false"
+        android:foreground="?attr/selectableItemBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:id="@+id/row_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_name"
+                android:text="Week"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/row_name"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_total_hours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total Hours"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                android:lineBreakStyle="strict"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/row_week"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/row_time_card_wages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_total_hours"
+                android:text="Wages"
+                android:textColor="?attr/settingsTextColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/row_total_hours"
+                app:layout_constraintEnd_toStartOf="@id/timeCardItemInfoCountChip"
+                android:foreground="?attr/selectableItemBackground"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/timeCardItemInfoCountChip"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:chipStrokeWidth="0dp"
+                android:layout_width="wrap_content"
+                app:closeIconVisible="true"
+                app:chipCornerRadius="28dp"
+                android:layout_height="wrap_content"
+                app:closeIcon="@drawable/ic_baseline_chevron_right_24"
+                app:chipIconEnabled="true"
+                app:chipIcon="@drawable/baseline_image_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="1"
+                android:clickable="false" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

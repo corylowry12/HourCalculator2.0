@@ -216,7 +216,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_100
-                            ) 
+                            )
                         )
                     }"
                 }
@@ -225,7 +225,7 @@ class CustomColorGenerator(context: Context) {
                         Integer.toHexString(
                             ContextCompat.getColor(
                                 insideContext, android.R.color.system_accent2_800
-                            ) 
+                            )
                         )
                     }"
                 }
@@ -236,7 +236,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_100
-                                    ) 
+                                    )
                                 )
                             }"
                         }
@@ -245,7 +245,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_800
-                                    ) 
+                                    )
                                 )
                             }"
                         }
@@ -254,7 +254,7 @@ class CustomColorGenerator(context: Context) {
                                 Integer.toHexString(
                                     ContextCompat.getColor(
                                         insideContext, android.R.color.system_accent2_800
-                                    ) 
+                                    )
                                 )
                             }"
                         }

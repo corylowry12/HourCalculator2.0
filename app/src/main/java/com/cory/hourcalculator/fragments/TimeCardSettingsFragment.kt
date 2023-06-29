@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -27,6 +28,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -206,6 +208,16 @@ class TimeCardSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled each time card item will show wages based on the number of hours that is calculated for that entry and the wages that are stored\n\n" +
                         "When disabled each time card item will not show wages"
@@ -255,6 +267,16 @@ class TimeCardSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the background when viewing a time card image will match the primary color of the image\n\n" +
                         "When disabled the background will be gray when viewing image"
@@ -420,6 +442,16 @@ class TimeCardSettingsFragment : Fragment() {
             layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
         dialog.setContentView(resetSettingsLayout)
         dialog.setCancelable(false)
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
         resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
             "Would you like to reset Time Card settings?"
         val yesResetButton =

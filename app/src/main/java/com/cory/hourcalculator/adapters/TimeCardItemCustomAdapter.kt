@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
@@ -15,6 +16,7 @@ import com.cory.hourcalculator.sharedprefs.ShowBreakTimeInDecimalData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInHistoryData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInTimeCardData
 import com.cory.hourcalculator.sharedprefs.WagesData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -187,6 +189,16 @@ class TimeCardItemCustomAdapter(
                 .inflate(R.layout.update_wages_bottom_sheet, null)
             dialog.setContentView(updateWagesLayout)
             dialog.setCancelable(true)
+
+            if (context.resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
 
             val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
             val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)

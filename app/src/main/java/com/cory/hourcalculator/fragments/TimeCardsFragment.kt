@@ -19,6 +19,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
@@ -39,7 +40,7 @@ import com.google.android.material.snackbar.Snackbar
 class TimeCardsFragment : Fragment() {
 
     private val dataList = ArrayList<HashMap<String, String>>()
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var linearLayoutManager: GridLayoutManager
     private lateinit var timeCardCustomAdapter: TimeCardCustomAdapter
 
     private lateinit var recyclerViewState: Parcelable
@@ -133,7 +134,12 @@ class TimeCardsFragment : Fragment() {
         MainActivity().runOnUiThread(runnable)
 
         timeCardCustomAdapter = TimeCardCustomAdapter(requireContext(), dataList)
-        linearLayoutManager = LinearLayoutManager(requireContext())
+
+        linearLayoutManager = if (resources.getBoolean(R.bool.isTablet)) {
+            GridLayoutManager(requireContext(), 2)
+        } else {
+            GridLayoutManager(requireContext(), 1)
+        }
 
         loadIntoList()
 

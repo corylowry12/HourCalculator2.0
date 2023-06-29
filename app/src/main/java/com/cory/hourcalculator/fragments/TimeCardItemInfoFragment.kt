@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -51,6 +52,7 @@ import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -298,6 +300,16 @@ class TimeCardItemInfoFragment : Fragment() {
             layoutInflater.inflate(R.layout.image_options_bottom_sheet, null)
         imageViewOptionsDialog.setContentView(addAPhotoLayout)
 
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                imageViewOptionsDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
+
         val removePhotoCardView =
             addAPhotoLayout.findViewById<MaterialCardView>(R.id.removePhotoCardView)
         val selectAPhotoCardView =
@@ -436,6 +448,17 @@ class TimeCardItemInfoFragment : Fragment() {
 
         deleteImageDialog.setContentView(deleteImageDialogLayout)
 
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                deleteImageDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
+
         val infoCardView =
             deleteImageDialogLayout.findViewById<MaterialCardView>(R.id.infoCardView)
         val yesButton = deleteImageDialogLayout.findViewById<Button>(R.id.yesButton)
@@ -493,6 +516,16 @@ class TimeCardItemInfoFragment : Fragment() {
         val addAPhotoLayout =
             layoutInflater.inflate(R.layout.image_options_bottom_sheet, null)
         dialog.setContentView(addAPhotoLayout)
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
 
         val removePhotoCardView =
             addAPhotoLayout.findViewById<MaterialCardView>(R.id.removePhotoCardView)

@@ -31,6 +31,7 @@ import com.cory.hourcalculator.classes.*
 import com.cory.hourcalculator.database.DBHelper
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -160,6 +161,15 @@ class EditHours : Fragment() {
                     dialog.setContentView(deleteAllLayout)
                     dialog.setCancelable(true)
 
+                    if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
                     yesButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         val dbHandler = DBHelper(requireContext(), null)
@@ -180,12 +190,11 @@ class EditHours : Fragment() {
 
                         dialog.dismiss()
                     }
-                    //alert.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                     noButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         dialog.dismiss()
                     }
-                    //alert.show()
+
                     dialog.show()
                     true
                 }
@@ -551,6 +560,15 @@ class EditHours : Fragment() {
             dialog.setContentView(deleteAllLayout)
             dialog.setCancelable(false)
 
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             val infoCardView =
                 deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
             val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)

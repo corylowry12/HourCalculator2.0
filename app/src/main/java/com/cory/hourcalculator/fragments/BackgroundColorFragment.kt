@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -136,7 +138,8 @@ class BackgroundColorFragment : Fragment() {
                     dialog.setCancelable(false)
                     resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
                         getString(R.string.would_you_like_to_reset_background_color_settings)
-                    /*if (resources.getBoolean(R.bool.isTablet)) {
+
+                    if (resources.getBoolean(R.bool.isTablet)) {
                         val bottomSheet =
                             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
                         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -144,7 +147,7 @@ class BackgroundColorFragment : Fragment() {
                         bottomSheetBehavior.skipCollapsed = true
                         bottomSheetBehavior.isHideable = false
                         bottomSheetBehavior.isDraggable = false
-                    }*/
+                    }
                     yesResetButton.setOnClickListener {
                         Vibrate().vibration(requireContext())
                         reset()
@@ -222,9 +225,6 @@ class BackgroundColorFragment : Fragment() {
                 }
 
         when {
-            darkThemeData.loadDarkModeState() == 1 -> {
-
-            }
             darkThemeData.loadDarkModeState() == 0 -> {
                 lightThemeButton?.isChecked = true
             }
@@ -296,6 +296,16 @@ class BackgroundColorFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the background color will be a light/dark shade of your accent color\n\n" +
                         "When disabled the background color will be white/black"

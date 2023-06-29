@@ -1,16 +1,19 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.os.VibratorManager
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,6 +36,7 @@ import com.cory.hourcalculator.sharedprefs.OutTimeData
 import com.cory.hourcalculator.sharedprefs.ShowPatchNotesOnAppLaunchData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -168,6 +172,9 @@ class AppSettingsFragment : Fragment() {
 
         val breakTimeSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTimeSettings)
 
+        val vibratorManager = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        val vibrator = vibratorManager.defaultVibrator
+
         outTimeCardView.shapeAppearanceModel = outTimeCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
@@ -198,21 +205,35 @@ class AppSettingsFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-        breakTimeSettingsCardView.shapeAppearanceModel =
-            breakTimeSettingsCardView.shapeAppearanceModel
+
+        if (!vibrator.hasVibrator()) {
+            breakTimeSettingsCardView.shapeAppearanceModel =
+                breakTimeSettingsCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+            vibrationCardView.visibility = View.GONE
+        }
+        else {
+            breakTimeSettingsCardView.shapeAppearanceModel =
+                breakTimeSettingsCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(0f)
-                .setBottomLeftCornerSize(0f)
+                .setBottomRightCornerSize(28f)
+                .setBottomLeftCornerSize(28f)
                 .build()
-        vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(28f)
-            .setBottomLeftCornerSize(28f)
-            .build()
+        }
 
         val outTimeData = OutTimeData(requireContext())
 
@@ -248,6 +269,16 @@ class AppSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the out time time picker on the home screen will match the device clock.\n\n" +
                         "When disabled the out time time picker on the home screen will match what out time was previously entered."
@@ -300,6 +331,16 @@ class AppSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the app will calculate time in time format. (eg. Total Hours: 6:45)\n\n" +
                         "When disabled the app will calculate time in decimal format. (eg. Total Hours: 6.45)"
@@ -352,6 +393,16 @@ class AppSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled you can long click on the calculate button and calculate time format in the opposite format of what is enabled.\n\n" +
                         "When disabled you will not be able to long click the calculate button to calculate time in another format."
@@ -406,6 +457,16 @@ class AppSettingsFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
             infoDialog.setContentView(infoAboutSettingLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the update patch notes will show on app launch after an update.\n\n" +
                         "When disabled the update patch notes will not show on app launch after an update."
@@ -460,6 +521,16 @@ class AppSettingsFragment : Fragment() {
             layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
         dialog.setContentView(resetSettingsLayout)
         dialog.setCancelable(false)
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
         resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
             getString(R.string.would_you_like_to_reset_app_settings)
         val yesResetButton =
@@ -482,15 +553,7 @@ class AppSettingsFragment : Fragment() {
                 ).generateCustomColorPrimary()
             )
         )
-        /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
+
         yesResetButton.setOnClickListener {
             Vibrate().vibration(requireContext())
             reset()

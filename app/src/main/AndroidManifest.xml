@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <queries>
         <intent>
@@ -8,21 +7,18 @@
         </intent>
     </queries>
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" android:requiredFeature="false"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.VIBRATE" android:requiredNotFeature="false"/>
 
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:requiredFeature="false" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <supports-screens
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:smallScreens="false"
-        android:xlargeScreens="true" />
 
     <application
         android:allowBackup="true"
@@ -38,11 +34,9 @@
         <activity
             android:name=".intents.MainActivity"
             android:exported="true"
-            android:configChanges="uiMode"
-            android:screenOrientation="portrait"
+            android:configChanges="uiMode|keyboardHidden|screenSize|orientation|screenLayout"
             android:theme="@style/Theme.AppSplash"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity" />
+            android:windowSoftInputMode="adjustPan" />
 
         <activity-alias
             android:name=".MaterialYou"

@@ -24,7 +24,6 @@
     <string name="press_back_again_to_exit">Press BACK Again To Exit</string>
     <string name="delete">Delete</string>
     <string name="would_you_like_to_delete_history">Would you like to delete this entry?</string>
-    <string name="hour_is_updated">Hour is updated</string>
     <string name="hour_was_not_updated">Hour was not updated</string>
     <string name="undo">UNDO</string>
     <string name="entry_deleted">Entry Deleted</string>
@@ -35,8 +34,6 @@
     <string name="no">No</string>
     <string name="cant_edit_entry">Can\'t edit entry</string>
     <string name="history_deleted">History Deleted</string>
-    <string name="wages_default">7.25</string>
-    <string name="app_settings_reset_to_default">App Settings reset to default</string>
     <string name="one_entry_already_enabled">One Entry Already Enabled</string>
     <string name="two_entries_already_enabled">Two Entries Already Enabled</string>
     <string name="three_entries_already_enabled">Three Entries Already Enabled</string>
@@ -52,9 +49,7 @@
     <string name="total_hours_time_format">Total Hours: %1$d:%2$s</string>
     <string name="total_hours_with_break_decimal_format">Total Hours: %1$d.%2$s\nTotal Hours With Break: %3$s</string>
     <string name="total_hours_decimal_format">Total Hours: %1$d.%2$s</string>
-    <string name="version_number">9.3.0</string>
     <string name="there_was_an_error_please_try_again">There was an error, please try again</string>
-    <string name="app_data_cleared">App Data Cleared</string>
     <string name="version_number_text">Version Number:</string>
     <string name="build_number">Build Number:</string>
     <string name="build_number_number">133</string>
@@ -112,18 +107,15 @@
     <string name="there_was_an_error">There was an error</string>
     <string name="there_was_an_error_deleting_this_entry">There was an error deleting this entry</string>
     <string name="update">Update</string>
-    <string name="already_default_settings">Already default settings</string>
     <string name="would_you_like_to_hide_check_boxes">Would you like to hide checkboxes?</string>
     <string name="menuItem">MenuItem</string>
     <string name="item_selected">" Item Selected"</string>
     <string name="items_selected">" Items Selected"</string>
     <string name="hide">Hide</string>
     <string name="date_last_updated">Date Last Updated:</string>
-    <string name="date">05/21/2023</string>
+    <string name="date">06/27/2023</string>
     <string name="restore_position">Restore Position?</string>
     <string name="restore">Restore</string>
-    <string name="toggle_vibration">Toggle Vibration</string>
-    <string name="toggle_break_text_box">Toggle Break Text Box</string>
     <string name="toggle_history">Toggle History</string>
     <string name="hour_calculated_in_time_format">Hour calculated in time format</string>
     <string name="hour_calculated_in_decimal_format">Hour calculated in decimal format</string>
@@ -150,9 +142,7 @@
     <string name="would_you_like_to_reset_app_settings">Would you like to reset App Settings?</string>
     <string name="would_you_like_to_reset_background_color_settings">Would you like to reset Background Color Settings?</string>
     <string name="follow_system_theme_already_enabled">Follow system theme already enabled</string>
-    <string name="sort_by_least_hours">Sort by Least Hours</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reset_to_default">Reset to default</string>
     <string name="you_must_save_and_exit_editing_to_leave_the_view">You must save and exit editing to leave the view</string>
     <string name="time_card_info">Time Card Info</string>
@@ -161,4 +151,6 @@
     <string name="about">About</string>
     <string name="animation_settings">Animation Settings</string>
     <string name="background_color">Background Color</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

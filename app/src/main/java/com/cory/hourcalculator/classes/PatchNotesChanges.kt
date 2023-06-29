@@ -57,18 +57,26 @@ class PatchNotesChanges {
     )
 
     var bugFixesArrayInternal = arrayOf(
-        "Fixed issue with bottom nav bar colors being different when light theme vs light theme (follow system) when material you is enabled",
-        "Fixed issue with app saving spaces when renaming colors",
-        "Fixed issue with app saving spaces when renaming time cards",
-        "Fixed issue with app saving spaces when setting default time card name"
+        "Fixed issue with bottom navigation bar not being colored properly when generate a random color on app launch was enabled",
+        "Fixed issue with tablet settings not showing the proper selection after the last update",
+        "Fixed issue with the Time Card Scrolling Animation setting not saving",
+        "Fixed issue with options bottom sheet in History not sliding up all the way on tablets",
+        "Fixed issue with the bottom sheets in Time Cards not sliding up all the way on tablets",
+        "Fixed issue with the permissions bottom sheet not sliding up all the way on tablets"
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "No new features"
+        "Added support for tablets",
+        "Added tablet settings for tablets",
+        "Added options to reposition items in the navigation rail for tablets"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "Upped character limit to time card default name from 5 to 15"
+        "Added support for auto rotation",
+        "Vibration settings will no longer be shown in App Settings if the device doesn't support vibration",
+        "Disabled auto rotate on devices that aren't tablets",
+        "History will now be two columns on tablets and one column on smart phones",
+        "Time Cards will now be two columns on tablets and one column on smart phones"
     )
 
 

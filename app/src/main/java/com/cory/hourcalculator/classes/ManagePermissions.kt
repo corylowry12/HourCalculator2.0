@@ -6,10 +6,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -48,6 +51,16 @@ class ManagePermissions(private val activity: Activity, private val list: List<S
         val askPermissionsLayout = LayoutInflater.from(context).inflate(R.layout.ask_permissions_bottom_sheet, null)
         bottomSheetDialog.setContentView(askPermissionsLayout)
         bottomSheetDialog.setCancelable(false)
+
+        if (context.resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
 
         val okCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.okCardView)
         val cancelCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.cancelCardView)

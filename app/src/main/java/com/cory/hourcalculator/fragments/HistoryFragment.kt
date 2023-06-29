@@ -15,6 +15,7 @@ import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
@@ -34,6 +36,7 @@ import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -51,7 +54,7 @@ class HistoryFragment : Fragment() {
     private lateinit var infoDialog: BottomSheetDialog
     private lateinit var sortDialog: BottomSheetDialog
 
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var linearLayoutManager: GridLayoutManager
 
     private var containsColon = false
 
@@ -117,6 +120,16 @@ class HistoryFragment : Fragment() {
                 layoutInflater.inflate(R.layout.info_bottom_sheet, null)
             infoDialog.setContentView(infoLayout)
             infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
 
             val totalHours = infoLayout.findViewById<TextView>(R.id.bodyTextView)
             val numberOfEntries = infoLayout.findViewById<TextView>(R.id.body1TextView)
@@ -287,7 +300,11 @@ class HistoryFragment : Fragment() {
 
         customAdapter = CustomAdapter(requireContext(), dataList)
 
-        linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager = if (resources.getBoolean(R.bool.isTablet)) {
+            GridLayoutManager(requireContext(), 2)
+        } else {
+            GridLayoutManager(requireContext(), 1)
+        }
 
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
         if (AnimationData(requireContext()).loadHistoryRecyclerViewLoadingAnimation()) {
@@ -307,8 +324,17 @@ class HistoryFragment : Fragment() {
                     val historyOptionsDialog = BottomSheetDialog(requireContext())
                     val historyOptions =
                         layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
-
                     historyOptionsDialog.setContentView(historyOptions)
+
+                    if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            historyOptionsDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
 
                     val exportCardView =
                         historyOptions.findViewById<MaterialCardView>(R.id.exportCardView)
@@ -493,6 +519,16 @@ class HistoryFragment : Fragment() {
             sortDialog.setContentView(sortingLayout)
             sortDialog.setCancelable(true)
 
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    sortDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
             val dateDescendingCardView =
                 sortingLayout.findViewById<MaterialCardView>(R.id.dateDescendingCardView)
             val dateAscendingCardView =
@@ -536,16 +572,6 @@ class HistoryFragment : Fragment() {
                     .setBottomRightCornerSize(28f)
                     .setBottomLeftCornerSize(28f)
                     .build()
-
-            /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
 
             val dateDescending =
                 sortingLayout.findViewById<RadioButton>(R.id.dateDescending)

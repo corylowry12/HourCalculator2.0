@@ -14,6 +14,7 @@ import com.cory.hourcalculator.sharedprefs.GenerateARandomColorData
 import com.cory.hourcalculator.sharedprefs.GenerateARandomColorMethodData
 import com.cory.hourcalculator.sharedprefs.MaterialYouData
 import com.cory.hourcalculator.sharedprefs.UserAddedColorsData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
@@ -117,6 +118,16 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
                 .inflate(R.layout.rename_bottom_sheet, null)
             dialog.setContentView(renameLayout)
             dialog.setCancelable(true)
+
+            if (context.resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
 
             val editText = renameLayout.findViewById<TextInputEditText>(R.id.renameTextInputEditText)
             val renameButton = renameLayout.findViewById<Button>(R.id.renameButton)
