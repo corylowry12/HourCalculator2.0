@@ -6,6 +6,8 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.os.IResultReceiver.Default
 import android.text.Editable
@@ -148,6 +150,7 @@ class TimeCardSettingsFragment : Fragment() {
         val showWagesInTimeCardsCardView = requireActivity().findViewById<MaterialCardView>(R.id.showWagesInTimeCardsCardView)
         val coloredImageViewBackgroundCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredImageViewBackgroundCardView)
         val defaultNameCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDefaultName)
+        val fabPositioningTimeCard = requireActivity().findViewById<MaterialCardView>(R.id.cardViewFABPositioningTimeCards)
 
         showWagesInTimeCardsCardView.shapeAppearanceModel =
             showWagesInTimeCardsCardView.shapeAppearanceModel
@@ -167,6 +170,14 @@ class TimeCardSettingsFragment : Fragment() {
                 .build()
         defaultNameCardView.shapeAppearanceModel =
             defaultNameCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(0f)
+                .setBottomLeftCornerSize(0f)
+                .build()
+        fabPositioningTimeCard.shapeAppearanceModel =
+            fabPositioningTimeCard.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -303,7 +314,11 @@ class TimeCardSettingsFragment : Fragment() {
         defaultNameEditTextLayout?.boxStrokeColor = Color.parseColor("#000000")
         defaultNameEditTextLayout?.hintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        try {
         defaultNameEditText.textCursorDrawable = null
+    } catch (e: NoSuchMethodError) {
+        e.printStackTrace()
+    }
         defaultNameEditTextLayout?.defaultHintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         defaultNameEditText.highlightColor =
@@ -341,6 +356,19 @@ class TimeCardSettingsFragment : Fragment() {
                 defaultTimeCardNameData.setDefaultName(s.toString().trim())
             }
         })
+
+        fabPositioningTimeCard.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+            transaction?.replace(R.id.fragment_container, TimeCardFABPositioningFragment())?.addToBackStack(null)
+            transaction?.commit()
+        }
     }
 
     fun updateCustomColor() {
@@ -351,6 +379,7 @@ class TimeCardSettingsFragment : Fragment() {
         requireActivity().findViewById<MaterialCardView>(R.id.cardViewDefaultName).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.coloredImageViewBackgroundCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.showWagesInTimeCardsCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        requireActivity().findViewById<MaterialCardView>(R.id.cardViewFABPositioningTimeCards).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
         val showWagesInTimeCardsSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInTimeCardsSwitch)
         val coloredBackgroundSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredImageViewBackgroundSwitch)
@@ -378,30 +407,46 @@ class TimeCardSettingsFragment : Fragment() {
         val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
         resetDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
 
-        } else {
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+        else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardSettings)
