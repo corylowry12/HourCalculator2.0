@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
@@ -821,6 +822,8 @@ class AccentColorFragment : Fragment() {
         requireActivity().findViewById<TextView>(R.id.generateRandomColorTitle).text =
             getString(R.string.generate_a_random_color_on_app_launch)
 
+        CustomColorGenerator(requireContext()).setCustomHex("#53c8c8")
+
         UserAddedColorsData(requireContext()).clear()
         UserAddedColorsData(requireContext()).clearHash()
         requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColorsData(requireContext()).read().count().toString()
@@ -922,22 +925,46 @@ class AccentColorFragment : Fragment() {
         val navigationDrawable = topAppBarAccent?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-                resetDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(customColorGenerator.generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(customColorGenerator.generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
+
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
         }
         else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarAccentColorFragment)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
