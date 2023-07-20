@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
@@ -128,17 +130,37 @@ class SavedColorsFragment : Fragment() {
         val navigationDrawable = topAppBarSavedColors?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
+
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
         }
         else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
 
         val runnable = Runnable {
