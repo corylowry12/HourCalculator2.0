@@ -333,8 +333,13 @@ class HomeFragment : Fragment() {
         }
 
         if (diffMinutes.toInt() < 0) {
+
             diffMinutes = (60 + diffMinutes.toInt()).toString()
             diffHours -= 1
+            if (diffMinutes.length == 1) {
+                Toast.makeText(requireContext(), "called", Toast.LENGTH_SHORT).show()
+                diffMinutes = "0$diffMinutes"
+            }
         }
 
         if (diffHours == 0 && diffMinutes == "00") {
