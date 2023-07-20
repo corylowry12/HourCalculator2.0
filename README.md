@@ -26,10 +26,11 @@ I created this app in order to help me calculate my hours at work.
 <img src="/Screenshots/Android Phone 6.0.png" width="200" height="350"/>
 
 <p></p>
-<img src="/Screenshots/Android Tablet - 1.png" />
+<img src="/Screenshots/Android Tablet 10 - 6.png" />
 <img src="/Screenshots/Android Tablet 10 - 1.png" />
+<img src="/Screenshots/Android Tablet - 1.png" />
 <img src="/Screenshots/Android Tablet 10 - 3.png" />
 <img src="/Screenshots/Android Tablet 10 - 4.png" />
 <img src="/Screenshots/Android Tablet 10 - 5.png" />
-<img src="/Screenshots/Android Tablet 10 - 6.png" />
+
 </p>
