@@ -6,7 +6,10 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
+import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -172,9 +175,69 @@ class AppSettingsFragment : Fragment() {
 
         val breakTimeSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewBreakTimeSettings)
 
+        if (Build.VERSION.SDK_INT >= 31) {
         val vibratorManager = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
         val vibrator = vibratorManager.defaultVibrator
-
+            if (!vibrator.hasVibrator()) {
+                breakTimeSettingsCardView.shapeAppearanceModel =
+                    breakTimeSettingsCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+                vibrationCardView.visibility = View.GONE
+            }
+            else {
+                breakTimeSettingsCardView.shapeAppearanceModel =
+                    breakTimeSettingsCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+            }
+        }
+        else {
+            val vib = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (!vib.hasVibrator()) {
+                breakTimeSettingsCardView.shapeAppearanceModel =
+                    breakTimeSettingsCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+                vibrationCardView.visibility = View.GONE
+            }
+            else {
+                breakTimeSettingsCardView.shapeAppearanceModel =
+                    breakTimeSettingsCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+                vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+            }
+        }
         outTimeCardView.shapeAppearanceModel = outTimeCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
@@ -205,35 +268,6 @@ class AppSettingsFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-
-        if (!vibrator.hasVibrator()) {
-            breakTimeSettingsCardView.shapeAppearanceModel =
-                breakTimeSettingsCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                    .setBottomRightCornerSize(28f)
-                    .setBottomLeftCornerSize(28f)
-                    .build()
-            vibrationCardView.visibility = View.GONE
-        }
-        else {
-            breakTimeSettingsCardView.shapeAppearanceModel =
-                breakTimeSettingsCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                    .setBottomRightCornerSize(0f)
-                    .setBottomLeftCornerSize(0f)
-                    .build()
-            vibrationCardView.shapeAppearanceModel = vibrationCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(28f)
-                .setBottomLeftCornerSize(28f)
-                .build()
-        }
 
         val outTimeData = OutTimeData(requireContext())
 
@@ -708,28 +742,46 @@ class AppSettingsFragment : Fragment() {
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
 
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-        } else {
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+        else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
     }
 }
