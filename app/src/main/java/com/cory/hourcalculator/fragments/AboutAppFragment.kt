@@ -5,7 +5,9 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -44,20 +46,25 @@ class AboutAppFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -75,20 +82,25 @@ class AboutAppFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -134,7 +146,11 @@ class AboutAppFragment : Fragment() {
             .build()
 
         val versionNumberTextView = view.findViewById<TextView>(R.id.versionNumber)
-        versionNumberTextView.text = getString(R.string.version_number_about, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        versionNumberTextView.text = getString(
+            R.string.version_number_about,
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE
+        )
 
         updateCustomColor()
 
@@ -147,26 +163,24 @@ class AboutAppFragment : Fragment() {
 
         val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
 
-        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.teal) || ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(
-                        R.string.material_you)) {
+        if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.teal) || ChosenAppIconData(
+                requireContext()
+            ).loadChosenAppIcon() == getString(
+                R.string.material_you
+            )
+        ) {
             autoIcon.setImageResource(R.drawable.hourcalclogoteal)
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.pink)) {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.pink)) {
             autoIcon.setImageResource(R.drawable.hourcalclogopink)
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.orange)) {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.orange)) {
             autoIcon.setImageResource(R.drawable.hourcalclogoorange)
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.red)) {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.red)) {
             autoIcon.setImageResource(R.drawable.hourcalclogored)
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.blue)) {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.blue)) {
             autoIcon.setImageResource(R.drawable.hourcalclogoblue)
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.og)) {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.og)) {
             autoIcon.setImageResource(R.drawable.hourcalculatorlogoyellowgradient)
-        }
-        else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.snow_falling)) {
+        } else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.snow_falling)) {
             autoIcon.setImageResource(R.drawable.hourcalclogo_christmas)
         }
 
@@ -214,11 +228,19 @@ class AboutAppFragment : Fragment() {
         if (this.isPackageInstalled(packageName)) {
             // if chrome is available use chrome custom tabs
             customBuilder.intent.setPackage(packageName)
-            customBuilder.launchUrl(requireContext(), Uri.parse(LinkData(requireContext()).loadLink()))
+            customBuilder.launchUrl(
+                requireContext(),
+                Uri.parse(LinkData(requireContext()).loadLink())
+            )
         } else {
-            Toast.makeText(requireContext(), getString(R.string.there_was_an_error), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.there_was_an_error),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
     private fun leaveAReview() {
         Vibrate().vibration(requireContext())
         val reviewManager = ReviewManagerFactory.create(requireContext())
@@ -255,7 +277,8 @@ class AboutAppFragment : Fragment() {
     }
 
     private fun updateCustomColor() {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.aboutAppCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        requireActivity().findViewById<CoordinatorLayout>(R.id.aboutAppCoordinatorLayout)
+            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         val cardView1 = requireActivity().findViewById<MaterialCardView>(R.id.cardView1)
         val cardView2 = requireActivity().findViewById<MaterialCardView>(R.id.cardView2)
         val cardView3 = requireActivity().findViewById<MaterialCardView>(R.id.cardView3)
@@ -264,20 +287,47 @@ class AboutAppFragment : Fragment() {
         cardView2.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         cardView3.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
-        val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAbout)
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        val collapsingToolbarLayout =
+            requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAbout)
+        collapsingToolbarLayout.setContentScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
+        collapsingToolbarLayout.setStatusBarScrimColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTopAppBarColor()
+            )
+        )
 
-        collapsingToolbarLayout?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+        collapsingToolbarLayout?.setExpandedTitleColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateTitleBarExpandedTextColor()
+            )
+        )
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
-            collapsingToolbarLayout?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
-        }
-        else {
+            collapsingToolbarLayout?.setCollapsedTitleTextColor(
+                Color.parseColor(
+                    CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()
+                )
+            )
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            collapsingToolbarLayout?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
+            collapsingToolbarLayout?.setCollapsedTitleTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    id
+                )
+            )
         }
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBarAboutApp)
@@ -285,18 +335,37 @@ class AboutAppFragment : Fragment() {
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
 
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
         }
         else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
     }
 
