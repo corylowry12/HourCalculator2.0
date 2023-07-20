@@ -19,9 +19,11 @@ I created this app in order to help me calculate my hours at work.
 # Screenshots
 <p float="left">
 <img src="/Screenshots/Android Phone 1.0.png" width="200" height="350"/>
-<img src=/Screenshots/screenshot2.png width="200" height="400"/>
-<img src=/Screenshots/screenshot3.png width="200" height="400"/>
-<img src=/Screenshots/screenshot4.png width="200" height="400"/>
-<img src=/Screenshots/screenshot5.png width="200" height="400"/>
-<img src=/Screenshots/screenshot6.png width="200" height="400"/>
+<img src="/Screenshots/Android Phone 2.0.png" width="200" height="350"/>
+<img src="/Screenshots/Android Phone 3.0.png" width="200" height="350"/>
+<img src="/Screenshots/Android Phone 4.0.png" width="200" height="350"/>
+<img src="/Screenshots/Android Phone 5.0.png" width="200" height="350"/>
+<img src="/Screenshots/Android Phone 6.0.png" width="200" height="350"/>
+
+<img src="/Screenshots/Android Tablet -1" width="200" height="350"/>
 </p>
