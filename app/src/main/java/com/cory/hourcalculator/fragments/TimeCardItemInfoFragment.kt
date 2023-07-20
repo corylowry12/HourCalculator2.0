@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
@@ -347,22 +348,38 @@ class TimeCardItemInfoFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-        selectAPhotoCardView.shapeAppearanceModel =
-            selectAPhotoCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(0f)
-                .setBottomLeftCornerSize(0f)
-                .build()
-        takeAPhotoCardView.shapeAppearanceModel =
-            takeAPhotoCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(28f)
-                .setBottomLeftCornerSize(28f)
-                .build()
+
+        val hasCamera = requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+
+        if (!hasCamera) {
+            takeAPhotoCardView.visibility = View.GONE
+            selectAPhotoCardView.shapeAppearanceModel =
+                selectAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+        }
+        else {
+            selectAPhotoCardView.shapeAppearanceModel =
+                selectAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            takeAPhotoCardView.shapeAppearanceModel =
+                takeAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+        }
 
         if (requireActivity().findViewById<ImageView>(R.id.timeCardImage).visibility == View.GONE) {
             removePhotoCardView.visibility = View.GONE
@@ -398,6 +415,7 @@ class TimeCardItemInfoFragment : Fragment() {
             )
             imageViewOptionsDialog.dismiss()
         }
+
         takeAPhotoCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             val list = listOf(
@@ -564,22 +582,37 @@ class TimeCardItemInfoFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-        selectAPhotoCardView.shapeAppearanceModel =
-            selectAPhotoCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(0f)
-                .setBottomLeftCornerSize(0f)
-                .build()
-        takeAPhotoCardView.shapeAppearanceModel =
-            takeAPhotoCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(28f)
-                .setBottomLeftCornerSize(28f)
-                .build()
+        val hasCamera = requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+
+        if (!hasCamera) {
+            takeAPhotoCardView.visibility = View.GONE
+            selectAPhotoCardView.shapeAppearanceModel =
+                selectAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+        }
+        else {
+            selectAPhotoCardView.shapeAppearanceModel =
+                selectAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            takeAPhotoCardView.shapeAppearanceModel =
+                takeAPhotoCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+        }
 
         if (requireActivity().findViewById<ImageView>(R.id.timeCardImage).visibility == View.GONE) {
             removePhotoCardView.visibility = View.GONE
@@ -588,14 +621,26 @@ class TimeCardItemInfoFragment : Fragment() {
             layoutParams.setMargins(0, 25, 0, 0)
             selectAPhotoCardView.requestLayout()
 
-            selectAPhotoCardView.shapeAppearanceModel =
-                selectAPhotoCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                    .setBottomRightCornerSize(0f)
-                    .setBottomLeftCornerSize(0f)
-                    .build()
+            if (hasCamera) {
+                selectAPhotoCardView.shapeAppearanceModel =
+                    selectAPhotoCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(0f)
+                        .setBottomLeftCornerSize(0f)
+                        .build()
+            }
+            else {
+                selectAPhotoCardView.shapeAppearanceModel =
+                    selectAPhotoCardView.shapeAppearanceModel
+                        .toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                        .setBottomRightCornerSize(28f)
+                        .setBottomLeftCornerSize(28f)
+                        .build()
+            }
         }
 
         removePhotoCardView.setOnClickListener {
@@ -873,28 +918,46 @@ class TimeCardItemInfoFragment : Fragment() {
             )
         )
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
 
-            addDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-        } else {
+                    addDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    addDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                addDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+        else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            addDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            addDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
 
         val timeCardInfoNameTextInput =
