@@ -6,6 +6,8 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +18,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -25,7 +28,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.adapters.CustomAdapter
@@ -44,6 +46,8 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 import java.math.RoundingMode
 
+
+@Suppress("DEPRECATION")
 class HistoryFragment : Fragment() {
 
     private var output: String = ""
@@ -70,22 +74,27 @@ class HistoryFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -204,8 +213,7 @@ class HistoryFragment : Fragment() {
                                 .toDouble()) + timeHalf
                         val wagesRounded = String.format("%,.2f", wages)
                         wagesTextView.text = "Wages: $$wagesRounded"
-                    }
-                    else {
+                    } else {
                         val wages =
                             outputWages.toDouble() * wagesData.loadWageAmount().toString()
                                 .toDouble()
@@ -263,22 +271,27 @@ class HistoryFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -410,16 +423,19 @@ class HistoryFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.info -> {
                     Vibrate().vibration(requireContext())
                     info()
                     true
                 }
+
                 R.id.mnuSort -> {
                     Vibrate().vibration(requireContext())
                     sort()
                     true
                 }
+
                 else -> false
             }
         }
@@ -453,6 +469,25 @@ class HistoryFragment : Fragment() {
             topAppBar?.navigationIcon = null
         }
 
+        val floatingActionButtonHistory =
+            requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
+
+        val params = CoordinatorLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(30, 0, 30, 30)
+
+        if (HistoryFABPositioning(requireContext()).loadFABPosition() == 0) {
+            params.gravity = Gravity.BOTTOM or Gravity.START
+        } else if (HistoryFABPositioning(requireContext()).loadFABPosition() == 1) {
+            params.gravity = Gravity.BOTTOM or Gravity.CENTER
+        } else if (HistoryFABPositioning(requireContext()).loadFABPosition() == 2) {
+            params.gravity = Gravity.BOTTOM or Gravity.END
+        }
+
+        floatingActionButtonHistory.layoutParams = params
+
         listView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -461,19 +496,16 @@ class HistoryFragment : Fragment() {
                 val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
 
                 if (pastVisibleItems > 0) {
-                    requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
-                        ?.show()
+                    floatingActionButtonHistory?.show()
                 } else {
-                    requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
-                        ?.hide()
+                    floatingActionButtonHistory?.hide()
                 }
             }
         })
 
-        requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
-            ?.setOnClickListener {
-                scrollToTop()
-            }
+        floatingActionButtonHistory?.setOnClickListener {
+            scrollToTop()
+        }
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -502,12 +534,15 @@ class HistoryFragment : Fragment() {
                 sortData.loadSortState() == getString(R.string.day_desc) -> {
                     selectedItem = 0
                 }
+
                 sortData.loadSortState() == getString(R.string.day_asc) -> {
                     selectedItem = 1
                 }
+
                 sortData.loadSortState() == getString(R.string.total_desc) -> {
                     selectedItem = 2
                 }
+
                 sortData.loadSortState() == getString(R.string.total_asc) -> {
                     selectedItem = 3
                 }
@@ -621,12 +656,15 @@ class HistoryFragment : Fragment() {
                 0 -> {
                     dateDescending.isChecked = true
                 }
+
                 1 -> {
                     dateAscending.isChecked = true
                 }
+
                 2 -> {
                     totalDescending.isChecked = true
                 }
+
                 3 -> {
                     totalAscending.isChecked = true
                 }
@@ -799,99 +837,147 @@ class HistoryFragment : Fragment() {
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            infoDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            sortDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            optionsDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
+                    infoDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    sortDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    optionsDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    infoDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    sortDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    optionsDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                infoDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                sortDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                optionsDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
         } else {
+
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            infoDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            sortDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            optionsDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+            infoDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            sortDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            optionsDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
     }
 
-    @SuppressLint("Range")
     private fun loadIntoList() {
 
-        val dbHandler = DBHelper(requireActivity().applicationContext, null)
+        try {
+            val dbHandler = DBHelper(requireActivity().applicationContext, null)
 
-        if (dbHandler.getCount() > 0) {
-            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
-            noHoursStoredTextView?.visibility = View.GONE
-        } else {
-            val noHoursStoredTextView = activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
-            noHoursStoredTextView?.visibility = View.VISIBLE
+            if (dbHandler.getCount() > 0) {
+                val noHoursStoredTextView =
+                    activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
+                noHoursStoredTextView?.visibility = View.GONE
+            } else {
+                val noHoursStoredTextView =
+                    activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
+                noHoursStoredTextView?.visibility = View.VISIBLE
 
-        }
-
-        dataList.clear()
-        val cursor = dbHandler.getAllRow(requireContext())
-        cursor!!.moveToFirst()
-
-        while (!cursor.isAfterLast) {
-            val map = HashMap<String, String>()
-            map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
-            dataList.add(map)
-
-            cursor.moveToNext()
-
-        }
-
-        calculateWages()
-
-        if (dataList.isNotEmpty()) {
-            for (i in 0 until dataList.count()) {
-                val (wholeNumber, decimal) = output.split(".")
-                var minute = (".$decimal".toDouble() * 60).toInt().toString()
-                if (minute.length == 1) {
-                    minute = "0$minute"
-                }
-
-                outputColon = "$wholeNumber:$minute"
             }
+
+            dataList.clear()
+            val cursor = dbHandler.getAllRow(requireContext())
+            cursor!!.moveToFirst()
+
+            while (!cursor.isAfterLast) {
+                val map = HashMap<String, String>()
+                map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                dataList.add(map)
+
+                cursor.moveToNext()
+
+            }
+
+            calculateWages()
+
+            if (dataList.isNotEmpty()) {
+                for (i in 0 until dataList.count()) {
+                    val (wholeNumber, decimal) = output.split(".")
+                    var minute = (".$decimal".toDouble() * 60).toInt().toString()
+                    if (minute.length == 1) {
+                        minute = "0$minute"
+                    }
+
+                    outputColon = "$wholeNumber:$minute"
+                }
+            }
+
+            val listView = activity?.findViewById<RecyclerView>(R.id.listView)
+            listView?.layoutManager = linearLayoutManager
+            listView?.adapter = customAdapter
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val snackBar =
+                Snackbar.make(requireView(), "Error loading history", Snackbar.LENGTH_LONG)
+            snackBar.duration = Snackbar.LENGTH_INDEFINITE
+
+            snackBar.setAction("Delete") {
+                Vibrate().vibration(requireContext())
+                snackBar.dismiss()
+                DBHelper(requireActivity().applicationContext, null).deleteAll()
+                loadIntoList()
+            }
+
+            snackBar.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
+            )
+            snackBar.apply {
+                snackBar.view.background = ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.snackbar_corners,
+                    context.theme
+                )
+            }
+            snackBar.show()
         }
-
-        val listView = activity?.findViewById<RecyclerView>(R.id.listView)
-        listView?.layoutManager = linearLayoutManager
-        listView?.adapter = customAdapter
-
     }
 
-    @SuppressLint("Range")
     private fun changeSortMethod() {
 
         val dbHandler = DBHelper(requireActivity().applicationContext, null)
@@ -915,7 +1001,6 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    @SuppressLint("Range")
     fun undo() {
         val listView = activity?.findViewById<RecyclerView>(R.id.listView)
 
