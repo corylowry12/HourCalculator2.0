@@ -8,11 +8,13 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -32,6 +34,7 @@ import com.cory.hourcalculator.database.TimeCardDBHelper
 import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.AnimationData
+import com.cory.hourcalculator.sharedprefs.TimeCardFABPositioningData
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -145,6 +148,24 @@ class TimeCardsFragment : Fragment() {
 
         val floatingActionButtonTimeCards =
             view.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCards)
+
+        val params = CoordinatorLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(30,0,30,30)
+
+        if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 0) {
+            params.gravity = Gravity.BOTTOM or Gravity.START
+        }
+        else if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 1) {
+            params.gravity = Gravity.BOTTOM or Gravity.CENTER
+        }
+        else if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 2) {
+            params.gravity = Gravity.BOTTOM or Gravity.END
+        }
+
+        floatingActionButtonTimeCards.layoutParams = params
 
         recyclerViewTimeCards?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
