@@ -18,7 +18,7 @@ I created this app in order to help me calculate my hours at work.
 
 # Screenshots
 <p float="left">
-<img src=/Screenshots/screenshot1.png width="200" height="400"/>
+<img src="/Screenshots/Android Phone 1.0.png" width="200" height="400"/>
 <img src=/Screenshots/screenshot2.png width="200" height="400"/>
 <img src=/Screenshots/screenshot3.png width="200" height="400"/>
 <img src=/Screenshots/screenshot4.png width="200" height="400"/>
