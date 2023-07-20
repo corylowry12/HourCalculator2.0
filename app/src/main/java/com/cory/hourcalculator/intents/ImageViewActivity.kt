@@ -99,26 +99,46 @@ class ImageViewActivity : AppCompatActivity() {
         val navigationDrawable = viewImageMaterialToolbar?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (MenuTintData(this).loadMenuTint()) {
-            deleteImageDrawable.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-        } else {
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(this).loadMenuTint()) {
+
+                    deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(this).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val resourceId = typedValue.resourceId
+                    deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(this, resourceId),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(this, resourceId),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(this, id), PorterDuff.Mode.SRC_ATOP)
+                deleteImageDrawable.setColorFilter(ContextCompat.getColor(this, id), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+        else {
             val typedValue = TypedValue()
-            this.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            deleteImageDrawable.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(this, typedValue.resourceId),
-                BlendMode.SRC_ATOP
-            )
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(this, typedValue.resourceId),
-                BlendMode.SRC_ATOP
-            )
+            theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+            val resourceId = typedValue.resourceId
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(this, resourceId), PorterDuff.Mode.SRC_ATOP)
+            deleteImageDrawable.setColorFilter(ContextCompat.getColor(this, resourceId), PorterDuff.Mode.SRC_ATOP)
         }
 
         viewImageMaterialToolbar.setNavigationOnClickListener {
@@ -282,14 +302,33 @@ class ImageViewActivity : AppCompatActivity() {
                 val navigationDrawable = viewImageMaterialToolbar?.navigationIcon
                 navigationDrawable?.mutate()
 
-                deleteImageDrawable.colorFilter = BlendModeColorFilter(
-                    invertedColor,
-                    BlendMode.SRC_ATOP
-                )
-                navigationDrawable?.colorFilter = BlendModeColorFilter(
-                    invertedColor,
-                    BlendMode.SRC_ATOP
-                )
+                if (Build.VERSION.SDK_INT >= 29) {
+                    try {
+
+                        deleteImageDrawable.colorFilter = BlendModeColorFilter(
+                            invertedColor,
+                            BlendMode.SRC_ATOP
+                        )
+                        navigationDrawable?.colorFilter = BlendModeColorFilter(
+                            invertedColor,
+                            BlendMode.SRC_ATOP
+                        )
+                    } catch (e: NoClassDefFoundError) {
+                        e.printStackTrace()
+                        val typedValue = TypedValue()
+                        theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                        val id = typedValue.resourceId
+                        navigationDrawable?.setColorFilter(ContextCompat.getColor(this, id), PorterDuff.Mode.SRC_ATOP)
+                        deleteImageDrawable?.setColorFilter(ContextCompat.getColor(this, id), PorterDuff.Mode.SRC_ATOP)
+                    }
+                }
+                else {
+                    val typedValue = TypedValue()
+                    theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    navigationDrawable?.setColorFilter(ContextCompat.getColor(this, id), PorterDuff.Mode.SRC_ATOP)
+                    deleteImageDrawable?.setColorFilter(ContextCompat.getColor(this, id), PorterDuff.Mode.SRC_ATOP)
+                }
 
             } catch (e: NullPointerException) {
                 e.printStackTrace()
