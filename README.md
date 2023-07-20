@@ -25,5 +25,5 @@ I created this app in order to help me calculate my hours at work.
 <img src="/Screenshots/Android Phone 5.0.png" width="200" height="350"/>
 <img src="/Screenshots/Android Phone 6.0.png" width="200" height="350"/>
 
-<img src="/Screenshots/Android Tablet -1.png" width="200" height="350"/>
+<img src="/Screenshots/Android Tablet - 1.png" width="200" height="350"/>
 </p>
