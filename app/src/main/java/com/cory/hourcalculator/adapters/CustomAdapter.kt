@@ -731,9 +731,9 @@ class CustomAdapter(
         holder.itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView).setOnClickListener {
             Vibrate().vibration(context)
 
+            val listPopupWindow = ListPopupWindow(context)
             val popupWindowAdapter =
                 ArrayAdapter(context, R.layout.historypopupwindow, R.id.details, listItems)
-            val listPopupWindow = ListPopupWindow(context)
             listPopupWindow.setAdapter(popupWindowAdapter)
             listPopupWindow.anchorView = imageView
             listPopupWindow.width = (holder.itemView.width / 2)
@@ -1281,13 +1281,16 @@ class CustomAdapter(
                 .addToBackStack(null)
             manager.commit()
 
-            val saveState = Runnable {
-                (context as MainActivity).saveState()
+            try {
+                val saveState = Runnable {
+                    (context as MainActivity).saveState()
 
+                }
+
+                MainActivity().runOnUiThread(saveState)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-
-            MainActivity().runOnUiThread(saveState)
-
         } else {
             Toast.makeText(
                 context,
