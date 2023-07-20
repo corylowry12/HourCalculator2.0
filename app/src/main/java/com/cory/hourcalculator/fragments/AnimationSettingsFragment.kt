@@ -5,6 +5,8 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.TypedValue
@@ -521,30 +523,46 @@ class AnimationSettingsFragment : Fragment() {
         val resetDrawable = topAppBar?.menu?.findItem(R.id.reset)?.icon
         resetDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.historyActionBarIconTint, typedValue, true)
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                BlendMode.SRC_ATOP
-            )
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
 
-        } else {
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
+                }
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
+                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+        else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            navigationDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
-            resetDrawable?.colorFilter = BlendModeColorFilter(
-                ContextCompat.getColor(requireContext(), id),
-                BlendMode.SRC_ATOP
-            )
+            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutAnimationSettings)?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
