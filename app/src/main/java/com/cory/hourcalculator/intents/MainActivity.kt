@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
                         if (currentFragment.toString().startsWith("EditHours", true)) {
                             editHours.historyTabClicked(this)
                             return@setOnItemSelectedListener false
-                        } else if (currentFragment.toString().startsWith("History", true) && !currentFragment.toString().contains("Settings", true)) {
+                        } else if (currentFragment.toString().startsWith("History", true) && !currentFragment.toString().contains("Settings", true) && !currentFragment.toString().contains("fab", true)) {
                             historyFragment.scrollToTop()
                             return@setOnItemSelectedListener true
                         }
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this,     getString(R.string.you_must_save_and_exit_editing_to_leave_the_view), Toast.LENGTH_SHORT).show()
                         return@setOnItemSelectedListener false
                     }
-                    else if (currentFragment.toString().startsWith("Time", true) && (!currentFragment.toString().contains("Info") && !currentFragment.toString().contains("Settings"))) {
+                    else if (currentFragment.toString().startsWith("Time", true) && (!currentFragment.toString().contains("Info") && !currentFragment.toString().contains("Settings")) && !currentFragment.toString().contains("fab", true)) {
                         timeCards.scrollToTop()
                         return@setOnItemSelectedListener true
                     }
