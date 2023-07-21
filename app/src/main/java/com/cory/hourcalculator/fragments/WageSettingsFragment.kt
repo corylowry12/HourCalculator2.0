@@ -303,7 +303,11 @@ class WageSettingsFragment : Fragment() {
         wagesTextInputEditText?.boxStrokeColor = Color.parseColor("#000000")
         wagesTextInputEditText?.hintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        wagesEditText.textCursorDrawable = null
+        try {
+            wagesEditText.textCursorDrawable = null
+        } catch (e: NoSuchMethodError) {
+            e.printStackTrace()
+        }
         wagesTextInputEditText?.defaultHintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         wagesEditText.highlightColor =

@@ -17,7 +17,9 @@ class PatchNotesChanges {
         "Fixed issue with app sending out a toast message saying \"called\" when clicking the History tab under certain conditions",
         "Fixed issue with bottom navigation bar not updating in some cases",
         "Fixed issue with crashing when opening app settings",
-        "Fixed issue with crashing when opening history settings"
+        "Fixed issue with crashing when opening history settings",
+        "Fixed crash in Wage settings",
+        "Fixed crash in the Appearance settings"
     )
 
     var newFeaturesArray = arrayOf(

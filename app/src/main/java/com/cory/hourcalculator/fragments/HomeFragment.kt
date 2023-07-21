@@ -89,11 +89,6 @@ class HomeFragment : Fragment() {
         main()
     }
 
-    override fun onResume() {
-        super.onResume()
-        main()
-    }
-
     private fun main() {
         val breakTextBox = requireActivity().findViewById<TextInputEditText>(R.id.breakTimeEditTextHomeFragment)
         val calculateButton =
