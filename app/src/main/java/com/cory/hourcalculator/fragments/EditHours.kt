@@ -243,7 +243,7 @@ class EditHours : Fragment() {
                 )
                 datePicker.setCancelable(false)
 
-                val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
+                val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US)
                 val dateString = formatter.format(historyDateEntry)
 
                 val (month1, day2, year1) = day.split("/")
@@ -1053,7 +1053,11 @@ class EditHours : Fragment() {
 
         breakTextInputEditText?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         breakTextInputEditText?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        breakTextBox.textCursorDrawable = null
+        try {
+            breakTextBox.textCursorDrawable = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         breakTextBox.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         breakTextBox.setTextIsSelectable(false)
 

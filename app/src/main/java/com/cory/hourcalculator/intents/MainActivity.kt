@@ -534,45 +534,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setActiveTab(view: Int) {
-        if (resources.getBoolean(R.bool.isTablet)) {
-            val bottomNav = findViewById<NavigationRailView>(R.id.bottom_nav)
-            when (view) {
-                0 -> {
-                    bottomNav.menu.findItem(R.id.ic_home).isChecked = true
-                }
+        try {
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomNav = findViewById<NavigationRailView>(R.id.bottom_nav)
+                when (view) {
+                    0 -> {
+                        bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+                    }
 
-                1 -> {
-                    bottomNav.menu.findItem(R.id.history).isChecked = true
-                }
+                    1 -> {
+                        bottomNav.menu.findItem(R.id.history).isChecked = true
+                    }
 
-                2 -> {
-                    bottomNav.menu.findItem(R.id.timeCards).isChecked = true
-                }
+                    2 -> {
+                        bottomNav.menu.findItem(R.id.timeCards).isChecked = true
+                    }
 
-                3 -> {
-                    bottomNav.menu.findItem(R.id.settings).isChecked = true
+                    3 -> {
+                        bottomNav.menu.findItem(R.id.settings).isChecked = true
+                    }
+                }
+            } else {
+                val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+                when (view) {
+                    0 -> {
+                        bottomNav.menu.findItem(R.id.ic_home).isChecked = true
+                    }
+
+                    1 -> {
+                        bottomNav.menu.findItem(R.id.history).isChecked = true
+                    }
+
+                    2 -> {
+                        bottomNav.menu.findItem(R.id.timeCards).isChecked = true
+                    }
+
+                    3 -> {
+                        bottomNav.menu.findItem(R.id.settings).isChecked = true
+                    }
                 }
             }
-        }
-        else {
-            val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-            when (view) {
-                0 -> {
-                    bottomNav.menu.findItem(R.id.ic_home).isChecked = true
-                }
-
-                1 -> {
-                    bottomNav.menu.findItem(R.id.history).isChecked = true
-                }
-
-                2 -> {
-                    bottomNav.menu.findItem(R.id.timeCards).isChecked = true
-                }
-
-                3 -> {
-                    bottomNav.menu.findItem(R.id.settings).isChecked = true
-                }
-            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
