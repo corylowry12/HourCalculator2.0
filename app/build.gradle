@@ -25,7 +25,7 @@ android {
             keyPassword 'corypreston2000'
         }
     }
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.cory.hourcalculator"
@@ -37,20 +37,20 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    flavorDimensions "hour_calculator"
+    flavorDimensions = ["hour_calculator"]
     productFlavors {
         Internal {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 171
-            versionName "10.0.2-production"
+            versionCode 180
+            versionName "10.0.8-beta04"
         }
 
         Production {
             applicationId "com.cory.hourcalculator"
             dimension "hour_calculator"
-            versionCode 175
-            versionName "10.0.6-production"
+            versionCode 181
+            versionName "10.0.8-production"
         }
     }
 
@@ -80,44 +80,46 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.8.0-beta01'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-config-ktx:21.2.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'com.google.firebase:firebase-config-ktx:21.4.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'androidx.activity:activity:1.7.0-alpha02'
+    implementation 'androidx.activity:activity-ktx:1.8.0-alpha06'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
-    implementation 'com.google.firebase:firebase-perf-ktx:20.3.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.3.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-perf-ktx:20.4.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.4.0'
 
     //GoogleAds
-    implementation 'com.google.android.gms:play-services-ads:21.4.0'
+    implementation 'com.google.android.gms:play-services-ads:22.2.0'
 
-    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     implementation 'androidx.transition:transition:1.4.1'
 
-    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
 
     implementation 'com.google.code.gson:gson:2.9.0'
 
-    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'androidx.browser:browser:1.5.0'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
 
     implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
 
     implementation 'androidx.palette:palette-ktx:1.0.0'
+
+    implementation 'com.android.billingclient:billing:6.0.1'
 }
