@@ -21,6 +21,18 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.BillingResponseCode
+import com.android.billingclient.api.BillingClient.ProductType.INAPP
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.Purchase.PurchaseState
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -33,9 +45,11 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.play.core.review.ReviewManagerFactory
 
-class AboutAppFragment : Fragment() {
+class AboutAppFragment : Fragment(), PurchasesUpdatedListener {
 
     private var packageName = "com.android.chrome"
+
+    private var billingClient : BillingClient? = null
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -205,6 +219,7 @@ class AboutAppFragment : Fragment() {
 
         versionInfo?.setOnClickListener {
             openFragment(VersionInfoFragment())
+            //startPurchase()
         }
 
         val githubLogoButton = activity?.findViewById<MaterialButton>(R.id.githubLogoButton)
@@ -212,6 +227,53 @@ class AboutAppFragment : Fragment() {
             Vibrate().vibration(requireContext())
             LinkData(requireContext()).setLink("https://github.com/corylowry12/")
             openCustomTab()
+        }
+    }
+
+    fun startPurchase() {
+        if (billingClient!!.isReady) {
+            initiatePurchase()
+        }
+        else {
+            billingClient = BillingClient.newBuilder(requireContext()).enablePendingPurchases().setListener(this).build()
+            billingClient!!.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(p0: BillingResult) {
+                    if (p0.responseCode == BillingResponseCode.OK) {
+                        initiatePurchase()
+                    }
+                    else {
+                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onBillingServiceDisconnected() {
+
+                }
+            })
+        }
+    }
+
+    private fun initiatePurchase() {
+        val skuList: MutableList<String> = ArrayList()
+        skuList.add("ten_dollar_donation")
+        val params = SkuDetailsParams.newBuilder()
+        params.setSkusList(skuList).setType(INAPP)
+
+        billingClient!!.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
+            if (billingResult.responseCode == BillingResponseCode.OK) {
+                if (skuDetailsList != null && skuDetailsList.size > 0) {
+                    val flowParams = BillingFlowParams.newBuilder()
+                        .setSkuDetails(skuDetailsList[0])
+                        .build()
+                    billingClient!!.launchBillingFlow(requireActivity(), flowParams)
+                }
+                else {
+                    Toast.makeText(requireContext(), "Purchase item not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else {
+                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -376,6 +438,22 @@ class AboutAppFragment : Fragment() {
             true
         } catch (e: PackageManager.NameNotFoundException) {
             false
+        }
+    }
+
+    override fun onPurchasesUpdated(p0: BillingResult, p1: MutableList<Purchase>?) {
+        //handlePurchases()
+    }
+
+    fun handlePurchases(purchases: List<Purchase>) {
+        for (purchase in purchases) {
+
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                //billingClient!!.acknowledgePurchase(acknowledgePurchaseParams, ack)
+            }
         }
     }
 }
