@@ -67,7 +67,7 @@ class GalleryCustomAdapter( private val context: Context,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         holder.itemView.findViewById<MaterialCardView>(R.id.galleryCard).setOnClickListener {
-            Vibrate().vibrateOnLongClick(context)
+            Vibrate().vibration(context)
             val intent = Intent(context, ImageViewActivity::class.java)
             intent.putExtra("id", dataList[position]["id"])
             intent.putExtra("name", dataList[position]["name"])
