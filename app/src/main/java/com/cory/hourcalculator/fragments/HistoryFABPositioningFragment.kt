@@ -190,18 +190,21 @@ class HistoryFABPositioningFragment : Fragment() {
         }
 
         leftCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
             HistoryFABPositioning(requireContext()).setFABPosition(0)
             leftRadioButton.isChecked = true
             middleRadioButton.isChecked = false
             rightRadioButton.isChecked = false
         }
         middleCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
             HistoryFABPositioning(requireContext()).setFABPosition(1)
             leftRadioButton.isChecked = false
             middleRadioButton.isChecked = true
             rightRadioButton.isChecked = false
         }
         rightCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
             HistoryFABPositioning(requireContext()).setFABPosition(2)
             leftRadioButton.isChecked = false
             middleRadioButton.isChecked = false
