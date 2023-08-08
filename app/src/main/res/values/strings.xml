@@ -113,7 +113,7 @@
     <string name="items_selected">" Items Selected"</string>
     <string name="hide">Hide</string>
     <string name="date_last_updated">Date Last Updated:</string>
-    <string name="date">07/22/2023</string>
+    <string name="date">07/25/2023</string>
     <string name="restore_position">Restore Position?</string>
     <string name="restore">Restore</string>
     <string name="toggle_history">Toggle History</string>
@@ -153,4 +153,7 @@
     <string name="background_color">Background Color</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="break_text_box">Break Text Box</string>
+    <string name="clear_break_text_box_automatically_when_time_is_successfully_calculated">Clear break text box automatically when time is successfully calculated</string>
+    <string name="show_break_time_in_decimal">Show Break Time In Decimal</string>
 </resources>
