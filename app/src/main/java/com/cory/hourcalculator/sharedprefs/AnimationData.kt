@@ -61,4 +61,15 @@ class AnimationData(context: Context) {
         val state = sharedPreferences.getBoolean("imageOpening/ClosingAnimation", true)
         return (state)
     }
+
+    fun setTabSwitchingAnimation(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("tabSwitchingAnimation", state)
+        editor.apply()
+    }
+
+    fun loadTabSwitchingAnimation(): Boolean {
+        val state = sharedPreferences.getBoolean("tabSwitchingAnimation", true)
+        return (state)
+    }
 }
