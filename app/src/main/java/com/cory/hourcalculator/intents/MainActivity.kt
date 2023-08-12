@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Gravity
 import android.view.View
+import android.view.animation.Animation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -32,6 +33,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import java.util.*
 
 
@@ -49,6 +54,9 @@ class MainActivity : AppCompatActivity() {
     var currentSettingsItem = -1
 
     private val dbHandler = DBHelper(this, null)
+
+    private var appUpdate : AppUpdateManager? = null
+    private val REQUEST_CODE = 100
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -85,6 +93,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         setContentView(R.layout.activity_main)
+
+        appUpdate = AppUpdateManagerFactory.create(this)
+        checkUpdate()
+
+        if (GenerateARandomColorData(this).loadGenerateARandomColorOnAppLaunch()) {
+            CustomColorGenerator(this).generateARandomColor()
+        }
 
         if (!resources.getBoolean(R.bool.isTablet)) {
             this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -384,23 +399,23 @@ class MainActivity : AppCompatActivity() {
         }
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)*/
 
-        if (currentTab < goingToTab) {
-            transaction.setCustomAnimations(
-                R.anim.enter_from_right,
-                R.anim.exit_to_left,
-                R.anim.enter_from_left,
-                R.anim.exit_to_right
-            )
+        if (AnimationData(this).loadTabSwitchingAnimation()) {
+            if (currentTab < goingToTab) {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+            } else {
+                transaction.setCustomAnimations(
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left
+                )
+            }
         }
-        else {
-            transaction.setCustomAnimations(
-                R.anim.enter_from_left,
-                R.anim.exit_to_right,
-                R.anim.enter_from_right,
-                R.anim.exit_to_left
-            )
-        }
-
         transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
 
         transaction.commit()
@@ -679,5 +694,29 @@ class MainActivity : AppCompatActivity() {
             BuildConfig.APPLICATION_ID,
             componentName
         ))
+    }
+
+    fun checkUpdate() {
+        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo ->
+
+            if (updateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && updateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                appUpdate?.startUpdateFlowForResult(updateInfo, AppUpdateType.IMMEDIATE, this, REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        inProgressUpdate()
+    }
+
+    fun inProgressUpdate() {
+        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo ->
+
+            if (updateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdate?.startUpdateFlowForResult(updateInfo, AppUpdateType.IMMEDIATE, this, REQUEST_CODE)
+            }
+        }
     }
 }
