@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +26,9 @@ import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 
 class SavedColorsFragment : Fragment() {
 
@@ -110,11 +116,59 @@ class SavedColorsFragment : Fragment() {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        topAppBarSavedColors.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.reset -> {
+                    Vibrate().vibration(requireContext())
+                    val dialog = BottomSheetDialog(requireContext())
+                    val resetSettingsLayout = layoutInflater.inflate(R.layout.reset_settings_bottom_sheet, null)
+                    val yesResetButton = resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
+                    val cancelResetButton = resetSettingsLayout.findViewById<Button>(R.id.cancelResetButton)
+                    resetSettingsLayout.findViewById<MaterialCardView>(R.id.bodyCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+                    yesResetButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                    cancelResetButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+                    dialog.setContentView(resetSettingsLayout)
+                    dialog.setCancelable(false)
+
+                    if (resources.getBoolean(R.bool.isTablet)) {
+                        val bottomSheet =
+                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.skipCollapsed = true
+                        bottomSheetBehavior.isHideable = false
+                        bottomSheetBehavior.isDraggable = false
+                    }
+                    resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text = "Would you like to clear all saved colors?"
+
+                    yesResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        reset()
+                        dialog.dismiss()
+                    }
+                    cancelResetButton.setOnClickListener {
+                        Vibrate().vibration(requireContext())
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    true
+                }
+                else -> false
+            }
+        }
+
         updateCustomColor()
 
         val savedColorsRecyclerView = requireActivity().findViewById<RecyclerView>(R.id.savedColorRecyclerView)
         savedColorsRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
         savedColorsRecyclerView.adapter = savedColorsAdapter
+    }
+
+    fun reset() {
+        UserAddedColorsData(requireContext()).clear()
+        UserAddedColorsData(requireContext()).clearHash()
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     fun updateCustomColor() {
@@ -130,11 +184,18 @@ class SavedColorsFragment : Fragment() {
         val navigationDrawable = topAppBarSavedColors?.navigationIcon
         navigationDrawable?.mutate()
 
+        val resetDrawable = topAppBarSavedColors?.menu?.findItem(R.id.reset)?.icon
+        resetDrawable?.mutate()
+
         if (Build.VERSION.SDK_INT >= 29) {
             try {
                 if (MenuTintData(requireContext()).loadMenuTint()) {
 
                     navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
                         Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
                         BlendMode.SRC_ATOP
                     )
@@ -147,6 +208,10 @@ class SavedColorsFragment : Fragment() {
                         ContextCompat.getColor(requireContext(), id),
                         BlendMode.SRC_ATOP
                     )
+                    resetDrawable?.colorFilter = BlendModeColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        BlendMode.SRC_ATOP
+                    )
                 }
             } catch (e: NoClassDefFoundError) {
                 e.printStackTrace()
@@ -154,6 +219,7 @@ class SavedColorsFragment : Fragment() {
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
                 navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
             }
         }
         else {
@@ -161,6 +227,7 @@ class SavedColorsFragment : Fragment() {
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
             navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            resetDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
         }
 
         val runnable = Runnable {

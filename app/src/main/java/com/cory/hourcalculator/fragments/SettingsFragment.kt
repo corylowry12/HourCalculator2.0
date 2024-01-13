@@ -89,12 +89,16 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val runnable = Runnable {
-            (activity as MainActivity).currentTab = 3
-            (activity as MainActivity).setActiveTab(3)
-        }
+        try {
+            val runnable = Runnable {
+                (activity as MainActivity).currentTab = 3
+                (activity as MainActivity).setActiveTab(3)
+            }
 
-        MainActivity().runOnUiThread(runnable)
+            MainActivity().runOnUiThread(runnable)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         updateCustomColor()
 
@@ -289,7 +293,6 @@ class SettingsFragment : Fragment() {
         val dialog = BottomSheetDialog(requireContext())
         val deleteAllLayout = layoutInflater.inflate(R.layout.delete_all_app_data_bottom_sheet, null)
         dialog.setContentView(deleteAllLayout)
-        dialog.setCancelable(false)
 
         if (resources.getBoolean(R.bool.isTablet)) {
             val bottomSheet =

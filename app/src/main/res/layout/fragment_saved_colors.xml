@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/savedColorCoordinatorLayout"
-    android:background="#000000"
     tools:context=".fragments.SavedColorsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -37,6 +36,7 @@
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:navigationIconTint="?attr/textColor"
                 app:buttonGravity="center_vertical"
+                app:menu="@menu/main_menu_reset"
                 app:title="Saved Colors" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

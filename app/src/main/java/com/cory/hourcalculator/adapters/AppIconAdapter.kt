@@ -112,6 +112,7 @@ class AppIconAdapter(val context: Context,
 
             if (ChosenAppIconData(context).loadChosenAppIcon().toString().lowercase() == iconNameTextView.text.toString().lowercase()) {
                 iconCardView.strokeWidth = 7
+                iconCardView.strokeColor = Color.parseColor("#6e6e6e")
             }
         }
     }

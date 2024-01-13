@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="20dp"
+        android:layout_height="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/view_corner_radius"/>
+
+    <TextView
+        android:id="@+id/headingTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Material You Options"
+        android:textColor="?attr/textColor"
+        android:textAlignment="center"
+        style="@style/TextAppearance.Material3.HeadlineSmall"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/accent1CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/headingTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="15dp"
+        style="@style/Widget.Material3.CardView.Filled">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <RadioButton
+                android:id="@+id/accent1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Accent 1"
+                android:textColor="?attr/settingsTextColor"
+                android:theme="?attr/radioButtonTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/accent1ColorCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/accent1ColorCardView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:cardCornerRadius="9dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@android:color/system_accent1_500"
+                android:contentDescription="accent 1 color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/accent2CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/accent1CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="1dp"
+        style="@style/Widget.Material3.CardView.Filled">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <RadioButton
+                android:id="@+id/accent2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Accent 2"
+                android:textColor="?attr/settingsTextColor"
+                android:theme="?attr/radioButtonTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/accent2ColorCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/accent2ColorCardView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:cardCornerRadius="9dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@android:color/system_accent2_500"
+                android:contentDescription="accent 1 color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/accent3CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/accent2CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="1dp"
+        style="@style/Widget.Material3.CardView.Filled">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <RadioButton
+                android:id="@+id/accent3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Accent 3"
+                android:textColor="?attr/settingsTextColor"
+                android:theme="?attr/radioButtonTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/accent3ColorCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/accent3ColorCardView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:cardCornerRadius="9dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@android:color/system_accent3_500"
+                android:contentDescription="accent 3 color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/neutral1CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/accent3CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="1dp"
+        style="@style/Widget.Material3.CardView.Filled">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <RadioButton
+                android:id="@+id/neutral1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Neutral 1"
+                android:textColor="?attr/settingsTextColor"
+                android:theme="?attr/radioButtonTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/neutral1ColorCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/neutral1ColorCardView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:cardCornerRadius="9dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@android:color/system_neutral1_500"
+                android:contentDescription="accent 3 color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/neutral2CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/neutral1CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="1dp"
+        style="@style/Widget.Material3.CardView.Filled">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <RadioButton
+                android:id="@+id/neutral2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Neutral 2"
+                android:textColor="?attr/settingsTextColor"
+                android:theme="?attr/radioButtonTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/neutral2ColorCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/neutral2ColorCardView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:cardCornerRadius="9dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@android:color/system_neutral2_500"
+                android:contentDescription="accent 3 color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/randomMaterialYouCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/neutral2CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="1dp"
+        style="@style/Widget.Material3.CardView.Filled">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <RadioButton
+                android:id="@+id/randomMaterialYou"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Random"
+                android:textColor="?attr/settingsTextColor"
+                android:theme="?attr/radioButtonTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/accent3ColorCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:clickable="false"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/randomMaterialYouColorCardView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:cardCornerRadius="9dp"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@android:color/system_accent3_500"
+                android:contentDescription="accent 3 color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,10 +27,11 @@
         android:layout_marginTop="5dp"
         android:text="Need Permissions"
         android:textColor="?attr/textColor"
-        style="@style/TextAppearance.Material3.HeadlineMedium"/>
+        android:textAlignment="center"
+        style="@style/TextAppearance.Material3.HeadlineSmall"/>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/okCardView"
+        android:id="@+id/bodyCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/headingTextView"
@@ -39,52 +40,50 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
-        android:foreground="?attr/selectableItemBackground"
-        style="@style/Widget.Material3.CardView.Filled">
+        app:cardCornerRadius="18dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/okConstraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="25dp">
-
+            android:padding="20dp">
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/bodyTextView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="OK"
-                android:textSize="18sp"
-                android:textColor="?attr/settingsTextColor"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Permissions are needed to provide the requested functionality"
+                android:textColor="?attr/settingsTextColor"
+                style="@style/TextAppearance.Material3.BodyLarge"/>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cancelCardView"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/okCardView"
+        android:text="OK"
+        app:layout_constraintTop_toBottomOf="@id/bodyCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="1dp"
-        android:foreground="?attr/selectableItemBackground"
-        style="@style/Widget.Material3.CardView.Filled">
+        android:layout_marginStart="10dp"
+        style="@style/Widget.Material3.Button" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cancelConstraint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="25dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:textSize="18sp"
-                android:textColor="?attr/settingsTextColor"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        app:layout_constraintTop_toBottomOf="@id/okButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        style="@style/Widget.Material3.Button.OutlinedButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

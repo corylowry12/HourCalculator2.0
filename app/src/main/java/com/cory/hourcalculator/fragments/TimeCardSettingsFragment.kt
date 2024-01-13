@@ -147,16 +147,25 @@ class TimeCardSettingsFragment : Fragment() {
             }
         }
 
+        val toggleTimeCardsCardView = requireActivity().findViewById<MaterialCardView>(R.id.disableTimeCardsCardView)
         val showWagesInTimeCardsCardView = requireActivity().findViewById<MaterialCardView>(R.id.showWagesInTimeCardsCardView)
         val coloredImageViewBackgroundCardView = requireActivity().findViewById<MaterialCardView>(R.id.coloredImageViewBackgroundCardView)
         val defaultNameCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewDefaultName)
         val fabPositioningTimeCard = requireActivity().findViewById<MaterialCardView>(R.id.cardViewFABPositioningTimeCards)
 
-        showWagesInTimeCardsCardView.shapeAppearanceModel =
-            showWagesInTimeCardsCardView.shapeAppearanceModel
+        toggleTimeCardsCardView.shapeAppearanceModel =
+            toggleTimeCardsCardView.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                .setBottomRightCornerSize(0f)
+                .setBottomLeftCornerSize(0f)
+                .build()
+        showWagesInTimeCardsCardView.shapeAppearanceModel =
+            showWagesInTimeCardsCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
@@ -186,6 +195,18 @@ class TimeCardSettingsFragment : Fragment() {
                 .build()
 
         updateCustomColor()
+
+        val toggleTimeCards = TimeCardsToggleData(requireContext())
+        val toggleTimeCardSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.disableTimeCardsSwitch)
+
+        if (toggleTimeCards.loadTimeCardsState()) {
+            toggleTimeCardSwitch.isChecked = true
+            toggleTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+        }
+        else {
+            toggleTimeCardSwitch.isChecked = false
+            toggleTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+        }
 
         val showWagesInTimeCards = ShowWagesInTimeCardData(requireContext())
         val showWagesInTimeCardSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInTimeCardsSwitch)
@@ -376,11 +397,14 @@ class TimeCardSettingsFragment : Fragment() {
         val collapsingToolbarLayout = requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardSettings)
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
         collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+
+        requireActivity().findViewById<MaterialCardView>(R.id.disableTimeCardsCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.cardViewDefaultName).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.coloredImageViewBackgroundCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.showWagesInTimeCardsCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.cardViewFABPositioningTimeCards).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
 
+        val toggleTimeCardsSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.disableTimeCardsSwitch)
         val showWagesInTimeCardsSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInTimeCardsSwitch)
         val coloredBackgroundSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.coloredImageViewBackgroundSwitch)
 
@@ -393,6 +417,8 @@ class TimeCardSettingsFragment : Fragment() {
             Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         )
 
+        toggleTimeCardsSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        toggleTimeCardsSwitch.trackTintList = ColorStateList(states, colors)
         showWagesInTimeCardsSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         showWagesInTimeCardsSwitch.trackTintList = ColorStateList(states, colors)
         coloredBackgroundSwitch.thumbIconTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))

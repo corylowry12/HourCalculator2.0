@@ -110,13 +110,13 @@ class AccentColorFragment : Fragment() {
 
         val topAppBarAccent = view.findViewById<MaterialToolbar>(R.id.materialToolBarAccentColorFragment)
 
-        val resetDrawable = topAppBarAccent?.menu?.findItem(R.id.reset)?.icon
-        resetDrawable?.mutate()
+       // val resetDrawable = topAppBarAccent?.menu?.findItem(R.id.reset)?.icon
+       // resetDrawable?.mutate()
 
-        val navigationDrawable = topAppBarAccent?.navigationIcon
-        navigationDrawable?.mutate()
+        //val navigationDrawable = topAppBarAccent?.navigationIcon
+       // navigationDrawable?.mutate()
 
-        if (MenuTintData(requireContext()).loadMenuTint()) {
+        /*if (MenuTintData(requireContext()).loadMenuTint()) {
             resetDrawable?.colorFilter = BlendModeColorFilter(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()), BlendMode.SRC_ATOP)
             navigationDrawable?.colorFilter = BlendModeColorFilter(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()), BlendMode.SRC_ATOP)
         }
@@ -126,7 +126,7 @@ class AccentColorFragment : Fragment() {
             val id = typedValue.resourceId
             resetDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
             navigationDrawable?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(requireContext(), id), BlendMode.SRC_ATOP)
-        }
+        }*/
 
         topAppBarAccent?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
@@ -474,6 +474,233 @@ class AccentColorFragment : Fragment() {
             optionsDialog.show()
         }
 
+        val materialColorOptionsCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewMaterialColorOptionsCardView)
+
+        materialColorOptionsCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            val optionsDialog = BottomSheetDialog(requireContext())
+            val optionsLayout =
+                layoutInflater.inflate(R.layout.material_color_options_bottom_sheet, null)
+            optionsDialog.setContentView(optionsLayout)
+            optionsDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    optionsDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
+            val accent1CardView = optionsLayout.findViewById<MaterialCardView>(R.id.accent1CardView)
+            val accent1RadioButton = optionsLayout.findViewById<RadioButton>(R.id.accent1)
+            val accent2CardView = optionsLayout.findViewById<MaterialCardView>(R.id.accent2CardView)
+            val accent2RadioButton = optionsLayout.findViewById<RadioButton>(R.id.accent2)
+            val accent3CardView = optionsLayout.findViewById<MaterialCardView>(R.id.accent3CardView)
+            val accent3RadioButton = optionsLayout.findViewById<RadioButton>(R.id.accent3)
+            val neutral1CardView = optionsLayout.findViewById<MaterialCardView>(R.id.neutral1CardView)
+            val neutral1RadioButton = optionsLayout.findViewById<RadioButton>(R.id.neutral1)
+            val neutral2CardView = optionsLayout.findViewById<MaterialCardView>(R.id.neutral2CardView)
+            val neutral2RadioButton = optionsLayout.findViewById<RadioButton>(R.id.neutral2)
+            val randomMaterialYouCardView = optionsLayout.findViewById<MaterialCardView>(R.id.randomMaterialYouCardView)
+            val randomMaterialYouRadioButton = optionsLayout.findViewById<RadioButton>(R.id.randomMaterialYou)
+
+            if (MaterialYouOptionData(requireContext()).loadMaterialOption() == 1) {
+                accent1RadioButton.isChecked = true
+            }
+            else if (MaterialYouOptionData(requireContext()).loadMaterialOption() == 2) {
+                accent2RadioButton.isChecked = true
+            }
+            else if (MaterialYouOptionData(requireContext()).loadMaterialOption() == 3) {
+                accent3RadioButton.isChecked = true
+            }
+            else if (MaterialYouOptionData(requireContext()).loadMaterialOption() == 4) {
+                neutral1RadioButton.isChecked = true
+            }
+            else if (MaterialYouOptionData(requireContext()).loadMaterialOption() == 5) {
+                neutral2RadioButton.isChecked = true
+            }
+            else if (MaterialYouOptionData(requireContext()).loadMaterialOption() == 6) {
+                randomMaterialYouRadioButton.isChecked = true
+            }
+
+            accent1CardView.shapeAppearanceModel =
+                accent1CardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            accent2CardView.shapeAppearanceModel =
+                accent2CardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            accent3CardView.shapeAppearanceModel =
+                accent3CardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            neutral1CardView.shapeAppearanceModel =
+                neutral1CardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            neutral2CardView.shapeAppearanceModel =
+                neutral2CardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(0f)
+                    .setBottomLeftCornerSize(0f)
+                    .build()
+            randomMaterialYouCardView.shapeAppearanceModel =
+                randomMaterialYouCardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                    .setBottomRightCornerSize(28f)
+                    .setBottomLeftCornerSize(28f)
+                    .build()
+
+            accent1CardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            accent2CardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            accent3CardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            neutral1CardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            neutral2CardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+            randomMaterialYouCardView.setCardBackgroundColor(
+                ColorStateList.valueOf(
+                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                )
+            )
+
+            optionsLayout.findViewById<MaterialCardView>(R.id.randomMaterialYouColorCardView).setCardBackgroundColor(Color.parseColor(GenerateMaterialYouColors(requireContext()).generate_random_500()))
+
+            val states = arrayOf(
+                intArrayOf(-android.R.attr.state_checked), // unchecked
+                intArrayOf(android.R.attr.state_checked)  // checked
+            )
+
+            val colors = intArrayOf(
+                Color.parseColor("#000000"),
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+            )
+
+            accent1RadioButton.buttonTintList = ColorStateList(states, colors)
+            accent2RadioButton.buttonTintList = ColorStateList(states, colors)
+            accent3RadioButton.buttonTintList = ColorStateList(states, colors)
+            neutral1RadioButton.buttonTintList = ColorStateList(states, colors)
+            neutral2RadioButton.buttonTintList = ColorStateList(states, colors)
+            randomMaterialYouRadioButton.buttonTintList = ColorStateList(states, colors)
+
+            accent1CardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                accent1RadioButton.isChecked = true
+                accent2RadioButton.isChecked = false
+                accent3RadioButton.isChecked = false
+                neutral1RadioButton.isChecked = false
+                neutral2RadioButton.isChecked = false
+                randomMaterialYouRadioButton.isChecked = false
+                MaterialYouOptionData(requireContext()).setMaterialOption(1)
+                updateCustomColorChange()
+                optionsDialog.dismiss()
+            }
+            accent2CardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                accent1RadioButton.isChecked = false
+                accent2RadioButton.isChecked = true
+                accent3RadioButton.isChecked = false
+                neutral1RadioButton.isChecked = false
+                neutral2RadioButton.isChecked = false
+                randomMaterialYouRadioButton.isChecked = false
+                MaterialYouOptionData(requireContext()).setMaterialOption(2)
+                updateCustomColorChange()
+                optionsDialog.dismiss()
+            }
+            accent3CardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                accent1RadioButton.isChecked = false
+                accent2RadioButton.isChecked = false
+                accent3RadioButton.isChecked = true
+                neutral1RadioButton.isChecked = false
+                neutral2RadioButton.isChecked = false
+                randomMaterialYouRadioButton.isChecked = false
+                MaterialYouOptionData(requireContext()).setMaterialOption(3)
+                updateCustomColorChange()
+                optionsDialog.dismiss()
+            }
+            neutral1CardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                accent1RadioButton.isChecked = false
+                accent2RadioButton.isChecked = false
+                accent3RadioButton.isChecked = false
+                neutral1RadioButton.isChecked = true
+                neutral2RadioButton.isChecked = false
+                randomMaterialYouRadioButton.isChecked = false
+                MaterialYouOptionData(requireContext()).setMaterialOption(4)
+                updateCustomColorChange()
+                optionsDialog.dismiss()
+            }
+            neutral2CardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                accent1RadioButton.isChecked = false
+                accent2RadioButton.isChecked = false
+                accent3RadioButton.isChecked = false
+                neutral1RadioButton.isChecked = false
+                neutral2RadioButton.isChecked = true
+                randomMaterialYouRadioButton.isChecked = false
+                MaterialYouOptionData(requireContext()).setMaterialOption(5)
+                updateCustomColorChange()
+                optionsDialog.dismiss()
+            }
+            randomMaterialYouCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                accent1RadioButton.isChecked = false
+                accent2RadioButton.isChecked = false
+                accent3RadioButton.isChecked = false
+                neutral1RadioButton.isChecked = false
+                neutral2RadioButton.isChecked = false
+                randomMaterialYouRadioButton.isChecked = true
+                MaterialYouOptionData(requireContext()).setMaterialOption(6)
+                updateCustomColorChange()
+                optionsDialog.dismiss()
+            }
+
+            optionsDialog.show()
+        }
+
         customCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             val customColorPickerDialog = BottomSheetDialog(requireContext())
@@ -505,15 +732,11 @@ class AccentColorFragment : Fragment() {
 
             val selectButton = customColorPickerLayout.findViewById<Button>(R.id.selectColorButton)
             val cancelSelectButton = customColorPickerLayout.findViewById<Button>(R.id.cancelSelectColorButton)
-            val generateRandomButton = customColorPickerLayout.findViewById<ImageButton>(R.id.generateRandomButton)
-            val generateRandomButtonCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.generateRandomButtonCardView)
+            val generateRandomColorButton = customColorPickerLayout.findViewById<Button>(R.id.generateRandomColorButton)
 
             selectButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
             cancelSelectButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-            generateRandomButtonCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-
-            val color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()) //The color u want
-            generateRandomButton.setColorFilter(color)
+            generateRandomColorButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
 
             var hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
             coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
@@ -532,7 +755,7 @@ class AccentColorFragment : Fragment() {
                 hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
             }
 
-            generateRandomButtonCardView.setOnClickListener {
+            generateRandomColorButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 val red = Random.nextInt(50,200)
                 val green = Random.nextInt(50,200)
@@ -827,6 +1050,7 @@ class AccentColorFragment : Fragment() {
         UserAddedColorsData(requireContext()).clear()
         UserAddedColorsData(requireContext()).clearHash()
         requireActivity().findViewById<TextView>(R.id.viewSavedColorsCountChip).text = UserAddedColorsData(requireContext()).read().count().toString()
+        MaterialYouOptionData(requireContext()).setMaterialOption(2)
         updateCustomColorChange()
     }
 
@@ -845,11 +1069,17 @@ class AccentColorFragment : Fragment() {
         val generateARandomColorSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)
         val material2Switch = requireActivity().findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)
 
+        val color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
+
         val generateRandomColorOptionsCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewRandomColorOptionsCardView)
         val generateARandomColorOptionsIcon = requireActivity().findViewById<ImageButton>(R.id.imageViewRandomColorOptions)
         generateRandomColorOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
-        val color = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
         generateARandomColorOptionsIcon.setColorFilter(color)
+
+        val materialColorOptionsCardView = requireActivity().findViewById<MaterialCardView>(R.id.imageViewMaterialColorOptionsCardView)
+        val materialColorOptionsIcon = requireActivity().findViewById<ImageButton>(R.id.imageViewMaterialColorOptions)
+        materialColorOptionsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+        materialColorOptionsIcon.setColorFilter(color)
 
         customCardView?.setCardBackgroundColor(Color.parseColor(customColorGenerator.generateCardColor()))
         customColorCardView.setCardBackgroundColor(Color.parseColor(customColorGenerator.loadCustomHex()))

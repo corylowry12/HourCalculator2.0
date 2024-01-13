@@ -38,6 +38,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import java.util.*
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -94,8 +95,11 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
+        val random = Random.nextInt(1, 5)
+        RandomMaterialYouColorData(this).setRandomState(random)
+
         appUpdate = AppUpdateManagerFactory.create(this)
-        checkUpdate()
+        //checkUpdate()
 
         if (GenerateARandomColorData(this).loadGenerateARandomColorOnAppLaunch()) {
             CustomColorGenerator(this).generateARandomColor()

@@ -27,7 +27,8 @@
         android:layout_marginTop="5dp"
         android:text="Reset"
         android:textColor="?attr/textColor"
-        style="@style/TextAppearance.Material3.DisplaySmall"/>
+        android:textAlignment="center"
+        style="@style/TextAppearance.Material3.HeadlineSmall"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bodyCardView"

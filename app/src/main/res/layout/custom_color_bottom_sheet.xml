@@ -21,37 +21,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/generateRandomButtonCardView"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
         android:text="Select Color"
         android:textColor="?attr/textColor"
-        style="@style/TextAppearance.Material3.HeadlineMedium"/>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/generateRandomButtonCardView"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/headingTextView"
-        app:layout_constraintBottom_toBottomOf="@id/headingTextView"
-        app:cardCornerRadius="18dp"
-        android:layout_marginRight="10dp"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:foreground="?attr/selectableItemBackground">
-
-    <ImageButton
-        android:id="@+id/generateRandomButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_refresh_24"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:clickable="false"
-        />
-
-    </com.google.android.material.card.MaterialCardView>
+        android:textAlignment="center"
+        style="@style/TextAppearance.Material3.HeadlineSmall"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/coloredCardView"
@@ -190,11 +167,23 @@
         android:layout_marginStart="10dp"/>
 
     <Button
+        android:id="@+id/generateRandomColorButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generate Random"
+        app:layout_constraintTop_toBottomOf="@id/selectColorButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <Button
         android:id="@+id/cancelSelectColorButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cancel"
-        app:layout_constraintTop_toBottomOf="@id/selectColorButton"
+        app:layout_constraintTop_toBottomOf="@id/generateRandomColorButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.Material3.Button.OutlinedButton"

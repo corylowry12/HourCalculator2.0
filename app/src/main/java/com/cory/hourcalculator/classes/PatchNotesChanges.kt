@@ -7,11 +7,12 @@ class PatchNotesChanges {
     )
 
     var newFeaturesArray = arrayOf(
-        "No new features"
+        "Added the ability to change between each Material You accent color"
     )
 
     var enhancementsArray = arrayOf(
-        "Added an in app updater"
+        "Added a scroll to top button in the Time Card Info view",
+        "Tweaked the card outline color on selected items in the settings"
     )
 
     var bugFixesArrayInternal = arrayOf(
@@ -19,11 +20,18 @@ class PatchNotesChanges {
     )
 
     var newFeaturesArrayInternal = arrayOf(
-        "Added test for in app updater"
+        "Added test for in app updater",
+        "Added the ability to change between each Material You accent color",
+        "Added the ability to reset all saved colors"
     )
 
     var enhancementsArrayInternal = arrayOf(
-        "No new enhancements"
+        "Added a scroll to top button in the Time Card Info view",
+        "Tweaked the card outline color on selected items in the settings",
+        "Added a confirmation dialog when deleting saved colors",
+        "Delete app data dialog is now dismissible",
+        "Redesigned the generate random button when selecting a color",
+        "Redesigned the header text for all button sheets"
     )
 
 

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
@@ -18,6 +19,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +29,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
@@ -36,6 +39,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,12 +56,16 @@ import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
+import com.cory.hourcalculator.sharedprefs.TimeCardFABPositioningData
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.io.*
@@ -204,6 +213,7 @@ class TimeCardItemInfoFragment : Fragment() {
                     addImage()
                     return@setOnMenuItemClickListener true
                 }
+
                 else -> false
             }
         }
@@ -270,9 +280,8 @@ class TimeCardItemInfoFragment : Fragment() {
                     "transition_image"
                 )
                 startActivity(intent, options.toBundle())
-            }
-            else {
-              startActivity(intent)
+            } else {
+                startActivity(intent)
             }
         }
 
@@ -293,6 +302,49 @@ class TimeCardItemInfoFragment : Fragment() {
                     }
                 }
             })
+
+        val floatingActionButtonTimeCardItemInfo =
+            view.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCardItemInfo)
+
+        val params = CoordinatorLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(30, 0, 30, 30)
+
+        if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 0) {
+            params.gravity = Gravity.BOTTOM or Gravity.START
+        } else if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 1) {
+            params.gravity = Gravity.BOTTOM or Gravity.CENTER
+        } else if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 2) {
+            params.gravity = Gravity.BOTTOM or Gravity.END
+        }
+
+        floatingActionButtonTimeCardItemInfo.layoutParams = params
+
+        val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.nestedScrollViewTimeCardItemInfo)
+
+        nestedScrollView?.setOnScrollChangeListener(object: NestedScrollView.OnScrollChangeListener {
+            override fun onScrollChange(
+                v: NestedScrollView,
+                scrollX: Int,
+                scrollY: Int,
+                oldScrollX: Int,
+                oldScrollY: Int
+            ) {
+
+                if (scrollY > 1000) {
+                    floatingActionButtonTimeCardItemInfo?.show()
+                } else {
+                    floatingActionButtonTimeCardItemInfo?.hide()
+                }
+            }
+
+        })
+
+        floatingActionButtonTimeCardItemInfo?.setOnClickListener {
+            scrollToTop()
+        }
     }
 
     private fun imageViewOptions() {
@@ -405,30 +457,31 @@ class TimeCardItemInfoFragment : Fragment() {
 
         selectAPhotoCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val pickerIntent = Intent(Intent.ACTION_PICK)
-            pickerIntent.type = "image/*"
+                val pickerIntent = Intent(Intent.ACTION_PICK)
+                pickerIntent.type = "image/*"
 
-            showImagePickerAndroid13.launch(
-                PickVisualMediaRequest(
-                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                showImagePickerAndroid13.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
                 )
-            )
-            imageViewOptionsDialog.dismiss()
-        }
+                imageViewOptionsDialog.dismiss()
+            }
 
         takeAPhotoCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-            val list = listOf(
+
+            val list1 = listOf(
                 Manifest.permission.CAMERA
             )
 
             managePermissions =
                 ManagePermissions(
                     requireActivity(),
-                    list,
+                    list1,
                     1
                 )
-            //Toast.makeText(requireContext(), managePermissions.checkPermissions(requireContext()).toString(), Toast.LENGTH_SHORT).show()
+
             if (managePermissions.checkPermissions()) {
 
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -445,7 +498,7 @@ class TimeCardItemInfoFragment : Fragment() {
                         val photoUri = FileProvider.getUriForFile(
                             requireContext(),
                             "com.cory.hourcalculator.FileProvider",
-                            photFile!!
+                            photFile
                         )
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
                         showCamera.launch(intent)
@@ -672,7 +725,7 @@ class TimeCardItemInfoFragment : Fragment() {
                     list1,
                     1
                 )
-            //Toast.makeText(requireContext(), managePermissions.checkPermissions(requireContext()).toString(), Toast.LENGTH_SHORT).show()
+
             if (managePermissions.checkPermissions()) {
 
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -899,6 +952,14 @@ class TimeCardItemInfoFragment : Fragment() {
         requireActivity().findViewById<CoordinatorLayout>(R.id.timeCardItemInfoCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.timeCardInfoImageViewWrapper).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generatePatchNotesCardColor()))
 
+        val floatingActionButtonTimeCardItemInfo =
+            activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCardItemInfo)
+
+        floatingActionButtonTimeCardItemInfo?.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavBackgroundColor()))
+        floatingActionButtonTimeCardItemInfo?.imageTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()))
+
         val topAppBarTimeCardItem =
             requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarTimeCardItemInfo)
         val addDrawable = topAppBarTimeCardItem?.menu?.findItem(R.id.add)?.icon
@@ -989,5 +1050,46 @@ class TimeCardItemInfoFragment : Fragment() {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutTimeCardItemInfo)
                 ?.setCollapsedTitleTextColor(ContextCompat.getColor(requireContext(), id))
         }
+    }
+
+    fun scrollToTop() {
+        //val listView = view?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
+        Vibrate().vibration(requireContext())
+
+        val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.nestedScrollViewTimeCardItemInfo)
+
+            val nestedScrollViewYScroll = nestedScrollView!!.scrollY
+            nestedScrollView.scrollTo(0,0)
+            val collapsingToolbarLayout =
+                requireView().findViewById<AppBarLayout>(R.id.appBarLayoutTimeCardItemInfo)
+            collapsingToolbarLayout.setExpanded(true, true)
+            val snackbar =
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.restore_position),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setDuration(5000)
+
+            snackbar.setAction(getString(R.string.restore)) {
+                Vibrate().vibration(requireContext())
+
+                nestedScrollView?.scrollTo(0,nestedScrollViewYScroll)
+                collapsingToolbarLayout.setExpanded(false, false)
+
+            }
+
+            snackbar.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
+            )
+
+            snackbar.apply {
+                snackbar.view.background = ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.snackbar_corners,
+                    context.theme
+                )
+            }
+        snackbar.show()
     }
 }

@@ -95,6 +95,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             if (!MaterialYouData(context).loadMaterialYou()) {
                 if (CustomColorGenerator(context).loadCustomHex() == "#${dataList[position]["hex"]}") {
                     savedColorCardView.strokeWidth = 7
+                    savedColorCardView.strokeColor = Color.parseColor("#6e6e6e")
                 } else {
                     savedColorCardView.strokeWidth = 0
                 }
@@ -194,6 +195,7 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
             Vibrate().vibration(context)
             CustomColorGenerator(context).setCustomHex("#${dataList[holder.adapterPosition]["hex"].toString()}")
             holder.itemView.findViewById<MaterialCardView>(R.id.savedColorItemCardView).strokeWidth = 7
+            savedColorCardView.strokeColor = Color.parseColor("#6e6e6e")
             notifyDataSetChanged()
 
             GenerateARandomColorData(context).setGenerateARandomColorOnAppLaunch(false)
@@ -204,42 +206,78 @@ private val dataList: ArrayList<HashMap<String, String>>, fragment: SavedColorsF
         savedColorCardView.setOnLongClickListener {
             Vibrate().vibrateOnLongClick(context)
 
-            if (GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
-                if (CustomColorGenerator(context).loadRandomHex() == "#${dataList[holder.adapterPosition]["hex"]}") {
-                    CustomColorGenerator(context).generateARandomColor()
-                    newFragment.updateCustomColor()
+            val confirmationDialog = BottomSheetDialog(context)
+            val confirmationLayout = LayoutInflater.from(context).inflate(R.layout.delete_saved_color_confirmation_bottom_sheet, null)
+            confirmationDialog.setContentView(confirmationLayout)
+            confirmationDialog.setCancelable(false)
+
+            if (context.resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    confirmationDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+
+            val yesButton = confirmationLayout.findViewById<Button>(R.id.yesButton)
+            val noButton = confirmationLayout.findViewById<Button>(R.id.noButton)
+
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+            noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+            confirmationLayout.findViewById<MaterialCardView>(R.id.bodyCardView).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(context)
+                if (GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
+                    if (CustomColorGenerator(context).loadRandomHex() == "#${dataList[holder.adapterPosition]["hex"]}") {
+                        CustomColorGenerator(context).generateARandomColor()
+                        newFragment.updateCustomColor()
+                    }
                 }
-            }
 
-            val addedColors = UserAddedColorsData(context).read()
-            dataList.clear()
+                val addedColors = UserAddedColorsData(context).read()
+                dataList.clear()
 
-            for (i in 0 until UserAddedColorsData(context).read().count()) {
-                val allColors = HashMap<String, String>()
-                try {
-                    allColors["name"] = addedColors[i]["name"].toString()
-                } catch (e: java.lang.Exception) {
-                    allColors["name"] = ""
+                for (i in 0 until UserAddedColorsData(context).read().count()) {
+                    val allColors = HashMap<String, String>()
+                    try {
+                        allColors["name"] = addedColors[i]["name"].toString()
+                    } catch (e: java.lang.Exception) {
+                        allColors["name"] = ""
+                    }
+                    allColors["hex"] = addedColors[i]["hex"].toString()
+                    dataList.add(allColors)
                 }
-                allColors["hex"] = addedColors[i]["hex"].toString()
-                dataList.add(allColors)
-            }
-            dataList.removeAt(holder.adapterPosition)
-            notifyItemRemoved(holder.adapterPosition)
-            UserAddedColorsData(context).insert(dataList)
-            Toast.makeText(context, "Color Deleted", Toast.LENGTH_SHORT).show()
+                dataList.removeAt(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+                UserAddedColorsData(context).insert(dataList)
+                Toast.makeText(context, "Color Deleted", Toast.LENGTH_SHORT).show()
 
-            if (dataList.count() < 2 && GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
-                Toast.makeText(context, "Generating a random color from saved colors is now disabled", Toast.LENGTH_SHORT).show()
-                GenerateARandomColorMethodData(context).setGenerateARandomColorMethod(0)
+                if (dataList.count() < 2 && GenerateARandomColorMethodData(context).loadGenerateARandomColorMethod() == 1) {
+                    Toast.makeText(
+                        context,
+                        "Generating a random color from saved colors is now disabled",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    GenerateARandomColorMethodData(context).setGenerateARandomColorMethod(0)
+                }
+
+                if (dataList.isEmpty()) {
+                    newFragment.itemCountZero()
+                } else {
+                    notifyItemRangeChanged(0, dataList.count())
+                }
+                confirmationDialog.dismiss()
+            }
+            noButton.setOnClickListener {
+                Vibrate().vibration(context)
+                confirmationDialog.dismiss()
             }
 
-            if (dataList.isEmpty()) {
-                newFragment.itemCountZero()
-            }
-            else {
-                notifyItemRangeChanged(0, dataList.count())
-            }
+            confirmationDialog.show()
             return@setOnLongClickListener true
         }
         (holder as SavedColorsAdapter.ViewHolder).bind(position)

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -62,33 +63,26 @@ class ManagePermissions(private val activity: Activity, private val list: List<S
             bottomSheetBehavior.isDraggable = false
         }
 
-        val okCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.okCardView)
-        val cancelCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.cancelCardView)
+        val bodyCardView = askPermissionsLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+        val okButton = askPermissionsLayout.findViewById<Button>(R.id.okButton)
+        val cancelButton = askPermissionsLayout.findViewById<Button>(R.id.cancelButton)
 
-        okCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
-        cancelCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+        bodyCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+        okButton.setBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    context
+                ).generateCustomColorPrimary()
+            )
+        )
+        cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
 
-        okCardView.shapeAppearanceModel = okCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-            .setBottomRightCornerSize(0f)
-            .setBottomLeftCornerSize(0f)
-            .build()
-        cancelCardView.shapeAppearanceModel = cancelCardView.shapeAppearanceModel
-            .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(28f)
-            .setBottomLeftCornerSize(28f)
-            .build()
-
-        okCardView.setOnClickListener {
+        okButton.setOnClickListener {
             Vibrate().vibration(context)
             bottomSheetDialog.dismiss()
             requestPermissions()
         }
-        cancelCardView.setOnClickListener {
+        cancelButton.setOnClickListener {
             Vibrate().vibration(context)
             bottomSheetDialog.dismiss()
         }
