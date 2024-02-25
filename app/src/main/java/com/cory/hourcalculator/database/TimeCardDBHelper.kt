@@ -44,6 +44,25 @@ class TimeCardDBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?)
         db.close()
     }
 
+    fun insertRestoreRow(
+        id: String,
+        name: String,
+        week: String,
+        total: String,
+        image: String
+    ) {
+        val values = ContentValues()
+        values.put(COLUMN_ID, id)
+        values.put(COLUMN_NAME, name)
+        values.put(COLUMN_TOTAL, total)
+        values.put(COLUMN_WEEK, week)
+        values.put(COLUMN_IMAGE, image)
+
+        val db = this.writableDatabase
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
     fun getCount(): Int {
         val db = this.readableDatabase
         return DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM $TABLE_NAME", null).toInt()
