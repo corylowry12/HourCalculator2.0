@@ -426,7 +426,7 @@ class CustomColorGenerator(context: Context) {
                             return "#${
                                 Integer.toHexString(
                                     ContextCompat.getColor(
-                                        insideContext, GenerateMaterialYouColors(insideContext).generate_200()
+                                        insideContext, GenerateMaterialYouColors(insideContext).generate_50()
                                     ) 
                                 )
                             }"
