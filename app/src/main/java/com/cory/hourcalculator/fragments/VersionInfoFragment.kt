@@ -1,5 +1,9 @@
 package com.cory.hourcalculator.fragments
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.BlendMode
@@ -13,6 +17,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -31,6 +36,8 @@ import com.cory.hourcalculator.sharedprefs.LinkData
 import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 
@@ -241,6 +248,14 @@ class VersionInfoFragment : Fragment() {
             openCustomTab()
         }
 
+        materialDependencyCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(materialSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
+        }
+
         val versionNumber = view.findViewById<TextView>(R.id.versionNumber)
         val buildNumber = view.findViewById<TextView>(R.id.buildNumber)
 
@@ -254,11 +269,27 @@ class VersionInfoFragment : Fragment() {
             openCustomTab()
         }
 
+        googleAdsDependencyCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(googleAdsSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
+        }
+
         val firebaseAnalyticsSubtitle = view.findViewById<TextView>(R.id.firebaseAnalyticsSubtitle)
 
         firebaseAnalyticsDependencyCardView.setOnClickListener {
             LinkData(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
             openCustomTab()
+        }
+
+        firebaseAnalyticsDependencyCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(firebaseAnalyticsSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
         }
 
         val firebaseCrashlyticsSubtitle = view.findViewById<TextView>(R.id.firebaseCrashlyticsSubtitle)
@@ -268,11 +299,27 @@ class VersionInfoFragment : Fragment() {
             openCustomTab()
         }
 
+        firebaseCrashlyticsDependencyCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(firebaseCrashlyticsSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
+        }
+
         val firebasePerfSubtitle = view.findViewById<TextView>(R.id.firebasePerfSubtitle)
 
         firebasePerformanceMonitoringDependencyCardView.setOnClickListener {
             LinkData(requireContext()).setLink(firebasePerfSubtitle.text.toString())
             openCustomTab()
+        }
+
+        firebasePerformanceMonitoringDependencyCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(firebasePerfSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
         }
 
         val inAppReviewSubtitle = view.findViewById<TextView>(R.id.inAppReviewSubtitle)
@@ -282,11 +329,27 @@ class VersionInfoFragment : Fragment() {
             openCustomTab()
         }
 
+        inAppReviewDependencyCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(inAppReviewSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
+        }
+
         val chromeCustomTabsSubtitle = view.findViewById<TextView>(R.id.inAppBrowserSubtitle)
 
         chromeCustomTabsCardView.setOnClickListener {
             LinkData(requireContext()).setLink(chromeCustomTabsSubtitle.text.toString())
             openCustomTab()
+        }
+
+        chromeCustomTabsCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(chromeCustomTabsSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
         }
 
         val glideSubtitle = view.findViewById<TextView>(R.id.glideSubtitle)
@@ -296,11 +359,27 @@ class VersionInfoFragment : Fragment() {
             openCustomTab()
         }
 
+        glideCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(glideSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
+        }
+
         val touchImageViewSubtitle = view.findViewById<TextView>(R.id.imageViewDependencySubtitle)
 
         touchImageViewCardView.setOnClickListener {
             LinkData(requireContext()).setLink(touchImageViewSubtitle.text.toString())
             openCustomTab()
+        }
+
+        touchImageViewCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(touchImageViewSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
         }
 
         val paletteSubtitle = view.findViewById<TextView>(R.id.paletteDependencySubtitle)
@@ -309,6 +388,75 @@ class VersionInfoFragment : Fragment() {
             LinkData(requireContext()).setLink(paletteSubtitle.text.toString())
             openCustomTab()
         }
+
+        paletteCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            LinkData(requireContext()).setLink(paletteSubtitle.text.toString())
+            viewOptions()
+
+            return@setOnLongClickListener true
+        }
+    }
+
+    private fun viewOptions() {
+        val dialog = BottomSheetDialog(requireContext())
+        val versionInfoOptionsLayout = LayoutInflater.from(context)
+            .inflate(R.layout.version_info_options_bottom_sheet, null)
+        dialog.setContentView(versionInfoOptionsLayout)
+
+        if (requireContext().resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
+
+        val openInBrowserCardView =
+            versionInfoOptionsLayout.findViewById<MaterialCardView>(R.id.openInBrowserCardView)
+        val copyLinkCardView =
+            versionInfoOptionsLayout.findViewById<MaterialCardView>(R.id.copyLinkCardView)
+
+        openInBrowserCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
+        copyLinkCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+
+        openInBrowserCardView.shapeAppearanceModel = openInBrowserCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        copyLinkCardView.shapeAppearanceModel = copyLinkCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
+        openInBrowserCardView.setOnClickListener {
+            val urlIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(LinkData(requireContext()).loadLink()))
+            startActivity(urlIntent)
+        }
+
+        copyLinkCardView.setOnClickListener {
+            val clipboard =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("URL", LinkData(requireContext()).loadLink())
+            clipboard.setPrimaryClip(clip)
+        }
+
+        dialog.show()
     }
 
     private fun updateCustomTheme() {
