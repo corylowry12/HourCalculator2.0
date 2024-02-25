@@ -45,6 +45,27 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
+    fun insertRow(
+        id: String,
+        inTime: String,
+        outTime: String,
+        total: String,
+        dayOfWeek: Long,
+        breakTime: String
+    ) {
+        val values = ContentValues()
+        values.put(COLUMN_ID, id)
+        values.put(COLUMN_IN, inTime)
+        values.put(COLUMN_OUT, outTime)
+        values.put(COLUMN_TOTAL, total)
+        values.put(COLUMN_DAY, dayOfWeek)
+        values.put(COLUMN_BREAK, breakTime)
+
+        val db = this.writableDatabase
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
     fun update(
         id: String,
         inTime: String,
