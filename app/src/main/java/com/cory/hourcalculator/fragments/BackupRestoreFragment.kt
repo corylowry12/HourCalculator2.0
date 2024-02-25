@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
@@ -24,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -71,6 +73,8 @@ import com.cory.hourcalculator.sharedprefs.ShowBreakTimeInDecimalData
 import com.cory.hourcalculator.sharedprefs.ShowPatchNotesOnAppLaunchData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
@@ -91,7 +95,33 @@ class BackupRestoreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val darkThemeData = DarkThemeData(requireContext())
+        when {
+            darkThemeData.loadDarkModeState() == 1 -> {
+                //activity?.setTheme(R.style.Theme_DarkTheme)
+            }
+            darkThemeData.loadDarkModeState() == 0 -> {
+                activity?.setTheme(R.style.Theme_MyApplication)
+            }
+            darkThemeData.loadDarkModeState() == 2 -> {
+                activity?.setTheme(R.style.Theme_AMOLED)
+            }
+            darkThemeData.loadDarkModeState() == 3 -> {
+                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        activity?.setTheme(R.style.Theme_MyApplication)
+                    }
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        activity?.setTheme(
+                            R.style.Theme_AMOLED
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        activity?.setTheme(R.style.Theme_AMOLED)
+                    }
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_backup_restore, container, false)
     }
 
@@ -132,9 +162,11 @@ class BackupRestoreFragment : Fragment() {
         updateCustomColor()
 
         backupNowCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
             backupNow()
         }
         restoreFromBackupCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
             getRestoreFilePath()
         }
     }
@@ -463,55 +495,78 @@ class BackupRestoreFragment : Fragment() {
     fun restoreBackup(restoreFilePath: Uri) {
 
         try {
-            /*val path =
+
+            val dialog = BottomSheetDialog(requireContext())
+            val restoreLayout = layoutInflater.inflate(R.layout.restore_bottom_sheet, null)
+            dialog.setContentView(restoreLayout)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+            val bodyCardView =
+                restoreLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+            val yesButton = restoreLayout.findViewById<Button>(R.id.yesOverwriteButton)
+            val noButton = restoreLayout.findViewById<Button>(R.id.cancelOverwriteButton)
+
+            bodyCardView.setCardBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(requireContext()).generateCardColor()
+                )
+            )
+            yesButton.setBackgroundColor(
+                Color.parseColor(
+                    CustomColorGenerator(
+                        requireContext()
+                    ).generateCustomColorPrimary()
+                )
+            )
+            noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                /*val path =
                 File(
                     restoreFilePath
                 ) as File*/
 
-            //if (path.exists()) {
-            // val input = FileInputStream(restoreFilePath)
-            val input = requireContext().contentResolver.openInputStream(restoreFilePath)!!
-            val size = input.available()
-            val buffer = ByteArray(size)
-            input.read(buffer)
-            input.close()
-            val json = String(buffer)
+                //if (path.exists()) {
+                // val input = FileInputStream(restoreFilePath)
+                val input = requireContext().contentResolver.openInputStream(restoreFilePath)!!
+                val size = input.available()
+                val buffer = ByteArray(size)
+                input.read(buffer)
+                input.close()
+                val json = String(buffer)
 
-            val jsonContact = JSONObject(json)
-            val jsonArrayBackup: JSONObject = jsonContact.getJSONObject("backup")
+                val jsonContact = JSONObject(json)
+                val jsonArrayBackup: JSONObject = jsonContact.getJSONObject("backup")
 
-            val keys : Iterator<String> = jsonArrayBackup.keys()
-            var sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("file", Context.MODE_PRIVATE)
-            requireContext().getSharedPreferences("file", 0).edit().clear().apply()
-            while (keys.hasNext()) {
-                val key = keys.next()
-                val editor = sharedPreferences.edit()
+                val keys : Iterator<String> = jsonArrayBackup.keys()
+                var sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("file", Context.MODE_PRIVATE)
+                requireContext().getSharedPreferences("file", 0).edit().clear().apply()
+                while (keys.hasNext()) {
+                    val key = keys.next()
+                    val editor = sharedPreferences.edit()
 
-                if (jsonArrayBackup.get(key) is Boolean) {
-                    editor.putBoolean(key, jsonArrayBackup.get(key).toString().toBoolean())
+                    if (jsonArrayBackup.get(key) is Boolean) {
+                        editor.putBoolean(key, jsonArrayBackup.get(key).toString().toBoolean())
+                    }
+                    else if (jsonArrayBackup.get(key) is String) {
+                        editor.putString(key, jsonArrayBackup.get(key).toString())
+                    }
+                    else if (jsonArrayBackup.get(key) is Int) {
+                        editor.putInt(key, jsonArrayBackup.get(key).toString().toInt())
+                    }
+
+                    editor.apply()
+
                 }
-                else if (jsonArrayBackup.get(key) is String) {
-                    editor.putString(key, jsonArrayBackup.get(key).toString())
-                }
-                else if (jsonArrayBackup.get(key) is Int) {
-                    editor.putInt(key, jsonArrayBackup.get(key).toString().toInt())
-                }
-
-                editor.apply()
-
-            }
-
-            val materialAlertDialogBuilder =
-                MaterialAlertDialogBuilder(
-                    requireContext()
-                )
-            materialAlertDialogBuilder.setCancelable(false)
-
-            materialAlertDialogBuilder.setTitle("Title")
-            materialAlertDialogBuilder.setMessage("overwrite?")
-
-            materialAlertDialogBuilder.setPositiveButton("Overwrite") { p0, p1 ->
-
                 val jsonArrayClasses: JSONArray = jsonContact.getJSONArray("hours")
 
                 val jsonArrayHoursSize = jsonArrayClasses.length()
@@ -571,7 +626,7 @@ class BackupRestoreFragment : Fragment() {
                 }
                 Toast.makeText(requireContext(), "Restore Successful", Toast.LENGTH_SHORT)
                     .show()
-                materialAlertDialogBuilder.create().dismiss()
+                dialog.dismiss()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent =
                         requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
@@ -581,16 +636,13 @@ class BackupRestoreFragment : Fragment() {
                     activity?.finish()
                 }, 500)
             }
-            materialAlertDialogBuilder.setNegativeButton("Cancel"
-            ) { p0, p1 ->
+            noButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                dialog.dismiss()
                 Toast.makeText(requireContext(), "Not restored", Toast.LENGTH_SHORT).show()
             }
-            materialAlertDialogBuilder.create().show()
+            dialog.show()
 
-
-            /* } else {
-                 Toast.makeText(requireContext(), "Error: File not Found", Toast.LENGTH_SHORT).show()
-             }*/
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(
