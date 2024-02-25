@@ -289,12 +289,15 @@ class SettingsFragment : Fragment() {
         Vibrate().vibration(requireContext())
 
         val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(
-            R.anim.enter_from_right,
-            R.anim.exit_to_left,
-            R.anim.enter_from_left,
-            R.anim.exit_to_right
-        )
+
+        if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
+            transaction?.setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+        }
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
     }

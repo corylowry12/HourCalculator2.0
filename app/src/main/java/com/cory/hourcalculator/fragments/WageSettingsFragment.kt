@@ -211,10 +211,12 @@ class WageSettingsFragment : Fragment() {
             calculateOvertimeInHistorySwitch?.isChecked = true
             calculateOvertimeInHistorySwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            calculateOvertimeInHistorySwitch?.jumpDrawablesToCurrentState()
         } else {
             calculateOvertimeInHistorySwitch?.isChecked = false
             calculateOvertimeInHistorySwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            calculateOvertimeInHistorySwitch?.jumpDrawablesToCurrentState()
         }
 
         calculateOvertimeInHistoryCardView?.setOnClickListener {

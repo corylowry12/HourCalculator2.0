@@ -181,12 +181,15 @@ class TimeCardFABPositioningFragment : Fragment() {
 
         if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 0) {
             leftRadioButton.isChecked = true
+            leftRadioButton?.jumpDrawablesToCurrentState()
         }
         if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 1) {
             middleRadioButton.isChecked = true
+            middleRadioButton?.jumpDrawablesToCurrentState()
         }
         if (TimeCardFABPositioningData(requireContext()).loadFABPosition() == 2) {
             rightRadioButton.isChecked = true
+            rightRadioButton?.jumpDrawablesToCurrentState()
         }
 
         leftCardView.setOnClickListener {

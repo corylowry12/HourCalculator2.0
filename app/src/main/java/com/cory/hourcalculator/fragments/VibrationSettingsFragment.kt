@@ -163,10 +163,12 @@ class VibrationSettingsFragment : Fragment() {
             toggleVibration?.isChecked = true
             toggleVibration?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleVibration?.jumpDrawablesToCurrentState()
         } else if (!vibrationData.loadVibrationOnClickState()) {
             toggleVibration?.isChecked = false
             toggleVibration?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleVibration?.jumpDrawablesToCurrentState()
         }
 
         vibrationOnClickCardView?.setOnClickListener {
@@ -222,10 +224,12 @@ class VibrationSettingsFragment : Fragment() {
             toggleVibrationOnLongClick?.isChecked = true
             toggleVibrationOnLongClick?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleVibrationOnLongClick?.jumpDrawablesToCurrentState()
         } else if (!vibrationData.loadVibrationOnLongClickState()) {
             toggleVibrationOnLongClick?.isChecked = false
             toggleVibrationOnLongClick?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleVibrationOnLongClick?.jumpDrawablesToCurrentState()
         }
 
         vibrationOnLongClickCardView.setOnClickListener {
@@ -281,10 +285,12 @@ class VibrationSettingsFragment : Fragment() {
             toggleTimePickerVibration?.isChecked = true
             toggleTimePickerVibration?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleTimePickerVibration?.jumpDrawablesToCurrentState()
         } else if (!vibrationData.loadVibrationOnTimePickerChangeState()) {
             toggleTimePickerVibration?.isChecked = false
             toggleTimePickerVibration?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleTimePickerVibration?.jumpDrawablesToCurrentState()
         }
 
         vibrationOnTimePickerCardView?.setOnClickListener {
@@ -340,10 +346,12 @@ class VibrationSettingsFragment : Fragment() {
             toggleCalculationErrorVibration?.isChecked = true
             toggleCalculationErrorVibration?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleCalculationErrorVibration?.jumpDrawablesToCurrentState()
         } else if (!vibrationData.loadVibrationOnErrorState()) {
             toggleCalculationErrorVibration?.isChecked = false
             toggleCalculationErrorVibration?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleCalculationErrorVibration?.jumpDrawablesToCurrentState()
         }
 
         vibrationOnErrorCardView?.setOnClickListener {

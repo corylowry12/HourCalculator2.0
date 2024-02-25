@@ -202,10 +202,12 @@ class TimeCardSettingsFragment : Fragment() {
         if (toggleTimeCards.loadTimeCardsState()) {
             toggleTimeCardSwitch.isChecked = true
             toggleTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleTimeCardSwitch?.jumpDrawablesToCurrentState()
         }
         else {
             toggleTimeCardSwitch.isChecked = false
             toggleTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleTimeCardSwitch?.jumpDrawablesToCurrentState()
         }
 
         val showWagesInTimeCards = ShowWagesInTimeCardData(requireContext())
@@ -214,10 +216,12 @@ class TimeCardSettingsFragment : Fragment() {
         if (showWagesInTimeCards.loadShowWages()) {
             showWagesInTimeCardSwitch.isChecked = true
             showWagesInTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            showWagesInTimeCardSwitch?.jumpDrawablesToCurrentState()
         }
         else {
             showWagesInTimeCardSwitch.isChecked = false
             showWagesInTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            showWagesInTimeCardSwitch?.jumpDrawablesToCurrentState()
         }
 
         showWagesInTimeCardsCardView.setOnClickListener {
@@ -273,10 +277,12 @@ class TimeCardSettingsFragment : Fragment() {
         if (imageViewBackground.loadMatchImageViewContents()) {
             imageViewBackgroundSwitch.isChecked = true
             imageViewBackgroundSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            imageViewBackgroundSwitch?.jumpDrawablesToCurrentState()
         }
         else {
             imageViewBackgroundSwitch.isChecked = false
             imageViewBackgroundSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            imageViewBackgroundSwitch?.jumpDrawablesToCurrentState()
         }
 
         coloredImageViewBackgroundCardView.setOnClickListener {
@@ -381,12 +387,14 @@ class TimeCardSettingsFragment : Fragment() {
         fabPositioningTimeCard.setOnClickListener {
             Vibrate().vibration(requireContext())
             val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.setCustomAnimations(
-                R.anim.enter_from_right,
-                R.anim.exit_to_left,
-                R.anim.enter_from_left,
-                R.anim.exit_to_right
-            )
+            if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
+                transaction?.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+            }
             transaction?.replace(R.id.fragment_container, TimeCardFABPositioningFragment())?.addToBackStack(null)
             transaction?.commit()
         }
