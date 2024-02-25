@@ -229,12 +229,15 @@ class BackgroundColorFragment : Fragment() {
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
                 lightThemeButton?.isChecked = true
+                lightThemeButton?.jumpDrawablesToCurrentState()
             }
             darkThemeData.loadDarkModeState() == 2 -> {
                 amoledThemeButton?.isChecked = true
+                amoledThemeButton?.jumpDrawablesToCurrentState()
             }
             darkThemeData.loadDarkModeState() == 3 -> {
                 followSystemThemeButton?.isChecked = true
+                followSystemThemeButton?.jumpDrawablesToCurrentState()
             }
         }
 
@@ -269,10 +272,12 @@ class BackgroundColorFragment : Fragment() {
             moreColorBackgroundSwitch?.isChecked = true
             moreColorBackgroundSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            moreColorBackgroundSwitch?.jumpDrawablesToCurrentState()
         } else {
             moreColorBackgroundSwitch?.isChecked = false
             moreColorBackgroundSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            moreColorBackgroundSwitch?.jumpDrawablesToCurrentState()
         }
 
         moreColorBackgroundCardView.setOnClickListener {

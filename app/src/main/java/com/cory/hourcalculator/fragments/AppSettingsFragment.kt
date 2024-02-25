@@ -26,6 +26,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.BreakTextBoxVisibilityData
 import com.cory.hourcalculator.sharedprefs.CalculationTypeData
 import com.cory.hourcalculator.sharedprefs.ClearBreakTextAutomaticallyData
@@ -277,10 +278,12 @@ class AppSettingsFragment : Fragment() {
             outTimeSwitch?.isChecked = true
             outTimeSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            outTimeSwitch?.jumpDrawablesToCurrentState()
         } else {
             outTimeSwitch?.isChecked = false
             outTimeSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            outTimeSwitch?.jumpDrawablesToCurrentState()
         }
 
         outTimeCardView?.setOnClickListener {
@@ -339,10 +342,12 @@ class AppSettingsFragment : Fragment() {
             calculationTypeSwitch?.isChecked = false
             calculationTypeSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            calculationTypeSwitch?.jumpDrawablesToCurrentState()
         } else {
             calculationTypeSwitch?.isChecked = true
             calculationTypeSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            calculationTypeSwitch?.jumpDrawablesToCurrentState()
         }
 
         calculationTypeCardView?.setOnClickListener {
@@ -401,10 +406,12 @@ class AppSettingsFragment : Fragment() {
             longClickEnabledSwitch.isChecked = true
             longClickEnabledSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            longClickEnabledSwitch?.jumpDrawablesToCurrentState()
         } else {
             longClickEnabledSwitch.isChecked = false
             longClickEnabledSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            longClickEnabledSwitch?.jumpDrawablesToCurrentState()
         }
 
         longClickEnabledCardView.setOnClickListener {
@@ -462,10 +469,12 @@ class AppSettingsFragment : Fragment() {
             showPatchNotesOnAppLaunchSwitch?.isChecked = true
             showPatchNotesOnAppLaunchSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            showPatchNotesOnAppLaunchSwitch?.jumpDrawablesToCurrentState()
         } else if (!showPatchNotesOnAppLaunchData.loadShowPatchNotesOnAppLaunch()) {
             showPatchNotesOnAppLaunchSwitch?.isChecked = false
             showPatchNotesOnAppLaunchSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            showPatchNotesOnAppLaunchSwitch?.jumpDrawablesToCurrentState()
         }
 
 
@@ -521,32 +530,30 @@ class AppSettingsFragment : Fragment() {
         breakTimeSettingsCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
 
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.setCustomAnimations(
-                R.anim.enter_from_right,
-                R.anim.exit_to_left,
-                R.anim.enter_from_left,
-                R.anim.exit_to_right
-            )
-            transaction?.replace(R.id.fragment_container, BreakTimeSettingsFragment())
-                ?.addToBackStack(null)
-            transaction?.commit()
+            openFragment(BreakTimeSettingsFragment())
         }
 
         vibrationCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
 
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            openFragment(VibrationSettingsFragment())
+        }
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+
+        if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
             transaction?.setCustomAnimations(
                 R.anim.enter_from_right,
                 R.anim.exit_to_left,
                 R.anim.enter_from_left,
                 R.anim.exit_to_right
             )
-            transaction?.replace(R.id.fragment_container, VibrationSettingsFragment())
-                ?.addToBackStack(null)
-            transaction?.commit()
         }
+        transaction?.replace(R.id.fragment_container, fragment)
+            ?.addToBackStack(null)
+        transaction?.commit()
     }
 
     private fun resetMenuPress() {

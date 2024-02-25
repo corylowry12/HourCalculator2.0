@@ -264,10 +264,12 @@ class AppearanceFragment : Fragment() {
             coloredNavBarSwitch?.isChecked = true
             coloredNavBarSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            coloredNavBarSwitch?.jumpDrawablesToCurrentState()
         } else if (!coloredNavBarData.loadNavBar()) {
             coloredNavBarSwitch?.isChecked = false
             coloredNavBarSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            coloredNavBarSwitch?.jumpDrawablesToCurrentState()
         }
 
         coloredNavigationBarCardView.setOnClickListener {
@@ -316,9 +318,11 @@ class AppearanceFragment : Fragment() {
         if (coloredMenuTintData.loadMenuTint()) {
             coloredMenuTintSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            coloredMenuTintSwitch?.jumpDrawablesToCurrentState()
         } else {
             coloredMenuTintSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            coloredMenuTintSwitch?.jumpDrawablesToCurrentState()
         }
 
         coloredMenuTintCardView.setOnClickListener {
@@ -377,9 +381,11 @@ class AppearanceFragment : Fragment() {
         if (coloredTitleBarData.loadTitleBarTextState()) {
             coloredTitleBarTextSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            coloredTitleBarTextSwitch?.jumpDrawablesToCurrentState()
         } else {
             coloredTitleBarTextSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            coloredTitleBarTextSwitch?.jumpDrawablesToCurrentState()
         }
 
         coloredTitleBarTextCardView.setOnClickListener {
@@ -517,12 +523,14 @@ class AppearanceFragment : Fragment() {
         Vibrate().vibration(requireContext())
 
         val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(
-            R.anim.enter_from_right,
-            R.anim.exit_to_left,
-            R.anim.enter_from_left,
-            R.anim.exit_to_right
-        )
+        if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
+            transaction?.setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+        }
         transaction?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)
         transaction?.commit()
     }

@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -277,10 +278,12 @@ class HistorySettingsFragment : Fragment() {
             toggleHistory?.isChecked = true
             toggleHistory?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            toggleHistory?.jumpDrawablesToCurrentState()
         } else if (!historyToggleData.loadHistoryState()) {
             toggleHistory?.isChecked = false
             toggleHistory?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            toggleHistory?.jumpDrawablesToCurrentState()
         }
 
         toggleHistoryCardView?.setOnClickListener {
@@ -412,11 +415,13 @@ class HistorySettingsFragment : Fragment() {
                 true
             activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.jumpDrawablesToCurrentState()
         } else {
             activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.isChecked =
                 false
             activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            activity?.findViewById<MaterialSwitch>(R.id.toggleHistoryAutomaticDeletionSwitch)?.jumpDrawablesToCurrentState()
         }
 
         requireActivity().findViewById<Chip>(R.id.daysWorkedChip).text =
@@ -491,10 +496,12 @@ class HistorySettingsFragment : Fragment() {
             deleteAllOnLimitReachedSwitch.isChecked = true
             deleteAllOnLimitReachedSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            deleteAllOnLimitReachedSwitch?.jumpDrawablesToCurrentState()
         } else {
             deleteAllOnLimitReachedSwitch.isChecked = false
             deleteAllOnLimitReachedSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            deleteAllOnLimitReachedSwitch?.jumpDrawablesToCurrentState()
         }
 
         historyDeleteAllOnLimitReachedCardView.setOnClickListener {
@@ -558,12 +565,15 @@ class HistorySettingsFragment : Fragment() {
             } else {
 
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.setCustomAnimations(
-                    R.anim.enter_from_right,
-                    R.anim.exit_to_left,
-                    R.anim.enter_from_left,
-                    R.anim.exit_to_right
-                )
+
+                if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
+                    transaction?.setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.enter_from_left,
+                        R.anim.exit_to_right
+                    )
+                }
                 transaction?.replace(
                     R.id.fragment_container,
                     NumberOfEntriesBeforeDeletionFragment()
@@ -580,10 +590,12 @@ class HistorySettingsFragment : Fragment() {
             historyClickableSwitch?.isChecked = true
             historyClickableSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            historyClickableSwitch?.jumpDrawablesToCurrentState()
         } else if (!historyClickable.loadHistoryItemClickable()) {
             historyClickableSwitch?.isChecked = false
             historyClickableSwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            historyClickableSwitch?.jumpDrawablesToCurrentState()
         }
 
         openHoursForEditingCardView?.setOnClickListener {
@@ -641,10 +653,12 @@ class HistorySettingsFragment : Fragment() {
             showWagesInHistorySwitch?.isChecked = true
             showWagesInHistorySwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            showWagesInHistorySwitch?.jumpDrawablesToCurrentState()
         } else if (!showWagesInHistoryData.loadShowWages()) {
             showWagesInHistorySwitch?.isChecked = false
             showWagesInHistorySwitch?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            showWagesInHistorySwitch?.jumpDrawablesToCurrentState()
         }
 
         showWagesInHistoryCardView?.setOnClickListener {
@@ -697,12 +711,15 @@ class HistorySettingsFragment : Fragment() {
         fabPositioningCardView.setOnClickListener {
             Vibrate().vibrateOnLongClick(requireContext())
             val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.setCustomAnimations(
-                R.anim.enter_from_right,
-                R.anim.exit_to_left,
-                R.anim.enter_from_left,
-                R.anim.exit_to_right
-            )
+
+            if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
+                transaction?.setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+            }
             transaction?.replace(R.id.fragment_container, HistoryFABPositioningFragment())
                 ?.addToBackStack(null)
             transaction?.commit()

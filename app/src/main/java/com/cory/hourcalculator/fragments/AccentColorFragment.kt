@@ -245,10 +245,12 @@ class AccentColorFragment : Fragment() {
         if (BottomNavBadgeColorData(requireContext()).loadColor()) {
             bottomNavBadgeColorSwitch.isChecked = true
             bottomNavBadgeColorSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            bottomNavBadgeColorSwitch?.jumpDrawablesToCurrentState()
         }
         else {
             bottomNavBadgeColorSwitch.isChecked = false
             bottomNavBadgeColorSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            bottomNavBadgeColorSwitch?.jumpDrawablesToCurrentState()
         }
 
         bottomNavBadgeColorCardView.setOnClickListener {
@@ -307,10 +309,12 @@ class AccentColorFragment : Fragment() {
         if (GenerateARandomColorData(requireContext()).loadGenerateARandomColorOnAppLaunch()) {
             generateARandomColorOnAppLaunchSwitch.isChecked = true
             generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            generateARandomColorCardView?.jumpDrawablesToCurrentState()
         }
         else {
             generateARandomColorOnAppLaunchSwitch.isChecked = false
             generateARandomColorOnAppLaunchSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            generateARandomColorOnAppLaunchSwitch?.jumpDrawablesToCurrentState()
         }
 
         generateARandomColorCardView.setOnClickListener {
@@ -949,12 +953,14 @@ class AccentColorFragment : Fragment() {
             }
             else {
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.setCustomAnimations(
-                    R.anim.enter_from_right,
-                    R.anim.exit_to_left,
-                    R.anim.enter_from_left,
-                    R.anim.exit_to_right
-                )
+                if (AnimationData(requireContext()).loadSettingsFragmentSwitchingAnimation()) {
+                    transaction?.setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.enter_from_left,
+                        R.anim.exit_to_right
+                    )
+                }
                 transaction?.replace(R.id.fragment_container, SavedColorsFragment())
                     ?.addToBackStack(null)
                 transaction?.commit()
@@ -979,9 +985,11 @@ class AccentColorFragment : Fragment() {
             if (MaterialYouData(requireContext()).loadMaterialYou()) {
                 materialYouStyle2Switch?.isChecked = true
                 materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+                materialYouStyle2Switch?.jumpDrawablesToCurrentState()
             } else if (!MaterialYouData(requireContext()).loadMaterialYou()) {
                 materialYouStyle2Switch?.isChecked = false
                 materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+                materialYouStyle2Switch?.jumpDrawablesToCurrentState()
             }
         }
 

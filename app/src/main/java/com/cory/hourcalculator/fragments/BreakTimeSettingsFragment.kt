@@ -185,10 +185,12 @@ class BreakTimeSettingsFragment : Fragment() {
             toggleBreakTextBox?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             toggleBreakTextBox?.isChecked = true
+            toggleBreakTextBox?.jumpDrawablesToCurrentState()
         } else if (breakTextBoxVisiblityClass.loadVisiblity() == 1) {
             toggleBreakTextBox?.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             toggleBreakTextBox?.isChecked = false
+            toggleBreakTextBox?.jumpDrawablesToCurrentState()
         }
 
         breakTextBoxCardView?.setOnClickListener {
@@ -246,10 +248,12 @@ class BreakTimeSettingsFragment : Fragment() {
             clearBreakTextBoxSwitch.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             clearBreakTextBoxSwitch.isChecked = true
+            clearBreakTextBoxSwitch?.jumpDrawablesToCurrentState()
         } else if (!clearBreakTextAutomaticallyData.loadClearAutomatically()) {
             clearBreakTextBoxSwitch.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             clearBreakTextBoxSwitch.isChecked = false
+            clearBreakTextBoxSwitch?.jumpDrawablesToCurrentState()
         }
 
         clearBreakTextBoxCardView.setOnClickListener {
@@ -307,10 +311,12 @@ class BreakTimeSettingsFragment : Fragment() {
             showBreakTimeInDecimalSwitch.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             showBreakTimeInDecimalSwitch.isChecked = true
+            showBreakTimeInDecimalSwitch?.jumpDrawablesToCurrentState()
         } else if (!showBreakTimeInDecimalData.loadShowBreakTimeInDecimal()) {
             showBreakTimeInDecimalSwitch.thumbIconDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             showBreakTimeInDecimalSwitch.isChecked = false
+            showBreakTimeInDecimalSwitch?.jumpDrawablesToCurrentState()
         }
 
         showBreakTimeInDecimalCardView.setOnClickListener {

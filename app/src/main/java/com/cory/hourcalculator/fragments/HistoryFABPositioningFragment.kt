@@ -181,12 +181,15 @@ class HistoryFABPositioningFragment : Fragment() {
 
         if (HistoryFABPositioning(requireContext()).loadFABPosition() == 0) {
             leftRadioButton.isChecked = true
+            leftRadioButton?.jumpDrawablesToCurrentState()
         }
         if (HistoryFABPositioning(requireContext()).loadFABPosition() == 1) {
             middleRadioButton.isChecked = true
+            middleRadioButton?.jumpDrawablesToCurrentState()
         }
         if (HistoryFABPositioning(requireContext()).loadFABPosition() == 2) {
             rightRadioButton.isChecked = true
+            rightRadioButton?.jumpDrawablesToCurrentState()
         }
 
         leftCardView.setOnClickListener {

@@ -280,30 +280,37 @@ class NumberOfEntriesBeforeDeletionFragment : Fragment() {
         when {
             daysWorked.loadDaysWorked() == 1 -> {
                 one?.isChecked = true
+                one?.jumpDrawablesToCurrentState()
             }
 
             daysWorked.loadDaysWorked() == 2 -> {
                 two?.isChecked = true
+                two?.jumpDrawablesToCurrentState()
             }
 
             daysWorked.loadDaysWorked() == 3 -> {
                 three?.isChecked = true
+                three?.jumpDrawablesToCurrentState()
             }
 
             daysWorked.loadDaysWorked() == 4 -> {
                 four?.isChecked = true
+                four?.jumpDrawablesToCurrentState()
             }
 
             daysWorked.loadDaysWorked() == 5 -> {
                 five?.isChecked = true
+                five?.jumpDrawablesToCurrentState()
             }
 
             daysWorked.loadDaysWorked() == 6 -> {
                 six?.isChecked = true
+                six?.jumpDrawablesToCurrentState()
             }
 
             daysWorked.loadDaysWorked() == 7 -> {
                 seven?.isChecked = true
+                seven?.jumpDrawablesToCurrentState()
             }
         }
 
