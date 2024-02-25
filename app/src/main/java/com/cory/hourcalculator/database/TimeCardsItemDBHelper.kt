@@ -47,6 +47,29 @@ class TimeCardsItemDBHelper(context: Context, factory: SQLiteDatabase.CursorFact
         db.close()
     }
 
+    fun insertRestoreRow(
+        id : String,
+        itemID : String,
+        inTime: String,
+        outTime: String,
+        total: String,
+        dayOfWeek: Long,
+        breakTime: String
+    ) {
+        val values = ContentValues()
+        values.put(COLUMN_ID, id)
+        values.put(COLUMN_ITEM_ID, itemID)
+        values.put(COLUMN_IN, inTime)
+        values.put(COLUMN_OUT, outTime)
+        values.put(COLUMN_TOTAL, total)
+        values.put(COLUMN_DAY, dayOfWeek)
+        values.put(COLUMN_BREAK, breakTime)
+
+        val db = this.writableDatabase
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
     fun getCount(): Int {
         val db = this.readableDatabase
         return DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM $TABLE_NAME", null).toInt()
@@ -62,6 +85,12 @@ class TimeCardsItemDBHelper(context: Context, factory: SQLiteDatabase.CursorFact
         val db = this.writableDatabase
 
         return db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ITEM_ID=$id ORDER BY date asc", null)
+    }
+
+    fun getAll(): Cursor? {
+        val db = this.writableDatabase
+
+        return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
     }
 
     fun deleteAllItemRow(id: String) {
