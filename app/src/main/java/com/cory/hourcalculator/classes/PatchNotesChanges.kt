@@ -3,7 +3,7 @@ package com.cory.hourcalculator.classes
 class PatchNotesChanges {
 
     var bugFixesArray = arrayOf(
-        "No new bug fixes"
+        "Fixed issue where cards would be the wrong color if material you was enabled and the background color was set to follow system and it was light theme"
     )
 
     var newFeaturesArray = arrayOf(
