@@ -3,11 +3,13 @@ package com.cory.hourcalculator.classes
 class PatchNotesChanges {
 
     var bugFixesArray = arrayOf(
-        "Fixed issue where cards would be the wrong color if material you was enabled and the background color was set to follow system and it was light theme"
+        "Fixed issue where cards would be the wrong color if material you was enabled and the background color was set to follow system and it was light theme",
+        "Fixed issue where switches and radio buttons would animate when loading the view"
     )
 
     var newFeaturesArray = arrayOf(
-        "Added the ability to change between each Material You accent color"
+        "Added the option to do a backup/restore of the app",
+        "Added the option to disable settings view change animations"
     )
 
     var enhancementsArray = arrayOf(
