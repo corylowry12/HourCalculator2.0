@@ -72,4 +72,24 @@ class AnimationData(context: Context) {
         val state = sharedPreferences.getBoolean("tabSwitchingAnimation", true)
         return (state)
     }
+    fun setSettingsFragmentSwitchingAnimation(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("settingsFragmentSwitchingAnimation", state)
+        editor.apply()
+    }
+
+    fun loadSettingsFragmentSwitchingAnimation(): Boolean {
+        val state = sharedPreferences.getBoolean("settingsFragmentSwitchingAnimation", true)
+        return (state)
+    }
+    fun setRecyclerViewAnimation(state: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("tabSwitchingAnimation", state)
+        editor.apply()
+    }
+
+    fun loadRecyclerViewAnimationAnimation(): Boolean {
+        val state = sharedPreferences.getBoolean("recyclerViewAnimation", true)
+        return (state)
+    }
 }
