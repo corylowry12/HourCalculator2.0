@@ -972,9 +972,11 @@ class AccentColorFragment : Fragment() {
         if (MaterialYouData(requireContext()).loadMaterialYou()) {
             materialYouStyle2Switch?.isChecked = true
             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            materialYouStyle2Switch?.jumpDrawablesToCurrentState()
         } else if (!MaterialYouData(requireContext()).loadMaterialYou()) {
             materialYouStyle2Switch?.isChecked = false
             materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            materialYouStyle2Switch?.jumpDrawablesToCurrentState()
         }
 
         followGoogleAppsCardView.setOnClickListener {
