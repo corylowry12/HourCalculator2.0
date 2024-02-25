@@ -115,6 +115,7 @@ class SettingsFragment : Fragment() {
         val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
         val tabletSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.tabletSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
+        val backupRestoreCardView = requireActivity().findViewById<MaterialCardView>(R.id.backupCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
         val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
@@ -181,6 +182,13 @@ class SettingsFragment : Fragment() {
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
+        backupRestoreCardView.shapeAppearanceModel = backupRestoreCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
         patchNotesCardView.shapeAppearanceModel = patchNotesCardView.shapeAppearanceModel
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
@@ -236,6 +244,10 @@ class SettingsFragment : Fragment() {
 
         timeCardGalleryCardView.setOnClickListener {
             openFragment(GalleryFragment())
+        }
+
+        backupRestoreCardView.setOnClickListener {
+            openFragment(BackupRestoreFragment())
         }
 
         val patchNotesChevron = activity?.findViewById<ImageView>(R.id.patchNotesChevron)
@@ -362,6 +374,7 @@ class SettingsFragment : Fragment() {
         val animationSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.animationSettingsCardView)
         val tabletSettingsCardView = requireActivity().findViewById<MaterialCardView>(R.id.tabletSettingsCardView)
         val timeCardGalleryCardView = requireActivity().findViewById<MaterialCardView>(R.id.galleryCardView)
+        val backupRestoreCardView = requireActivity().findViewById<MaterialCardView>(R.id.backupCardView)
         val patchNotesCardView = requireActivity().findViewById<MaterialCardView>(R.id.patchNotesCardView)
         val aboutCardView = requireActivity().findViewById<MaterialCardView>(R.id.aboutAppCardView)
         val deleteAppDataCardView = requireActivity().findViewById<MaterialCardView>(R.id.deleteAppDataCardView)
@@ -374,6 +387,7 @@ class SettingsFragment : Fragment() {
         animationSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         tabletSettingsCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         timeCardGalleryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        backupRestoreCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         patchNotesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         aboutCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         deleteAppDataCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
