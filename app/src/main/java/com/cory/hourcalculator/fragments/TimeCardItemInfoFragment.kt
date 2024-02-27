@@ -273,16 +273,16 @@ class TimeCardItemInfoFragment : Fragment() {
             Vibrate().vibration(requireContext())
             val intent = Intent(requireContext(), ImageViewActivity::class.java)
             intent.putExtra("id", id)
-            if (AnimationData(requireContext()).loadImageAnimation()) {
+            //if (AnimationData(requireContext()).loadImageAnimation()) {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     imageView,
                     "transition_image"
                 )
                 startActivity(intent, options.toBundle())
-            } else {
-                startActivity(intent)
-            }
+            //} else {
+                //startActivity(intent)
+            //}
         }
 
         imageView?.setOnLongClickListener {
