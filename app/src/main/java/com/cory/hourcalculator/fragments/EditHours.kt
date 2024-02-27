@@ -257,7 +257,6 @@ class EditHours : Fragment() {
                 datePicker.datePicker.maxDate = System.currentTimeMillis()
 
                 datePicker.datePicker.setOnDateChangedListener { _, _, _, _ ->
-                    Vibrate().vibration(requireContext())
                     if (datePicker.datePicker.month == month2.toInt() || datePicker.datePicker.dayOfMonth != day2.toInt() || datePicker.datePicker.year != year2.toInt()) {
                         dateChangedBool = true
                         timeEditHourData.setDateBool(true)
