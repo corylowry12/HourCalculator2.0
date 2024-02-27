@@ -235,7 +235,6 @@ class AppIconAdapter(val context: Context,
                             iconDisableArray.add("com.cory.hourcalculator.SplashRed")
                             iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
                             iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
-                            iconDisableArray.add("com.cory.hourcalculator.SplashOG")
                             iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
                             changeIcons()
                             ChosenAppIconData(context).setChosenAppIcon(context.getString(R.string.og))
