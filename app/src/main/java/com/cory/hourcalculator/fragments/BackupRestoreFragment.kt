@@ -1,12 +1,14 @@
 package com.cory.hourcalculator.fragments
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
@@ -30,6 +32,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.ManagePermissions
@@ -88,6 +91,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class BackupRestoreFragment : Fragment() {
+
+    private val iconDisableArray = arrayListOf<String>()
+    private var iconEnableID = ""
 
     var filePath = ""
 
@@ -624,6 +630,95 @@ class BackupRestoreFragment : Fragment() {
                         jsonObjectDetail.get("breakTime").toString(),
                     )
                 }
+                iconDisableArray.clear()
+                if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.teal)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashScreenNoIcon"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.pink)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashPink"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.orange)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashOrange"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.red)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashRed"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.blue)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashBlue"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.og)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashOG"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.snow_falling)) {
+                    iconEnableID = "com.cory.hourcalculator.SplashSnowFalling"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    changeIcons()
+                }
+                else if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == requireContext().getString(R.string.material_you)) {
+                    iconEnableID = "com.cory.hourcalculator.MaterialYou"
+                    iconDisableArray.add("com.cory.hourcalculator.SplashScreenNoIcon")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+                    iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+                    changeIcons()
+                }
                 Toast.makeText(requireContext(), "Restore Successful", Toast.LENGTH_SHORT)
                     .show()
                 dialog.dismiss()
@@ -634,7 +729,7 @@ class BackupRestoreFragment : Fragment() {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     activity?.finish()
-                }, 500)
+                }, 1500)
             }
             noButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
@@ -655,7 +750,7 @@ class BackupRestoreFragment : Fragment() {
 
     fun getRestoreFilePath() {
         val intent = Intent()
-            .setType("*/*")
+            .setType("text/*")
             .setAction(Intent.ACTION_GET_CONTENT)
 
         getFilePathResult.launch(intent)
@@ -693,6 +788,27 @@ class BackupRestoreFragment : Fragment() {
                 }
             }
         }
+
+    private fun changeIcons() {
+        for (i in 0 until iconDisableArray.count()) {
+            requireContext().packageManager?.setComponentEnabledSetting(
+                ComponentName(
+                    BuildConfig.APPLICATION_ID,
+                    iconDisableArray.elementAt(i)
+                ),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
+        requireContext().packageManager?.setComponentEnabledSetting(
+            ComponentName(
+                BuildConfig.APPLICATION_ID,
+                iconEnableID
+            ),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+    }
 
     private fun getFilePath() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
