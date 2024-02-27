@@ -447,7 +447,8 @@ class AnimationSettingsFragment : Fragment() {
 
         val imageLoadingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.imageLoadingAnimationSwitch)
 
-        if (animationData.loadImageAnimation()) {
+        imageLoadingAnimationCardView.visibility = View.GONE
+        /*if (animationData.loadImageAnimation()) {
             imageLoadingAnimationSwitch?.isChecked = true
             imageLoadingAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
             imageLoadingAnimationSwitch?.jumpDrawablesToCurrentState()
@@ -500,7 +501,7 @@ class AnimationSettingsFragment : Fragment() {
             }
             infoDialog.show()
             return@setOnLongClickListener true
-        }
+        }*/
 
         val tabSwitchingAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.tabSwitchingAnimationSwitch)
 
@@ -602,6 +603,63 @@ class AnimationSettingsFragment : Fragment() {
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
                 "When enabled the view will slide left or right when entering/exiting settings views.\n\n" +
                         "When disabled the view will have no animation."
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
+        val recyclerViewAnimationSwitch = requireActivity().findViewById<MaterialSwitch>(R.id.recyclerViewAnimationSwitch)
+
+        if (animationData.loadRecyclerViewAnimation()) {
+            recyclerViewAnimationSwitch?.isChecked = true
+            recyclerViewAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            recyclerViewAnimationSwitch?.jumpDrawablesToCurrentState()
+        } else if (!animationData.loadRecyclerViewAnimation()) {
+            recyclerViewAnimationSwitch?.isChecked = false
+            recyclerViewAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            recyclerViewAnimationSwitch?.jumpDrawablesToCurrentState()
+        }
+
+        recyclerViewAnimationCardView?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            recyclerViewAnimationSwitch.isChecked = !recyclerViewAnimationSwitch.isChecked
+            if (recyclerViewAnimationSwitch.isChecked) {
+                recyclerViewAnimationSwitch.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                recyclerViewAnimationSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+            animationData.setRecyclerViewAnimation(recyclerViewAnimationSwitch.isChecked)
+        }
+
+        recyclerViewAnimationCardView.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled the recyclerview in History and Time Cards will animation when deleting/restoring items.\n\n" +
+                        "When disabled the recycler view will have no animation."
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -807,7 +865,7 @@ class AnimationSettingsFragment : Fragment() {
         AnimationData(requireContext()).setHistoryScrollingLoadingAnimation(false)
         AnimationData(requireContext()).setTimeCardRecyclerViewLoadingAnimation(false)
         AnimationData(requireContext()).setTimeCardsScrollingLoadingAnimation(false)
-        AnimationData(requireContext()).setImageAnimation(true)
+        //AnimationData(requireContext()).setImageAnimation(true)
         AnimationData(requireContext()).setTabSwitchingAnimation(true)
 
         val historyListLoadingAnimation =

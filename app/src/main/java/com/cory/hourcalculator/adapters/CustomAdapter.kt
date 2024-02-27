@@ -60,7 +60,12 @@ class CustomAdapter(
 
     fun checkboxVisible() {
         checkBoxVisible = false
-        notifyItemRangeChanged(0, dataList.size)
+        if (AnimationData(context).loadRecyclerViewAnimation()) {
+            notifyItemRangeChanged(0, dataList.size)
+        }
+        else {
+            notifyDataSetChanged()
+        }
         snackbarDeleteSelected.dismiss()
         snackbarDismissCheckBox.dismiss()
         selectedItemsList.clear()
@@ -342,7 +347,12 @@ class CustomAdapter(
 
                 dbHandler.deleteRow(map["id"].toString())
                 dataList.removeAt(selectedItemsList.elementAt(i))
-                notifyItemRemoved(selectedItemsList.elementAt(i))
+                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                    notifyItemRemoved(selectedItemsList.elementAt(i))
+                }
+                else {
+                    notifyDataSetChanged()
+                }
                 checkBoxVisible = false
                 //checkBox.isChecked = false
             }
@@ -388,7 +398,12 @@ class CustomAdapter(
         }
 
         checkBoxVisible = false
-        notifyItemRangeChanged(0, dataList.size)
+        if (AnimationData(context).loadRecyclerViewAnimation()) {
+            notifyItemRangeChanged(0, dataList.size)
+        }
+        else {
+            notifyDataSetChanged()
+        }
         val entriesDeleted: String = if (selectedItemsList.count() == 1) {
             selectedItemsList.count().toString() + " Entry Exported"
         } else {
@@ -468,7 +483,13 @@ class CustomAdapter(
 
                 dbHandler.deleteRow(map["id"].toString())
                 dataList.removeAt(selectedItemsList.elementAt(i))
-                notifyItemRemoved(selectedItemsList.elementAt(i))
+                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                    notifyItemRemoved(selectedItemsList.elementAt(i))
+                }
+                else {
+                    notifyDataSetChanged()
+                }
+
                 checkBoxVisible = false
                 //checkBox.isChecked = false
             }
@@ -476,7 +497,12 @@ class CustomAdapter(
         }
 
         checkBoxVisible = false
-        notifyItemRangeChanged(0, dataList.size)
+        if (AnimationData(context).loadRecyclerViewAnimation()) {
+            notifyItemRangeChanged(0, dataList.size)
+        }
+        else {
+            notifyDataSetChanged()
+        }
         val entriesDeleted: String = if (selectedItemsList.count() == 1) {
             selectedItemsList.count().toString() + " Entry Deleted"
         } else {
@@ -534,7 +560,12 @@ class CustomAdapter(
             }
 
             for (i in 0 until selectedItemsList.count()) {
-                notifyItemInserted(selectedItemsList.elementAt(i))
+                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                    notifyItemInserted(selectedItemsList.elementAt(i))
+                }
+                else {
+                    notifyDataSetChanged()
+                }
             }
 
             selectedItemsList.clear()
@@ -576,8 +607,13 @@ class CustomAdapter(
                     }
                 }
             }*/
-            notifyItemRangeChanged(0, dataList.count())
 
+            if (AnimationData(context).loadRecyclerViewAnimation()) {
+                notifyItemRangeChanged(0, dataList.count())
+            }
+            else {
+                notifyDataSetChanged()
+            }
             val restoreState = Runnable {
                 (context as MainActivity).restoreState()
 
@@ -802,7 +838,12 @@ class CustomAdapter(
                             MainActivity().runOnUiThread(saveState)
 
                             dataList.removeAt(holder.adapterPosition)
-                            notifyItemRemoved(holder.adapterPosition)
+                            if (AnimationData(context).loadRecyclerViewAnimation()) {
+                                notifyItemRemoved(holder.adapterPosition)
+                            }
+                            else {
+                                notifyDataSetChanged()
+                            }
                             checkBoxVisible = false
 
                             val snackbar =
@@ -847,7 +888,12 @@ class CustomAdapter(
 
                                 }
 
-                                notifyItemInserted(itemPosition)
+                                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                                    notifyItemInserted(itemPosition)
+                                }
+                                else {
+                                    notifyDataSetChanged()
+                                }
 
                                 /*for (i in 0 until dataList.count()) {
                                     if (dataList.count() == 1) {
@@ -890,7 +936,13 @@ class CustomAdapter(
                                         }
                                     }*/
                                 //notifyItemChanged(i)
-                            notifyItemRangeChanged(0, dataList.count())
+
+                                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                                    notifyItemRangeChanged(0, dataList.count())
+                                }
+                                else {
+                                    notifyDataSetChanged()
+                                }
 
                                 val restoreState = Runnable {
                                     (context as MainActivity).restoreState()
@@ -913,7 +965,12 @@ class CustomAdapter(
                                 )
                             }
                             snackbar.show()
-                            notifyItemRangeChanged(0, dataList.size)
+                            if (AnimationData(context).loadRecyclerViewAnimation()) {
+                                notifyItemRangeChanged(0, dataList.size)
+                            }
+                            else {
+                                notifyDataSetChanged()
+                            }
 
                         } catch (e: Exception) {
                             Toast.makeText(
@@ -1106,7 +1163,12 @@ class CustomAdapter(
                 snackbarDismissCheckBox.setAction(context.getString(R.string.hide)) {
                     Vibrate().vibration(context)
                     checkBoxVisible = false
-                    notifyItemRangeChanged(0, dataList.size)
+                    if (AnimationData(context).loadRecyclerViewAnimation()) {
+                        notifyItemRangeChanged(0, dataList.size)
+                    }
+                    else {
+                        notifyDataSetChanged()
+                    }
 
                     val hideNavigationIcon = Runnable {
                         (context as MainActivity).hideNavigationIcon()
@@ -1135,14 +1197,25 @@ class CustomAdapter(
     private fun longClickSelectAll(holder: RecyclerView.ViewHolder) {
         if (selectedItemsList.count() == dataList.count()) {
             selectedItemsList.clear()
-            notifyItemRangeChanged(0, dataList.count())
+            if (AnimationData(context).loadRecyclerViewAnimation()) {
+                notifyItemRangeChanged(0, dataList.count())
+            }
+            else {
+                notifyDataSetChanged()
+            }
 
             snackbarDeleteSelected.dismiss()
 
             snackbarDismissCheckBox.setAction(context.getString(R.string.hide)) {
                 Vibrate().vibration(context)
                 checkBoxVisible = false
-                notifyItemRangeChanged(0, dataList.size)
+
+                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                    notifyItemRangeChanged(0, dataList.size)
+                }
+                else {
+                    notifyDataSetChanged()
+                }
 
                 val hideNavigationIcon = Runnable {
                     (context as MainActivity).hideNavigationIcon()
@@ -1170,7 +1243,12 @@ class CustomAdapter(
             for (i in 0 until dataList.count()) {
                 selectedItemsList.add(i)
             }
-            notifyItemRangeChanged(0, dataList.size)
+            if (AnimationData(context).loadRecyclerViewAnimation()) {
+                notifyItemRangeChanged(0, dataList.size)
+            }
+            else {
+                notifyDataSetChanged()
+            }
 
             if (selectedItemsList.isNotEmpty()) {
                 var isInIt = false
@@ -1205,7 +1283,12 @@ class CustomAdapter(
                 snackbarDismissCheckBox.setAction(context.getString(R.string.hide)) {
                     Vibrate().vibration(context)
                     checkBoxVisible = false
-                    notifyItemRangeChanged(0, dataList.size)
+                    if (AnimationData(context).loadRecyclerViewAnimation()) {
+                        notifyItemRangeChanged(0, dataList.size)
+                    }
+                    else {
+                        notifyDataSetChanged()
+                    }
 
                     val hideNavigationIcon = Runnable {
                         (context as MainActivity).hideNavigationIcon()
@@ -1325,6 +1408,7 @@ class CustomAdapter(
         MainActivity().runOnUiThread(historyCheckBox)
 
         notifyItemRangeChanged(0, dataList.count())
+
         checkBox.isChecked = true
 
         selectedItemsList.add(holder.adapterPosition)

@@ -446,7 +446,12 @@ class TimeCardCustomAdapter(
                             dataList[position]["id"].toString()
                         )
                         dataList.removeAt(holder.adapterPosition)
-                        notifyItemRemoved(holder.adapterPosition)
+                        if (AnimationData(context).loadRecyclerViewAnimation()) {
+                            notifyItemRemoved(holder.adapterPosition)
+                        }
+                        else {
+                            notifyDataSetChanged()
+                        }
 
                         val runnable = Runnable {
                             (context as MainActivity).saveTimeCardState()
@@ -581,7 +586,12 @@ class TimeCardCustomAdapter(
 
             cursor.moveToNext()
         }
-        notifyItemChanged(holder.adapterPosition)
+        if (AnimationData(context).loadRecyclerViewAnimation()) {
+            notifyItemChanged(holder.adapterPosition)
+        }
+        else {
+            notifyDataSetChanged()
+        }
     }
 
     private fun setAnimation(viewToAnimate: View, position: Int) {
