@@ -51,7 +51,7 @@ class AnimationData(context: Context) {
         return (state)
     }
 
-    fun setImageAnimation(state: Boolean) {
+    /*fun setImageAnimation(state: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean("imageOpening/ClosingAnimation", state)
         editor.apply()
@@ -60,7 +60,7 @@ class AnimationData(context: Context) {
     fun loadImageAnimation(): Boolean {
         val state = sharedPreferences.getBoolean("imageOpening/ClosingAnimation", true)
         return (state)
-    }
+    }*/
 
     fun setTabSwitchingAnimation(state: Boolean) {
         val editor = sharedPreferences.edit()
@@ -84,11 +84,11 @@ class AnimationData(context: Context) {
     }
     fun setRecyclerViewAnimation(state: Boolean) {
         val editor = sharedPreferences.edit()
-        editor.putBoolean("tabSwitchingAnimation", state)
+        editor.putBoolean("recyclerViewAnimation", state)
         editor.apply()
     }
 
-    fun loadRecyclerViewAnimationAnimation(): Boolean {
+    fun loadRecyclerViewAnimation(): Boolean {
         val state = sharedPreferences.getBoolean("recyclerViewAnimation", true)
         return (state)
     }
