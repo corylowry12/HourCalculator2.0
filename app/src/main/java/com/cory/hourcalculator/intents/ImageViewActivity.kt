@@ -23,6 +23,7 @@ import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.CustomColorGenerator
 import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.TimeCardDBHelper
+import com.cory.hourcalculator.sharedprefs.AnimationData
 import com.cory.hourcalculator.sharedprefs.ColoredNavBarData
 import com.cory.hourcalculator.sharedprefs.DarkThemeData
 import com.cory.hourcalculator.sharedprefs.MatchImageViewContentsBackgroundData
@@ -151,7 +152,12 @@ class ImageViewActivity : AppCompatActivity() {
                 this@ImageViewActivity.window.navigationBarColor =
                     Color.parseColor("#000000")
             }
-            finishAfterTransition()
+            //if (AnimationData(this).loadImageAnimation()) {
+                finishAfterTransition()
+            //}
+            //else {
+                //finish()
+           // }
         }
         viewImageMaterialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -189,7 +195,12 @@ class ImageViewActivity : AppCompatActivity() {
                             this@ImageViewActivity.window.navigationBarColor =
                                 Color.parseColor("#000000")
                         }
-                        finishAfterTransition()
+                        //if (AnimationData(this).loadImageAnimation()) {
+                            finishAfterTransition()
+                        //}
+                        //else {
+                            //finish()
+                        //}
                     }
                     deleteImageDialog.show()
                     return@setOnMenuItemClickListener true
