@@ -4,7 +4,8 @@ class PatchNotesChanges {
 
     var bugFixesArray = arrayOf(
         "Fixed issue where cards would be the wrong color if material you was enabled and the background color was set to follow system and it was light theme",
-        "Fixed issue where switches and radio buttons would animate when loading the view"
+        "Fixed issue where switches and radio buttons would animate when loading the view",
+        "Fixed issue where the app would vibrate twice when changing a date when editing an hour"
     )
 
     var newFeaturesArray = arrayOf(
@@ -13,8 +14,8 @@ class PatchNotesChanges {
     )
 
     var enhancementsArray = arrayOf(
-        "Added a scroll to top button in the Time Card Info view",
-        "Tweaked the card outline color on selected items in the settings"
+        "Improved the responsiveness when changing tabs",
+        "Removed the option to disable image animations"
     )
 
     var bugFixesArrayInternal = arrayOf(
