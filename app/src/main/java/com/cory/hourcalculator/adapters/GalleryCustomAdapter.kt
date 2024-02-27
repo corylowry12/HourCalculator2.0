@@ -72,17 +72,17 @@ class GalleryCustomAdapter( private val context: Context,
             intent.putExtra("id", dataList[position]["id"])
             intent.putExtra("name", dataList[position]["name"])
             intent.putExtra("gallery", true)
-            if (AnimationData(context).loadImageAnimation()) {
+           // if (AnimationData(context).loadImageAnimation()) {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     (context as AppCompatActivity),
                     holder.itemView.findViewById(R.id.galleryImage),
                     "transition_image"
                 )
                 context.startActivity(intent, options.toBundle())
-            }
-            else {
-                context.startActivity(intent)
-            }
+            //}
+            //else {
+                //context.startActivity(intent)
+            //}
         }
 
         holder.itemView.findViewById<MaterialCardView>(R.id.galleryCard).setOnLongClickListener {
