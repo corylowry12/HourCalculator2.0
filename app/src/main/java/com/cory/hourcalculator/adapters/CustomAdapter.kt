@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 class CustomAdapter(
@@ -278,6 +279,10 @@ class CustomAdapter(
 
     fun getSelectedCount(): Int {
         return selectedItemsList.count()
+    }
+
+    fun getSelectedItems(): MutableList<Int> {
+        return selectedItemsList
     }
 
     fun exportSelected() {
