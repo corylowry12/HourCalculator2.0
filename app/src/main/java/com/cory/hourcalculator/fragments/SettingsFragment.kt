@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -318,26 +319,155 @@ class SettingsFragment : Fragment() {
             bottomSheetBehavior.isHideable = false
             bottomSheetBehavior.isDraggable = false
         }
-        val infoCardView =
-            deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
-        val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
-        val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+        val hoursCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.hoursCardView)
+        val timeCardsCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.timeCardsCardView)
+        val imagesCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.imagesCardView)
+        val deleteSettingsCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.deleteSettingsCardView)
+        val deleteAllCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.deleteAllCardView)
+        val cancelDeletionCardView =
+            deleteAllLayout.findViewById<MaterialCardView>(R.id.cancelDeletionCardView)
 
-        infoCardView.setCardBackgroundColor(
+        hoursCardView.setCardBackgroundColor(
             Color.parseColor(
                 CustomColorGenerator(requireContext()).generateCardColor()
             )
         )
-        yesButton.setBackgroundColor(
+        timeCardsCardView.setCardBackgroundColor(
             Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateCustomColorPrimary()
+                CustomColorGenerator(requireContext()).generateCardColor()
             )
         )
-        noButton.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        imagesCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(requireContext()).generateCardColor()
+            )
+        )
+        deleteSettingsCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(requireContext()).generateCardColor()
+            )
+        )
+        deleteAllCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(requireContext()).generateCardColor()
+            )
+        )
+        cancelDeletionCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(requireContext()).generateCardColor()
+            )
+        )
 
-        yesButton.setOnClickListener {
+        hoursCardView.shapeAppearanceModel = hoursCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        timeCardsCardView.shapeAppearanceModel = timeCardsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        imagesCardView.shapeAppearanceModel = imagesCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        deleteSettingsCardView.shapeAppearanceModel = deleteSettingsCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        deleteAllCardView.shapeAppearanceModel = deleteAllCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
+            .build()
+        cancelDeletionCardView.shapeAppearanceModel = cancelDeletionCardView.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setBottomRightCornerSize(28f)
+            .setBottomLeftCornerSize(28f)
+            .build()
+
+        hoursCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            val dbHandler = DBHelper(requireContext(), null)
+            dbHandler.deleteAll()
+            val runnable = Runnable {
+                (context as MainActivity).changeBadgeNumber()
+            }
+
+            MainActivity().runOnUiThread(runnable)
+
+            Toast.makeText(requireContext(), "Hours deleted", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        timeCardsCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            TimeCardDBHelper(requireContext(), null).deleteAll()
+            TimeCardsItemDBHelper(requireContext(), null).deleteAll()
+            val runnable = Runnable {
+                (context as MainActivity).changeBadgeNumber()
+            }
+
+            MainActivity().runOnUiThread(runnable)
+            Toast.makeText(requireContext(), "Time Cards deleted", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        imagesCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            val dbHandler = TimeCardDBHelper(requireActivity().applicationContext, null)
+
+            val cursor = dbHandler.getAllRow()
+            cursor!!.moveToFirst()
+
+            while (!cursor.isAfterLast) {
+                dbHandler.addImage(cursor.getString(cursor.getColumnIndex(TimeCardDBHelper.COLUMN_ID)), "")
+                cursor.moveToNext()
+            }
+            Toast.makeText(requireContext(), "Images deleted", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        deleteSettingsCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            requireContext().getSharedPreferences("file", 0).edit().clear().apply()
+
+            iconDisableArray.clear()
+            iconEnableID = "com.cory.hourcalculator.SplashScreenNoIcon"
+            iconDisableArray.add("com.cory.hourcalculator.SplashPink")
+            iconDisableArray.add("com.cory.hourcalculator.SplashOrange")
+            iconDisableArray.add("com.cory.hourcalculator.SplashRed")
+            iconDisableArray.add("com.cory.hourcalculator.MaterialYou")
+            iconDisableArray.add("com.cory.hourcalculator.SplashBlue")
+            iconDisableArray.add("com.cory.hourcalculator.SplashOG")
+            iconDisableArray.add("com.cory.hourcalculator.SplashSnowFalling")
+            changeIcons()
+            ChosenAppIconData(requireContext()).setChosenAppIcon(getString(R.string.teal))
+            restartApplication()
+            dialog.dismiss()
+        }
+
+        deleteAllCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             val dbHandler = DBHelper(requireContext(), null)
             requireContext().getSharedPreferences("file", 0).edit().clear().apply()
@@ -360,7 +490,7 @@ class SettingsFragment : Fragment() {
             restartApplication()
             dialog.dismiss()
         }
-        noButton.setOnClickListener {
+        cancelDeletionCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
             dialog.dismiss()
         }
