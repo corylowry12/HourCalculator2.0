@@ -331,6 +331,8 @@ class SettingsFragment : Fragment() {
             deleteAllLayout.findViewById<MaterialCardView>(R.id.deleteAllCardView)
         val cancelDeletionCardView =
             deleteAllLayout.findViewById<MaterialCardView>(R.id.cancelDeletionCardView)
+        val cancelDeletionTextView =
+            deleteAllLayout.findViewById<TextView>(R.id.cancelDeletionText)
 
         hoursCardView.setCardBackgroundColor(
             Color.parseColor(
@@ -357,11 +359,9 @@ class SettingsFragment : Fragment() {
                 CustomColorGenerator(requireContext()).generateCardColor()
             )
         )
-        cancelDeletionCardView.setCardBackgroundColor(
-            Color.parseColor(
-                CustomColorGenerator(requireContext()).generateCardColor()
-            )
-        )
+        cancelDeletionTextView.setTextColor(Color.parseColor(
+            CustomColorGenerator(requireContext()).generateCardColor()
+        ))
 
         hoursCardView.shapeAppearanceModel = hoursCardView.shapeAppearanceModel
             .toBuilder()
