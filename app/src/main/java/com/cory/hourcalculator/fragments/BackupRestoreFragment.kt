@@ -243,7 +243,7 @@ class BackupRestoreFragment : Fragment() {
 
     private fun backupNow() {
 
-        var sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("file", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("file", Context.MODE_PRIVATE)
         val allPrefs = sharedPreferences.all.map { it }
 
         val path =
@@ -263,8 +263,8 @@ class BackupRestoreFragment : Fragment() {
             )
 
 
-        if (Build.VERSION.SDK_INT >= 33) {
-            var outputStream : OutputStream
+        if (Build.VERSION.SDK_INT >= 33 || managePermissions.checkPermissions()) {
+            val outputStream : OutputStream
             val backupObjects = JSONObject()
             val hoursJSONArray = JSONArray()
             val timeCardsJSONArray = JSONArray()
@@ -554,7 +554,7 @@ class BackupRestoreFragment : Fragment() {
                 val jsonArrayBackup: JSONObject = jsonContact.getJSONObject("backup")
 
                 val keys : Iterator<String> = jsonArrayBackup.keys()
-                var sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("file", Context.MODE_PRIVATE)
+                val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("file", Context.MODE_PRIVATE)
                 requireContext().getSharedPreferences("file", 0).edit().clear().apply()
                 while (keys.hasNext()) {
                     val key = keys.next()
