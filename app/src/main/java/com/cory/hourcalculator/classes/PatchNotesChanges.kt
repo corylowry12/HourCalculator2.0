@@ -10,7 +10,8 @@ class PatchNotesChanges {
 
     var newFeaturesArray = arrayOf(
         "Added the option to do a backup/restore of the app",
-        "Added the option to disable settings view change animations"
+        "Added the option to disable settings view change animations",
+        "Added the option to disable recycler view animations"
     )
 
     var enhancementsArray = arrayOf(
