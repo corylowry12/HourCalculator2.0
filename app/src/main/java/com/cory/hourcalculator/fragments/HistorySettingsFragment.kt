@@ -214,6 +214,8 @@ class HistorySettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
         val showWagesInHistoryCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowWagesInHistory)
+        val cardViewOnlyShowTotalForSelectedItems =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewOnlyShowTotalForSelectedItems)
         val fabPositioningCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewFABPositioning)
 
@@ -256,6 +258,14 @@ class HistorySettingsFragment : Fragment() {
                 .build()
         showWagesInHistoryCardView.shapeAppearanceModel =
             showWagesInHistoryCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(0f)
+                .setBottomLeftCornerSize(0f)
+                .build()
+        cardViewOnlyShowTotalForSelectedItems.shapeAppearanceModel =
+            cardViewOnlyShowTotalForSelectedItems.shapeAppearanceModel
                 .toBuilder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
                 .setTopRightCorner(CornerFamily.ROUNDED, 0f)
@@ -708,6 +718,69 @@ class HistorySettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
+        val showInfoForOnlySelectedItemsData = ShowInfoForOnlySelectedItemsData(requireContext())
+        val onlyShowTotalForSelectedItemsSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.onlyShowTotalForSelectedItemsSwitch)
+
+        if (showInfoForOnlySelectedItemsData.loadShowInfoForOnlySelectedItems()) {
+            onlyShowTotalForSelectedItemsSwitch?.isChecked = true
+            onlyShowTotalForSelectedItemsSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            onlyShowTotalForSelectedItemsSwitch?.jumpDrawablesToCurrentState()
+        } else if (!showInfoForOnlySelectedItemsData.loadShowInfoForOnlySelectedItems()) {
+            onlyShowTotalForSelectedItemsSwitch?.isChecked = false
+            onlyShowTotalForSelectedItemsSwitch?.thumbIconDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            onlyShowTotalForSelectedItemsSwitch?.jumpDrawablesToCurrentState()
+        }
+
+        cardViewOnlyShowTotalForSelectedItems?.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            onlyShowTotalForSelectedItemsSwitch.isChecked = !onlyShowTotalForSelectedItemsSwitch.isChecked
+            showInfoForOnlySelectedItemsData.setShowInfoForOnlySelectedItems(onlyShowTotalForSelectedItemsSwitch.isChecked)
+            if (onlyShowTotalForSelectedItemsSwitch.isChecked) {
+                onlyShowTotalForSelectedItemsSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+                onlyShowTotalForSelectedItemsSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+        }
+
+        cardViewOnlyShowTotalForSelectedItems.setOnLongClickListener {
+            Vibrate().vibrateOnLongClick(requireContext())
+            val infoDialog = BottomSheetDialog(requireContext())
+            val infoAboutSettingLayout =
+                layoutInflater.inflate(R.layout.info_about_setting_bottom_sheet, null)
+            infoDialog.setContentView(infoAboutSettingLayout)
+            infoDialog.setCancelable(true)
+
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val bottomSheet =
+                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.skipCollapsed = true
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
+            infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
+                "When enabled each history item will show wages based on the number of hours that is calculated for that entry and the wages that are stored\n\n" +
+                        "When disabled each history item will not show wages"
+            val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
+
+            infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
+                .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+
+            yesButton.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                infoDialog.dismiss()
+            }
+            infoDialog.show()
+            return@setOnLongClickListener true
+        }
+
         fabPositioningCardView.setOnClickListener {
             Vibrate().vibrateOnLongClick(requireContext())
             val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -901,6 +974,8 @@ class HistorySettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewHistoryClickable)
         val showWagesInHistoryCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewShowWagesInHistory)
+        val cardViewOnlyShowTotalForSelectedItems =
+            requireActivity().findViewById<MaterialCardView>(R.id.cardViewOnlyShowTotalForSelectedItems)
         val fabPositioningCardView =
             requireActivity().findViewById<MaterialCardView>(R.id.cardViewFABPositioning)
 
@@ -953,6 +1028,13 @@ class HistorySettingsFragment : Fragment() {
                 ).generateCardColor()
             )
         )
+        cardViewOnlyShowTotalForSelectedItems.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
         fabPositioningCardView.setCardBackgroundColor(
             Color.parseColor(
                 CustomColorGenerator(
@@ -970,6 +1052,8 @@ class HistorySettingsFragment : Fragment() {
             requireActivity().findViewById<MaterialSwitch>(R.id.clickableHistorySwitch)
         val showWagesInHistorySwitch =
             requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch)
+        val onlyShowTotalForSelectedItemsSwitch =
+            requireActivity().findViewById<MaterialSwitch>(R.id.onlyShowTotalForSelectedItemsSwitch)
 
         val states = arrayOf(
             intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -996,6 +1080,9 @@ class HistorySettingsFragment : Fragment() {
         showWagesInHistorySwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         showWagesInHistorySwitch.trackTintList = ColorStateList(states, colors)
+        onlyShowTotalForSelectedItemsSwitch.thumbIconTintList =
+            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+        onlyShowTotalForSelectedItemsSwitch.trackTintList = ColorStateList(states, colors)
 
         val collapsingToolbarHistorySettings =
             requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistorySettings)
