@@ -122,7 +122,36 @@ class HistoryFragment : Fragment() {
     fun info() {
         val wagesData = WagesData(requireContext())
         val dbHandler = DBHelper(requireContext(), null)
+
         if (dbHandler.getCount() > 0) {
+        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+            val cursor = dbHandler.getAllRow(requireContext())
+            cursor!!.moveToFirst()
+
+            output = ""
+            var total = 0.0
+
+                while (!cursor.isAfterLast) {
+                    if (customAdapter.getSelectedItems().contains(cursor.position)) {
+                        val map = HashMap<String, String>()
+                        map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                        map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                        map["outTime"] =
+                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                        map["breakTime"] =
+                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                        map["totalHours"] =
+                            cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                        map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+
+                        total += map["totalHours"]!!.toDouble()
+
+                    }
+                    cursor.moveToNext()
+            }
+            //Toast.makeText(requireContext(), total.toString(), Toast.LENGTH_SHORT).show()
+        }
+
             calculateWages()
             infoDialog = BottomSheetDialog(requireContext())
             val infoLayout =
@@ -202,8 +231,18 @@ class HistoryFragment : Fragment() {
 
             if (wagesData.loadWageAmount() != "") {
                 try {
-                    totalHours.text = "Total Hours: $output/$outputColon"
-                    numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                        totalHours.text = "Total Hours for Selected Items: $output/$outputColon"
+                    }
+                    else {
+                        totalHours.text = "Total Hours: $output/$outputColon"
+                    }
+                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                        numberOfEntries.text = "Number of Entries Selected: ${customAdapter.getSelectedCount()}"
+                    }
+                    else {
+                        numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                    }
                     if (CalculateOvertimeInHistoryData(requireContext()).loadCalculateOvertimeInHistoryState() && outputWages.toDouble() > 40) {
                         val overFourty = outputWages.toDouble() - 40
                         val timeHalf = overFourty * (wagesData.loadWageAmount().toString()
@@ -212,19 +251,36 @@ class HistoryFragment : Fragment() {
                             (40 * wagesData.loadWageAmount().toString()
                                 .toDouble()) + timeHalf
                         val wagesRounded = String.format("%,.2f", wages)
-                        wagesTextView.text = "Wages: $$wagesRounded"
+                        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                            wagesTextView.text = "Wages for Selected Items: $$wagesRounded"
+                        }
+                        else {
+                            wagesTextView.text = "Wages: $$wagesRounded"
+                        }
                     } else {
                         val wages =
                             outputWages.toDouble() * wagesData.loadWageAmount().toString()
                                 .toDouble()
                         val wagesRounded = String.format("%,.2f", wages)
-                        wagesTextView.text = "Wages: $$wagesRounded"
+                        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                            wagesTextView.text = "Wages for Selected Items: $$wagesRounded"
+                        }
+                        else {
+                            wagesTextView.text = "Wages: $$wagesRounded"
+                        }
                     }
                 } catch (e: NumberFormatException) {
                     e.printStackTrace()
-                    totalHours.text = "Total Hours: $output/$outputColon"
-                    numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
-                    wagesTextView.text = "Wages: Error"
+                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                        totalHours.text = "Total Hours for Selected Items: $output/$outputColon"
+                        numberOfEntries.text = "Number of Entries Selected: ${dbHandler.getCount()}"
+                        wagesTextView.text = "Wages Selected: Error"
+                    }
+                    else {
+                        totalHours.text = "Total Hours: $output/$outputColon"
+                        numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
+                        wagesTextView.text = "Wages: Error"
+                    }
                 }
             } else {
                 totalHours.text = "Total Hours: $output/$outputColon"
@@ -1065,32 +1121,33 @@ class HistoryFragment : Fragment() {
 
         while (!cursor.isAfterLast) {
 
-            val array = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
+            if (customAdapter.getSelectedItems().contains(cursor.position)) {
+                val array =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
 
-            var decimalTime: Double
-            if (array.contains(":")) {
-                val (hours, minutes) = array.split(":")
-                val decimal =
-                    (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
-                        .toString().drop(2)
-                try {
-                    decimalTime = "$hours.$decimal".toDouble()
-                    y += decimalTime
+                var decimalTime: Double
+                if (array.contains(":")) {
+                    val (hours, minutes) = array.split(":")
+                    val decimal =
+                        (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                            .toString().drop(2)
+                    try {
+                        decimalTime = "$hours.$decimal".toDouble()
+                        y += decimalTime
 
-                } catch (e: java.lang.NumberFormatException) {
-                    e.printStackTrace()
+                    } catch (e: java.lang.NumberFormatException) {
+                        e.printStackTrace()
+                    }
+
+                    containsColon = true
+
+                } else {
+                    y += array.toDouble()
                 }
-
-                containsColon = true
-
-            } else {
-                y += array.toDouble()
             }
 
-
-            output = String.format("%.2f", y)
-            outputWages = output
-
+                output = String.format("%.2f", y)
+                outputWages = output
             cursor.moveToNext()
 
         }
