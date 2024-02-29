@@ -23,15 +23,6 @@
               <deviceKey>
                 <Key>
                   <type value="SERIAL_NUMBER" />
-                  <value value="adb-38091FDJG00BQ1-f7DQOp._adb-tls-connect._tcp" />
-                </Key>
-              </deviceKey>
-            </Target>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="SERIAL_NUMBER" />
                   <value value="adb-3512105H803NLJ-pSMjwo._adb-tls-connect._tcp" />
                 </Key>
               </deviceKey>
