@@ -166,6 +166,7 @@ class MainActivity : AppCompatActivity() {
         openPatchNotesOnAppLaunch()
 
         toggleHistory()
+        toggleTimeCards()
 
         bottomNav.setOnItemSelectedListener {
             Vibrate().vibration(this)
@@ -549,6 +550,19 @@ class MainActivity : AppCompatActivity() {
         else {
             findViewById<NavigationRailView>(R.id.bottom_nav).menu.findItem(R.id.history).isVisible =
                 historyToggleData.loadHistoryState()
+        }
+    }
+
+    fun toggleTimeCards() {
+        val timeCardsToggleData = TimeCardsToggleData(this)
+
+        if (!resources.getBoolean(R.bool.isTablet)) {
+            findViewById<BottomNavigationView>(R.id.bottom_nav).menu.findItem(R.id.timeCards).isVisible =
+                timeCardsToggleData.loadTimeCardsState()
+        }
+        else {
+            findViewById<NavigationRailView>(R.id.bottom_nav).menu.findItem(R.id.timeCards).isVisible =
+                timeCardsToggleData.loadTimeCardsState()
         }
     }
 

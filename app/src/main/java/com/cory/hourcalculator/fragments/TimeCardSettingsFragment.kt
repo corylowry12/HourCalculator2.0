@@ -22,10 +22,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.database.DBHelper
+import com.cory.hourcalculator.database.TimeCardDBHelper
+import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.*
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -208,6 +212,87 @@ class TimeCardSettingsFragment : Fragment() {
             toggleTimeCardSwitch.isChecked = false
             toggleTimeCardSwitch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
             toggleTimeCardSwitch?.jumpDrawablesToCurrentState()
+        }
+
+        toggleTimeCardsCardView.setOnClickListener {
+            Vibrate().vibration(requireContext())
+            toggleTimeCardSwitch.isChecked = !toggleTimeCardSwitch.isChecked
+            if (toggleTimeCardSwitch.isChecked) {
+                toggleTimeCardSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
+            } else {
+
+                val timeCardWarningBottomSheet = BottomSheetDialog(requireContext())
+                val timeCardSettingsBottomSheet = LayoutInflater.from(context)
+                    .inflate(R.layout.history_settings_warning_bottom_sheet, null)
+                timeCardWarningBottomSheet.setContentView(timeCardSettingsBottomSheet)
+                timeCardWarningBottomSheet.setCancelable(false)
+
+                if (resources.getBoolean(R.bool.isTablet)) {
+                    val bottomSheet =
+                        timeCardWarningBottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+                    val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    bottomSheetBehavior.skipCollapsed = true
+                    bottomSheetBehavior.isHideable = false
+                    bottomSheetBehavior.isDraggable = false
+                }
+
+                val title =
+                    timeCardWarningBottomSheet.findViewById<TextView>(R.id.headingTextView)
+                val body =
+                    timeCardWarningBottomSheet.findViewById<TextView>(R.id.bodyTextView)
+                val infoCardView =
+                    timeCardWarningBottomSheet.findViewById<MaterialCardView>(R.id.bodyCardView)
+                val yesButton =
+                    timeCardWarningBottomSheet.findViewById<Button>(R.id.yesButton)
+                val noButton =
+                    timeCardWarningBottomSheet.findViewById<Button>(R.id.cancelButton)
+
+                title!!.text = "Time Cards"
+                body!!.text = "Would you like to clear Time Cards?"
+
+                infoCardView!!.setCardBackgroundColor(
+                    Color.parseColor(
+                        CustomColorGenerator(
+                            requireContext()
+                        ).generateCardColor()
+                    )
+                )
+                yesButton!!.setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                noButton!!.setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
+                yesButton.setOnClickListener {
+                    Vibrate().vibration(requireContext())
+                    timeCardWarningBottomSheet.dismiss()
+                    val dbHandler = TimeCardDBHelper(requireContext(), null)
+                    val dbHandler2 = TimeCardsItemDBHelper(requireContext(), null)
+                    dbHandler.deleteAll()
+                    dbHandler2.deleteAll()
+                    Toast.makeText(
+                        requireContext(),
+                        "Time Cards deleted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val changeBadgeNumber = Runnable {
+                        (context as MainActivity).changeBadgeNumber()
+                    }
+
+                    MainActivity().runOnUiThread(changeBadgeNumber)
+                }
+                noButton.setOnClickListener {
+                    Vibrate().vibration(requireContext())
+                    timeCardWarningBottomSheet.dismiss()
+                }
+                timeCardWarningBottomSheet.show()
+                toggleTimeCardSwitch.thumbIconDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+            }
+            toggleTimeCards.setTimeCardsToggle(toggleTimeCardSwitch.isChecked)
+            val toggleTimeCardsRunnable = Runnable {
+                (context as MainActivity).toggleTimeCards()
+            }
+
+            MainActivity().runOnUiThread(toggleTimeCardsRunnable)
         }
 
         val showWagesInTimeCards = ShowWagesInTimeCardData(requireContext())
