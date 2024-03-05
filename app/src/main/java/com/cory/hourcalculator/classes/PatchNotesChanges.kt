@@ -5,18 +5,27 @@ class PatchNotesChanges {
     var bugFixesArray = arrayOf(
         "Fixed issue where cards would be the wrong color if material you was enabled and the background color was set to follow system and it was light theme",
         "Fixed issue where switches and radio buttons would animate when loading the view",
-        "Fixed issue where the app would vibrate twice when changing a date when editing an hour"
+        "Fixed issue where the app would vibrate twice when changing a date when editing an hour",
+        "Fixed issue with cards style in the About view being different than the rest of the app",
+        "Fixed issue where the history options icon would still show when changing sort method"
     )
 
     var newFeaturesArray = arrayOf(
         "Added the option to do a backup/restore of the app",
         "Added the option to disable settings view change animations",
-        "Added the option to disable recycler view animations"
+        "Added the option to disable recycler view animations",
+        "Added the ability to show info for only selected items (disabled by default, can change at Settings->History Settings->Show info for only selected items)",
+        "Added the option to disable Time Cards (Settings->Time Card Settings->Toggle Time Cards)",
+        "Added the ability to adjust the overtime ration (default was 1.5x) in Settings->Wage Settings"
     )
 
     var enhancementsArray = arrayOf(
         "Improved the responsiveness when changing tabs",
-        "Removed the option to disable image animations"
+        "Removed the option to disable image animations",
+        "Improved functionality of the \"Delete app data\" option in Settings",
+        "Overtime will now be calculated in Time Cards",
+        "Renamed the \"Calculate Overtime In History\" setting to \"Calculate Overtime\"",
+        "The date button when editing an hour will no longer say \"Click on me to change date\""
     )
 
     var bugFixesArrayInternal = arrayOf(
