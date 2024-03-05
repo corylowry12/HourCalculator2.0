@@ -144,8 +144,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Backup and restore all app data in case you need to reinstall, this will only work for the app thats installed on this device"
-                android:textAlignment="textStart"
+                android:text="Backup and restore all app data in case you need to reinstall, this will only work for the app that's installed on this device"
+                android:textAlignment="center"
                 android:paddingStart="25dp"
                 android:paddingEnd="25dp"
                 android:textSize="12sp"
