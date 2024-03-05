@@ -26,6 +26,8 @@ import com.cory.hourcalculator.database.TimeCardsItemDBHelper
 import com.cory.hourcalculator.fragments.TimeCardItemInfoFragment
 import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.sharedprefs.AnimationData
+import com.cory.hourcalculator.sharedprefs.CalculateOvertimeInHistoryData
+import com.cory.hourcalculator.sharedprefs.OvertimeData
 import com.cory.hourcalculator.sharedprefs.ShowWagesInTimeCardData
 import com.cory.hourcalculator.sharedprefs.WagesData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -109,13 +111,24 @@ class TimeCardCustomAdapter(
             }
             else {
                 try {
-                    val wagesFormatted =  String.format(
-                        "%,.2f",
-                        dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
-                            .toDouble()
-                    )
-
-                    wages.text = "Wages: $${wagesFormatted}"
+                    if (dataItem["totalHours"]!!.toDouble() > 40 && CalculateOvertimeInHistoryData(context).loadCalculateOvertimeInHistoryState()) {
+                        val overFourty = dataItem["totalHours"]!!.toDouble() - 40
+                        val timeHalf = overFourty * (WagesData(context).loadWageAmount().toString()
+                            .toDouble() * OvertimeData(context).loadOverTimeAmount())
+                        val wagesCalculated =
+                            (40 * WagesData(context).loadWageAmount().toString()
+                                .toDouble()) + timeHalf
+                        val wagesRounded = String.format("%,.2f", wagesCalculated)
+                        wages.text = "Wages: $${wagesRounded}"
+                    }
+                    else {
+                        val wagesFormatted = String.format(
+                            "%,.2f",
+                            dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
+                                .toDouble()
+                        )
+                        wages.text = "Wages: $${wagesFormatted}"
+                    }
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                     if (WagesData(context).loadWageAmount() == "") {
