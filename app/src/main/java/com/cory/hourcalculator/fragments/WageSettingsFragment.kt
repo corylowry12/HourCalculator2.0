@@ -39,6 +39,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.Exception
@@ -152,6 +153,7 @@ class WageSettingsFragment : Fragment() {
 
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
         val calculateOvertimeInHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculateOvertimeInHistory)
+        val overtimeAmountCardView = requireActivity().findViewById<MaterialCardView>(R.id.overtimeRatioCardView)
 
         wagesCardView.shapeAppearanceModel = wagesCardView.shapeAppearanceModel
             .toBuilder()
@@ -164,9 +166,17 @@ class WageSettingsFragment : Fragment() {
             .toBuilder()
             .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
             .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-            .setBottomRightCornerSize(28f)
-            .setBottomLeftCornerSize(28f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCornerSize(0f)
             .build()
+        overtimeAmountCardView.shapeAppearanceModel =
+            overtimeAmountCardView.shapeAppearanceModel
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                .setBottomRightCornerSize(28f)
+                .setBottomLeftCornerSize(28f)
+                .build()
 
         val wagesData = WagesData(requireContext())
         val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
@@ -266,6 +276,14 @@ class WageSettingsFragment : Fragment() {
             return@setOnLongClickListener true
         }
 
+        val overtimeSlider = requireActivity().findViewById<Slider>(R.id.overtimeAmountSlider)
+        overtimeSlider.value = OvertimeData(requireContext()).loadOverTimeAmount()
+
+        overtimeSlider.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+            Vibrate().vibrationSliders(requireContext())
+            OvertimeData(requireContext()).setOverTimeAmount(value)
+        });
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -295,8 +313,16 @@ class WageSettingsFragment : Fragment() {
 
         val wagesCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewWages)
         val calculateOvertimeInHistoryCardView = requireActivity().findViewById<MaterialCardView>(R.id.cardViewCalculateOvertimeInHistory)
+        val overtimeAmountCardView = requireActivity().findViewById<MaterialCardView>(R.id.overtimeRatioCardView)
         wagesCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
         calculateOvertimeInHistoryCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+        overtimeAmountCardView.setCardBackgroundColor(
+            Color.parseColor(
+                CustomColorGenerator(
+                    requireContext()
+                ).generateCardColor()
+            )
+        )
 
         val wagesEditText = requireActivity().findViewById<TextInputEditText>(R.id.Wages)
         val wagesTextInputEditText =
@@ -330,6 +356,23 @@ class WageSettingsFragment : Fragment() {
         calculateOverTimeInHistorySwitch.thumbIconTintList =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         calculateOverTimeInHistorySwitch.trackTintList = ColorStateList(states, colors)
+
+        val sliderStates = arrayOf(
+            intArrayOf(-android.R.attr.state_enabled),
+            intArrayOf(android.R.attr.state_enabled)
+        )
+
+        val sliderStatesInactive = arrayOf(
+            intArrayOf(android.R.attr.state_enabled),
+            intArrayOf(-android.R.attr.state_enabled)
+        )
+
+        val overtimeSlider = requireActivity().findViewById<Slider>(R.id.overtimeAmountSlider)
+        overtimeSlider.trackActiveTintList = ColorStateList(sliderStates, colors)
+        overtimeSlider.trackInactiveTintList = ColorStateList(sliderStatesInactive, colors)
+        overtimeSlider.thumbTintList = ColorStateList(sliderStates, colors)
+        overtimeSlider.tickActiveTintList = ColorStateList.valueOf(Color.parseColor("#e7dfec"))
+        overtimeSlider.tickInactiveTintList = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutWageSettings)
             ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
@@ -490,5 +533,9 @@ class WageSettingsFragment : Fragment() {
         wagesEditText?.text = editable
 
         hideKeyboard(wagesEditText)
+
+        OvertimeData(requireContext()).setOverTimeAmount(1.5f)
+        val overtimeSlider = requireActivity().findViewById<Slider>(R.id.overtimeAmountSlider)
+        overtimeSlider.value = OvertimeData(requireContext()).loadOverTimeAmount()
     }
 }
