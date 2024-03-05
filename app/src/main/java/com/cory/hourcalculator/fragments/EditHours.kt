@@ -694,7 +694,7 @@ class EditHours : Fragment() {
         timePickerOutTime?.hour = outTimeHoursInteger
         timePickerOutTime?.minute = outTimeMinutesNumbers
         breakTimeEditText?.setText(breakTime)
-        if (!DialogData(requireContext()).loadDateDialogState()) {
+        /*if (!DialogData(requireContext()).loadDateDialogState()) {
             Handler(Looper.getMainLooper()).postDelayed({
 
                 dateChip?.text = day
@@ -703,7 +703,9 @@ class EditHours : Fragment() {
             DialogData(requireContext()).setDateDialogState(true)
         } else {
             dateChip?.text = day
-        }
+        }*/
+
+        dateChip?.text = day
 
         val calculationTypeData = CalculationTypeData(requireContext())
 
