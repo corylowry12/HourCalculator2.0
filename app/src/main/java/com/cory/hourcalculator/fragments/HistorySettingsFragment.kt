@@ -12,7 +12,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -21,11 +20,24 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import com.cory.hourcalculator.intents.MainActivity
 import com.cory.hourcalculator.R
-import com.cory.hourcalculator.classes.*
+import com.cory.hourcalculator.classes.CustomColorGenerator
+import com.cory.hourcalculator.classes.HistoryDeletion
+import com.cory.hourcalculator.classes.Vibrate
 import com.cory.hourcalculator.database.DBHelper
-import com.cory.hourcalculator.sharedprefs.*
+import com.cory.hourcalculator.intents.MainActivity
+import com.cory.hourcalculator.sharedprefs.AnimationData
+import com.cory.hourcalculator.sharedprefs.ClickableHistoryEntryData
+import com.cory.hourcalculator.sharedprefs.ColoredTitleBarTextData
+import com.cory.hourcalculator.sharedprefs.DarkThemeData
+import com.cory.hourcalculator.sharedprefs.DaysWorkedPerWeekData
+import com.cory.hourcalculator.sharedprefs.DeleteAllOnLimitReachedData
+import com.cory.hourcalculator.sharedprefs.HistoryAutomaticDeletionData
+import com.cory.hourcalculator.sharedprefs.HistoryToggleData
+import com.cory.hourcalculator.sharedprefs.MenuTintData
+import com.cory.hourcalculator.sharedprefs.OvertimeData
+import com.cory.hourcalculator.sharedprefs.ShowInfoForOnlySelectedItemsData
+import com.cory.hourcalculator.sharedprefs.ShowWagesInHistoryData
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -34,8 +46,10 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.slider.Slider
+import com.google.android.material.slider.Slider.OnChangeListener
 import com.google.android.material.snackbar.Snackbar
-import java.lang.Exception
+
 
 class HistorySettingsFragment : Fragment() {
 
@@ -949,6 +963,12 @@ class HistorySettingsFragment : Fragment() {
         requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch).isChecked =
             false
         requireActivity().findViewById<MaterialSwitch>(R.id.showWagesInHistorySwitch).thumbIconDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
+
+        ShowInfoForOnlySelectedItemsData(requireContext()).setShowInfoForOnlySelectedItems(false)
+        requireActivity().findViewById<MaterialSwitch>(R.id.onlyShowTotalForSelectedItemsSwitch).isChecked =
+            false
+        requireActivity().findViewById<MaterialSwitch>(R.id.onlyShowTotalForSelectedItemsSwitch).thumbIconDrawable =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
 
         val runnable = Runnable {
