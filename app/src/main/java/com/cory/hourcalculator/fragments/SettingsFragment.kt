@@ -360,7 +360,7 @@ class SettingsFragment : Fragment() {
             )
         )
         cancelDeletionTextView.setTextColor(Color.parseColor(
-            CustomColorGenerator(requireContext()).generateCardColor()
+            CustomColorGenerator(requireContext()).generateBottomNavIconTintColor()
         ))
 
         hoursCardView.shapeAppearanceModel = hoursCardView.shapeAppearanceModel
