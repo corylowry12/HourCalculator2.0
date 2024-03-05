@@ -106,4 +106,32 @@ class Vibrate {
             e.printStackTrace()
         }
     }
+
+    fun vibrationSliders(context: Context) {
+        try {
+            val vibrationData = VibrationData(context)
+
+            if (vibrationData.loadVibrationOnTimePickerChangeState()) {
+
+                if (Build.VERSION.SDK_INT >= 31) {
+
+                    val vibratorManager = context
+                        .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                    val vibrator = vibratorManager.defaultVibrator
+
+                    if (vibrator.hasVibrator()) {
+                        context.getSystemService(Vibrator::class.java)
+                            .vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
+                    }
+                } else {
+                    val vib = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                    if (vib.hasVibrator()) {
+                        vib.vibrate(3)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
