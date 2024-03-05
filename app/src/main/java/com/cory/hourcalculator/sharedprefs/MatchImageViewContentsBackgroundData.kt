@@ -17,7 +17,6 @@ class MatchImageViewContentsBackgroundData(context: Context) {
 
     fun loadMatchImageViewContents(): Boolean {
         val state = sharedPreferences.getBoolean("matchImageViewContents", false)
-
         return (state)
     }
 }
