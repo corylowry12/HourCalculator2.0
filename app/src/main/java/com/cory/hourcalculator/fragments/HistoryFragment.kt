@@ -1,6 +1,7 @@
 package com.cory.hourcalculator.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.BlendMode
@@ -42,6 +43,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 import java.math.RoundingMode
@@ -63,6 +65,9 @@ class HistoryFragment : Fragment() {
     private var containsColon = false
 
     private lateinit var customAdapter: CustomAdapter
+
+    fun View.dpToPx(dp: Float): Int = context.dpToPx(dp)
+    fun Context.dpToPx(dp: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -149,7 +154,8 @@ class HistoryFragment : Fragment() {
                     }
                     cursor.moveToNext()
             }
-            //Toast.makeText(requireContext(), total.toString(), Toast.LENGTH_SHORT).show()
+            output = total.toString()
+
         }
 
             calculateWages()
@@ -246,7 +252,7 @@ class HistoryFragment : Fragment() {
                     if (CalculateOvertimeInHistoryData(requireContext()).loadCalculateOvertimeInHistoryState() && outputWages.toDouble() > 40) {
                         val overFourty = outputWages.toDouble() - 40
                         val timeHalf = overFourty * (wagesData.loadWageAmount().toString()
-                            .toDouble() * 1.5)
+                            .toDouble() * OvertimeData(requireContext()).loadOverTimeAmount())
                         val wages =
                             (40 * wagesData.loadWageAmount().toString()
                                 .toDouble()) + timeHalf
@@ -410,32 +416,57 @@ class HistoryFragment : Fragment() {
                     val deleteSelectedCardView =
                         historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
 
-                    exportCardView.setCardBackgroundColor(
-                        ColorStateList.valueOf(
-                            Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                    if (TimeCardsToggleData(requireContext()).loadTimeCardsState()) {
+                        exportCardView.setCardBackgroundColor(
+                            ColorStateList.valueOf(
+                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                            )
                         )
-                    )
-                    deleteSelectedCardView.setCardBackgroundColor(
-                        ColorStateList.valueOf(
-                            Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                        deleteSelectedCardView.setCardBackgroundColor(
+                            ColorStateList.valueOf(
+                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                            )
                         )
-                    )
 
-                    exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                        .setBottomRightCornerSize(0f)
-                        .setBottomLeftCornerSize(0f)
-                        .build()
-                    deleteSelectedCardView.shapeAppearanceModel =
-                        deleteSelectedCardView.shapeAppearanceModel
+                        exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
                             .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                            .setBottomRightCornerSize(28f)
-                            .setBottomLeftCornerSize(28f)
+                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                            .setBottomRightCornerSize(0f)
+                            .setBottomLeftCornerSize(0f)
                             .build()
+                        deleteSelectedCardView.shapeAppearanceModel =
+                            deleteSelectedCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+                                .setBottomRightCornerSize(28f)
+                                .setBottomLeftCornerSize(28f)
+                                .build()
+                    }
+                    else {
+                        exportCardView.visibility = View.GONE
+
+                        val param = (deleteSelectedCardView.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                            setMargins(0, dpToPx(requireContext(), 15).toInt(),0,0)
+                        }
+                        deleteSelectedCardView.layoutParams = param
+
+                        deleteSelectedCardView.setCardBackgroundColor(
+                            ColorStateList.valueOf(
+                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                            )
+                        )
+
+                        deleteSelectedCardView.shapeAppearanceModel =
+                            deleteSelectedCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                .setBottomRightCornerSize(28f)
+                                .setBottomLeftCornerSize(28f)
+                                .build()
+                    }
 
                     exportCardView.setOnClickListener {
                         Vibrate().vibration(requireContext())
@@ -739,6 +770,7 @@ class HistoryFragment : Fragment() {
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
+                    hideOptionsIcon()
                     customAdapter.snackbarDeleteSelected.dismiss()
                     customAdapter.snackbarDismissCheckBox.dismiss()
                 } catch (e: UninitializedPropertyAccessException) {
@@ -765,6 +797,7 @@ class HistoryFragment : Fragment() {
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
+                    hideOptionsIcon()
                     customAdapter.snackbarDeleteSelected.dismiss()
                     customAdapter.snackbarDismissCheckBox.dismiss()
                 } catch (e: UninitializedPropertyAccessException) {
@@ -791,6 +824,7 @@ class HistoryFragment : Fragment() {
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
+                    hideOptionsIcon()
                     customAdapter.snackbarDeleteSelected.dismiss()
                     customAdapter.snackbarDismissCheckBox.dismiss()
                 } catch (e: UninitializedPropertyAccessException) {
@@ -817,6 +851,7 @@ class HistoryFragment : Fragment() {
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
+                    hideOptionsIcon()
                     customAdapter.snackbarDeleteSelected.dismiss()
                     customAdapter.snackbarDismissCheckBox.dismiss()
                 } catch (e: UninitializedPropertyAccessException) {
@@ -1121,7 +1156,34 @@ class HistoryFragment : Fragment() {
 
         while (!cursor.isAfterLast) {
 
-            if (customAdapter.getSelectedItems().contains(cursor.position)) {
+            if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                if (customAdapter.getSelectedItems().contains(cursor.position)) {
+                    val array =
+                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
+
+                    var decimalTime: Double
+                    if (array.contains(":")) {
+                        val (hours, minutes) = array.split(":")
+                        val decimal =
+                            (minutes.toDouble() / 60).toBigDecimal()
+                                .setScale(2, RoundingMode.HALF_EVEN)
+                                .toString().drop(2)
+                        try {
+                            decimalTime = "$hours.$decimal".toDouble()
+                            y += decimalTime
+
+                        } catch (e: java.lang.NumberFormatException) {
+                            e.printStackTrace()
+                        }
+
+                        containsColon = true
+
+                    } else {
+                        y += array.toDouble()
+                    }
+                }
+            }
+            else {
                 val array =
                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
 
@@ -1151,6 +1213,14 @@ class HistoryFragment : Fragment() {
             cursor.moveToNext()
 
         }
+
+        val (wholeNumber, decimal) = output.split(".")
+        var minute = (".$decimal".toDouble() * 60).toInt().toString()
+        if (minute.length == 1) {
+            minute = "0$minute"
+        }
+
+        outputColon = "$wholeNumber:$minute"
 
     }
 
