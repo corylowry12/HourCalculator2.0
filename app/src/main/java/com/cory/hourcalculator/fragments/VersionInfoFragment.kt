@@ -444,6 +444,7 @@ class VersionInfoFragment : Fragment() {
             .build()
 
         openInBrowserCardView.setOnClickListener {
+            dialog.dismiss()
             val urlIntent =
                 Intent(Intent.ACTION_VIEW, Uri.parse(LinkData(requireContext()).loadLink()))
             startActivity(urlIntent)
@@ -454,6 +455,7 @@ class VersionInfoFragment : Fragment() {
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("URL", LinkData(requireContext()).loadLink())
             clipboard.setPrimaryClip(clip)
+            dialog.dismiss()
         }
 
         dialog.show()
