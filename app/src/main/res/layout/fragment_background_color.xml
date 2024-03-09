@@ -126,6 +126,7 @@
                         android:background="@null"/>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/blackThemeCardView"
                         style="@style/Widget.Material3.CardView.Filled"
                         app:strokeWidth="1dp"
                         app:strokeColor="#000000"
