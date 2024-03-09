@@ -77,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Name"
+            android:hint="@string/name"
             android:inputType="textCapWords"
             android:imeOptions="actionGo"
             android:textColor="?attr/textColor"
@@ -98,7 +98,8 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:transitionName="transition_image"
-            android:hapticFeedbackEnabled="false"/>
+            android:hapticFeedbackEnabled="false"
+            android:contentDescription="@string/image_for_this_time_card_entry"/>
         </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -122,6 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:contentDescription="scroll to top"
         app:fabSize="mini"
         app:fabCustomSize="44dp"
