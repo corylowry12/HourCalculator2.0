@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        android:text="Select Color"
+        android:text="@string/select_color"
         android:textColor="?attr/textColor"
         android:textAlignment="center"
         style="@style/TextAppearance.Material3.HeadlineSmall"/>
@@ -53,7 +53,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:text="#"
+                android:text="@string/select_color_hashtag"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
             <TextView
@@ -63,10 +63,11 @@
                 app:layout_constraintStart_toEndOf="@id/hashtagTextView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:text="ffffff"
+                android:text="@string/select_color_default_code"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                android:paddingStart="5dp"/>
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -74,7 +75,7 @@
         android:id="@+id/redTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="R"
+        android:text="@string/r"
         android:textColor="#C60000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/redSlider"
@@ -94,6 +95,7 @@
         app:labelBehavior="gone"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/coloredCardView"
         app:layout_constraintStart_toEndOf="@id/redTextView"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -102,7 +104,7 @@
         android:id="@+id/greenTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="G"
+        android:text="@string/g"
         android:textColor="#3EB612"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/greenSlider"
@@ -130,7 +132,7 @@
         android:id="@+id/blueTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="B"
+        android:text="@string/b"
         android:textColor="#0F67C6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/blueSlider"
@@ -158,11 +160,11 @@
         android:id="@+id/selectColorButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select"
+        android:text="@string/select"
         app:layout_constraintTop_toBottomOf="@id/blueSlider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"/>
 
@@ -170,7 +172,7 @@
         android:id="@+id/generateRandomColorButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Generate Random"
+        android:text="@string/generate_random"
         app:layout_constraintTop_toBottomOf="@id/selectColorButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -182,7 +184,7 @@
         android:id="@+id/cancelSelectColorButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="@string/cancel"
         app:layout_constraintTop_toBottomOf="@id/generateRandomColorButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
