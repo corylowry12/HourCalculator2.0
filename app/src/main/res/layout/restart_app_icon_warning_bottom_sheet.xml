@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        android:text="Change App Icon"
+        android:text="@string/change_app_icon"
         android:textColor="?attr/textColor"
         android:textAlignment="center"
         style="@style/TextAppearance.Material3.HeadlineSmall"/>
@@ -55,7 +55,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Would you like to change the current app icon? This will restart the app."
+                android:text="@string/would_you_like_to_change_the_current_app_icon_this_will_restart_the_app"
                 android:textColor="?attr/settingsTextColor"
                 style="@style/TextAppearance.Material3.BodyLarge"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -65,7 +65,7 @@
         android:id="@+id/yesAppIconButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Yes"
+        android:text="@string/yes"
         app:layout_constraintTop_toBottomOf="@id/bodyCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +84,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:text="No"
+        android:text="@string/no"
         style="@style/Widget.Material3.Button.OutlinedButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
