@@ -35,7 +35,7 @@
                 app:layout_collapseMode="pin"
                 app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:title="Vibration Settings" />
+                app:title="@string/vibration_settings" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -75,7 +75,7 @@
                         android:id="@+id/vibrationSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Vibration On Click"
+                        android:text="@string/vibration_on_click"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +110,7 @@
                         android:id="@+id/vibrationOnLongClickSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Vibration On Long Click"
+                        android:text="@string/vibration_on_long_click"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +145,7 @@
                         android:id="@+id/vibrationOnTimePickerChangeSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Vibration On Time Picker Change"
+                        android:text="@string/vibration_on_time_picker_change"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -180,7 +180,7 @@
                         android:id="@+id/vibrationOnCalculationErrorSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Vibration On Calculation Error"
+                        android:text="@string/vibration_on_calculation_error"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
