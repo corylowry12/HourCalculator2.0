@@ -138,7 +138,6 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="8dp"
-                        android:text="@string/build_number_number"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
