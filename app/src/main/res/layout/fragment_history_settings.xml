@@ -62,7 +62,10 @@
                 android:layout_marginTop="1dp"
                 android:hapticFeedbackEnabled="false"
                 android:foreground="?attr/selectableItemBackground"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -114,7 +117,7 @@
                         android:id="@+id/toggleHistoryAutomaticDeletionSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Toggle History Automatic Deletion"
+                        android:text="@string/history_automatic_deletion"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +155,7 @@
                         android:id="@+id/historyDeleteAllOnLimitSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Delete all entries when limit reached"
+                        android:text="@string/delete_all_entries_when_limit_is_reached"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +175,6 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/historyDeleteAllOnLimitCardView">
 
@@ -188,7 +190,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Number of entries stored before deletion"
+                        android:text="@string/number_of_entries_stored_before_deletion"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/daysWorkedChip"
@@ -207,7 +209,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="1"
                         android:clickable="false" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -240,7 +241,7 @@
                         android:id="@+id/clickableHistorySwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Open hour for editing on history item click"
+                        android:text="@string/open_hour_for_editing_on_history_item_click"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -278,7 +279,7 @@
                         android:id="@+id/showWagesInHistorySwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Show wages for each history item"
+                        android:text="@string/show_wages_for_each_history_item"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -316,7 +317,7 @@
                         android:id="@+id/onlyShowTotalForSelectedItemsSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Show info for only selected items"
+                        android:text="@string/show_info_for_only_selected_items"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -366,7 +367,7 @@
                         android:paddingTop="20dp"
                         android:paddingBottom="20dp"
                         android:paddingEnd="5dp"
-                        android:text="FAB Positioning"
+                        android:text="@string/fab_positioning"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toStartOf="@id/fabPositioningChevron"
                         app:layout_constraintStart_toEndOf="@id/FABImage"
