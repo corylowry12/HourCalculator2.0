@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        android:text="Info"
+        android:text="@string/info"
         android:textColor="?attr/textColor"
         android:textAlignment="center"
         style="@style/TextAppearance.Material3.HeadlineSmall"/>
@@ -55,7 +55,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Information"
                 android:textColor="?attr/settingsTextColor"
                 style="@style/TextAppearance.Material3.BodyLarge"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -65,7 +64,7 @@
         android:id="@+id/yesButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="OK"
+        android:text="@string/ok"
         app:layout_constraintTop_toBottomOf="@id/bodyCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
