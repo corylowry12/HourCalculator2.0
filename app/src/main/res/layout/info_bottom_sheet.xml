@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
-        android:text="Info"
+        android:text="@string/info"
         android:textColor="?attr/textColor"
         android:textAlignment="center"
         style="@style/TextAppearance.Material3.HeadlineSmall"/>
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Total Hours:"
+        android:text="@string/total_hours"
         android:textColor="?attr/settingsTextColor"
         style="@style/TextAppearance.Material3.BodyLarge"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -82,7 +82,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Number of Entries:"
+        android:text="@string/number_of_entries"
         android:textColor="?attr/settingsTextColor"
         style="@style/TextAppearance.Material3.BodyLarge"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -111,7 +111,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Wages:"
+        android:text="@string/wages_info"
         android:textColor="?attr/settingsTextColor"
         style="@style/TextAppearance.Material3.BodyLarge"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -121,7 +121,7 @@
         android:id="@+id/okButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="OK"
+        android:text="@string/ok"
         app:layout_constraintTop_toBottomOf="@id/wagesCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
