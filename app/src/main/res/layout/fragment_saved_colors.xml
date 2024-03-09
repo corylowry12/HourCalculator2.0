@@ -37,7 +37,7 @@
                 app:navigationIconTint="?attr/textColor"
                 app:buttonGravity="center_vertical"
                 app:menu="@menu/main_menu_reset"
-                app:title="Saved Colors" />
+                app:title="@string/saved_colors" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
