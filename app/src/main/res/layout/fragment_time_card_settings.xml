@@ -35,7 +35,7 @@
                 app:layout_collapseMode="pin"
                 app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:title="Time Card Settings" />
+                app:title="@string/time_card_settings" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -75,7 +75,7 @@
                         android:id="@+id/disableTimeCardsSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Toggle Time Cards"
+                        android:text="@string/toggle_time_cards"
                         android:textColor="#000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +111,7 @@
                         android:id="@+id/showWagesInTimeCardsSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Show Wages For Each Time Card Item"
+                        android:text="@string/show_wages_for_each_time_card_item"
                         android:textColor="#000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -147,7 +147,7 @@
                         android:id="@+id/coloredImageViewBackgroundSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Make background match the base color of the image"
+                        android:text="@string/make_background_match_the_base_color_of_the_image_when_viewing_a_time_card_image"
                         android:textColor="#000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -190,13 +190,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="Name"
+                        android:hint="@string/name"
                         android:imeOptions="actionGo"
                         android:inputType="text"
                         android:maxLength="15"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp" />
-
 
                 </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -238,7 +237,7 @@
                         android:paddingTop="20dp"
                         android:paddingBottom="20dp"
                         android:paddingEnd="5dp"
-                        android:text="FAB Positioning"
+                        android:text="@string/fab_positioning"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toStartOf="@id/fabPositioningChevronTimeCards"
                         app:layout_constraintStart_toEndOf="@id/FABImageTimeCards"
