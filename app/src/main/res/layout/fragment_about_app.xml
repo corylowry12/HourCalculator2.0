@@ -83,15 +83,15 @@
                     android:id="@+id/appIconImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/ic_launcher"
+                    android:contentDescription="@string/app_icon_image" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:id="@+id/appName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:text="Hour Calculator"
+                    android:text="@string/hour_calculator"
                     android:textColor="?attr/settingsTextColor"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -102,8 +102,6 @@
                     android:id="@+id/versionNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:text="Version:"
                     android:textColor="?attr/settingsTextColor"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
