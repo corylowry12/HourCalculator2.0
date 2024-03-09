@@ -34,7 +34,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="Gallery"
+                app:title="@string/gallery"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:buttonGravity="center_vertical"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -58,7 +58,7 @@
         android:id="@+id/noImagesStoredGallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="There are currently no images stored in the time cards"
+        android:text="@string/there_are_currently_no_images_stored_in_the_time_cards"
         android:textAlignment="center"
         android:textColor="?attr/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
