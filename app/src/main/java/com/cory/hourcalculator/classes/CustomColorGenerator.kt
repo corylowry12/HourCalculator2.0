@@ -182,6 +182,69 @@ class CustomColorGenerator(context: Context) {
         return "#000000"
     }
 
+    fun generateDarkColorfulBackgroundColor() : String {
+        //DARK GRAY COLOR #383B3C
+        val darkTheme = DarkThemeData(insideContext)
+        if (MoreColorfulBackgroundData(insideContext).loadMoreColorfulBackground()) {
+            if (MaterialYouData(insideContext).loadMaterialYou()) {
+                when {
+                    darkTheme.loadDarkModeState() == 2 -> {
+                        return "#${
+                            this.darken(
+                                ContextCompat.getColor(
+                                    insideContext, GenerateMaterialYouColors(insideContext).generate_900()
+                                ), 0.4)
+                        }"
+                    }
+                    darkTheme.loadDarkModeState() == 3 -> {
+                        when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                            Configuration.UI_MODE_NIGHT_YES -> {
+                                return "#${
+                                    this.darken(
+                                        ContextCompat.getColor(
+                                            insideContext, GenerateMaterialYouColors(insideContext).generate_900()
+                                        ), 0.4)
+                                }"
+                            }
+                            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                                return "#${
+                                    this.darken(
+                                        ContextCompat.getColor(
+                                            insideContext, GenerateMaterialYouColors(insideContext).generate_900()
+                                        ), 0.4)
+                                }"
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                when {
+                    darkTheme.loadDarkModeState() == 2 -> {
+                        return "#${
+                            this.darken(Color.parseColor(this.loadCustomHex()), 0.85)
+                        }"
+                    }
+                    darkTheme.loadDarkModeState() == 3 -> {
+                        when (insideContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                            Configuration.UI_MODE_NIGHT_YES -> {
+                                return "#${
+                                    this.darken(Color.parseColor(this.loadCustomHex()), 0.85)
+                                }"
+                            }
+                            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                                return "#${
+                                    this.darken(Color.parseColor(this.loadCustomHex()), 0.85)
+                                }"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "#000000"
+    }
+
     fun generateTitleBarExpandedTextColor() : String {
             val darkThemeData = DarkThemeData(insideContext)
             when {
