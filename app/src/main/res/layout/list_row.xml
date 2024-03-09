@@ -45,7 +45,6 @@
                 android:id="@+id/row_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="In Time"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
@@ -57,7 +56,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_in"
-                android:text="Out Time"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
@@ -69,7 +67,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_out"
-                android:text="Break"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
@@ -81,7 +78,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_break"
-                android:text="Total"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
@@ -93,7 +89,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_total"
-                android:text="Wages"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
@@ -108,7 +103,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/row_wages"
-                android:text="Day"
                 android:textColor="?attr/settingsTextColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -123,7 +117,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:cardCornerRadius="15dp"
                 style="@style/Widget.Material3.CardView.Filled"
-                android:foreground="?attr/selectableItemBackground">
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintTop_toTopOf="parent">
             <ImageButton
                 android:id="@+id/imageViewOptions"
                 android:layout_width="wrap_content"
@@ -135,7 +130,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:contentDescription="@string/history_options_image_view_button"/>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
