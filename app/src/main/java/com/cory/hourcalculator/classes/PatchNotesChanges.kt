@@ -7,7 +7,9 @@ class PatchNotesChanges {
         "Fixed issue where switches and radio buttons would animate when loading the view",
         "Fixed issue where the app would vibrate twice when changing a date when editing an hour",
         "Fixed issue with cards style in the About view being different than the rest of the app",
-        "Fixed issue where the history options icon would still show when changing sort method"
+        "Fixed issue where the history options icon would still show when changing sort method",
+        "Fixed issue with crashing when showing checkbox on certain versions of Android if \"Colored Menu Items\" was enabled",
+        "Fixed issue with wage settings in the Settings view having the wrong subtitle"
     )
 
     var newFeaturesArray = arrayOf(
@@ -25,7 +27,14 @@ class PatchNotesChanges {
         "Improved functionality of the \"Delete app data\" option in Settings",
         "Overtime will now be calculated in Time Cards",
         "Renamed the \"Calculate Overtime In History\" setting to \"Calculate Overtime\"",
-        "The date button when editing an hour will no longer say \"Click on me to change date\""
+        "The date button when editing an hour will no longer say \"Click on me to change date\"",
+        "Black theme icon and the follow system icon in the Background Color view will now change color slightly if Make background more colorful is enabled",
+        "Updated the minimum supported Android version",
+        "Updated the design of the color picker sliders",
+        "Various performance improvements in the History view",
+        "Tweaked the margins of the sliders when selecting a custom color",
+        "Adjusted the naming of various settings",
+        "Updated the hint for the wages text box in the Wage settings view"
     )
 
     var bugFixesArrayInternal = arrayOf(
