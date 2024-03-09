@@ -35,7 +35,7 @@
                 app:layout_collapseMode="pin"
                 app:menu="@menu/main_menu_reset"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:title="Wage Settings" />
+                app:title="@string/wage_settings" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -48,7 +48,7 @@
         android:isScrollContainer="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -58,7 +58,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/outlinedTextFieldWages"
@@ -82,7 +85,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="Wages (7.25)"
+                        android:hint="@string/_7_25"
                         android:imeOptions="actionGo"
                         android:inputType="numberDecimal"
                         android:maxLength="5"
@@ -104,7 +107,10 @@
                 android:layout_marginTop="1dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:hapticFeedbackEnabled="false"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/cardViewWages"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -119,7 +125,7 @@
                         android:id="@+id/calculateOvertimeInHistorySwitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Calculate Overtime"
+                        android:text="@string/calculate_overtime"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +146,9 @@
                 android:layout_marginEnd="10dp"
                 android:layout_below="@id/cardViewCalculateOvertimeInHistory"
                 android:foreground="?attr/selectableItemBackground"
-                app:layout_constraintTop_toBottomOf="@id/cardViewOnlyShowTotalForSelectedItems">
+                app:layout_constraintTop_toBottomOf="@id/cardViewCalculateOvertimeInHistory"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintAppearance"
@@ -155,7 +163,7 @@
                         android:paddingStart="12dp"
                         android:paddingTop="4dp"
                         android:paddingEnd="5dp"
-                        android:text="Overtime Amount Adjustment"
+                        android:text="@string/overtime_amount_adjustment"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -182,7 +190,7 @@
                         android:id="@+id/minValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1.0"
+                        android:text="@string/_1_0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/overtimeRatioHeading"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -192,7 +200,7 @@
                         android:id="@+id/maxValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2.0"
+                        android:text="@string/_2_0"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/overtimeRatioHeading"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -201,7 +209,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
