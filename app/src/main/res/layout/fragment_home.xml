@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -39,7 +39,10 @@
         android:layout_height="100dp"
         android:descendantFocusability="blocksDescendants"
         android:timePickerMode="spinner"
-        android:layout_below="@id/outTimeTextViewHomeFragment"/>
+        android:layout_below="@id/outTimeTextViewHomeFragment"
+        app:layout_constraintTop_toBottomOf="@id/outTimeTextViewHomeFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/textViewBreakHomeFragment"
@@ -122,7 +125,9 @@
         android:textColor="?attr/textColor"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_below="@id/calculateButtonHomeFragment"
+        app:layout_constraintTop_toBottomOf="@id/calculateButtonHomeFragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:hint="Total Hours: 6.42"
         tools:visibility="visible" />
 
@@ -140,5 +145,5 @@
         app:layout_constraintTop_toBottomOf="@id/materialToolBarHomeFragment"
         app:layout_goneMarginTop="8dp"
         android:layout_below="@id/materialToolBarHomeFragment"/>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
