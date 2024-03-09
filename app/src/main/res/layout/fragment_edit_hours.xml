@@ -106,7 +106,6 @@
             android:layout_below="@id/outlinedTextFieldEdit"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:text="@string/click_on_me"
             android:textAlignment="center"
             android:textColor="@color/white"
             app:chipCornerRadius="28dp"
