@@ -1,12 +1,15 @@
 package com.cory.hourcalculator.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -51,37 +54,39 @@ class TimeCardCustomAdapter(
 
     private var lastPosition = -1
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCardColor() {
         notifyDataSetChanged()
     }
 
-    private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var name: TextView = itemView.findViewById(R.id.row_name)
         var week: TextView = itemView.findViewById(R.id.row_week)
         var totalHours: TextView = itemView.findViewById(R.id.row_total_hours)
         val wages: TextView = itemView.findViewById(R.id.row_time_card_wages)
-        var countChip : Chip = itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
+        var countChip: Chip = itemView.findViewById(R.id.timeCardItemInfoCountChip)
         fun bind(position: Int) {
 
             itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard)
                 .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
             itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip)
                 .setTextColor(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).closeIconTint =
+            countChip.closeIconTint =
                 ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipIconTint =
+            countChip.chipIconTint =
                 ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateBottomNavTextColor()))
-            itemView.findViewById<Chip>(R.id.timeCardItemInfoCountChip).chipBackgroundColor =
+            countChip.chipBackgroundColor =
                 ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(context).generateChipBackgroundColor()))
 
             try {
                 val imagePath = File(dataList[position]["image"]!!)
                 if (imagePath.exists()) {
-                    countChip.chipIcon = ContextCompat.getDrawable(context, R.drawable.baseline_image_24)
+                    countChip.chipIcon =
+                        ContextCompat.getDrawable(context, R.drawable.baseline_image_24)
                 } else {
                     countChip.chipIcon = null
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 countChip.chipIcon = null
             }
@@ -89,9 +94,9 @@ class TimeCardCustomAdapter(
             val dataItem = dataList[position]
 
             if (dataItem["name"] == null || dataItem["name"] == "") {
-                name.text = "Name: Unknown"
+                name.text = context.getString(R.string.name_unknown)
             } else {
-                name.text = "Name: ${dataItem["name"]}"
+                name.text = context.getString(R.string.name, dataItem["name"])
             }
 
             val totalHoursRounded =
@@ -104,14 +109,17 @@ class TimeCardCustomAdapter(
                 minute = "0$minute"
             }
 
-            totalHours.text = "Total: $totalHoursRounded/$wholeNumber:$minute"
+            totalHours.text =
+                context.getString(R.string.total, totalHoursRounded.toString(), wholeNumber, minute)
 
             if (!ShowWagesInTimeCardData(context).loadShowWages()) {
                 wages.visibility = View.GONE
-            }
-            else {
+            } else {
                 try {
-                    if (dataItem["totalHours"]!!.toDouble() > 40 && CalculateOvertimeInHistoryData(context).loadCalculateOvertimeInHistoryState()) {
+                    if (dataItem["totalHours"]!!.toDouble() > 40 && CalculateOvertimeInHistoryData(
+                            context
+                        ).loadCalculateOvertimeInHistoryState()
+                    ) {
                         val overFourty = dataItem["totalHours"]!!.toDouble() - 40
                         val timeHalf = overFourty * (WagesData(context).loadWageAmount().toString()
                             .toDouble() * OvertimeData(context).loadOverTimeAmount())
@@ -119,31 +127,29 @@ class TimeCardCustomAdapter(
                             (40 * WagesData(context).loadWageAmount().toString()
                                 .toDouble()) + timeHalf
                         val wagesRounded = String.format("%,.2f", wagesCalculated)
-                        wages.text = "Wages: $${wagesRounded}"
-                    }
-                    else {
+                        wages.text = context.getString(R.string.wages, wagesRounded)
+                    } else {
                         val wagesFormatted = String.format(
                             "%,.2f",
                             dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
                                 .toDouble()
                         )
-                        wages.text = "Wages: $${wagesFormatted}"
+                        wages.text = context.getString(R.string.wages, wagesFormatted)
                     }
-                } catch (e: java.lang.Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                     if (WagesData(context).loadWageAmount() == "") {
-                        wages.text = "Wages: Must Set Wages"
-                    }
-                    else {
-                        wages.text = "Wages: Error"
+                        wages.text = context.getString(R.string.wages_must_set_wages)
+                    } else {
+                        wages.text = context.getString(R.string.wages_error)
                     }
                 }
             }
 
             if (dataItem["count"]!!.toInt() > 1) {
-                week.text = "Week: ${dataItem["week"]}"
+                week.text = context.getString(R.string.week, dataItem["week"])
             } else {
-                week.text = "Day: ${dataItem["week"]}"
+                week.text = context.getString(R.string.day, dataItem["week"])
             }
             countChip.text = dataItem["count"]
 
@@ -188,8 +194,7 @@ class TimeCardCustomAdapter(
                                 .build()
                     }
                 }
-            }
-            else {
+            } else {
                 timeCardCardView.shapeAppearanceModel =
                     timeCardCardView.shapeAppearanceModel
                         .toBuilder()
@@ -212,71 +217,10 @@ class TimeCardCustomAdapter(
         return dataList.count()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (AnimationData(context).loadTimeCardsScrollingAnimation()) {
             setAnimation(holder.itemView, position)
-        }
-
-        holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).setOnLongClickListener {
-            val dialog = BottomSheetDialog(context)
-            val updateWagesLayout = LayoutInflater.from(context)
-                .inflate(R.layout.update_wages_bottom_sheet, null)
-            dialog.setContentView(updateWagesLayout)
-            dialog.setCancelable(true)
-
-            if (context.resources.getBoolean(R.bool.isTablet)) {
-                val bottomSheet =
-                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                bottomSheetBehavior.skipCollapsed = true
-                bottomSheetBehavior.isHideable = false
-                bottomSheetBehavior.isDraggable = false
-            }
-
-                    val editText =
-                        updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
-                    val updateWagesButton =
-                        updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
-                    val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
-                    val updateWagesCardView =
-                        updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
-
-                    editText.textCursorDrawable = null
-
-                    updateWagesCardView.setCardBackgroundColor(
-                        Color.parseColor(
-                            CustomColorGenerator(context).generateCardColor()
-                        )
-                    )
-                    updateWagesButton.setBackgroundColor(
-                        Color.parseColor(
-                            CustomColorGenerator(
-                                context
-                            ).generateCustomColorPrimary()
-                        )
-                    )
-                    cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-
-                    editText.setText(WagesData(context).loadWageAmount())
-
-                    updateWagesButton.setOnClickListener {
-                        Vibrate().vibration(context)
-                        WagesData(context).setWageAmount(editText.text.toString())
-                        notifyDataSetChanged()
-                        dialog.dismiss()
-                    }
-                    cancelButton.setOnClickListener {
-                        Vibrate().vibration(context)
-                        dialog.dismiss()
-                    }
-
-            if (holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).text.toString().contains("Error") ||
-                holder.itemView.findViewById<TextView>(R.id.row_time_card_wages).text.toString().contains("Must")) {
-                dialog.show()
-                return@setOnLongClickListener true
-            }
-            return@setOnLongClickListener false
         }
 
         holder.itemView.findViewById<MaterialCardView>(R.id.cardViewTimeCard).setOnClickListener {
@@ -312,7 +256,8 @@ class TimeCardCustomAdapter(
                     bottomSheetBehavior.isDraggable = false
                 }
 
-                val renameCardView = timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.renameCardView)
+                val renameCardView =
+                    timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.renameCardView)
                 val deleteCardView =
                     timeCardOptionsLayout.findViewById<MaterialCardView>(R.id.deleteCardView)
                 val deleteAllCardView =
@@ -369,10 +314,12 @@ class TimeCardCustomAdapter(
                         bottomSheetBehavior.isDraggable = false
                     }
 
-                    val editText = renameLayout.findViewById<TextInputEditText>(R.id.renameTextInputEditText)
+                    val editText =
+                        renameLayout.findViewById<TextInputEditText>(R.id.renameTextInputEditText)
                     val renameButton = renameLayout.findViewById<Button>(R.id.renameButton)
                     val cancelButton = renameLayout.findViewById<Button>(R.id.cancelButton)
-                    val renameBottomSheetCardView = renameLayout.findViewById<MaterialCardView>(R.id.renameCardView)
+                    val renameBottomSheetCardView =
+                        renameLayout.findViewById<MaterialCardView>(R.id.renameCardView)
 
                     renameBottomSheetCardView.setCardBackgroundColor(
                         Color.parseColor(
@@ -388,8 +335,10 @@ class TimeCardCustomAdapter(
                     )
                     cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
 
-                    editText.textCursorDrawable = null
-                    
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        editText.textCursorDrawable = null
+                    }
+
                     editText.setText(dataList[holder.adapterPosition]["name"]?.trim())
 
                     editText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
@@ -400,13 +349,13 @@ class TimeCardCustomAdapter(
                         }
                         false
                     })
-                    
+
                     renameButton.setOnClickListener {
                         Vibrate().vibration(context)
                         rename(editText, holder)
                         renameDialog.dismiss()
                     }
-                    cancelButton.setOnClickListener { 
+                    cancelButton.setOnClickListener {
                         Vibrate().vibration(context)
                         renameDialog.dismiss()
                     }
@@ -461,8 +410,7 @@ class TimeCardCustomAdapter(
                         dataList.removeAt(holder.adapterPosition)
                         if (AnimationData(context).loadRecyclerViewAnimation()) {
                             notifyItemRemoved(holder.adapterPosition)
-                        }
-                        else {
+                        } else {
                             notifyDataSetChanged()
                         }
 
@@ -526,7 +474,8 @@ class TimeCardCustomAdapter(
                         MainActivity().runOnUiThread(runnable)
 
                         deleteAllDialog.dismiss()
-                        Toast.makeText(context, "All time card entries deleted", Toast.LENGTH_SHORT)
+                        Toast.makeText(context,
+                            context.getString(R.string.all_time_card_entries_deleted), Toast.LENGTH_SHORT)
                             .show()
                     }
                     noButton.setOnClickListener {
@@ -541,6 +490,7 @@ class TimeCardCustomAdapter(
         (holder as TimeCardCustomAdapter.ViewHolder).bind(position)
     }
 
+    @SuppressLint("Range", "NotifyDataSetChanged")
     private fun rename(
         editText: TextInputEditText,
         holder: RecyclerView.ViewHolder
@@ -601,8 +551,7 @@ class TimeCardCustomAdapter(
         }
         if (AnimationData(context).loadRecyclerViewAnimation()) {
             notifyItemChanged(holder.adapterPosition)
-        }
-        else {
+        } else {
             notifyDataSetChanged()
         }
     }
