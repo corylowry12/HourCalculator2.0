@@ -81,7 +81,7 @@ class HistoryFABPositioningFragment : Fragment() {
         MainActivity().runOnUiThread(runnable)
 
         val topAppBarBackgroundColorFragment =
-            view.findViewById<MaterialToolbar>(R.id.materialToolBarfabPositioningFragment)
+            view.findViewById<MaterialToolbar>(R.id.materialToolBarFabPositioningFragment)
         topAppBarBackgroundColorFragment?.setNavigationOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
@@ -272,7 +272,7 @@ class HistoryFABPositioningFragment : Fragment() {
         }
 
         val topAppBarBackgroundColorFragment =
-            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarfabPositioningFragment)
+            requireActivity().findViewById<MaterialToolbar>(R.id.materialToolBarFabPositioningFragment)
         val resetDrawable = topAppBarBackgroundColorFragment?.menu?.findItem(R.id.reset)?.icon
         val navigationDrawable = topAppBarBackgroundColorFragment?.navigationIcon
         resetDrawable?.mutate()
