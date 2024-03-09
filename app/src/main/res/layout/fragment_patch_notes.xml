@@ -33,7 +33,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="Patch Notes"
+                app:title="@string/patch_notes"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:buttonGravity="center_vertical"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -81,7 +81,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="Bug Fixes"
+                        android:text="@string/bug_fixes"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         android:visibility="visible"
@@ -103,7 +103,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="1"
                         android:layout_marginEnd="10dp"
                         android:clickable="false" />
 
@@ -147,7 +146,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="New Features"
+                        android:text="@string/new_features"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         android:visibility="visible"
@@ -169,7 +168,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="1"
                         android:layout_marginEnd="10dp"
                         android:clickable="false" />
 
@@ -213,7 +211,7 @@
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingBottom="10dp"
-                        android:text="Enhancements"
+                        android:text="@string/enhancements"
                         android:textColor="?attr/settingsTextColor"
                         android:textSize="18sp"
                         android:visibility="visible"
@@ -235,7 +233,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="1"
                         android:layout_marginEnd="10dp"
                         android:clickable="false" />
 
