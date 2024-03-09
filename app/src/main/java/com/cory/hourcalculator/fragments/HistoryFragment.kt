@@ -52,6 +52,8 @@ import java.math.RoundingMode
 @Suppress("DEPRECATION")
 class HistoryFragment : Fragment() {
 
+    private var isLoaded = false
+
     private var output: String = ""
     private var outputColon: String = ""
     private var outputWages: String = ""
@@ -529,32 +531,7 @@ class HistoryFragment : Fragment() {
 
         loadIntoList()
 
-        if (customAdapter.isCheckBoxVisible()) {
-            topAppBar?.navigationIcon = ResourcesCompat.getDrawable(
-                requireContext().resources,
-                R.drawable.ic_baseline_close_24,
-                requireContext().theme
-            )
-            val xIconDrawable = topAppBar?.navigationIcon
-            xIconDrawable?.mutate()
-
-            if (MenuTintData(requireContext()).loadMenuTint()) {
-                xIconDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            } else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                xIconDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
-            }
-        } else {
-            topAppBar?.navigationIcon = null
-        }
+        topAppBar?.navigationIcon = null
 
         val floatingActionButtonHistory =
             requireActivity().findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
@@ -766,7 +743,7 @@ class HistoryFragment : Fragment() {
                 listView?.scrollToPosition(0)
                 collapsingToolbarLayout.setExpanded(true, true)
                 sortData.setSortState(getString(R.string.day_desc))
-                changeSortMethod()
+                loadIntoList()
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
@@ -793,7 +770,7 @@ class HistoryFragment : Fragment() {
                 listView?.scrollToPosition(0)
                 collapsingToolbarLayout.setExpanded(true, true)
                 sortData.setSortState(getString(R.string.day_asc))
-                changeSortMethod()
+                loadIntoList()
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
@@ -820,7 +797,7 @@ class HistoryFragment : Fragment() {
                 listView?.scrollToPosition(0)
                 collapsingToolbarLayout.setExpanded(true, true)
                 sortData.setSortState(getString(R.string.total_desc))
-                changeSortMethod()
+                loadIntoList()
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
@@ -847,7 +824,7 @@ class HistoryFragment : Fragment() {
                 listView?.scrollToPosition(0)
                 collapsingToolbarLayout.setExpanded(true, true)
                 sortData.setSortState(getString(R.string.total_asc))
-                changeSortMethod()
+                loadIntoList()
                 customAdapter.checkBoxVisible = false
                 try {
                     topAppBar.navigationIcon = null
@@ -993,18 +970,9 @@ class HistoryFragment : Fragment() {
     private fun loadIntoList() {
 
         try {
-            val dbHandler = DBHelper(requireActivity().applicationContext, null)
+            val dbHandler = DBHelper(requireContext(), null)
 
-            if (dbHandler.getCount() > 0) {
-                val noHoursStoredTextView =
-                    activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
-                noHoursStoredTextView?.visibility = View.GONE
-            } else {
-                val noHoursStoredTextView =
-                    activity?.findViewById<TextView>(R.id.noHoursStoredTextView)
-                noHoursStoredTextView?.visibility = View.VISIBLE
-
-            }
+            textViewVisibility()
 
             dataList.clear()
             val cursor = dbHandler.getAllRow(requireContext())
@@ -1025,18 +993,6 @@ class HistoryFragment : Fragment() {
             }
 
             calculateWages()
-
-            if (dataList.isNotEmpty()) {
-                for (i in 0 until dataList.count()) {
-                    val (wholeNumber, decimal) = output.split(".")
-                    var minute = (".$decimal".toDouble() * 60).toInt().toString()
-                    if (minute.length == 1) {
-                        minute = "0$minute"
-                    }
-
-                    outputColon = "$wholeNumber:$minute"
-                }
-            }
 
             val listView = activity?.findViewById<RecyclerView>(R.id.listView)
             listView?.layoutManager = linearLayoutManager
@@ -1066,29 +1022,6 @@ class HistoryFragment : Fragment() {
                 )
             }
             snackBar.show()
-        }
-    }
-
-    private fun changeSortMethod() {
-
-        val dbHandler = DBHelper(requireActivity().applicationContext, null)
-
-        dataList.clear()
-        val cursor = dbHandler.getAllRow(requireContext())
-        cursor!!.moveToFirst()
-
-        while (!cursor.isAfterLast) {
-            val map = HashMap<String, String>()
-            map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
-            dataList.add(map)
-
-            cursor.moveToNext()
-
         }
     }
 
@@ -1214,14 +1147,15 @@ class HistoryFragment : Fragment() {
 
         }
 
-        val (wholeNumber, decimal) = output.split(".")
-        var minute = (".$decimal".toDouble() * 60).toInt().toString()
-        if (minute.length == 1) {
-            minute = "0$minute"
+        if (dataList.isNotEmpty()) {
+            val (wholeNumber, decimal) = output.split(".")
+            var minute = (".$decimal".toDouble() * 60).toInt().toString()
+            if (minute.length == 1) {
+                minute = "0$minute"
+            }
+
+            outputColon = "$wholeNumber:$minute"
         }
-
-        outputColon = "$wholeNumber:$minute"
-
     }
 
     private fun textViewVisibility() {
@@ -1279,22 +1213,36 @@ class HistoryFragment : Fragment() {
                 R.drawable.ic_baseline_close_24,
                 requireContext().theme
             )
-            val xIconDrawable = topAppBar?.navigationIcon
-            xIconDrawable?.mutate()
 
-            if (MenuTintData(requireContext()).loadMenuTint()) {
-                xIconDrawable?.colorFilter = BlendModeColorFilter(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                    BlendMode.SRC_ATOP
-                )
-            } else {
-                val typedValue = TypedValue()
-                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                xIconDrawable?.colorFilter = BlendModeColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    BlendMode.SRC_ATOP
-                )
+            val navigationDrawable = topAppBar?.navigationIcon
+            navigationDrawable?.mutate()
+
+            if (Build.VERSION.SDK_INT >= 29) {
+                try {
+                    if (MenuTintData(requireContext()).loadMenuTint()) {
+                        navigationDrawable?.colorFilter = BlendModeColorFilter(
+                            Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                            BlendMode.SRC_ATOP
+                        )
+                    } else {
+                        val typedValue = TypedValue()
+                        activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                        val id = typedValue.resourceId
+                        navigationDrawable?.colorFilter = BlendModeColorFilter(
+                            ContextCompat.getColor(requireContext(), id),
+                            BlendMode.SRC_ATOP
+                        )
+                    }
+                } catch (e: NoClassDefFoundError) {
+                    e.printStackTrace()
+                    val typedValue = TypedValue()
+                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                    val id = typedValue.resourceId
+                    navigationDrawable?.setColorFilter(
+                        ContextCompat.getColor(requireContext(), id),
+                        PorterDuff.Mode.SRC_ATOP
+                    )
+                }
             }
             showOptionsIcon()
         } else {
