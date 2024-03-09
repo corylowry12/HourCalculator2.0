@@ -74,10 +74,13 @@
 
                     <TextView
                         android:id="@+id/customTextViewHeading"
-                        android:text="Custom"
+                        android:text="@string/custom_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="?attr/settingsTextColor"/>
+                        android:textColor="?attr/settingsTextColor"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/customThemeColorThemeCardView"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
                         android:id="@+id/customTextViewSubtitle"
@@ -86,7 +89,7 @@
                         app:layout_constraintStart_toStartOf="@id/customTextViewHeading"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/customTextViewHeading"
-                        android:text="#FFFFFF"
+                        android:text="@string/select_color_default_code"
                         android:textColor="?attr/settingsTextColor"/>
 
                     <com.google.android.material.card.MaterialCardView
@@ -142,7 +145,7 @@
                         android:paddingTop="20dp"
                         android:paddingBottom="20dp"
                         android:paddingEnd="5dp"
-                        android:text="Save Color"
+                        android:text="@string/save_color"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/addColorImage"
@@ -186,7 +189,7 @@
                         android:paddingTop="20dp"
                         android:paddingBottom="20dp"
                         android:paddingEnd="5dp"
-                        android:text="View Saved Colors"
+                        android:text="@string/view_saved_colors"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintEnd_toStartOf="@id/viewSavedColorsCountChip"
                         app:layout_constraintStart_toEndOf="@id/viewSavedColorsImage"
@@ -204,7 +207,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="1"
                         android:clickable="false"
                         android:layout_marginEnd="20dp"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -235,7 +237,7 @@
                         android:id="@+id/bottomNavBadgeSettingSwitch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Themed bottom navigation badges"
+                        android:text="@string/colorful_bottom_navigation_badges"
                         android:textColor="?attr/settingsTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -275,7 +277,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:textColor="#000000"
-                        android:text="Generate a random color on app launch"
+                        android:text="@string/generate_a_random_color_on_app_start"
                         app:layout_constraintEnd_toStartOf="@id/imageViewRandomColorOptionsCardView"
                         android:layout_marginEnd="4dp"/>
 
@@ -301,7 +303,8 @@
                             app:layout_constraintTop_toTopOf="parent"
                             android:layout_gravity="center"
                             android:background="@android:color/transparent"
-                            android:clickable="false"/>
+                            android:clickable="false"
+                            android:contentDescription="@string/random_color_settings_icon" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
@@ -347,7 +350,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:textColor="#000000"
-                        android:text="Material You"
+                        android:text="@string/material_you_option"
                         app:layout_constraintEnd_toStartOf="@id/imageViewMaterialColorOptionsCardView"
                         android:layout_marginEnd="4dp"/>
 
@@ -373,7 +376,8 @@
                             app:layout_constraintTop_toTopOf="parent"
                             android:layout_gravity="center"
                             android:background="@android:color/transparent"
-                            android:clickable="false"/>
+                            android:clickable="false"
+                            android:contentDescription="@string/material_you_settings_icon" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
