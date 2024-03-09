@@ -22,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nameTextView"/>
+        app:layout_constraintBottom_toTopOf="@id/nameTextView"
+        android:contentDescription="@string/time_card_image"/>
 
         <TextView
             android:id="@+id/nameTextView"
@@ -31,7 +32,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="name"
             android:textAlignment="center"
             android:layout_marginTop="5dp"
             android:paddingBottom="2dp"/>
