@@ -37,7 +37,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="@string/time_cards" />
+                app:title="@string/time_cards_app_bar_title" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -59,7 +59,7 @@
         android:id="@+id/noEntriesStoredTextViewTimeCards"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="There are currently no time cards stored"
+        android:text="@string/there_are_currently_no_time_cards_stored"
         android:textAlignment="center"
         android:textColor="?attr/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,6 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:contentDescription="scroll to top"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
