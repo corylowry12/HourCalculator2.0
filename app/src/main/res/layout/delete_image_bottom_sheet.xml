@@ -54,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Would you like to delete this image? This CAN NOT be undone!"
+                android:text="@string/would_you_like_to_delete_this_image_this_can_not_be_undone"
                 android:textColor="?attr/settingsTextColor"
                 style="@style/TextAppearance.Material3.BodyLarge"/>
 
