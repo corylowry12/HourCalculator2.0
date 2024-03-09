@@ -37,21 +37,9 @@ class BackgroundColorFragment : Fragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+
         updateCustomColorChange()
-
-        val followSystemCardView = activity?.findViewById<MaterialCardView>(R.id.followSystemCardView)
-
-        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-            Configuration.UI_MODE_NIGHT_NO -> {
-                followSystemCardView?.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
-            }
-            Configuration.UI_MODE_NIGHT_YES -> {
-                followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
-            }
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
-            }
-        }
+        updateFollowSystemThemeCardViewColor()
     }
 
     override fun onCreateView(
@@ -212,19 +200,8 @@ class BackgroundColorFragment : Fragment() {
         val amoledThemeButton = activity?.findViewById<RadioButton>(R.id.blackTheme)
         val followSystemThemeButton = activity?.findViewById<RadioButton>(R.id.followSystem)
 
-        val followSystemCardView = activity?.findViewById<MaterialCardView>(R.id.followSystemCardView)
-
-                when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-                    Configuration.UI_MODE_NIGHT_NO -> {
-                        followSystemCardView?.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
-                    }
-                    Configuration.UI_MODE_NIGHT_YES -> {
-                        followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
-                    }
-                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                        followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
-                    }
-                }
+        updateFollowSystemThemeCardViewColor()
+        updateBlackThemeCardViewColor()
 
         when {
             darkThemeData.loadDarkModeState() == 0 -> {
@@ -294,6 +271,8 @@ class BackgroundColorFragment : Fragment() {
             }
 
             updateCustomColorChange()
+            updateFollowSystemThemeCardViewColor()
+            updateBlackThemeCardViewColor()
         }
 
         moreColorBackgroundCardView.setOnLongClickListener {
@@ -330,6 +309,64 @@ class BackgroundColorFragment : Fragment() {
             return@setOnLongClickListener true
         }
     }
+
+    private fun updateFollowSystemThemeCardViewColor() {
+        val followSystemCardView =
+            activity?.findViewById<MaterialCardView>(R.id.followSystemCardView)
+
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                if (MoreColorfulBackgroundData(requireContext()).loadMoreColorfulBackground()) {
+                    followSystemCardView?.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(requireContext()).generateBackgroundColor()
+                        )
+                    )
+                } else {
+                    followSystemCardView?.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+                }
+            }
+
+            Configuration.UI_MODE_NIGHT_YES -> {
+                if (MoreColorfulBackgroundData(requireContext()).loadMoreColorfulBackground()) {
+                    followSystemCardView?.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(requireContext()).generateDarkColorfulBackgroundColor()
+                        )
+                    )
+                } else {
+                    followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
+                }
+            }
+
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                if (MoreColorfulBackgroundData(requireContext()).loadMoreColorfulBackground()) {
+                    followSystemCardView?.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(requireContext()).generateBackgroundColor()
+                        )
+                    )
+                } else {
+                    followSystemCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
+                }
+            }
+        }
+    }
+
+    private fun updateBlackThemeCardViewColor() {
+        val blackThemeCardView =
+            activity?.findViewById<MaterialCardView>(R.id.blackThemeCardView)
+
+                if (MoreColorfulBackgroundData(requireContext()).loadMoreColorfulBackground() && (DarkThemeData(requireContext()).loadDarkModeState() == 1) || DarkThemeData(requireContext()).loadDarkModeState() == 2) {
+                    blackThemeCardView?.setCardBackgroundColor(
+                        Color.parseColor(
+                            CustomColorGenerator(requireContext()).generateBackgroundColor()
+                        )
+                    )
+                } else {
+                    blackThemeCardView?.setCardBackgroundColor(Color.parseColor("#000000"))
+                }
+        }
 
     private fun changeToFollowSystem(
         darkThemeData: DarkThemeData,
