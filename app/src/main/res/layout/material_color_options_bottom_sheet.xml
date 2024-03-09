@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="15dp"
@@ -25,7 +26,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
-        android:text="Material You Options"
+        android:text="@string/material_you_options"
         android:textColor="?attr/textColor"
         android:textAlignment="center"
         style="@style/TextAppearance.Material3.HeadlineSmall"/>
@@ -51,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Accent 1"
+                android:text="@string/accent_1"
                 android:textColor="?attr/settingsTextColor"
                 android:theme="?attr/radioButtonTheme"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,11 +71,12 @@
                 app:strokeColor="#000000"
                 app:strokeWidth="1dp"
                 app:cardBackgroundColor="@android:color/system_accent1_500"
-                android:contentDescription="accent 1 color"
+                android:contentDescription="@string/accent_1_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"
+                tools:ignore="NewApi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -98,7 +100,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Accent 2"
+                android:text="@string/accent_2"
                 android:textColor="?attr/settingsTextColor"
                 android:theme="?attr/radioButtonTheme"
                 app:layout_constraintStart_toStartOf="parent"
@@ -117,11 +119,12 @@
                 app:strokeColor="#000000"
                 app:strokeWidth="1dp"
                 app:cardBackgroundColor="@android:color/system_accent2_500"
-                android:contentDescription="accent 1 color"
+                android:contentDescription="@string/accent_2_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"
+                tools:ignore="NewApi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -145,7 +148,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Accent 3"
+                android:text="@string/accent_3"
                 android:textColor="?attr/settingsTextColor"
                 android:theme="?attr/radioButtonTheme"
                 app:layout_constraintStart_toStartOf="parent"
@@ -164,11 +167,12 @@
                 app:strokeColor="#000000"
                 app:strokeWidth="1dp"
                 app:cardBackgroundColor="@android:color/system_accent3_500"
-                android:contentDescription="accent 3 color"
+                android:contentDescription="@string/accent_3_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"
+                tools:ignore="NewApi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -192,7 +196,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Neutral 1"
+                android:text="@string/neutral_1"
                 android:textColor="?attr/settingsTextColor"
                 android:theme="?attr/radioButtonTheme"
                 app:layout_constraintStart_toStartOf="parent"
@@ -211,11 +215,12 @@
                 app:strokeColor="#000000"
                 app:strokeWidth="1dp"
                 app:cardBackgroundColor="@android:color/system_neutral1_500"
-                android:contentDescription="accent 3 color"
+                android:contentDescription="@string/neutral_1_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"
+                tools:ignore="NewApi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -239,7 +244,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Neutral 2"
+                android:text="@string/neutral_2"
                 android:textColor="?attr/settingsTextColor"
                 android:theme="?attr/radioButtonTheme"
                 app:layout_constraintStart_toStartOf="parent"
@@ -258,11 +263,12 @@
                 app:strokeColor="#000000"
                 app:strokeWidth="1dp"
                 app:cardBackgroundColor="@android:color/system_neutral2_500"
-                android:contentDescription="accent 3 color"
+                android:contentDescription="@string/neutral_2_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"
+                tools:ignore="NewApi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -286,11 +292,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Random"
+                android:text="@string/random"
                 android:textColor="?attr/settingsTextColor"
                 android:theme="?attr/radioButtonTheme"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/accent3ColorCardView"
+                app:layout_constraintEnd_toStartOf="@id/randomMaterialYouColorCardView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@null"
@@ -305,11 +311,12 @@
                 app:strokeColor="#000000"
                 app:strokeWidth="1dp"
                 app:cardBackgroundColor="@android:color/system_accent3_500"
-                android:contentDescription="accent 3 color"
+                android:contentDescription="random material you color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginEnd="10dp"
+                tools:ignore="HardcodedText,NewApi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
