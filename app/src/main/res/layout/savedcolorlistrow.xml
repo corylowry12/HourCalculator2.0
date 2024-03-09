@@ -55,7 +55,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:contentDescription="@string/rename_saved_color"/>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
