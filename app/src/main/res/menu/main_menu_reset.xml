@@ -6,6 +6,5 @@
         android:id="@+id/reset"
         android:title="@string/reset_to_defaults"
         app:showAsAction="always"
-        android:iconTint="?attr/textColor"
         android:icon="@drawable/ic_baseline_restore_24"/>
 </menu>
