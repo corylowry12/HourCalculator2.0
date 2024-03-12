@@ -300,4 +300,10 @@
     <string name="copy_link_to_clipboard">Copy link to clipboard</string>
     <string name="delete_image">Delete image</string>
     <string name="add_photo">Add photo</string>
+    <string name="colored_bottom_nav_badge_info">When enabled the badges in the bottom navigation view that show history/time card count will match the theme\n\nWhen disabled the badges in the bottom navigation view that show history/time card count will be red</string>
+    <string name="generate_a_random_color_info">When enabled the app will generate and set a random color on app launch\n\nWhen disabled the app will be set to the theme you have chosen</string>
+    <string name="hex">#%1$s</string>
+    <string name="saved_color_text">%1$s (Saved)</string>
+    <string name="saved_color">%1$s (Saved)</string>
+    <string name="saved_color_with_name">%1$s (%2$s)</string>
 </resources>
