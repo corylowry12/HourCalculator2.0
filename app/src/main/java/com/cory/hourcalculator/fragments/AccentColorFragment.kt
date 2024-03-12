@@ -288,8 +288,7 @@ class AccentColorFragment : Fragment() {
             }
 
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the badges in the bottom navigation view that show history/time card count will match the theme\n\n" +
-                        "When disabled the badges in the bottom navigation view that show history/time card count will be red"
+                getString(R.string.colored_bottom_nav_badge_info)
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -350,8 +349,7 @@ class AccentColorFragment : Fragment() {
             }
 
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled the app will generate and set a random color on app launch\n\n" +
-                        "When disabled the app will be set to whatever theme you have chosen"
+                getString(R.string.generate_a_random_color_info)
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -759,6 +757,112 @@ class AccentColorFragment : Fragment() {
                 hexadecimalTextView.setTextColor(Color.parseColor("#000000"))
             }
 
+            val defaultTealCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.defaultTealCardView)
+            val darkGreenCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.darkGreenCardView)
+            val darkRedCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.darkRedCardView)
+            val darkBlueCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.darkBlueCardView)
+            val pinkCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.pinkCardView)
+            val orangeCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.orangeCardView)
+            val yellowCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.yellowCardView)
+            val purpleCardView = customColorPickerLayout.findViewById<MaterialCardView>(R.id.purpleCardView)
+
+            defaultTealCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = defaultTealCardView.cardBackgroundColor.defaultColor.red
+                greenValue = defaultTealCardView.cardBackgroundColor.defaultColor.green
+                blueValue = defaultTealCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            darkGreenCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = darkGreenCardView.cardBackgroundColor.defaultColor.red
+                greenValue = darkGreenCardView.cardBackgroundColor.defaultColor.green
+                blueValue = darkGreenCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            darkRedCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = darkRedCardView.cardBackgroundColor.defaultColor.red
+                greenValue = darkRedCardView.cardBackgroundColor.defaultColor.green
+                blueValue = darkRedCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            darkBlueCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = darkBlueCardView.cardBackgroundColor.defaultColor.red
+                greenValue = darkBlueCardView.cardBackgroundColor.defaultColor.green
+                blueValue = darkBlueCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            pinkCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = pinkCardView.cardBackgroundColor.defaultColor.red
+                greenValue = pinkCardView.cardBackgroundColor.defaultColor.green
+                blueValue = pinkCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            orangeCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = orangeCardView.cardBackgroundColor.defaultColor.red
+                greenValue = orangeCardView.cardBackgroundColor.defaultColor.green
+                blueValue = orangeCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            yellowCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = yellowCardView.cardBackgroundColor.defaultColor.red
+                greenValue = yellowCardView.cardBackgroundColor.defaultColor.green
+                blueValue = yellowCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+            purpleCardView.setOnClickListener {
+                Vibrate().vibration(requireContext())
+                redValue = purpleCardView.cardBackgroundColor.defaultColor.red
+                greenValue = purpleCardView.cardBackgroundColor.defaultColor.green
+                blueValue = purpleCardView.cardBackgroundColor.defaultColor.blue
+                hex = String.format("#%02X%02X%02X", redValue, greenValue, blueValue).drop(1)
+                coloredCardView.setCardBackgroundColor(Color.parseColor("#$hex"))
+                hexadecimalTextView.text = hex
+                redSlider.value = redValue.toFloat()
+                greenSlider.value = greenValue.toFloat()
+                blueSlider.value = blueValue.toFloat()
+            }
+
             generateRandomColorButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 val red = Random.nextInt(50,200)
@@ -827,6 +931,32 @@ class AccentColorFragment : Fragment() {
                 activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 updateCustomColorChange()
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = "#$hex"
+
+                val addedColors = UserAddedColorsData(requireContext()).read()
+
+                val contains = addedColors.filter { it.containsValue(CustomColorGenerator(requireContext()).loadCustomHex().drop(1)) }
+
+                if (contains.isEmpty()) {
+                    requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                        CustomColorGenerator(requireContext()).loadCustomHex()
+                }
+                else {
+                    if (contains[0]["name"].toString() == "") {
+                        requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                            getString(
+                                R.string.saved_color,
+                                CustomColorGenerator(requireContext()).loadCustomHex()
+                            )
+                    }
+                    else {
+                        requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                            getString(
+                                R.string.saved_color_with_name,
+                                CustomColorGenerator(requireContext()).loadCustomHex(),
+                                contains[0]["name"]?.trim()
+                            )
+                    }
+                }
             }
 
             selectButton.setOnLongClickListener {
@@ -840,7 +970,10 @@ class AccentColorFragment : Fragment() {
                 activity?.findViewById<MaterialSwitch>(R.id.followGoogleAppsSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 activity?.findViewById<MaterialSwitch>(R.id.generateARandomColorOnAppLaunchSwitch)?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
                 updateCustomColorChange()
-                requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text = "#$hex"
+                requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
+                    getString(
+                        R.string.hex, hex
+                    )
 
                 val addedColors = UserAddedColorsData(requireContext()).read()
                 val dataList = ArrayList<HashMap<String, String>>()
@@ -987,11 +1120,9 @@ class AccentColorFragment : Fragment() {
             if (MaterialYouData(requireContext()).loadMaterialYou()) {
                 materialYouStyle2Switch?.isChecked = true
                 materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
-                materialYouStyle2Switch?.jumpDrawablesToCurrentState()
             } else if (!MaterialYouData(requireContext()).loadMaterialYou()) {
                 materialYouStyle2Switch?.isChecked = false
                 materialYouStyle2Switch?.thumbIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_close_16)
-                materialYouStyle2Switch?.jumpDrawablesToCurrentState()
             }
         }
 
@@ -1112,11 +1243,18 @@ class AccentColorFragment : Fragment() {
         else {
             if (contains[0]["name"].toString() == "") {
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
-                    CustomColorGenerator(requireContext()).loadCustomHex() + " (Saved)"
+                    getString(
+                        R.string.saved_color,
+                        CustomColorGenerator(requireContext()).loadCustomHex()
+                    )
             }
             else {
                 requireActivity().findViewById<TextView>(R.id.customTextViewSubtitle).text =
-                    CustomColorGenerator(requireContext()).loadCustomHex() + " (${contains[0]["name"]?.trim()})"
+                    getString(
+                        R.string.saved_color_with_name,
+                        CustomColorGenerator(requireContext()).loadCustomHex(),
+                        contains[0]["name"]?.trim()
+                    )
             }
         }
 
