@@ -66,7 +66,7 @@ class CustomColorGenerator(context: Context) {
         if (GenerateARandomColorData(insideContext).loadGenerateARandomColorOnAppLaunch()) {
             return loadRandomHex()
         }
-        val state = sharedPreferences.getString("customColor", "#53c8c8")
+        val state = sharedPreferences.getString("customColor", "#53C8C8")
         return (state!!)
     }
 
