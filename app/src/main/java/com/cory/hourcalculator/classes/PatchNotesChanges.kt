@@ -9,7 +9,8 @@ class PatchNotesChanges {
         "Fixed issue with cards style in the About view being different than the rest of the app",
         "Fixed issue where the history options icon would still show when changing sort method",
         "Fixed issue with crashing when showing checkbox on certain versions of Android if \"Colored Menu Items\" was enabled",
-        "Fixed issue with wage settings in the Settings view having the wrong subtitle"
+        "Fixed issue with wage settings in the Settings view having the wrong subtitle",
+        "Fixed issue where if you saved a color and changed the color and then manually selected the saved color again, the custom color subtitle would not show #color (Saved)"
     )
 
     var newFeaturesArray = arrayOf(
@@ -34,7 +35,8 @@ class PatchNotesChanges {
         "Various performance improvements in the History view",
         "Tweaked the margins of the sliders when selecting a custom color",
         "Adjusted the naming of various settings",
-        "Updated the hint for the wages text box in the Wage settings view"
+        "Updated the hint for the wages text box in the Wage settings view",
+        "Added 8 different presets to choose from when selecting a color under Settings->Accent color->Custom color"
     )
 
     var bugFixesArrayInternal = arrayOf(
