@@ -76,7 +76,7 @@ class CustomAdapter(
         return checkBoxVisible
     }
 
-    private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var inTime: TextView = itemView.findViewById(R.id.row_in)
         var outTime: TextView = itemView.findViewById(R.id.row_out)
@@ -179,10 +179,10 @@ class CustomAdapter(
                     val decimal =
                         (dataItem["breakTime"]!!.toDouble() / 60).toBigDecimal()
                             .setScale(2, RoundingMode.HALF_EVEN)
-                    breakTime.text = "Break Time: $decimal Hours"
+                    breakTime.text = context.getString(R.string.break_time_hours, decimal)
                 } catch (e : Exception) {
                     e.printStackTrace()
-                    breakTime.text = "Break Time: Error"
+                    breakTime.text = context.getString(R.string.break_time_error)
                 }
             }
             else {
@@ -224,39 +224,40 @@ class CustomAdapter(
                     try {
                         val wagesDecimal = "$hours$decimal".toDouble()
                         val wagesFormat = String.format("%.2f", wagesDecimal)
-                        wages.text = "Wages: $${
-                            String.format(
+                        wages.text = context.getString(
+                            R.string.wages_adapter, String.format(
                                 "%,.2f",
                                 wagesFormat.toDouble() * WagesData(context).loadWageAmount()!!
                                     .toDouble()
                             )
-                        }"
+                        )
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
                         if (WagesData(context).loadWageAmount() == "") {
-                            wages.text = "Wages: Must Set Wages"
+                            wages.text = context.getString(R.string.wages_must_set_wages)
                         }
                         else {
-                            wages.text = "Wages: Error"
+                            wages.text = context.getString(R.string.wages_error)
                         }
                     }
 
                 } else {
                     try {
-                        wages.text = "Wages: $${
+                        wages.text = context.getString(
+                            R.string.wages_adapter,
                             String.format(
                                 "%,.2f",
                                 dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
                                     .toDouble()
                             )
-                        }"
+                        )
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
                         if (WagesData(context).loadWageAmount() == "") {
-                            wages.text = "Wages: Must Set Wages"
+                            wages.text = context.getString(R.string.wages_must_set_wages)
                         }
                         else {
-                            wages.text = "Wages: Error"
+                            wages.text = context.getString(R.string.wages_error)
                         }
                     }
                 }
@@ -646,66 +647,6 @@ class CustomAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (AnimationData(context).loadHistoryScrollingAnimation()) {
             setAnimation(holder.itemView, position)
-        }
-
-        holder.itemView.findViewById<TextView>(R.id.row_wages).setOnLongClickListener {
-            Vibrate().vibrateOnLongClick(context)
-            val dialog = BottomSheetDialog(context)
-            val updateWagesLayout = LayoutInflater.from(context)
-                .inflate(R.layout.update_wages_bottom_sheet, null)
-            dialog.setContentView(updateWagesLayout)
-            dialog.setCancelable(true)
-
-            if (context.resources.getBoolean(R.bool.isTablet)) {
-                val bottomSheet =
-                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                bottomSheetBehavior.skipCollapsed = true
-                bottomSheetBehavior.isHideable = false
-                bottomSheetBehavior.isDraggable = false
-            }
-
-            val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
-            val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
-            val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
-            val updateWagesCardView = updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
-
-            editText.textCursorDrawable = null
-
-            updateWagesCardView.setCardBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(context).generateCardColor()
-                )
-            )
-            updateWagesButton.setBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(
-                        context
-                    ).generateCustomColorPrimary()
-                )
-            )
-            cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-
-            editText.setText(WagesData(context).loadWageAmount())
-
-            updateWagesButton.setOnClickListener {
-                Vibrate().vibration(context)
-                WagesData(context).setWageAmount(editText.text.toString())
-                notifyDataSetChanged()
-                dialog.dismiss()
-            }
-            cancelButton.setOnClickListener {
-                Vibrate().vibration(context)
-                dialog.dismiss()
-            }
-
-            if (holder.itemView.findViewById<TextView>(R.id.row_wages).text.toString().contains("Error") ||
-                holder.itemView.findViewById<TextView>(R.id.row_wages).text.toString().contains("Must")) {
-                dialog.show()
-                return@setOnLongClickListener true
-            }
-            return@setOnLongClickListener false
         }
 
         val dbHandler = DBHelper(context, null)
