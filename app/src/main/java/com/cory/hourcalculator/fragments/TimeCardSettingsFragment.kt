@@ -23,6 +23,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.cory.hourcalculator.R
@@ -426,11 +427,9 @@ class TimeCardSettingsFragment : Fragment() {
         defaultNameEditTextLayout?.boxStrokeColor = Color.parseColor("#000000")
         defaultNameEditTextLayout?.hintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        try {
-        defaultNameEditText.textCursorDrawable = null
-    } catch (e: NoSuchMethodError) {
-        e.printStackTrace()
-    }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                defaultNameEditText.textCursorDrawable = null
+            }
         defaultNameEditTextLayout?.defaultHintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         defaultNameEditText.highlightColor =
@@ -483,6 +482,18 @@ class TimeCardSettingsFragment : Fragment() {
             transaction?.replace(R.id.fragment_container, TimeCardFABPositioningFragment())?.addToBackStack(null)
             transaction?.commit()
         }
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (defaultNameEditText!!.hasFocus()) {
+                        defaultNameEditText.clearFocus()
+                    } else {
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
+                }
+            })
     }
 
     fun updateCustomColor() {
