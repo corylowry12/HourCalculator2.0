@@ -9,8 +9,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
@@ -23,7 +21,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -181,8 +178,16 @@ class WageSettingsFragment : Fragment() {
         val wagesData = WagesData(requireContext())
         val wagesEditText = activity?.findViewById<TextInputEditText>(R.id.Wages)
 
+        String.format(
+            "%,.2f",
+            wagesData.loadWageAmount().toString()
+        )
+
         val editable =
-            Editable.Factory.getInstance().newEditable(wagesData.loadWageAmount().toString())
+            Editable.Factory.getInstance().newEditable(String.format(
+                "%,.2f",
+                wagesData.loadWageAmount().toString()
+            ))
         wagesEditText?.text = editable
 
         wagesEditText?.setOnKeyListener(View.OnKeyListener { _, i, keyEvent ->
@@ -260,8 +265,7 @@ class WageSettingsFragment : Fragment() {
                 bottomSheetBehavior.isDraggable = false
             }
             infoAboutSettingLayout.findViewById<TextView>(R.id.bodyTextView).text =
-                "When enabled when viewing total wages, overtime will be calculated if hours are over 40 at 1.5x your hourly wage\n\n" +
-                        "When disabled overtime will not be calculated"
+                getString(R.string.calculate_overtime_setting_info)
             val yesButton = infoAboutSettingLayout.findViewById<Button>(R.id.yesButton)
 
             infoAboutSettingLayout.findViewById<MaterialCardView>(R.id.bodyCardView)
@@ -279,10 +283,10 @@ class WageSettingsFragment : Fragment() {
         val overtimeSlider = requireActivity().findViewById<Slider>(R.id.overtimeAmountSlider)
         overtimeSlider.value = OvertimeData(requireContext()).loadOverTimeAmount()
 
-        overtimeSlider.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+        overtimeSlider.addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
             Vibrate().vibrationSliders(requireContext())
             OvertimeData(requireContext()).setOverTimeAmount(value)
-        });
+        })
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -331,11 +335,11 @@ class WageSettingsFragment : Fragment() {
         wagesTextInputEditText?.boxStrokeColor = Color.parseColor("#000000")
         wagesTextInputEditText?.hintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        try {
-            wagesEditText.textCursorDrawable = null
-        } catch (e: NoSuchMethodError) {
-            e.printStackTrace()
-        }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                wagesEditText.textCursorDrawable = null
+            }
+
         wagesTextInputEditText?.defaultHintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         wagesEditText.highlightColor =
@@ -473,7 +477,7 @@ class WageSettingsFragment : Fragment() {
             bottomSheetBehavior.isDraggable = false
         }
         resetSettingsLayout.findViewById<TextView>(R.id.bodyTextView).text =
-            "Would you like to reset Wage settings?"
+            getString(R.string.would_you_like_to_reset_wage_settings)
         val yesResetButton =
             resetSettingsLayout.findViewById<Button>(R.id.yesResetButton)
         val cancelResetButton =
@@ -494,15 +498,7 @@ class WageSettingsFragment : Fragment() {
                 ).generateCustomColorPrimary()
             )
         )
-        /*if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
-                    }*/
+
         yesResetButton.setOnClickListener {
             Vibrate().vibration(requireContext())
             reset()
