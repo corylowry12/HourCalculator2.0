@@ -52,18 +52,18 @@ class TimeCardItemCustomAdapter(
             val formatter = SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.getDefault())
             val dateString = formatter.format(dataItem["day"]!!.toLong())
 
-            inTime.text = "In Time: ${dataItem["inTime"]}"
-            outTime.text = "Out Time: ${dataItem["outTime"]}"
+            inTime.text = context.getString(R.string.in_time_adapter, dataItem["inTime"])
+            outTime.text = context.getString(R.string.out_time_adapter, dataItem["outTime"])
 
             if (ShowBreakTimeInDecimalData(context).loadShowBreakTimeInDecimal()) {
                 try {
                     val decimal =
                         (dataItem["breakTime"]!!.toDouble() / 60).toBigDecimal()
                             .setScale(2, RoundingMode.HALF_EVEN)
-                    breakTime.text = "Break Time: $decimal Hours"
+                    breakTime.text = context.getString(R.string.break_time_hours, decimal)
                 } catch (e : Exception) {
                     e.printStackTrace()
-                    breakTime.text = "Break Time: Error"
+                    breakTime.text = context.getString(R.string.break_time_error)
                 }
             }
             else {
@@ -79,8 +79,19 @@ class TimeCardItemCustomAdapter(
                 }
             }
 
-            totalHours.text = "Total: ${dataItem["totalHours"]}"
-            day.text = "Date: $dateString"
+            val totalHoursRounded =
+                dataItem["totalHours"].toString().toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                    .toDouble()
+
+            val (wholeNumber, decimal) = dataItem["totalHours"]!!.split(".")
+            var minute = (".$decimal".toDouble() * 60).toInt().toString()
+            if (minute.length == 1) {
+                minute = "0$minute"
+            }
+
+            totalHours.text =
+                context.getString(R.string.total, totalHoursRounded.toString(), wholeNumber, minute)
+            day.text = context.getString(R.string.date_time_card_custom_item_adapter, dateString)
 
             if (dataList.count() == 1) {
                 timeCardItemCardView.shapeAppearanceModel = timeCardItemCardView.shapeAppearanceModel
@@ -123,46 +134,48 @@ class TimeCardItemCustomAdapter(
             if (ShowWagesInTimeCardData(context).loadShowWages()) {
                 if (dataItem["totalHours"]!!.contains(":")) {
                     val (hours, minutes) = dataItem["totalHours"]!!.split(":")
-                    val decimal =
+                    val decimal2 =
                         (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
                             .toString().drop(1)
 
                     try {
-                        val wagesDecimal = "$hours$decimal".toDouble()
+                        val wagesDecimal = "$hours$decimal2".toDouble()
                         val wagesFormat = String.format("%.2f", wagesDecimal)
-                        wages.text = "Wages: $${
+                        wages.text = context.getString(
+                            R.string.wages_adapter,
                             String.format(
                                 "%,.2f",
                                 wagesFormat.toDouble() * WagesData(context).loadWageAmount()!!
                                     .toDouble()
                             )
-                        }"
+                        )
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
                         if (WagesData(context).loadWageAmount() == "") {
-                            wages.text = "Wages: Must Set Wages"
+                            wages.text = context.getString(R.string.wages_must_set_wages)
                         }
                         else {
-                            wages.text = "Wages: Error"
+                            wages.text = context.getString(R.string.wages_error)
                         }
                     }
 
                 } else {
                     try {
-                        wages.text = "Wages: $${
+                        wages.text = context.getString(
+                            R.string.wages_adapter,
                             String.format(
                                 "%,.2f",
                                 dataItem["totalHours"]!!.toDouble() * WagesData(context).loadWageAmount()!!
                                     .toDouble()
                             )
-                        }"
+                        )
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
                         if (WagesData(context).loadWageAmount() == "") {
-                            wages.text = "Wages: Must Set Wages"
+                            wages.text = context.getString(R.string.wages_must_set_wages)
                         }
                         else {
-                            wages.text = "Wages: Error"
+                            wages.text = context.getString(R.string.wages_error)
                         }
                     }
                 }
@@ -182,65 +195,6 @@ class TimeCardItemCustomAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.itemView.findViewById<TextView>(R.id.row_time_card_item_info_wages).setOnLongClickListener {
-            Vibrate().vibrateOnLongClick(context)
-            val dialog = BottomSheetDialog(context)
-            val updateWagesLayout = LayoutInflater.from(context)
-                .inflate(R.layout.update_wages_bottom_sheet, null)
-            dialog.setContentView(updateWagesLayout)
-            dialog.setCancelable(true)
-
-            if (context.resources.getBoolean(R.bool.isTablet)) {
-                val bottomSheet =
-                    dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                bottomSheetBehavior.skipCollapsed = true
-                bottomSheetBehavior.isHideable = false
-                bottomSheetBehavior.isDraggable = false
-            }
-
-            val editText = updateWagesLayout.findViewById<TextInputEditText>(R.id.updateWagesTextInputEditText)
-            val updateWagesButton = updateWagesLayout.findViewById<Button>(R.id.updateWagesButton)
-            val cancelButton = updateWagesLayout.findViewById<Button>(R.id.cancelButton)
-            val updateWagesCardView = updateWagesLayout.findViewById<MaterialCardView>(R.id.updateWagesCardView)
-
-            editText.textCursorDrawable = null
-
-            updateWagesCardView.setCardBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(context).generateCardColor()
-                )
-            )
-            updateWagesButton.setBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(
-                        context
-                    ).generateCustomColorPrimary()
-                )
-            )
-            cancelButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-
-            editText.setText(WagesData(context).loadWageAmount())
-
-            updateWagesButton.setOnClickListener {
-                Vibrate().vibration(context)
-                WagesData(context).setWageAmount(editText.text.toString())
-                notifyDataSetChanged()
-                dialog.dismiss()
-            }
-            cancelButton.setOnClickListener {
-                Vibrate().vibration(context)
-                dialog.dismiss()
-            }
-
-            if (holder.itemView.findViewById<TextView>(R.id.row_time_card_item_info_wages).text.toString().contains("Error") ||
-                holder.itemView.findViewById<TextView>(R.id.row_time_card_item_info_wages).text.toString().contains("Must")) {
-                dialog.show()
-                return@setOnLongClickListener true
-            }
-            return@setOnLongClickListener false
-        }
         (holder as TimeCardItemCustomAdapter.ViewHolder).bind(position)
     }
 }
