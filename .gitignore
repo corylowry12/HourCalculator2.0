@@ -14,3 +14,4 @@
 .cxx
 local.properties
 app/src/main/java/com/cory/hourcalculator/classes/GoogleAdsKey.kt
+app/src/main/java/com/cory/hourcalculator/classes/PatchNotesChanges.kt
