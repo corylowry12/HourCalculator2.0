@@ -10,7 +10,8 @@ class PatchNotesChanges {
         "Fixed issue where the history options icon would still show when changing sort method",
         "Fixed issue with crashing when showing checkbox on certain versions of Android if \"Colored Menu Items\" was enabled",
         "Fixed issue with wage settings in the Settings view having the wrong subtitle",
-        "Fixed issue where if you saved a color and changed the color and then manually selected the saved color again, the custom color subtitle would not show #color (Saved)"
+        "Fixed issue where if you saved a color and changed the color and then manually selected the saved color again, the custom color subtitle would not show #color (Saved)",
+        "Fixed issue where if the name text box in the time card settings view had focus and you clicked the back button it would go back instead of clearing focus from the text box"
     )
 
     var newFeaturesArray = arrayOf(
@@ -19,7 +20,7 @@ class PatchNotesChanges {
         "Added the option to disable recycler view animations",
         "Added the ability to show info for only selected items (disabled by default, can change at Settings->History Settings->Show info for only selected items)",
         "Added the option to disable Time Cards (Settings->Time Card Settings->Toggle Time Cards)",
-        "Added the ability to adjust the overtime ration (default was 1.5x) in Settings->Wage Settings"
+        "Added the ability to adjust the overtime ratio (default was 1.5x) in Settings->Wage Settings"
     )
 
     var enhancementsArray = arrayOf(
