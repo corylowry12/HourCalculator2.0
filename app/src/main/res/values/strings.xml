@@ -306,4 +306,10 @@
     <string name="saved_color_text">%1$s (Saved)</string>
     <string name="saved_color">%1$s (Saved)</string>
     <string name="saved_color_with_name">%1$s (%2$s)</string>
+    <string name="date_time_card_custom_item_adapter">Date: %1$s</string>
+    <string name="break_time_hours">Break Time: %1$s Hours</string>
+    <string name="break_time_error">Break Time: Error</string>
+    <string name="wages_adapter">Wages: $%1$s</string>
+    <string name="calculate_overtime_setting_info">When enabled when viewing total wages, overtime will be calculated if hours are over 40 at 1.5x your hourly wage\n\nWhen disabled overtime will not be calculated</string>
+    <string name="would_you_like_to_reset_wage_settings">Would you like to reset wage settings?</string>
 </resources>
