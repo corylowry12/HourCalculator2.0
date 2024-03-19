@@ -157,6 +157,7 @@
     <string name="wages">Wages: $%1$s</string>
     <string name="total">Total: %1$s/%2$s:%3$s</string>
     <string name="name">Name: %1$s</string>
+    <string name="name_hint">Name</string>
     <string name="week">Week: %1$s</string>
     <string name="day">Day: %1$s</string>
     <string name="all_time_card_entries_deleted">All time card entries deleted</string>
@@ -176,7 +177,6 @@
     <string name="delete_app_data_bottom_sheet_heading">Delete app data</string>
     <string name="everything">Everything</string>
     <string name="images">Images</string>
-    <string name="hours">Hours</string>
     <string name="time_cards_delete_app_data">Time cards</string>
     <string name="would_you_like_to_delete_this_image_this_can_not_be_undone">Would you like to delete this image? This CAN NOT be undone!</string>
     <string name="would_you_like_to_delete_this_entry_this_can_not_be_undone">Would you like to delete this entry? This CAN NOT be undone!</string>
@@ -312,4 +312,6 @@
     <string name="wages_adapter">Wages: $%1$s</string>
     <string name="calculate_overtime_setting_info">When enabled when viewing total wages, overtime will be calculated if hours are over 40 at 1.5x your hourly wage\n\nWhen disabled overtime will not be calculated</string>
     <string name="would_you_like_to_reset_wage_settings">Would you like to reset wage settings?</string>
+    <string name="designed_and_developed_by">Designed and developed by</string>
+    <string name="cory_lowry">Cory Lowry</string>
 </resources>
