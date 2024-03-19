@@ -180,13 +180,13 @@ class WageSettingsFragment : Fragment() {
 
         String.format(
             "%,.2f",
-            wagesData.loadWageAmount().toString()
+            wagesData.loadWageAmount()?.toDouble()
         )
 
         val editable =
             Editable.Factory.getInstance().newEditable(String.format(
                 "%,.2f",
-                wagesData.loadWageAmount().toString()
+                wagesData.loadWageAmount()?.toDouble()
             ))
         wagesEditText?.text = editable
 
