@@ -5,6 +5,7 @@ import android.graphics.*
 import android.media.ExifInterface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.transition.Fade
 import android.util.TypedValue
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -31,6 +33,7 @@ import com.cory.hourcalculator.sharedprefs.MenuTintData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
 import com.ortiz.touchview.TouchImageView
 
 
@@ -181,9 +184,41 @@ class ImageViewActivity : AppCompatActivity() {
                     yesButton.setOnClickListener {
                         Vibrate().vibration(this)
                         deleteImageDialog.dismiss()
-                        TimeCardDBHelper(this, null).addImage(id!!, "")
-                        finish()
-                        Toast.makeText(this, "Image Deleted", Toast.LENGTH_SHORT).show()
+                        val imageCursor = TimeCardDBHelper(this, null).getImage(id!!)
+                        imageCursor.moveToFirst()
+
+                        val imagePath = imageCursor.getString(imageCursor.getColumnIndex(TimeCardDBHelper.COLUMN_IMAGE))
+                        TimeCardDBHelper(this, null).addImage(id, "")
+
+                        val snackBar = Snackbar.make(
+                            imageView,
+                            "Image deleted",
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setDuration(5000)
+
+                        snackBar.apply {
+                            snackBar.view.background = ResourcesCompat.getDrawable(
+                                this@ImageViewActivity.resources,
+                                R.drawable.snackbar_corners,
+                                this@ImageViewActivity.theme
+                            )
+                        }
+                        snackBar.setActionTextColor(
+                            Color.parseColor(CustomColorGenerator(this).generateSnackbarActionTextColor())
+                        )
+
+                        snackBar.setAction(getString(R.string.undo)) {
+                            Vibrate().vibration(this)
+                            TimeCardDBHelper(this, null).addImage(id, imagePath)
+                            finish()
+                        }
+                        snackBar.show()
+                        //deleteImageDialog.dismiss()
+                        Handler().postDelayed({
+                            finish()
+                        }, 5000)
+                        //Toast.makeText(this, "Image Deleted", Toast.LENGTH_SHORT).show()
                     }
                     noButton.setOnClickListener {
                         Vibrate().vibration(this)
