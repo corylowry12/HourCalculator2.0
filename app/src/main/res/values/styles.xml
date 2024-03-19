@@ -109,4 +109,9 @@
         <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">14dp</item>
+    </style>
+
 </resources>
