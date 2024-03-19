@@ -10,6 +10,11 @@ class PatchNotesChanges {
         "Fixed issue where the history options icon would still show when changing sort method",
         "Fixed issue with crashing when showing checkbox on certain versions of Android if \"Colored Menu Items\" was enabled",
         "Fixed issue with wage settings in the Settings view having the wrong subtitle",
+        "Fixed some issues with crashing in the History view",
+        "Fixed some various crashing issues in the Settings view",
+        "Fixed issue with crashing when trying to edit an hour on certain versions of android",
+        "Fixed issue with crashing when trying to view time card items on certain versions of android",
+        "Fixed issues where app would crash when adding a photo to time cards on certain versions of androids",
         "Fixed issue where if you saved a color and changed the color and then manually selected the saved color again, the custom color subtitle would not show #color (Saved)",
         "Fixed issue where if the name text box in the time card settings view had focus and you clicked the back button it would go back instead of clearing focus from the text box"
     )
