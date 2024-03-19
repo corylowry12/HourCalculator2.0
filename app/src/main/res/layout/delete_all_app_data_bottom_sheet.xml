@@ -52,7 +52,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/hours"
+                android:text="@string/history"
                 android:textSize="18sp"
                 android:textColor="?attr/settingsTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
