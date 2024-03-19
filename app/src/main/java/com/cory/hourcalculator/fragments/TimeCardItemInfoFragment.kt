@@ -74,8 +74,8 @@ import java.util.*
 
 class TimeCardItemInfoFragment : Fragment() {
 
-    private lateinit var dialog : BottomSheetDialog
-    private lateinit var imageViewOptionsDialog : BottomSheetDialog
+    private lateinit var dialog: BottomSheetDialog
+    private lateinit var imageViewOptionsDialog: BottomSheetDialog
     private lateinit var deleteImageDialog: BottomSheetDialog
 
     private lateinit var managePermissions: ManagePermissions
@@ -98,22 +98,27 @@ class TimeCardItemInfoFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -129,8 +134,7 @@ class TimeCardItemInfoFragment : Fragment() {
                 dialog.dismiss()
                 addImage()
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -139,8 +143,7 @@ class TimeCardItemInfoFragment : Fragment() {
                 imageViewOptionsDialog.dismiss()
                 imageViewOptions()
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -163,22 +166,27 @@ class TimeCardItemInfoFragment : Fragment() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 activity?.setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 activity?.setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         activity?.setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         activity?.setTheme(
                             R.style.Theme_AMOLED
                         )
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         activity?.setTheme(R.style.Theme_AMOLED)
                     }
@@ -274,14 +282,14 @@ class TimeCardItemInfoFragment : Fragment() {
             val intent = Intent(requireContext(), ImageViewActivity::class.java)
             intent.putExtra("id", id)
             //if (AnimationData(requireContext()).loadImageAnimation()) {
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    requireActivity(),
-                    imageView,
-                    "transition_image"
-                )
-                startActivity(intent, options.toBundle())
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(),
+                imageView,
+                "transition_image"
+            )
+            startActivity(intent, options.toBundle())
             //} else {
-                //startActivity(intent)
+            //startActivity(intent)
             //}
         }
 
@@ -322,9 +330,11 @@ class TimeCardItemInfoFragment : Fragment() {
 
         floatingActionButtonTimeCardItemInfo.layoutParams = params
 
-        val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.nestedScrollViewTimeCardItemInfo)
+        val nestedScrollView =
+            activity?.findViewById<NestedScrollView>(R.id.nestedScrollViewTimeCardItemInfo)
 
-        nestedScrollView?.setOnScrollChangeListener(object: NestedScrollView.OnScrollChangeListener {
+        nestedScrollView?.setOnScrollChangeListener(object :
+            NestedScrollView.OnScrollChangeListener {
             override fun onScrollChange(
                 v: NestedScrollView,
                 scrollX: Int,
@@ -401,7 +411,8 @@ class TimeCardItemInfoFragment : Fragment() {
                 .setBottomLeftCornerSize(0f)
                 .build()
 
-        val hasCamera = requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+        val hasCamera =
+            requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
 
         if (!hasCamera) {
             takeAPhotoCardView.visibility = View.GONE
@@ -413,8 +424,7 @@ class TimeCardItemInfoFragment : Fragment() {
                     .setBottomRightCornerSize(28f)
                     .setBottomLeftCornerSize(28f)
                     .build()
-        }
-        else {
+        } else {
             selectAPhotoCardView.shapeAppearanceModel =
                 selectAPhotoCardView.shapeAppearanceModel
                     .toBuilder()
@@ -457,16 +467,16 @@ class TimeCardItemInfoFragment : Fragment() {
 
         selectAPhotoCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
-                val pickerIntent = Intent(Intent.ACTION_PICK)
-                pickerIntent.type = "image/*"
+            val pickerIntent = Intent(Intent.ACTION_PICK)
+            pickerIntent.type = "image/*"
 
-                showImagePickerAndroid13.launch(
-                    PickVisualMediaRequest(
-                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                    )
+            showImagePickerAndroid13.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
                 )
-                imageViewOptionsDialog.dismiss()
-            }
+            )
+            imageViewOptionsDialog.dismiss()
+        }
 
         takeAPhotoCardView.setOnClickListener {
             Vibrate().vibration(requireContext())
@@ -635,7 +645,8 @@ class TimeCardItemInfoFragment : Fragment() {
                 .setBottomRightCornerSize(0f)
                 .setBottomLeftCornerSize(0f)
                 .build()
-        val hasCamera = requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+        val hasCamera =
+            requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
 
         if (!hasCamera) {
             takeAPhotoCardView.visibility = View.GONE
@@ -647,8 +658,7 @@ class TimeCardItemInfoFragment : Fragment() {
                     .setBottomRightCornerSize(28f)
                     .setBottomLeftCornerSize(28f)
                     .build()
-        }
-        else {
+        } else {
             selectAPhotoCardView.shapeAppearanceModel =
                 selectAPhotoCardView.shapeAppearanceModel
                     .toBuilder()
@@ -683,8 +693,7 @@ class TimeCardItemInfoFragment : Fragment() {
                         .setBottomRightCornerSize(0f)
                         .setBottomLeftCornerSize(0f)
                         .build()
-            }
-            else {
+            } else {
                 selectAPhotoCardView.shapeAppearanceModel =
                     selectAPhotoCardView.shapeAppearanceModel
                         .toBuilder()
@@ -768,7 +777,6 @@ class TimeCardItemInfoFragment : Fragment() {
         timeCardItemInfoDataList.clear()
         val cursor = dbHandler.getAllRow(id)
         cursor!!.moveToFirst()
-
 
         while (!cursor.isAfterLast) {
             val map = HashMap<String, String>()
@@ -857,61 +865,81 @@ class TimeCardItemInfoFragment : Fragment() {
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
 
-            val ei = ExifInterface(currentPhotoPath)
-            val orientation = ei.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED
-            )
+            try {
+                val ei = ExifInterface(currentPhotoPath)
+                val orientation = ei.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED
+                )
 
-            val m = Matrix()
-            when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> {
-                    m.postRotate(90f)
+                val m = Matrix()
+                when (orientation) {
+                    ExifInterface.ORIENTATION_ROTATE_90 -> {
+                        m.postRotate(90f)
+                    }
+
+                    ExifInterface.ORIENTATION_ROTATE_180 -> {
+                        m.postRotate(180f)
+                    }
+
+                    ExifInterface.ORIENTATION_ROTATE_270 -> {
+                        m.postRotate(270f)
+                    }
                 }
-                ExifInterface.ORIENTATION_ROTATE_180 -> {
-                    m.postRotate(180f)
+
+                val originalBitmap = BitmapFactory.decodeFile(currentPhotoPath)
+
+                val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH)
+                    .format(System.currentTimeMillis())
+                val storageDir = File(
+                    Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                        .toString() + "/HourCalculator/"
+                )
+
+                if (!storageDir.exists()) {
+                    storageDir.mkdirs()
                 }
-                ExifInterface.ORIENTATION_ROTATE_270 -> {
-                    m.postRotate(270f)
-                }
+                val image = File.createTempFile(timeStamp, ".jpeg", storageDir)
+
+                val f = File(image.toString())
+                val fileOutputStream = FileOutputStream(f)
+                val rotatedBitmap = Bitmap.createBitmap(
+                    originalBitmap,
+                    0,
+                    0,
+                    originalBitmap.width,
+                    originalBitmap.height,
+                    m,
+                    true
+                )
+                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+                MediaScannerConnection.scanFile(
+                    requireContext(),
+                    arrayOf(image.toString()),
+                    null,
+                    null
+                )
+
+                this.image = image.toString()
+
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.picture_taken_and_added),
+                    Toast.LENGTH_SHORT
+                ).show()
+                TimeCardDBHelper(requireContext(), null).addImage(id, image.toString())
+                loadIntoList(id)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), getString(R.string.adding_image_failed), Toast.LENGTH_SHORT).show()
             }
-
-            val originalBitmap = BitmapFactory.decodeFile(currentPhotoPath)
-
-            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH)
-                .format(System.currentTimeMillis())
-            val storageDir = File(
-                Environment
-                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                    .toString() + "/HourCalculator/"
-            )
-
-            if (!storageDir.exists()) {
-                storageDir.mkdirs()
-            }
-            val image = File.createTempFile(timeStamp, ".jpeg", storageDir)
-
-            val f = File(image.toString())
-            val fileOutputStream = FileOutputStream(f)
-            val rotatedBitmap = Bitmap.createBitmap(
-                originalBitmap,
-                0,
-                0,
-                originalBitmap.width,
-                originalBitmap.height,
-                m,
-                true
-            )
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
-            MediaScannerConnection.scanFile(requireContext(), arrayOf(image.toString()), null, null)
-
-            this.image = image.toString()
-
-            Toast.makeText(requireContext(), getString(R.string.picture_taken_and_added), Toast.LENGTH_SHORT).show()
-            TimeCardDBHelper(requireContext(), null).addImage(id, image.toString())
-            loadIntoList(id)
         } else {
-            Toast.makeText(requireContext(), getString(R.string.adding_image_failed), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.adding_image_failed),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -949,8 +977,10 @@ class TimeCardItemInfoFragment : Fragment() {
     }
 
     fun updateCustomColor() {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.timeCardItemInfoCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
-        requireActivity().findViewById<MaterialCardView>(R.id.timeCardInfoImageViewWrapper).setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generatePatchNotesCardColor()))
+        requireActivity().findViewById<CoordinatorLayout>(R.id.timeCardItemInfoCoordinatorLayout)
+            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        requireActivity().findViewById<MaterialCardView>(R.id.timeCardInfoImageViewWrapper)
+            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generatePatchNotesCardColor()))
 
         val floatingActionButtonTimeCardItemInfo =
             activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonTimeCardItemInfo)
@@ -1009,16 +1039,27 @@ class TimeCardItemInfoFragment : Fragment() {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
-                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-                addDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                navigationDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+                addDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
             }
-        }
-        else {
+        } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-            addDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            navigationDrawable?.setColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                PorterDuff.Mode.SRC_ATOP
+            )
+            addDrawable?.setColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                PorterDuff.Mode.SRC_ATOP
+            )
         }
 
         val timeCardInfoNameTextInput =
@@ -1026,10 +1067,13 @@ class TimeCardItemInfoFragment : Fragment() {
         val textInputLayoutName =
             requireActivity().findViewById<TextInputLayout>(R.id.textInputLayoutName)
 
-        textInputLayoutName?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
+        textInputLayoutName?.boxStrokeColor =
+            Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         textInputLayoutName?.hintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        timeCardInfoNameTextInput.textCursorDrawable = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            timeCardInfoNameTextInput.textCursorDrawable = null
+        }
         textInputLayoutName?.defaultHintTextColor =
             ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
         timeCardInfoNameTextInput.highlightColor =
@@ -1056,40 +1100,41 @@ class TimeCardItemInfoFragment : Fragment() {
         //val listView = view?.findViewById<RecyclerView>(R.id.timeCardItemInfoRecyclerView)
         Vibrate().vibration(requireContext())
 
-        val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.nestedScrollViewTimeCardItemInfo)
+        val nestedScrollView =
+            activity?.findViewById<NestedScrollView>(R.id.nestedScrollViewTimeCardItemInfo)
 
-            val nestedScrollViewYScroll = nestedScrollView!!.scrollY
-            nestedScrollView.scrollTo(0,0)
-            val collapsingToolbarLayout =
-                requireView().findViewById<AppBarLayout>(R.id.appBarLayoutTimeCardItemInfo)
-            collapsingToolbarLayout.setExpanded(true, true)
-            val snackbar =
-                Snackbar.make(
-                    requireView(),
-                    getString(R.string.restore_position),
-                    Snackbar.LENGTH_LONG
-                )
-                    .setDuration(5000)
-
-            snackbar.setAction(getString(R.string.restore)) {
-                Vibrate().vibration(requireContext())
-
-                nestedScrollView?.scrollTo(0,nestedScrollViewYScroll)
-                collapsingToolbarLayout.setExpanded(false, false)
-
-            }
-
-            snackbar.setActionTextColor(
-                Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
+        val nestedScrollViewYScroll = nestedScrollView!!.scrollY
+        nestedScrollView.scrollTo(0, 0)
+        val collapsingToolbarLayout =
+            requireView().findViewById<AppBarLayout>(R.id.appBarLayoutTimeCardItemInfo)
+        collapsingToolbarLayout.setExpanded(true, true)
+        val snackbar =
+            Snackbar.make(
+                requireView(),
+                getString(R.string.restore_position),
+                Snackbar.LENGTH_LONG
             )
+                .setDuration(5000)
 
-            snackbar.apply {
-                snackbar.view.background = ResourcesCompat.getDrawable(
-                    context.resources,
-                    R.drawable.snackbar_corners,
-                    context.theme
-                )
-            }
+        snackbar.setAction(getString(R.string.restore)) {
+            Vibrate().vibration(requireContext())
+
+            nestedScrollView?.scrollTo(0, nestedScrollViewYScroll)
+            collapsingToolbarLayout.setExpanded(false, false)
+
+        }
+
+        snackbar.setActionTextColor(
+            Color.parseColor(CustomColorGenerator(requireContext()).generateSnackbarActionTextColor())
+        )
+
+        snackbar.apply {
+            snackbar.view.background = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.snackbar_corners,
+                context.theme
+            )
+        }
         snackbar.show()
     }
 }
