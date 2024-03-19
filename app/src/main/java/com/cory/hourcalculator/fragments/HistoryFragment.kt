@@ -69,7 +69,8 @@ class HistoryFragment : Fragment() {
     private lateinit var customAdapter: CustomAdapter
 
     fun View.dpToPx(dp: Float): Int = context.dpToPx(dp)
-    fun Context.dpToPx(dp: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
+    fun Context.dpToPx(dp: Float): Int =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -131,12 +132,12 @@ class HistoryFragment : Fragment() {
         val dbHandler = DBHelper(requireContext(), null)
 
         if (dbHandler.getCount() > 0) {
-        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
-            val cursor = dbHandler.getAllRow(requireContext())
-            cursor!!.moveToFirst()
+            if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                val cursor = dbHandler.getAllRow(requireContext())
+                cursor!!.moveToFirst()
 
-            output = ""
-            var total = 0.0
+                output = ""
+                var total = 0.0
 
                 while (!cursor.isAfterLast) {
                     if (customAdapter.getSelectedItems().contains(cursor.position)) {
@@ -155,10 +156,10 @@ class HistoryFragment : Fragment() {
 
                     }
                     cursor.moveToNext()
-            }
-            output = total.toString()
+                }
+                output = total.toString()
 
-        }
+            }
 
             calculateWages()
             infoDialog = BottomSheetDialog(requireContext())
@@ -239,16 +240,21 @@ class HistoryFragment : Fragment() {
 
             if (wagesData.loadWageAmount() != "") {
                 try {
-                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
+                            requireContext()
+                        ).loadShowInfoForOnlySelectedItems()
+                    ) {
                         totalHours.text = "Total Hours for Selected Items: $output/$outputColon"
-                    }
-                    else {
+                    } else {
                         totalHours.text = "Total Hours: $output/$outputColon"
                     }
-                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
-                        numberOfEntries.text = "Number of Entries Selected: ${customAdapter.getSelectedCount()}"
-                    }
-                    else {
+                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
+                            requireContext()
+                        ).loadShowInfoForOnlySelectedItems()
+                    ) {
+                        numberOfEntries.text =
+                            "Number of Entries Selected: ${customAdapter.getSelectedCount()}"
+                    } else {
                         numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
                     }
                     if (CalculateOvertimeInHistoryData(requireContext()).loadCalculateOvertimeInHistoryState() && outputWages.toDouble() > 40) {
@@ -259,10 +265,12 @@ class HistoryFragment : Fragment() {
                             (40 * wagesData.loadWageAmount().toString()
                                 .toDouble()) + timeHalf
                         val wagesRounded = String.format("%,.2f", wages)
-                        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
+                                requireContext()
+                            ).loadShowInfoForOnlySelectedItems()
+                        ) {
                             wagesTextView.text = "Wages for Selected Items: $$wagesRounded"
-                        }
-                        else {
+                        } else {
                             wagesTextView.text = "Wages: $$wagesRounded"
                         }
                     } else {
@@ -270,21 +278,25 @@ class HistoryFragment : Fragment() {
                             outputWages.toDouble() * wagesData.loadWageAmount().toString()
                                 .toDouble()
                         val wagesRounded = String.format("%,.2f", wages)
-                        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                        if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
+                                requireContext()
+                            ).loadShowInfoForOnlySelectedItems()
+                        ) {
                             wagesTextView.text = "Wages for Selected Items: $$wagesRounded"
-                        }
-                        else {
+                        } else {
                             wagesTextView.text = "Wages: $$wagesRounded"
                         }
                     }
                 } catch (e: NumberFormatException) {
                     e.printStackTrace()
-                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(requireContext()).loadShowInfoForOnlySelectedItems()) {
+                    if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
+                            requireContext()
+                        ).loadShowInfoForOnlySelectedItems()
+                    ) {
                         totalHours.text = "Total Hours for Selected Items: $output/$outputColon"
                         numberOfEntries.text = "Number of Entries Selected: ${dbHandler.getCount()}"
                         wagesTextView.text = "Wages Selected: Error"
-                    }
-                    else {
+                    } else {
                         totalHours.text = "Total Hours: $output/$outputColon"
                         numberOfEntries.text = "Number of Entries: ${dbHandler.getCount()}"
                         wagesTextView.text = "Wages: Error"
@@ -430,13 +442,14 @@ class HistoryFragment : Fragment() {
                             )
                         )
 
-                        exportCardView.shapeAppearanceModel = exportCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                            .setBottomRightCornerSize(0f)
-                            .setBottomLeftCornerSize(0f)
-                            .build()
+                        exportCardView.shapeAppearanceModel =
+                            exportCardView.shapeAppearanceModel
+                                .toBuilder()
+                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
+                                .setBottomRightCornerSize(0f)
+                                .setBottomLeftCornerSize(0f)
+                                .build()
                         deleteSelectedCardView.shapeAppearanceModel =
                             deleteSelectedCardView.shapeAppearanceModel
                                 .toBuilder()
@@ -445,13 +458,13 @@ class HistoryFragment : Fragment() {
                                 .setBottomRightCornerSize(28f)
                                 .setBottomLeftCornerSize(28f)
                                 .build()
-                    }
-                    else {
+                    } else {
                         exportCardView.visibility = View.GONE
 
-                        val param = (deleteSelectedCardView.layoutParams as ViewGroup.MarginLayoutParams).apply {
-                            setMargins(0, dpToPx(requireContext(), 15).toInt(),0,0)
-                        }
+                        val param =
+                            (deleteSelectedCardView.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                                setMargins(0, dpToPx(requireContext(), 15).toInt(), 0, 0)
+                            }
                         deleteSelectedCardView.layoutParams = param
 
                         deleteSelectedCardView.setCardBackgroundColor(
@@ -950,20 +963,44 @@ class HistoryFragment : Fragment() {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
-                infoDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-                sortDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-                optionsDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                infoDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+                sortDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+                navigationDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+                optionsDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
             }
         } else {
 
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
-            infoDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-            sortDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
-            optionsDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            infoDrawable?.setColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                PorterDuff.Mode.SRC_ATOP
+            )
+            sortDrawable?.setColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                PorterDuff.Mode.SRC_ATOP
+            )
+            navigationDrawable?.setColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                PorterDuff.Mode.SRC_ATOP
+            )
+            optionsDrawable?.setColorFilter(
+                ContextCompat.getColor(requireContext(), id),
+                PorterDuff.Mode.SRC_ATOP
+            )
         }
     }
 
@@ -1115,8 +1152,7 @@ class HistoryFragment : Fragment() {
                         y += array.toDouble()
                     }
                 }
-            }
-            else {
+            } else {
                 val array =
                     cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)).toString()
 
@@ -1141,8 +1177,8 @@ class HistoryFragment : Fragment() {
                 }
             }
 
-                output = String.format("%.2f", y)
-                outputWages = output
+            output = String.format("%.2f", y)
+            outputWages = output
             cursor.moveToNext()
 
         }
@@ -1243,6 +1279,11 @@ class HistoryFragment : Fragment() {
                         PorterDuff.Mode.SRC_ATOP
                     )
                 }
+            } else {
+                navigationDrawable?.setColorFilter(
+                    ContextCompat.getColor(requireContext(), id),
+                    PorterDuff.Mode.SRC_ATOP
+                )
             }
             showOptionsIcon()
         } else {
