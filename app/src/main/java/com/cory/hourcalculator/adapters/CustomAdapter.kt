@@ -32,6 +32,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
@@ -995,10 +996,15 @@ class CustomAdapter(
                             }
 
                             dbHandler.deleteAll()
-                            val runnable = Runnable {
-                                (context as MainActivity).deleteAll()
+                            try {
+                                val runnable = Runnable {
+                                    (context as MainActivity).deleteAll()
+                                }
+                                MainActivity().runOnUiThread(runnable)
+                            } catch (e: IllegalArgumentException) {
+                                e.printStackTrace()
+                                Toast.makeText(context, "There was an error", Toast.LENGTH_SHORT).show()
                             }
-                            MainActivity().runOnUiThread(runnable)
 
                             val snackBar = Snackbar.make(
                                 holder.itemView,
