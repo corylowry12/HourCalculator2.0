@@ -40,6 +40,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.play.core.review.ReviewManagerFactory
 
@@ -173,7 +174,7 @@ class AboutAppFragment : Fragment(), PurchasesUpdatedListener {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        val autoIcon = view.findViewById<ImageView>(R.id.appIconImageView)
+        val autoIcon = view.findViewById<ShapeableImageView>(R.id.appIconImageView)
 
         if (ChosenAppIconData(requireContext()).loadChosenAppIcon() == getString(R.string.teal) || ChosenAppIconData(
                 requireContext()

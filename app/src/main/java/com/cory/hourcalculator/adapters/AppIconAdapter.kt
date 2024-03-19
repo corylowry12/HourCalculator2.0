@@ -22,6 +22,7 @@ import com.cory.hourcalculator.classes.Vibrate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 
 
@@ -39,7 +40,7 @@ class AppIconAdapter(val context: Context,
     private inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(position: Int) {
-            val iconImageView = itemView.findViewById<ImageView>(R.id.iconImageView)
+            val iconImageView = itemView.findViewById<ShapeableImageView>(R.id.iconImageView)
             val iconNameTextView = itemView.findViewById<TextView>(R.id.icon_name)
             val iconCardView = itemView.findViewById<MaterialCardView>(R.id.cardViewAppIcon)
 
