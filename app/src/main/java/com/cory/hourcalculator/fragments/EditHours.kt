@@ -1054,11 +1054,10 @@ class EditHours : Fragment() {
 
         breakTextInputEditText?.boxStrokeColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         breakTextInputEditText?.hintTextColor = ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary()))
-        try {
-            breakTextBox.textCursorDrawable = null
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                breakTextBox.textCursorDrawable = null
+            }
         breakTextBox.highlightColor = Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
         breakTextBox.setTextIsSelectable(false)
 
