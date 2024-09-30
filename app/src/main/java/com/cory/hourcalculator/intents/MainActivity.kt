@@ -1,6 +1,5 @@
 package com.cory.hourcalculator.intents
 
-import android.R.attr.enabled
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.pm.ActivityInfo
@@ -8,10 +7,8 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Gravity
 import android.view.View
-import android.view.animation.Animation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -333,10 +330,10 @@ class MainActivity : AppCompatActivity() {
                 ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(this).generateBottomNavIconIndicatorColor()))
 
             val historyBadge =
-                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+                bottomNav.getOrCreateBadge(R.id.history)
             val timeCardBadge =
-                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
-            val settingsBadge = findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.settings)
+                bottomNav.getOrCreateBadge(R.id.timeCards)
+            val settingsBadge = bottomNav.getOrCreateBadge(R.id.settings)
 
             historyBadge.backgroundColor = Color.parseColor(CustomColorGenerator(this).generateBottomNavBadgeBackgroundColor())
             historyBadge.badgeTextColor = Color.parseColor("#ffffff")
@@ -421,7 +418,8 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-        transaction.replace(R.id.fragment_container, fragment).addToBackStack(null)
+
+        transaction.replace(R.id.fragment_container, fragment).addToBackStack(fragment.id.toString())
 
         transaction.commit()
     }
@@ -499,9 +497,9 @@ class MainActivity : AppCompatActivity() {
     fun changeBadgeNumber() {
         if (!resources.getBoolean(R.bool.isTablet)) {
             val historyBadge =
-                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+                bottomNav.getOrCreateBadge(R.id.history)
             val timeCardBadge =
-                findViewById<BottomNavigationView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+                bottomNav.getOrCreateBadge(R.id.timeCards)
             historyBadge.isVisible = true
             timeCardBadge.isVisible = true
             historyBadge.number = dbHandler.getCount()
@@ -509,9 +507,9 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             val historyBadge =
-                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.history)
+                bottomNav.getOrCreateBadge(R.id.history)
             val timeCardBadge =
-                findViewById<NavigationRailView>(R.id.bottom_nav).getOrCreateBadge(R.id.timeCards)
+                bottomNav.getOrCreateBadge(R.id.timeCards)
             historyBadge.isVisible = true
             timeCardBadge.isVisible = true
             historyBadge.number = dbHandler.getCount()
