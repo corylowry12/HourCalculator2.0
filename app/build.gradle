@@ -25,12 +25,12 @@ android {
             keyPassword 'corypreston2000'
         }
     }
-    compileSdk 34
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.cory.hourcalculator"
         minSdk 26
-        targetSdk 34
+        targetSdk 37
         versionCode 134
         versionName "10.0.0"
 
