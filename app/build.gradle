@@ -1,7 +1,9 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.firebase-perf'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -25,11 +27,12 @@ android {
             keyPassword 'corypreston2000'
         }
     }
+
     compileSdk 37
 
     defaultConfig {
         applicationId "com.cory.hourcalculator"
-        minSdk 26
+        minSdk 31
         targetSdk 37
         versionCode 134
         versionName "10.0.0"
@@ -56,73 +59,70 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.production
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
     }
+
     buildFeatures {
         viewBinding true
         buildConfig true
     }
+
     namespace 'com.cory.hourcalculator'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'com.google.firebase.crashlytics'
-
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.19.1'
     implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-config-ktx:22.1.2'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.11.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.10.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.10.2'
-    implementation 'androidx.core:core-ktx:1.19.1'
     implementation 'androidx.activity:activity-ktx:1.13.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
-    implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'androidx.activity:activity-ktx:1.13.0'
+    implementation 'androidx.work:work-runtime-ktx:2.12.0'
+    implementation 'androidx.transition:transition:1.7.2'
+    implementation 'androidx.core:core-splashscreen:1.2.0'
+    implementation 'androidx.browser:browser:1.10.0'
+    implementation 'androidx.palette:palette-ktx:1.1.0'
 
-    //Firebase
+    // Google Play & Billing
+    implementation 'com.google.android.play:core-ktx:1.8.1'
+    implementation 'com.android.billingclient:billing:9.1.0'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-config-ktx:22.1.2'
     implementation 'com.google.firebase:firebase-analytics-ktx:22.5.0'
     implementation 'com.google.firebase:firebase-perf-ktx:21.0.5'
     implementation 'com.google.firebase:firebase-crashlytics:21.0.1'
 
-    //GoogleAds
+    // Google Ads
     implementation 'com.google.android.gms:play-services-ads:25.5.0'
 
-    implementation 'androidx.work:work-runtime-ktx:2.12.0'
-
-    implementation 'androidx.transition:transition:1.7.2'
-
-    implementation 'androidx.core:core-splashscreen:1.2.0'
-
+    // Third-party
     implementation 'com.google.code.gson:gson:2.15.0'
-
-    implementation 'androidx.browser:browser:1.10.0'
-
     implementation 'com.github.bumptech.glide:glide:5.0.9'
-
     implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
 
-    implementation 'androidx.palette:palette-ktx:1.1.0'
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 
-    implementation 'com.android.billingclient:billing:9.1.0'
-
+    implementation 'com.github.Dimezis:BlurView:version-2.0.4'
 }
