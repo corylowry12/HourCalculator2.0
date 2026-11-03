@@ -125,10 +125,12 @@ class PatchNotesFragment : Fragment() {
             topAppBar?.title = "Patch Notes (Internal)"
         }
 
-        topAppBar?.setNavigationOnClickListener {
+        val btnBack = requireView().findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBackPatchNotes)
+        btnBack?.setOnClickListener {
             Vibrate().vibration(requireContext())
             activity?.supportFragmentManager?.popBackStack()
         }
+
         if (BuildConfig.FLAVOR == "Internal") {
             bugFixesAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().bugFixesArrayInternal)
             newFeaturesAdapter = PatchNotesAdapter(requireContext(), PatchNotesChanges().newFeaturesArrayInternal)
@@ -247,79 +249,65 @@ class PatchNotesFragment : Fragment() {
     }
 
     private fun updateCustomTheme(): MaterialToolbar? {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.patchNotesCoordinatorLayout).setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+        val customColors = CustomColorGenerator(requireContext())
+        requireActivity().findViewById<CoordinatorLayout>(R.id.patchNotesCoordinatorLayout)
+            .setBackgroundColor(Color.parseColor(customColors.generateBackgroundColor()))
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
-        val navigationDrawable = topAppBar?.navigationIcon
-        navigationDrawable?.mutate()
+        // Tint circular back button
+        val btnBack = view?.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBackPatchNotes)
+        if (btnBack != null) {
+            // Container circle color (tonal surface)
+            btnBack.backgroundTintList = ColorStateList.valueOf(
+                Color.parseColor(customColors.generateCardColor())
+            )
 
-        if (Build.VERSION.SDK_INT >= 29) {
-            try {
-                if (MenuTintData(requireContext()).loadMenuTint()) {
-
-                    navigationDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-                } else {
-                    val typedValue = TypedValue()
-                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                    val id = typedValue.resourceId
-                    navigationDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                }
-            } catch (e: NoClassDefFoundError) {
-                e.printStackTrace()
+            // Arrow icon tint
+            val arrowColor = if (MenuTintData(requireContext()).loadMenuTint()) {
+                Color.parseColor(customColors.generateMenuTintColor())
+            } else {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                val id = typedValue.resourceId
-                navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+                ContextCompat.getColor(requireContext(), typedValue.resourceId)
             }
-        }
-        else {
-            val typedValue = TypedValue()
-            activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-            val id = typedValue.resourceId
-            navigationDrawable?.setColorFilter(ContextCompat.getColor(requireContext(), id), PorterDuff.Mode.SRC_ATOP)
+            btnBack.iconTint = ColorStateList.valueOf(arrowColor)
         }
 
         requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
-            .setContentScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            .setContentScrimColor(Color.parseColor(customColors.generateTopAppBarColor()))
         requireActivity().findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
-            .setStatusBarScrimColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTopAppBarColor()))
+            .setStatusBarScrimColor(Color.parseColor(customColors.generateTopAppBarColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.bugFixesOuterCardView)
-            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            .setCardBackgroundColor(Color.parseColor(customColors.generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.newFeaturesOuterCardView)
-            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            .setCardBackgroundColor(Color.parseColor(customColors.generateCardColor()))
         requireActivity().findViewById<MaterialCardView>(R.id.enhancementsOuterCardView)
-            .setCardBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor()))
+            .setCardBackgroundColor(Color.parseColor(customColors.generateCardColor()))
         requireActivity().findViewById<Chip>(R.id.bugFixesChip)
-            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            .setTextColor(Color.parseColor(customColors.generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.bugFixesChip).closeIconTint =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            ColorStateList.valueOf(Color.parseColor(customColors.generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.bugFixesChip).chipBackgroundColor =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+            ColorStateList.valueOf(Color.parseColor(customColors.generateChipBackgroundColor()))
         requireActivity().findViewById<Chip>(R.id.newFeaturesChip)
-            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            .setTextColor(Color.parseColor(customColors.generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.newFeaturesChip).closeIconTint =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            ColorStateList.valueOf(Color.parseColor(customColors.generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.newFeaturesChip).chipBackgroundColor =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+            ColorStateList.valueOf(Color.parseColor(customColors.generateChipBackgroundColor()))
         requireActivity().findViewById<Chip>(R.id.enhancementsChip)
-            .setTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            .setTextColor(Color.parseColor(customColors.generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.enhancementsChip).closeIconTint =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateBottomNavTextColor()))
+            ColorStateList.valueOf(Color.parseColor(customColors.generateBottomNavTextColor()))
         requireActivity().findViewById<Chip>(R.id.enhancementsChip).chipBackgroundColor =
-            ColorStateList.valueOf(Color.parseColor(CustomColorGenerator(requireContext()).generateChipBackgroundColor()))
+            ColorStateList.valueOf(Color.parseColor(customColors.generateChipBackgroundColor()))
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
-            ?.setExpandedTitleColor(Color.parseColor(CustomColorGenerator(requireContext()).generateTitleBarExpandedTextColor()))
+            ?.setExpandedTitleColor(Color.parseColor(customColors.generateTitleBarExpandedTextColor()))
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutPatchNotes)
-                ?.setCollapsedTitleTextColor(Color.parseColor(CustomColorGenerator(requireContext()).generateCollapsedToolBarTextColor()))
+                ?.setCollapsedTitleTextColor(Color.parseColor(customColors.generateCollapsedToolBarTextColor()))
         } else {
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
