@@ -27,6 +27,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,7 +49,6 @@ import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
 import java.math.RoundingMode
-
 
 @Suppress("DEPRECATION")
 class HistoryFragment : Fragment() {
@@ -168,14 +169,17 @@ class HistoryFragment : Fragment() {
             infoDialog.setContentView(infoLayout)
             infoDialog.setCancelable(true)
 
-            if (resources.getBoolean(R.bool.isTablet)) {
-                val bottomSheet =
-                    infoDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            val bottomSheet =
+                infoDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { sheet ->
+                val bottomSheetBehavior = BottomSheetBehavior.from(sheet)
                 bottomSheetBehavior.skipCollapsed = true
-                bottomSheetBehavior.isHideable = false
-                bottomSheetBehavior.isDraggable = false
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.isGestureInsetBottomIgnored = true
+                if (resources.getBoolean(R.bool.isTablet)) {
+                    bottomSheetBehavior.isHideable = false
+                    bottomSheetBehavior.isDraggable = false
+                }
             }
 
             val totalHours = infoLayout.findViewById<TextView>(R.id.bodyTextView)
@@ -190,23 +194,13 @@ class HistoryFragment : Fragment() {
             val wagesCardView =
                 infoLayout.findViewById<MaterialCardView>(R.id.wagesCardView)
 
-            totalHoursCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
+            val cardColor = ColorStateList.valueOf(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
             )
-            totalNumberOfEntriesCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
-            )
-            wagesCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(
-                        CustomColorGenerator(requireContext()).generateCardColor()
-                    )
-                )
-            )
+            totalHoursCardView.setCardBackgroundColor(cardColor)
+            totalNumberOfEntriesCardView.setCardBackgroundColor(cardColor)
+            wagesCardView.setCardBackgroundColor(cardColor)
+
             okButton.setBackgroundColor(
                 Color.parseColor(
                     CustomColorGenerator(
@@ -259,11 +253,8 @@ class HistoryFragment : Fragment() {
                     }
                     if (CalculateOvertimeInHistoryData(requireContext()).loadCalculateOvertimeInHistoryState() && outputWages.toDouble() > 40) {
                         val overFourty = outputWages.toDouble() - 40
-                        val timeHalf = overFourty * (wagesData.loadWageAmount().toString()
-                            .toDouble() * OvertimeData(requireContext()).loadOverTimeAmount())
-                        val wages =
-                            (40 * wagesData.loadWageAmount().toString()
-                                .toDouble()) + timeHalf
+                        val timeHalf = overFourty * (wagesData.loadWageAmount()!!.toDouble() * OvertimeData(requireContext()).loadOverTimeAmount())
+                        val wages = (40 * wagesData.loadWageAmount()!!.toDouble()) + timeHalf
                         val wagesRounded = String.format("%,.2f", wages)
                         if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
                                 requireContext()
@@ -275,8 +266,7 @@ class HistoryFragment : Fragment() {
                         }
                     } else {
                         val wages =
-                            outputWages.toDouble() * wagesData.loadWageAmount().toString()
-                                .toDouble()
+                            outputWages.toDouble() * wagesData.loadWageAmount()!!.toDouble()
                         val wagesRounded = String.format("%,.2f", wages)
                         if (customAdapter.checkBoxVisible && ShowInfoForOnlySelectedItemsData(
                                 requireContext()
@@ -315,15 +305,6 @@ class HistoryFragment : Fragment() {
                         .setBottomLeftCornerSize(28f)
                         .build()
             }
-            /*if (resources.getBoolean(R.bool.isTablet)) {
-            val bottomSheet =
-                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetBehavior.skipCollapsed = true
-            bottomSheetBehavior.isHideable = false
-            bottomSheetBehavior.isDraggable = false
-        }*/
             okButton.setOnClickListener {
                 Vibrate().vibration(requireContext())
                 infoDialog.dismiss()
@@ -402,6 +383,15 @@ class HistoryFragment : Fragment() {
             listView?.layoutAnimation = animation
         }
 
+        val coordinatorLayout = view.findViewById<CoordinatorLayout>(R.id.historyCoordinatorLayout)
+        val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+
+        ViewCompat.setOnApplyWindowInsetsListener(coordinatorLayout) { _, insets ->
+            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            appBarLayout.setPadding(0, statusBars.top, 0, 0)
+            WindowInsetsCompat.CONSUMED
+        }
+
         updateCustomTheme()
 
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarHistory)
@@ -415,14 +405,17 @@ class HistoryFragment : Fragment() {
                         layoutInflater.inflate(R.layout.history_options_bottom_sheet, null)
                     historyOptionsDialog.setContentView(historyOptions)
 
-                    if (resources.getBoolean(R.bool.isTablet)) {
-                        val bottomSheet =
-                            historyOptionsDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    val bottomSheet =
+                        historyOptionsDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+                    bottomSheet?.let { sheet ->
+                        val bottomSheetBehavior = BottomSheetBehavior.from(sheet)
                         bottomSheetBehavior.skipCollapsed = true
-                        bottomSheetBehavior.isHideable = false
-                        bottomSheetBehavior.isDraggable = false
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        bottomSheetBehavior.isGestureInsetBottomIgnored = true
+                        if (resources.getBoolean(R.bool.isTablet)) {
+                            bottomSheetBehavior.isHideable = false
+                            bottomSheetBehavior.isDraggable = false
+                        }
                     }
 
                     val exportCardView =
@@ -430,17 +423,13 @@ class HistoryFragment : Fragment() {
                     val deleteSelectedCardView =
                         historyOptions.findViewById<MaterialCardView>(R.id.deleteSelectedCardView)
 
+                    val cardColor = ColorStateList.valueOf(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
+                    )
+
                     if (TimeCardsToggleData(requireContext()).loadTimeCardsState()) {
-                        exportCardView.setCardBackgroundColor(
-                            ColorStateList.valueOf(
-                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                            )
-                        )
-                        deleteSelectedCardView.setCardBackgroundColor(
-                            ColorStateList.valueOf(
-                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                            )
-                        )
+                        exportCardView.setCardBackgroundColor(cardColor)
+                        deleteSelectedCardView.setCardBackgroundColor(cardColor)
 
                         exportCardView.shapeAppearanceModel =
                             exportCardView.shapeAppearanceModel
@@ -467,11 +456,7 @@ class HistoryFragment : Fragment() {
                             }
                         deleteSelectedCardView.layoutParams = param
 
-                        deleteSelectedCardView.setCardBackgroundColor(
-                            ColorStateList.valueOf(
-                                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                            )
-                        )
+                        deleteSelectedCardView.setCardBackgroundColor(cardColor)
 
                         deleteSelectedCardView.shapeAppearanceModel =
                             deleteSelectedCardView.shapeAppearanceModel
@@ -631,14 +616,17 @@ class HistoryFragment : Fragment() {
             sortDialog.setContentView(sortingLayout)
             sortDialog.setCancelable(true)
 
-            if (resources.getBoolean(R.bool.isTablet)) {
-                val bottomSheet =
-                    sortDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            val bottomSheet =
+                sortDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { sheet ->
+                val bottomSheetBehavior = BottomSheetBehavior.from(sheet)
                 bottomSheetBehavior.skipCollapsed = true
-                bottomSheetBehavior.isHideable = false
-                bottomSheetBehavior.isDraggable = false
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.isGestureInsetBottomIgnored = true
+                if (resources.getBoolean(R.bool.isTablet)) {
+                    bottomSheetBehavior.isHideable = false
+                    bottomSheetBehavior.isDraggable = false
+                }
             }
 
             val dateDescendingCardView =
@@ -694,29 +682,17 @@ class HistoryFragment : Fragment() {
             val totalAscending =
                 sortingLayout.findViewById<RadioButton>(R.id.totalAscending)
 
-            dateDescendingCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
+            val cardColor = ColorStateList.valueOf(
+                Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
             )
-            dateAscendingCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
-            )
-            totalDescendingCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
-            )
-            totalAscendingCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
-            )
+            dateDescendingCardView.setCardBackgroundColor(cardColor)
+            dateAscendingCardView.setCardBackgroundColor(cardColor)
+            totalDescendingCardView.setCardBackgroundColor(cardColor)
+            totalAscendingCardView.setCardBackgroundColor(cardColor)
+
             val states = arrayOf(
-                intArrayOf(-android.R.attr.state_checked), // unchecked
-                intArrayOf(android.R.attr.state_checked)  // checked
+                intArrayOf(-android.R.attr.state_checked),
+                intArrayOf(android.R.attr.state_checked)
             )
 
             val colors = intArrayOf(
@@ -862,8 +838,19 @@ class HistoryFragment : Fragment() {
     }
 
     private fun updateCustomTheme() {
+        val backgroundColor = Color.parseColor(
+            CustomColorGenerator(requireContext()).generateBackgroundColor()
+        )
+        val topAppBarColor = Color.parseColor(
+            CustomColorGenerator(requireContext()).generateTopAppBarColor()
+        )
+
         requireActivity().findViewById<CoordinatorLayout>(R.id.historyCoordinatorLayout)
-            .setBackgroundColor(Color.parseColor(CustomColorGenerator(requireContext()).generateBackgroundColor()))
+            .setBackgroundColor(backgroundColor)
+
+        val appBarLayout = activity?.findViewById<AppBarLayout>(R.id.appBarLayoutHistory)
+        appBarLayout?.setBackgroundColor(backgroundColor)
+
         val floatingActionButtonHistory =
             activity?.findViewById<FloatingActionButton>(R.id.floatingActionButtonHistory)
 
@@ -883,13 +870,8 @@ class HistoryFragment : Fragment() {
             )
         )
 
-        collapsingToolbarLayout?.setContentScrimColor(
-            Color.parseColor(
-                CustomColorGenerator(
-                    requireContext()
-                ).generateTopAppBarColor()
-            )
-        )
+        collapsingToolbarLayout?.setContentScrimColor(topAppBarColor)
+        collapsingToolbarLayout?.setStatusBarScrimColor(topAppBarColor)
 
         if (ColoredTitleBarTextData(requireContext()).loadTitleBarTextState()) {
             activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayoutHistory)
@@ -918,70 +900,25 @@ class HistoryFragment : Fragment() {
         val navigationDrawable = topAppBar?.navigationIcon
         navigationDrawable?.mutate()
 
-        if (Build.VERSION.SDK_INT >= 29) {
-            try {
-                if (MenuTintData(requireContext()).loadMenuTint()) {
-                    infoDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-                    sortDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-                    optionsDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-                    navigationDrawable?.colorFilter = BlendModeColorFilter(
-                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                        BlendMode.SRC_ATOP
-                    )
-                } else {
-                    val typedValue = TypedValue()
-                    activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                    val id = typedValue.resourceId
-                    infoDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                    sortDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                    optionsDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                    navigationDrawable?.colorFilter = BlendModeColorFilter(
-                        ContextCompat.getColor(requireContext(), id),
-                        BlendMode.SRC_ATOP
-                    )
-                }
-            } catch (e: NoClassDefFoundError) {
-                e.printStackTrace()
+        try {
+            if (MenuTintData(requireContext()).loadMenuTint()) {
+                val menuTint = Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor())
+                infoDrawable?.colorFilter = BlendModeColorFilter(menuTint, BlendMode.SRC_ATOP)
+                sortDrawable?.colorFilter = BlendModeColorFilter(menuTint, BlendMode.SRC_ATOP)
+                optionsDrawable?.colorFilter = BlendModeColorFilter(menuTint, BlendMode.SRC_ATOP)
+                navigationDrawable?.colorFilter = BlendModeColorFilter(menuTint, BlendMode.SRC_ATOP)
+            } else {
                 val typedValue = TypedValue()
                 activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                 val id = typedValue.resourceId
-                infoDrawable?.setColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    PorterDuff.Mode.SRC_ATOP
-                )
-                sortDrawable?.setColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    PorterDuff.Mode.SRC_ATOP
-                )
-                navigationDrawable?.setColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    PorterDuff.Mode.SRC_ATOP
-                )
-                optionsDrawable?.setColorFilter(
-                    ContextCompat.getColor(requireContext(), id),
-                    PorterDuff.Mode.SRC_ATOP
-                )
+                val textColor = ContextCompat.getColor(requireContext(), id)
+                infoDrawable?.colorFilter = BlendModeColorFilter(textColor, BlendMode.SRC_ATOP)
+                sortDrawable?.colorFilter = BlendModeColorFilter(textColor, BlendMode.SRC_ATOP)
+                optionsDrawable?.colorFilter = BlendModeColorFilter(textColor, BlendMode.SRC_ATOP)
+                navigationDrawable?.colorFilter = BlendModeColorFilter(textColor, BlendMode.SRC_ATOP)
             }
-        } else {
-
+        } catch (e: NoClassDefFoundError) {
+            e.printStackTrace()
             val typedValue = TypedValue()
             activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
             val id = typedValue.resourceId
@@ -1019,9 +956,12 @@ class HistoryFragment : Fragment() {
                 val map = HashMap<String, String>()
                 map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
                 map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                map["outTime"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                map["breakTime"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                map["totalHours"] =
+                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
                 map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
                 dataList.add(map)
 
@@ -1098,7 +1038,6 @@ class HistoryFragment : Fragment() {
 
         listView?.adapter?.notifyItemInserted(ItemPositionData(requireContext()).loadPosition())
         listView?.adapter?.notifyItemRangeChanged(0, dataList.count())
-        //customAdapter.updateCornerRadius()
     }
 
     private lateinit var recyclerViewState: Parcelable
@@ -1230,8 +1169,6 @@ class HistoryFragment : Fragment() {
             loadIntoList()
         }, 500)
 
-        //requireActivity().findViewById<AppBarLayout>(R.id.appBarLayoutHistory).setExpanded(true, true)
-
         saveState()
 
         hideNavigationIcon()
@@ -1253,33 +1190,26 @@ class HistoryFragment : Fragment() {
             val navigationDrawable = topAppBar?.navigationIcon
             navigationDrawable?.mutate()
 
-            if (Build.VERSION.SDK_INT >= 29) {
-                try {
-                    if (MenuTintData(requireContext()).loadMenuTint()) {
-                        navigationDrawable?.colorFilter = BlendModeColorFilter(
-                            Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
-                            BlendMode.SRC_ATOP
-                        )
-                    } else {
-                        val typedValue = TypedValue()
-                        activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
-                        val id = typedValue.resourceId
-                        navigationDrawable?.colorFilter = BlendModeColorFilter(
-                            ContextCompat.getColor(requireContext(), id),
-                            BlendMode.SRC_ATOP
-                        )
-                    }
-                } catch (e: NoClassDefFoundError) {
-                    e.printStackTrace()
+            try {
+                if (MenuTintData(requireContext()).loadMenuTint()) {
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(CustomColorGenerator(requireContext()).generateMenuTintColor()),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
                     val typedValue = TypedValue()
                     activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
                     val id = typedValue.resourceId
-                    navigationDrawable?.setColorFilter(
+                    navigationDrawable?.colorFilter = BlendModeColorFilter(
                         ContextCompat.getColor(requireContext(), id),
-                        PorterDuff.Mode.SRC_ATOP
+                        BlendMode.SRC_ATOP
                     )
                 }
-            } else {
+            } catch (e: NoClassDefFoundError) {
+                e.printStackTrace()
+                val typedValue = TypedValue()
+                activity?.theme?.resolveAttribute(R.attr.textColor, typedValue, true)
+                val id = typedValue.resourceId
                 navigationDrawable?.setColorFilter(
                     ContextCompat.getColor(requireContext(), id),
                     PorterDuff.Mode.SRC_ATOP
