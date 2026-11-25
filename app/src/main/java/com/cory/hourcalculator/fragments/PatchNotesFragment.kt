@@ -255,12 +255,11 @@ class PatchNotesFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.materialToolBarPatchNotes)
 
         // Tint circular back button
-        val btnBack = view?.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBackPatchNotes)
+        val btnBack =
+            view?.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBackPatchNotes)
+        // Tint back button
         if (btnBack != null) {
-            // Container circle color (tonal surface)
-            btnBack.backgroundTintList = ColorStateList.valueOf(
-                Color.parseColor(customColors.generateCardColor())
-            )
+            btnBack.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
 
             // Arrow icon tint
             val arrowColor = if (MenuTintData(requireContext()).loadMenuTint()) {
