@@ -1,10 +1,15 @@
 package com.cory.hourcalculator.adapters
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Outline
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -28,7 +33,6 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -64,8 +68,7 @@ class CustomAdapter(
         checkBoxVisible = false
         if (AnimationData(context).loadRecyclerViewAnimation()) {
             notifyItemRangeChanged(0, dataList.size)
-        }
-        else {
+        } else {
             notifyDataSetChanged()
         }
         snackbarDeleteSelected.dismiss()
@@ -156,8 +159,7 @@ class CustomAdapter(
                             .build()
                     }
                 }
-            }
-            else {
+            } else {
                 historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
                     .toBuilder()
                     .setTopLeftCorner(CornerFamily.ROUNDED, 14f)
@@ -181,12 +183,11 @@ class CustomAdapter(
                         (dataItem["breakTime"]!!.toDouble() / 60).toBigDecimal()
                             .setScale(2, RoundingMode.HALF_EVEN)
                     breakTime.text = context.getString(R.string.break_time_hours, decimal)
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                     breakTime.text = context.getString(R.string.break_time_error)
                 }
-            }
-            else {
+            } else {
                 if (dataItem["breakTime"] == "1") {
                     breakTime.text =
                         context.getString(
@@ -236,8 +237,7 @@ class CustomAdapter(
                         e.printStackTrace()
                         if (WagesData(context).loadWageAmount() == "") {
                             wages.text = context.getString(R.string.wages_must_set_wages)
-                        }
-                        else {
+                        } else {
                             wages.text = context.getString(R.string.wages_error)
                         }
                     }
@@ -256,14 +256,12 @@ class CustomAdapter(
                         e.printStackTrace()
                         if (WagesData(context).loadWageAmount() == "") {
                             wages.text = context.getString(R.string.wages_must_set_wages)
-                        }
-                        else {
+                        } else {
                             wages.text = context.getString(R.string.wages_error)
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 wages.visibility = View.GONE
             }
         }
@@ -294,16 +292,12 @@ class CustomAdapter(
 
         val saveState = Runnable {
             (context as MainActivity).saveState()
-
         }
-
         MainActivity().runOnUiThread(saveState)
 
         val hideNavigationIcon = Runnable {
             (context as MainActivity).hideNavigationIcon()
-
         }
-
         MainActivity().runOnUiThread(hideNavigationIcon)
 
         val map = HashMap<String, String>()
@@ -321,18 +315,12 @@ class CustomAdapter(
 
             for (i in 0 until selectedItemsList.count()) {
                 cursor.moveToPosition(selectedItemsList.elementAt(i))
-                map["id"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                map["inTime"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                map["outTime"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                map["breakTime"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                map["totalHours"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                map["date"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                 weekArray.add(map["date"].toString())
                 totalHours += if (!map["totalHours"]!!.contains(":")) {
@@ -342,8 +330,7 @@ class CustomAdapter(
                     val decimal =
                         (minutes.toDouble() / 60).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
                             .toString().drop(2)
-                    val decimalTime = "$hours.$decimal".toDouble()
-                    decimalTime
+                    "$hours.$decimal".toDouble()
                 }
 
                 inTimeArray.add(map["inTime"]!!)
@@ -356,15 +343,12 @@ class CustomAdapter(
                 dataList.removeAt(selectedItemsList.elementAt(i))
                 if (AnimationData(context).loadRecyclerViewAnimation()) {
                     notifyItemRemoved(selectedItemsList.elementAt(i))
-                }
-                else {
+                } else {
                     notifyDataSetChanged()
                 }
                 checkBoxVisible = false
-                //checkBox.isChecked = false
             }
             val sortedList = weekArray.sortedWith(compareBy { it })
-            //val week = "${sortedList.first()}-${sortedList.last()}"
 
             val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             val firstDateString: String
@@ -407,8 +391,7 @@ class CustomAdapter(
         checkBoxVisible = false
         if (AnimationData(context).loadRecyclerViewAnimation()) {
             notifyItemRangeChanged(0, dataList.size)
-        }
-        else {
+        } else {
             notifyDataSetChanged()
         }
         val entriesDeleted: String = if (selectedItemsList.count() == 1) {
@@ -420,8 +403,7 @@ class CustomAdapter(
             snackbarDeleteSelected.view,
             entriesDeleted,
             Snackbar.LENGTH_LONG
-        )
-            .setDuration(5000)
+        ).setDuration(5000)
 
         snackBar.apply {
             snackBar.view.background = ResourcesCompat.getDrawable(
@@ -444,20 +426,15 @@ class CustomAdapter(
         val totalHours = arrayOf<String>().toMutableList()
         val day = arrayOf<Long>().toMutableList()
 
-
         Vibrate().vibration(context)
         val saveState = Runnable {
             (context as MainActivity).saveState()
-
         }
-
         MainActivity().runOnUiThread(saveState)
 
         val hideNavigationIcon = Runnable {
             (context as MainActivity).hideNavigationIcon()
-
         }
-
         MainActivity().runOnUiThread(hideNavigationIcon)
 
         val map = HashMap<String, String>()
@@ -466,48 +443,35 @@ class CustomAdapter(
 
             for (i in 0 until selectedItemsList.count()) {
                 cursor.moveToPosition(selectedItemsList.elementAt(i))
-                map["id"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                map["inTime"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                map["outTime"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                map["breakTime"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                map["totalHours"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                map["date"] =
-                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+                map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
                 inTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN)))
-
                 outTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT)))
-
                 breakTime.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
                 totalHours.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
-
                 day.add(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
 
                 dbHandler.deleteRow(map["id"].toString())
                 dataList.removeAt(selectedItemsList.elementAt(i))
                 if (AnimationData(context).loadRecyclerViewAnimation()) {
                     notifyItemRemoved(selectedItemsList.elementAt(i))
-                }
-                else {
+                } else {
                     notifyDataSetChanged()
                 }
 
                 checkBoxVisible = false
-                //checkBox.isChecked = false
             }
-
         }
 
         checkBoxVisible = false
         if (AnimationData(context).loadRecyclerViewAnimation()) {
             notifyItemRangeChanged(0, dataList.size)
-        }
-        else {
+        } else {
             notifyDataSetChanged()
         }
         val entriesDeleted: String = if (selectedItemsList.count() == 1) {
@@ -519,9 +483,7 @@ class CustomAdapter(
             view,
             entriesDeleted,
             Snackbar.LENGTH_LONG
-        )
-            .setDuration(5000)
-
+        ).setDuration(5000)
 
         snackBar.setActionTextColor(
             Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
@@ -545,23 +507,15 @@ class CustomAdapter(
             val cursor2 = dbHandler.getAllRow(context)
             cursor2!!.moveToFirst()
             if (cursor2.count > 0) {
-
                 while (!cursor2.isAfterLast) {
                     val map2 = HashMap<String, String>()
-                    map2["id"] =
-                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
-                    map2["inTime"] =
-                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
-                    map2["outTime"] =
-                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
-                    map2["breakTime"] =
-                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
-                    map2["totalHours"] =
-                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                    map2["date"] =
-                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
+                    map2["id"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
+                    map2["inTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
+                    map2["outTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
+                    map2["breakTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
+                    map2["totalHours"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                    map2["date"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
                     dataList.add(map2)
-
                     cursor2.moveToNext()
                 }
             }
@@ -569,63 +523,21 @@ class CustomAdapter(
             for (i in 0 until selectedItemsList.count()) {
                 if (AnimationData(context).loadRecyclerViewAnimation()) {
                     notifyItemInserted(selectedItemsList.elementAt(i))
-                }
-                else {
+                } else {
                     notifyDataSetChanged()
                 }
             }
 
             selectedItemsList.clear()
 
-            /*for (i in 0 until dataList.count()) {
-                if (dataList.count() == 1) {
-                    historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                        .toBuilder()
-                        .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                        .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                        .setBottomRightCornerSize(28f)
-                        .setBottomLeftCornerSize(28f)
-                        .build()
-                } else if (dataList.count() > 1) {
-                    if (i == 0) {
-                        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                            .setBottomRightCornerSize(0f)
-                            .setBottomLeftCornerSize(0f)
-                            .build()
-                    } else if (i > 0 && i < dataList.count() - 1) {
-                        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                            .setBottomRightCornerSize(0f)
-                            .setBottomLeftCornerSize(0f)
-                            .build()
-                    } else if (i == dataList.count() - 1) {
-                        historyCardView.shapeAppearanceModel = historyCardView.shapeAppearanceModel
-                            .toBuilder()
-                            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                            .setBottomRightCornerSize(28f)
-                            .setBottomLeftCornerSize(28f)
-                            .build()
-                    }
-                }
-            }*/
-
             if (AnimationData(context).loadRecyclerViewAnimation()) {
                 notifyItemRangeChanged(0, dataList.count())
-            }
-            else {
+            } else {
                 notifyDataSetChanged()
             }
             val restoreState = Runnable {
                 (context as MainActivity).restoreState()
-
             }
-
             MainActivity().runOnUiThread(restoreState)
         }
         snackBar.apply {
@@ -637,11 +549,7 @@ class CustomAdapter(
         }
         snackBar.show()
 
-        //val handler = android.os.Handler(Looper.getMainLooper())
-        //val runnable = Runnable {
         selectedItemsList.clear()
-        //}
-        //handler.postDelayed(runnable, 5000)
     }
 
     @SuppressLint("Range")
@@ -651,13 +559,12 @@ class CustomAdapter(
         }
 
         val dbHandler = DBHelper(context, null)
-        val listItems = arrayOf(
-            context.getString(R.string.edit),
-            context.getString(R.string.delete),
-            context.getString(R.string.delete_all)
-        )
-        val imageView = holder.itemView.findViewById<ImageView>(R.id.imageViewOptions)
         val checkBox = holder.itemView.findViewById<CheckBox>(R.id.checkbox)
+
+        holder.itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView).setOnClickListener {
+            Vibrate().vibration(context)
+            showBlurredPopupMenu(it, holder, dbHandler)
+        }
 
         items = holder
 
@@ -698,369 +605,313 @@ class CustomAdapter(
                 }
         }
 
-        /*checkBox.setOnLongClickListener {
-            Vibrate().vibration(context)
-            longClickSelectAll(holder)
-
-            return@setOnLongClickListener true
-        }*/
-
-        /*checkBox.setOnClickListener {
-            holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked =
-                !holder.itemView.findViewById<CheckBox>(R.id.checkbox).isChecked
-            clickEntryWhenCheckboxVisible(holder)
-        }*/
-
         holder.itemView.findViewById<MaterialCardView>(R.id.imageViewOptionsCardView).setOnClickListener {
             Vibrate().vibration(context)
+            showBlurredPopupMenu(it, holder, dbHandler)
+        }
 
-            val listPopupWindow = ListPopupWindow(context)
-            val popupWindowAdapter =
-                ArrayAdapter(context, R.layout.historypopupwindow, R.id.details, listItems)
-            listPopupWindow.setAdapter(popupWindowAdapter)
-            listPopupWindow.anchorView = imageView
-            listPopupWindow.width = (holder.itemView.width / 2)
-            listPopupWindow.height = ListPopupWindow.WRAP_CONTENT
-            listPopupWindow.setDropDownGravity(Gravity.NO_GRAVITY)
+        (holder as ViewHolder).bind(position)
+    }
 
-            listPopupWindow.setOnItemClickListener { _, _, p2, _ ->
-                val itemPosition = holder.adapterPosition
-                when (p2) {
-                    0 -> {
-                        Vibrate().vibration(context)
-                        listPopupWindow.dismiss()
-                        openHourForEditing(holder, dbHandler)
-                    }
-                    1 -> {
-                        listPopupWindow.dismiss()
-                        Vibrate().vibration(context)
-                        try {
-                            var intimeDelete = ""
-                            var outtimeDelete = ""
-                            var breaktimeDelete = ""
-                            var totalhoursDelete = ""
-                            var dayDelete = 0L
+    private fun showBlurredPopupMenu(
+        anchorView: View,
+        holder: RecyclerView.ViewHolder,
+        dbHandler: DBHelper
+    ) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.dialog_history_popup_menu, null)
+        val cardView = popupView.findViewById<com.google.android.material.card.MaterialCardView>(R.id.popupCardContainer)
+        val blurView = popupView.findViewById<eightbitlab.com.blurview.BlurView>(R.id.blurViewContainer)
 
-                            val map = HashMap<String, String>()
-                            val cursor = dbHandler.getAllRow(context)
-                            if (cursor!!.count > 0) {
-                                cursor.moveToPosition(holder.adapterPosition)
+        cardView.strokeWidth = 0
 
-                                while (cursor.position == holder.adapterPosition) {
+        val activity = context as? AppCompatActivity
+        val rootView = activity?.findViewById<ViewGroup>(android.R.id.content)
 
-                                    map["id"] =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                                    map["inTime"] =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                                    map["outTime"] =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                                    map["breakTime"] =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                    map["totalHours"] =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                    map["date"] =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+        // Detect dark mode
+        val isDark = when (DarkThemeData(context).loadDarkModeState()) {
+            1, 2 -> true
+            0 -> false
+            else -> {
+                val nightMask = context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+                nightMask == android.content.res.Configuration.UI_MODE_NIGHT_YES
+            }
+        }
 
-                                    intimeDelete =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-                                    outtimeDelete =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-                                    breaktimeDelete =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                    totalhoursDelete =
-                                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                    dayDelete =
-                                        cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+        // --- 1. LIGHT THEME FROSTED TRANSLUCENCY ADJUSTMENT ---
+        // Lowered light mode alpha from ~140 down to 85 (~33% opacity) for strong see-through glass
+        val frostedOverlayColor = if (isDark) {
+            Color.argb(125, 28, 30, 34) // Dark smoky slate
+        } else {
+            Color.argb(85, 255, 255, 255) // High-translucency milk glass
+        }
 
-                                    dbHandler.deleteRow(map["id"].toString())
-                                    cursor.moveToNext()
-                                }
-                            }
+        if (rootView != null) {
+            val blurAlgorithm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                eightbitlab.com.blurview.RenderEffectBlur()
+            } else {
+                eightbitlab.com.blurview.RenderScriptBlur(context)
+            }
 
-                            val saveState = Runnable {
-                                (context as MainActivity).saveState()
+            // Increased blur radius from 24f to 35f for an ultra-smooth frosted diffusion
+            blurView.setupWith(rootView, blurAlgorithm)
+                .setFrameClearDrawable(rootView.background)
+                .setBlurRadius(35f)
+                .setOverlayColor(frostedOverlayColor)
+        }
 
-                            }
+        // Tint both text and start icons consistently
+        val textColor = if (isDark) Color.parseColor("#F1F3F4") else Color.parseColor("#1F1F1F")
+        val colorStateList = ColorStateList.valueOf(textColor)
 
-                            MainActivity().runOnUiThread(saveState)
+        val itemEdit = popupView.findViewById<TextView>(R.id.menuItemEdit)
+        val itemDelete = popupView.findViewById<TextView>(R.id.menuItemDelete)
+        val itemDeleteAll = popupView.findViewById<TextView>(R.id.menuItemDeleteAll)
 
-                            dataList.removeAt(holder.adapterPosition)
-                            if (AnimationData(context).loadRecyclerViewAnimation()) {
-                                notifyItemRemoved(holder.adapterPosition)
-                            }
-                            else {
-                                notifyDataSetChanged()
-                            }
-                            checkBoxVisible = false
+        listOf(itemEdit, itemDelete, itemDeleteAll).forEach { textView ->
+            textView.setTextColor(textColor)
+            textView.compoundDrawableTintList = colorStateList
+        }
 
-                            val snackbar =
-                                Snackbar.make(
-                                    holder.itemView,
-                                    context.getString(R.string.entry_deleted),
-                                    Snackbar.LENGTH_LONG
-                                )
-                                    .setDuration(5000)
+        popupView.measure(
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        val popupWidth = popupView.measuredWidth
 
-                            snackbar.setAction(context.getString(R.string.undo)) {
-                                Vibrate().vibration(context)
-                                dbHandler.insertRow(
-                                    intimeDelete,
-                                    outtimeDelete,
-                                    totalhoursDelete,
-                                    dayDelete,
-                                    breaktimeDelete
-                                )
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 0f
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            isOutsideTouchable = true
+        }
 
-                                dataList.clear()
-                                val cursor2 = dbHandler.getAllRow(context)
-                                cursor2!!.moveToFirst()
+        itemEdit.setOnClickListener {
+            Vibrate().vibration(context)
+            popupWindow.dismiss()
+            openHourForEditing(holder, dbHandler)
+        }
 
-                                while (!cursor2.isAfterLast) {
-                                    val map2 = HashMap<String, String>()
-                                    map2["id"] =
-                                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
-                                    map2["inTime"] =
-                                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
-                                    map2["outTime"] =
-                                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
-                                    map2["breakTime"] =
-                                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
-                                    map2["totalHours"] =
-                                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
-                                    map2["date"] =
-                                        cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
-                                    dataList.add(map2)
+        itemDelete.setOnClickListener {
+            popupWindow.dismiss()
+            deleteSingleItem(holder, dbHandler)
+        }
 
-                                    cursor2.moveToNext()
+        itemDeleteAll.setOnClickListener {
+            popupWindow.dismiss()
+            showDeleteAllBottomSheet(dbHandler)
+        }
 
-                                }
+        // --- 2. PUSH AWAY FROM RIGHT SCREEN EDGE ---
+        // 12dp margin converted to physical pixels
+        val rightMarginPx = (12 * context.resources.displayMetrics.density).toInt()
+        val xOffset = -(popupWidth - anchorView.width + rightMarginPx)
 
-                                if (AnimationData(context).loadRecyclerViewAnimation()) {
-                                    notifyItemInserted(itemPosition)
-                                }
-                                else {
-                                    notifyDataSetChanged()
-                                }
+        popupWindow.showAsDropDown(anchorView, xOffset, 6)
+    }
 
-                                /*for (i in 0 until dataList.count()) {
-                                    if (dataList.count() == 1) {
-                                        holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel =
-                                            holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel
-                                                .toBuilder()
-                                                .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                                                .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                                                .setBottomRightCornerSize(28f)
-                                                .setBottomLeftCornerSize(28f)
-                                                .build()
-                                    } else if (dataList.count() > 1) {
-                                        if (i == 0) {
-                                            holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel =
-                                                holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel
-                                                    .toBuilder()
-                                                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                                                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                                                    .setBottomRightCornerSize(0f)
-                                                    .setBottomLeftCornerSize(0f)
-                                                    .build()
-                                        } else if (i < dataList.count() - 1) {
-                                            holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel =
-                                                holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel
-                                                    .toBuilder()
-                                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                                    .setBottomRightCornerSize(0f)
-                                                    .setBottomLeftCornerSize(0f)
-                                                    .build()
-                                        } else if (i == dataList.count() - 1) {
-                                            holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel =
-                                                holder.itemView.findViewById<MaterialCardView>(R.id.cardViewHistory).shapeAppearanceModel
-                                                    .toBuilder()
-                                                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                                                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                                                    .setBottomRightCornerSize(28f)
-                                                    .setBottomLeftCornerSize(28f)
-                                                    .build()
-                                        }
-                                    }*/
-                                //notifyItemChanged(i)
+    @SuppressLint("Range")
+    private fun deleteSingleItem(holder: RecyclerView.ViewHolder, dbHandler: DBHelper) {
+        Vibrate().vibration(context)
+        try {
+            var intimeDelete = ""
+            var outtimeDelete = ""
+            var breaktimeDelete = ""
+            var totalhoursDelete = ""
+            var dayDelete = 0L
 
-                                if (AnimationData(context).loadRecyclerViewAnimation()) {
-                                    notifyItemRangeChanged(0, dataList.count())
-                                }
-                                else {
-                                    notifyDataSetChanged()
-                                }
+            val map = HashMap<String, String>()
+            val cursor = dbHandler.getAllRow(context)
+            val itemPosition = holder.adapterPosition
+            if (cursor!!.count > 0) {
+                cursor.moveToPosition(itemPosition)
+                if (cursor.position == itemPosition) {
+                    map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                    intimeDelete = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+                    outtimeDelete = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+                    breaktimeDelete = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+                    totalhoursDelete = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                    dayDelete = cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
-                                val restoreState = Runnable {
-                                    (context as MainActivity).restoreState()
-
-                                }
-
-                                MainActivity().runOnUiThread(restoreState)
-
-                            }
-
-                            snackbar.setActionTextColor(
-                                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                            )
-
-                            snackbar.apply {
-                                snackbar.view.background = ResourcesCompat.getDrawable(
-                                    context.resources,
-                                    R.drawable.snackbar_corners,
-                                    context.theme
-                                )
-                            }
-                            snackbar.show()
-                            if (AnimationData(context).loadRecyclerViewAnimation()) {
-                                notifyItemRangeChanged(0, dataList.size)
-                            }
-                            else {
-                                notifyDataSetChanged()
-                            }
-
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.there_was_an_error_deleting_this_entry),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                    2 -> {
-                        listPopupWindow.dismiss()
-                        Vibrate().vibration(context)
-                        val inTimeDelete = arrayOf<String>().toMutableList()
-                        val outTimeDelete = arrayOf<String>().toMutableList()
-                        val breakTimeDelete = arrayOf<String>().toMutableList()
-                        val totalHoursDelete = arrayOf<String>().toMutableList()
-                        val dayDelete = arrayOf<Long>().toMutableList()
-
-                        val dialog = BottomSheetDialog(context)
-                        val deleteAllLayout = LayoutInflater.from(context)
-                            .inflate(R.layout.delete_all_bottom_sheet, null)
-                        dialog.setContentView(deleteAllLayout)
-                        dialog.setCancelable(true)
-
-                        if (context.resources.getBoolean(R.bool.isTablet)) {
-                            val bottomSheet =
-                                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                            bottomSheetBehavior.skipCollapsed = true
-                            bottomSheetBehavior.isHideable = false
-                            bottomSheetBehavior.isDraggable = false
-                        }
-
-                        val infoCardView =
-                            deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
-                        val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
-                        val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
-
-
-                        infoCardView.setCardBackgroundColor(
-                            Color.parseColor(
-                                CustomColorGenerator(context).generateCardColor()
-                            )
-                        )
-                        yesButton.setBackgroundColor(
-                            Color.parseColor(
-                                CustomColorGenerator(
-                                    context
-                                ).generateCustomColorPrimary()
-                            )
-                        )
-                        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
-
-                        yesButton.setOnClickListener {
-                            Vibrate().vibration(context)
-
-                            val cursor = dbHandler.getAllRow(context)
-                            cursor!!.moveToFirst()
-
-                            while (!cursor.isAfterLast) {
-                                val map = HashMap<String, String>()
-                                map["id"] =
-                                    cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-                                inTimeDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN)))
-
-                                outTimeDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT)))
-
-                                breakTimeDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
-                                totalHoursDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
-
-                                dayDelete.add(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
-
-
-                                cursor.moveToNext()
-                            }
-
-                            dbHandler.deleteAll()
-                            try {
-                                val runnable = Runnable {
-                                    (context as MainActivity).deleteAll()
-                                }
-                                MainActivity().runOnUiThread(runnable)
-                            } catch (e: IllegalArgumentException) {
-                                e.printStackTrace()
-                                Toast.makeText(context, "There was an error", Toast.LENGTH_SHORT).show()
-                            }
-
-                            val snackBar = Snackbar.make(
-                                holder.itemView,
-                                context.getString(R.string.all_entries_deleted),
-                                Snackbar.LENGTH_LONG
-                            )
-                                .setDuration(5000)
-
-                            snackBar.setActionTextColor(
-                                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
-                            )
-
-                            snackBar.setAction(context.getString(R.string.undo)) {
-                                Vibrate().vibration(context)
-                                GlobalScope.launch(Dispatchers.Main) {
-                                    for (i in inTimeDelete.indices) {
-                                        dbHandler.insertRow(
-                                            inTimeDelete.elementAt(i),
-                                            outTimeDelete.elementAt(i),
-                                            totalHoursDelete.elementAt(i),
-                                            dayDelete.elementAt(i),
-                                            breakTimeDelete.elementAt(i)
-                                        )
-                                    }
-
-                                    val runnable2 = Runnable {
-                                        (context as MainActivity).undoDeleteAll()
-                                    }
-                                    MainActivity().runOnUiThread(runnable2)
-                                }
-                            }
-                            snackBar.apply {
-                                snackBar.view.background = ResourcesCompat.getDrawable(
-                                    context.resources,
-                                    R.drawable.snackbar_corners,
-                                    context.theme
-                                )
-                            }
-                            snackBar.show()
-                            dialog.dismiss()
-                        }
-                        //.setNeutralButton(context.getString(R.string.no)) { _, _ ->
-                        noButton.setOnClickListener {
-                            Vibrate().vibration(context)
-                            dialog.dismiss()
-                        }
-
-                        dialog.show()
-
-                        checkBoxVisible = false
-                    }
+                    dbHandler.deleteRow(map["id"].toString())
                 }
             }
-            listPopupWindow.show()
+
+            val saveState = Runnable { (context as MainActivity).saveState() }
+            MainActivity().runOnUiThread(saveState)
+
+            dataList.removeAt(itemPosition)
+            if (AnimationData(context).loadRecyclerViewAnimation()) {
+                notifyItemRemoved(itemPosition)
+            } else {
+                notifyDataSetChanged()
+            }
+            checkBoxVisible = false
+
+            val snackbar = Snackbar.make(
+                holder.itemView,
+                context.getString(R.string.entry_deleted),
+                Snackbar.LENGTH_LONG
+            ).setDuration(5000)
+
+            snackbar.setAction(context.getString(R.string.undo)) {
+                Vibrate().vibration(context)
+                dbHandler.insertRow(
+                    intimeDelete,
+                    outtimeDelete,
+                    totalhoursDelete,
+                    dayDelete,
+                    breaktimeDelete
+                )
+
+                dataList.clear()
+                val cursor2 = dbHandler.getAllRow(context)
+                cursor2!!.moveToFirst()
+                while (!cursor2.isAfterLast) {
+                    val map2 = HashMap<String, String>()
+                    map2["id"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_ID))
+                    map2["inTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_IN))
+                    map2["outTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_OUT))
+                    map2["breakTime"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_BREAK))
+                    map2["totalHours"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_TOTAL))
+                    map2["date"] = cursor2.getString(cursor2.getColumnIndex(DBHelper.COLUMN_DAY))
+                    dataList.add(map2)
+                    cursor2.moveToNext()
+                }
+
+                if (AnimationData(context).loadRecyclerViewAnimation()) {
+                    notifyItemInserted(itemPosition)
+                    notifyItemRangeChanged(0, dataList.count())
+                } else {
+                    notifyDataSetChanged()
+                }
+
+                val restoreState = Runnable { (context as MainActivity).restoreState() }
+                MainActivity().runOnUiThread(restoreState)
+            }
+
+            snackbar.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+            )
+            snackbar.view.background = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.snackbar_corners,
+                context.theme
+            )
+            snackbar.show()
+        } catch (e: Exception) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.there_was_an_error_deleting_this_entry),
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        (holder as ViewHolder).bind(position)
+    }
+
+    @SuppressLint("Range")
+    private fun showDeleteAllBottomSheet(dbHandler: DBHelper) {
+        Vibrate().vibration(context)
+        val inTimeDelete = arrayOf<String>().toMutableList()
+        val outTimeDelete = arrayOf<String>().toMutableList()
+        val breakTimeDelete = arrayOf<String>().toMutableList()
+        val totalHoursDelete = arrayOf<String>().toMutableList()
+        val dayDelete = arrayOf<Long>().toMutableList()
+
+        val dialog = BottomSheetDialog(context)
+        val deleteAllLayout = LayoutInflater.from(context).inflate(R.layout.delete_all_bottom_sheet, null)
+        dialog.setContentView(deleteAllLayout)
+        dialog.setCancelable(true)
+
+        if (context.resources.getBoolean(R.bool.isTablet)) {
+            val bottomSheet =
+                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = false
+            bottomSheetBehavior.isDraggable = false
+        }
+
+        val infoCardView = deleteAllLayout.findViewById<MaterialCardView>(R.id.infoCardView)
+        val yesButton = deleteAllLayout.findViewById<Button>(R.id.yesButton)
+        val noButton = deleteAllLayout.findViewById<Button>(R.id.noButton)
+
+        infoCardView.setCardBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCardColor()))
+        yesButton.setBackgroundColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+        noButton.setTextColor(Color.parseColor(CustomColorGenerator(context).generateCustomColorPrimary()))
+
+        yesButton.setOnClickListener {
+            Vibrate().vibration(context)
+            val cursor = dbHandler.getAllRow(context)
+            cursor!!.moveToFirst()
+            while (!cursor.isAfterLast) {
+                val map = HashMap<String, String>()
+                map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+                inTimeDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN)))
+                outTimeDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT)))
+                breakTimeDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK)))
+                totalHoursDelete.add(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL)))
+                dayDelete.add(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_DAY)))
+                cursor.moveToNext()
+            }
+
+            dbHandler.deleteAll()
+            try {
+                val runnable = Runnable { (context as MainActivity).deleteAll() }
+                MainActivity().runOnUiThread(runnable)
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+                Toast.makeText(context, "There was an error", Toast.LENGTH_SHORT).show()
+            }
+
+            val snackBar = Snackbar.make(
+                items.itemView,
+                context.getString(R.string.all_entries_deleted),
+                Snackbar.LENGTH_LONG
+            ).setDuration(5000)
+
+            snackBar.setActionTextColor(
+                Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
+            )
+
+            snackBar.setAction(context.getString(R.string.undo)) {
+                Vibrate().vibration(context)
+                GlobalScope.launch(Dispatchers.Main) {
+                    for (i in inTimeDelete.indices) {
+                        dbHandler.insertRow(
+                            inTimeDelete.elementAt(i),
+                            outTimeDelete.elementAt(i),
+                            totalHoursDelete.elementAt(i),
+                            dayDelete.elementAt(i),
+                            breakTimeDelete.elementAt(i)
+                        )
+                    }
+
+                    val runnable2 = Runnable { (context as MainActivity).undoDeleteAll() }
+                    MainActivity().runOnUiThread(runnable2)
+                }
+            }
+            snackBar.apply {
+                snackBar.view.background = ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.snackbar_corners,
+                    context.theme
+                )
+            }
+            snackBar.show()
+            dialog.dismiss()
+        }
+
+        noButton.setOnClickListener {
+            Vibrate().vibration(context)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+        checkBoxVisible = false
     }
 
     private fun clickEntryWhenCheckboxVisible(holder: RecyclerView.ViewHolder) {
@@ -1074,7 +925,6 @@ class CustomAdapter(
 
             if (selectedItemsList.isNotEmpty()) {
                 var isInIt = false
-
                 for (i in 0 until selectedItemsList.count()) {
                     if (selectedItemsList.elementAt(i) == holder.adapterPosition) {
                         isInIt = true
@@ -1117,16 +967,13 @@ class CustomAdapter(
                     checkBoxVisible = false
                     if (AnimationData(context).loadRecyclerViewAnimation()) {
                         notifyItemRangeChanged(0, dataList.size)
-                    }
-                    else {
+                    } else {
                         notifyDataSetChanged()
                     }
 
                     val hideNavigationIcon = Runnable {
                         (context as MainActivity).hideNavigationIcon()
-
                     }
-
                     MainActivity().runOnUiThread(hideNavigationIcon)
                 }
                 snackbarDismissCheckBox.apply {
@@ -1151,8 +998,7 @@ class CustomAdapter(
             selectedItemsList.clear()
             if (AnimationData(context).loadRecyclerViewAnimation()) {
                 notifyItemRangeChanged(0, dataList.count())
-            }
-            else {
+            } else {
                 notifyDataSetChanged()
             }
 
@@ -1164,16 +1010,13 @@ class CustomAdapter(
 
                 if (AnimationData(context).loadRecyclerViewAnimation()) {
                     notifyItemRangeChanged(0, dataList.size)
-                }
-                else {
+                } else {
                     notifyDataSetChanged()
                 }
 
                 val hideNavigationIcon = Runnable {
                     (context as MainActivity).hideNavigationIcon()
-
                 }
-
                 MainActivity().runOnUiThread(hideNavigationIcon)
             }
             snackbarDismissCheckBox.apply {
@@ -1197,19 +1040,16 @@ class CustomAdapter(
             }
             if (AnimationData(context).loadRecyclerViewAnimation()) {
                 notifyItemRangeChanged(0, dataList.size)
-            }
-            else {
+            } else {
                 notifyDataSetChanged()
             }
 
             if (selectedItemsList.isNotEmpty()) {
                 var isInIt = false
-
                 for (i in 0 until selectedItemsList.count()) {
                     isInIt = selectedItemsList.contains(holder.adapterPosition)
                 }
                 if (isInIt) {
-
                     if (selectedItemsList.contains(holder.adapterPosition)) {
                         val index = selectedItemsList.indexOf(holder.adapterPosition)
                         selectedItemsList.removeAt(index)
@@ -1237,16 +1077,13 @@ class CustomAdapter(
                     checkBoxVisible = false
                     if (AnimationData(context).loadRecyclerViewAnimation()) {
                         notifyItemRangeChanged(0, dataList.size)
-                    }
-                    else {
+                    } else {
                         notifyDataSetChanged()
                     }
 
                     val hideNavigationIcon = Runnable {
                         (context as MainActivity).hideNavigationIcon()
-
                     }
-
                     MainActivity().runOnUiThread(hideNavigationIcon)
                 }
                 snackbarDismissCheckBox.apply {
@@ -1266,6 +1103,7 @@ class CustomAdapter(
         }
     }
 
+    @SuppressLint("Range")
     private fun openHourForEditing(
         holder: RecyclerView.ViewHolder,
         dbHandler: DBHelper
@@ -1277,24 +1115,15 @@ class CustomAdapter(
         cursor!!.moveToPosition(itemPosition)
 
         while (cursor.position == itemPosition) {
-
-            map["id"] =
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
-            map["inTime"] =
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
-            map["outTime"] =
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
-            map["breakTime"] =
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
-            map["totalHours"] =
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
-            map["date"] =
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
+            map["id"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ID))
+            map["inTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IN))
+            map["outTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_OUT))
+            map["breakTime"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_BREAK))
+            map["totalHours"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TOTAL))
+            map["date"] = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DAY))
 
             dataList.add(map)
-
             cursor.moveToNext()
-
         }
         if ((map["inTime"].toString()
                 .contains(context.getString(R.string.AM)) || map["inTime"].toString()
@@ -1319,9 +1148,7 @@ class CustomAdapter(
             try {
                 val saveState = Runnable {
                     (context as MainActivity).saveState()
-
                 }
-
                 MainActivity().runOnUiThread(saveState)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -1344,7 +1171,6 @@ class CustomAdapter(
         checkBox: CheckBox,
         holder: RecyclerView.ViewHolder
     ) {
-
         inTime.clear()
         outTime.clear()
         breakTime.clear()
@@ -1356,13 +1182,11 @@ class CustomAdapter(
         val historyCheckBox = Runnable {
             (context as MainActivity).checkBoxVisible(checkBoxVisible)
         }
-
         MainActivity().runOnUiThread(historyCheckBox)
 
         notifyItemRangeChanged(0, dataList.count())
 
         checkBox.isChecked = true
-
         selectedItemsList.add(holder.adapterPosition)
 
         snackbarDismissCheckBox = Snackbar.make(
@@ -1371,12 +1195,11 @@ class CustomAdapter(
             Snackbar.LENGTH_INDEFINITE
         )
 
-        snackbarDeleteSelected =
-            Snackbar.make(
-                holder.itemView,
-                "Items selected",
-                Snackbar.LENGTH_INDEFINITE
-            )
+        snackbarDeleteSelected = Snackbar.make(
+            holder.itemView,
+            "Items selected",
+            Snackbar.LENGTH_INDEFINITE
+        )
 
         snackbarDeleteSelected.setActionTextColor(
             Color.parseColor(CustomColorGenerator(context).generateSnackbarActionTextColor())
@@ -1397,7 +1220,6 @@ class CustomAdapter(
             snackbarDeleteSelected.setText((selectedItemsList.count()).toString() + " Items Selected")
         }
         snackbarDeleteSelected.show()
-
     }
 
     override fun getItemCount(): Int {
@@ -1413,7 +1235,6 @@ class CustomAdapter(
     }
 
     private fun setAnimation(viewToAnimate: View, position: Int) {
-
         if (position > lastPosition) {
             val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in_recycler_view)
             viewToAnimate.startAnimation(animation)
