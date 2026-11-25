@@ -289,7 +289,7 @@ class AppSettingsFragment : Fragment() {
         outTimeCardView?.setOnClickListener {
             Vibrate().vibration(requireContext())
             outTimeSwitch?.isChecked = !outTimeSwitch!!.isChecked
-            outTimeData.setOutTimeState(!outTimeSwitch.isChecked)
+            outTimeData.setOutTimeState(!outTimeSwitch!!.isChecked)
             if (outTimeSwitch.isChecked) {
                 outTimeSwitch.thumbIconDrawable =
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_check_16)
