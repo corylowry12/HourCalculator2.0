@@ -41,20 +41,25 @@ class DonationActivity : AppCompatActivity() {
             darkThemeData.loadDarkModeState() == 1 -> {
                 //activity?.setTheme(R.style.Theme_DarkTheme)
             }
+
             darkThemeData.loadDarkModeState() == 0 -> {
                 setTheme(R.style.Theme_MyApplication)
             }
+
             darkThemeData.loadDarkModeState() == 2 -> {
                 setTheme(R.style.Theme_AMOLED)
             }
+
             darkThemeData.loadDarkModeState() == 3 -> {
                 when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         setTheme(R.style.Theme_MyApplication)
                     }
+
                     Configuration.UI_MODE_NIGHT_YES -> {
                         setTheme(R.style.Theme_AMOLED)
                     }
+
                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                         setTheme(R.style.Theme_AMOLED)
                     }
@@ -137,7 +142,7 @@ class DonationActivity : AppCompatActivity() {
             .build()
 
         val candy =
-             findViewById<RadioButton>(R.id.candy)
+            findViewById<RadioButton>(R.id.candy)
         val coffee =
             findViewById<RadioButton>(R.id.coffee)
         val pizza =
@@ -189,78 +194,7 @@ class DonationActivity : AppCompatActivity() {
             selected_item = "one_hundred_dollar_donation"
         }
 
-        billingClient = BillingClient.newBuilder(this)
-            .enablePendingPurchases()
-            .setListener { billingResult, list ->
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && list != null) {
-                    // for (purchase in list) {
-                    // verifySubPurchase(purchase)
-                    //}
-                }
-            }.build()
-
-        establishConnection()
-
         donateButton.setOnClickListener {
-            showProducts()
-        }
-    }
-
-    fun establishConnection() {
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(@NonNull billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    //showProducts()
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                establishConnection()
-            }
-        })
-    }
-
-    fun launchPurchaseFlow(productDetails: ProductDetails) {
-        val productDetailsParamsList =
-            ImmutableList.of(
-                ProductDetailsParams.newBuilder()
-                    .setProductDetails(productDetails)
-                    .build()
-            )
-        val billingFlowParams = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(productDetailsParamsList)
-            .build()
-
-        billingClient.launchBillingFlow(this, billingFlowParams)
-    }
-
-    fun showProducts() {
-        val productList = ImmutableList.of( //Product 1
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId(selected_item)
-                .setProductType(BillingClient.ProductType.INAPP)
-                .build()
-        )
-
-        val params = QueryProductDetailsParams.newBuilder()
-            .setProductList(productList)
-            .build()
-
-        billingClient.queryProductDetailsAsync(
-            params
-        ) { billingResult: BillingResult?, prodDetailsList: List<ProductDetails>? ->
-            // Process the result
-            this.productDetailsList = null
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                runOnUiThread {
-                  //  Toast.makeText(this@DonationActivity, "Show products", Toast.LENGTH_SHORT).show()
-                }
-                productDetailsList = prodDetailsList
-                launchPurchaseFlow(productDetailsList!!.get(0))
-            }, 2000)
         }
     }
 }

@@ -30,7 +30,6 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetailsParams
 import com.cory.hourcalculator.BuildConfig
 import com.cory.hourcalculator.R
 import com.cory.hourcalculator.classes.*
@@ -226,53 +225,6 @@ class AboutAppFragment : Fragment(), PurchasesUpdatedListener {
             Vibrate().vibration(requireContext())
             LinkData(requireContext()).setLink("https://github.com/corylowry12/")
             openCustomTab()
-        }
-    }
-
-    fun startPurchase() {
-        if (billingClient!!.isReady) {
-            initiatePurchase()
-        }
-        else {
-            billingClient = BillingClient.newBuilder(requireContext()).enablePendingPurchases().setListener(this).build()
-            billingClient!!.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(p0: BillingResult) {
-                    if (p0.responseCode == BillingResponseCode.OK) {
-                        initiatePurchase()
-                    }
-                    else {
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onBillingServiceDisconnected() {
-
-                }
-            })
-        }
-    }
-
-    private fun initiatePurchase() {
-        val skuList: MutableList<String> = ArrayList()
-        skuList.add("ten_dollar_donation")
-        val params = SkuDetailsParams.newBuilder()
-        params.setSkusList(skuList).setType(INAPP)
-
-        billingClient!!.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
-            if (billingResult.responseCode == BillingResponseCode.OK) {
-                if (skuDetailsList != null && skuDetailsList.size > 0) {
-                    val flowParams = BillingFlowParams.newBuilder()
-                        .setSkuDetails(skuDetailsList[0])
-                        .build()
-                    billingClient!!.launchBillingFlow(requireActivity(), flowParams)
-                }
-                else {
-                    Toast.makeText(requireContext(), "Purchase item not found", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else {
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

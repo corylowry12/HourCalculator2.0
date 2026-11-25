@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/historyCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="history"
-    android:fitsSystemWindows="true"
-    android:id="@+id/historyCoordinatorLayout"
+    android:fitsSystemWindows="false"
     tools:context=".fragments.HistoryFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:liftOnScroll="true">
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayoutHistory"
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineMedium"
-            app:expandedTitleMarginBottom="24dp"
-            app:titleCollapseMode="scale"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:expandedTitleMarginBottom="24dp"
+            app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineMedium"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/materialToolBarHistory"
+            app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolBarHistory"
@@ -33,60 +34,47 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
+                app:buttonGravity="center_vertical"
                 app:layout_collapseMode="pin"
-                app:title="@string/history"
                 app:menu="@menu/menu_history"
                 app:navigationIcon="@drawable/ic_baseline_close_24"
-                app:buttonGravity="center_vertical"/>
+                app:title="@string/history" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:divider="@null"
-        android:paddingBottom="60dp"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayoutHistory" />
+        android:clipToPadding="false"
+        android:paddingBottom="60dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <TextView
         android:id="@+id/noHoursStoredTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="@string/there_are_currently_no_hours_stored"
         android:textAlignment="center"
-        android:textColor="?attr/textColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity="center"/>
+        android:textColor="?attr/textColor" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonHistory"
+        style="?attr/floatingActionButtonSmallStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:contentDescription="scroll to top"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_gravity="bottom|center"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
+        android:clickable="true"
+        android:contentDescription="scroll to top"
+        android:focusable="true"
+        android:visibility="invisible"
         app:srcCompat="@drawable/ic_arrow_upward_24px"
         tools:ignore="HardcodedText"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_gravity="bottom|center"
-        tools:visibility="visible"
-        style="?attr/floatingActionButtonSmallStyle"/>
+        tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -26,6 +26,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -106,9 +108,22 @@ class SettingsFragment : Fragment() {
             e.printStackTrace()
         }
 
+        val coordinatorLayout = view.findViewById<CoordinatorLayout>(R.id.settingsCoordinatorLayout)
+        val appBarLayout = view.findViewById<com.google.android.material.appbar.AppBarLayout>(R.id.appBarLayout)
+
+        ViewCompat.setOnApplyWindowInsetsListener(coordinatorLayout) { _, insets ->
+            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+
+            // Apply status bar top padding to AppBarLayout so "Settings" title doesn't clip
+            appBarLayout.setPadding(0, statusBars.top, 0, 0)
+
+            // Consume insets so no extra bottom margins are added to the coordinator
+            WindowInsetsCompat.CONSUMED
+        }
+
         updateCustomColor()
 
-            main()
+        main()
     }
 
     private fun main() {
@@ -136,8 +151,8 @@ class SettingsFragment : Fragment() {
             .build()
         appearanceCardView.shapeAppearanceModel = appearanceCardView.shapeAppearanceModel
             .toBuilder()
-            .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 0f)
+            .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 28f)
             .setBottomRightCornerSize(0f)
             .setBottomLeftCornerSize(0f)
             .build()
@@ -226,154 +241,6 @@ class SettingsFragment : Fragment() {
             .build()
 
         supportDevelopmentCardView.setOnClickListener {
-            /*val supportDevelopmentDialog = BottomSheetDialog(requireContext())
-            val supportDevelopmentLayout =
-                layoutInflater.inflate(R.layout.support_development_bottom_sheet, null)
-            supportDevelopmentDialog.setContentView(supportDevelopmentLayout)
-            supportDevelopmentDialog.setCancelable(true)
-
-            if (resources.getBoolean(R.bool.isTablet)) {
-                val bottomSheet =
-                    supportDevelopmentDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                bottomSheetBehavior.skipCollapsed = true
-                bottomSheetBehavior.isHideable = false
-                bottomSheetBehavior.isDraggable = false
-            }
-            val donateButton = supportDevelopmentLayout.findViewById<Button>(R.id.donateButton)
-
-            val candyCardView =
-                supportDevelopmentLayout.findViewById<MaterialCardView>(R.id.candyCardView)
-            val coffeeCardView =
-                supportDevelopmentLayout.findViewById<MaterialCardView>(R.id.coffeeCardView)
-            val pizzaCardView =
-                supportDevelopmentLayout.findViewById<MaterialCardView>(R.id.pizzaCardView)
-            val fiveStarCardView =
-                supportDevelopmentLayout.findViewById<MaterialCardView>(R.id.fiveStarCardView)
-
-            candyCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
-            )
-            coffeeCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(CustomColorGenerator(requireContext()).generateCardColor())
-                )
-            )
-            pizzaCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(
-                        CustomColorGenerator(requireContext()).generateCardColor()
-                    )
-                )
-            )
-            fiveStarCardView.setCardBackgroundColor(
-                ColorStateList.valueOf(
-                    Color.parseColor(
-                        CustomColorGenerator(requireContext()).generateCardColor()
-                    )
-                )
-            )
-            donateButton.setBackgroundColor(
-                Color.parseColor(
-                    CustomColorGenerator(
-                        requireContext()
-                    ).generateCustomColorPrimary()
-                )
-            )
-            candyCardView.shapeAppearanceModel =
-                candyCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 28f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 28f)
-                    .setBottomRightCornerSize(0f)
-                    .setBottomLeftCornerSize(0f)
-                    .build()
-            coffeeCardView.shapeAppearanceModel =
-                coffeeCardView.shapeAppearanceModel
-                    .toBuilder()
-                    .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                    .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                    .setBottomRightCornerSize(0f)
-                    .setBottomLeftCornerSize(0f)
-                    .build()
-            pizzaCardView.shapeAppearanceModel = pizzaCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(0f)
-                .setBottomLeftCornerSize(0f)
-                .build()
-            fiveStarCardView.shapeAppearanceModel = fiveStarCardView.shapeAppearanceModel
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 0f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 0f)
-                .setBottomRightCornerSize(28f)
-                .setBottomLeftCornerSize(28f)
-                .build()
-
-            val candy =
-                supportDevelopmentLayout.findViewById<RadioButton>(R.id.candy)
-            val coffee =
-                supportDevelopmentLayout.findViewById<RadioButton>(R.id.coffee)
-            val pizza =
-                supportDevelopmentLayout.findViewById<RadioButton>(R.id.pizza)
-            val fiveStarMeal =
-                supportDevelopmentLayout.findViewById<RadioButton>(R.id.fiveStar)
-
-            val states = arrayOf(
-                intArrayOf(-android.R.attr.state_checked), // unchecked
-                intArrayOf(android.R.attr.state_checked)  // checked
-            )
-
-            val colors = intArrayOf(
-                Color.parseColor("#000000"),
-                Color.parseColor(CustomColorGenerator(requireContext()).generateCustomColorPrimary())
-            )
-
-            candy.buttonTintList = ColorStateList(states, colors)
-            coffee.buttonTintList = ColorStateList(states, colors)
-            pizza.buttonTintList = ColorStateList(states, colors)
-            fiveStarMeal.buttonTintList = ColorStateList(states, colors)
-
-            candyCardView.setOnClickListener {
-                candy.isChecked = true
-                coffee.isChecked = false
-                pizza.isChecked = false
-                fiveStarMeal.isChecked = false
-            }
-            coffeeCardView.setOnClickListener {
-                candy.isChecked = false
-                coffee.isChecked = true
-                pizza.isChecked = false
-                fiveStarMeal.isChecked = false
-            }
-            pizzaCardView.setOnClickListener {
-                candy.isChecked = false
-                coffee.isChecked = false
-                pizza.isChecked = true
-                fiveStarMeal.isChecked = false
-            }
-            fiveStarCardView.setOnClickListener {
-                    candy.isChecked = false
-                    coffee.isChecked = false
-                    pizza.isChecked = false
-                    fiveStarMeal.isChecked = true
-            }
-
-            donateButton.setOnClickListener {
-                billingClient = BillingClient.newBuilder(requireContext())
-                    .setListener(purchasesUpdatedListener)
-                    .enablePendingPurchases()
-                    .build()
-
-                // Connect to the Google Play Billing service
-                connectToBillingService()
-            }
-
-            supportDevelopmentDialog.show()*/
             val intent = Intent(requireContext(), DonationActivity::class.java)
             startActivity(intent)
         }
@@ -476,15 +343,19 @@ class SettingsFragment : Fragment() {
         val deleteAllLayout = layoutInflater.inflate(R.layout.delete_all_app_data_bottom_sheet, null)
         dialog.setContentView(deleteAllLayout)
 
-        if (resources.getBoolean(R.bool.isTablet)) {
-            val bottomSheet =
-                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        val bottomSheet =
+            dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.let { sheet ->
+            val bottomSheetBehavior = BottomSheetBehavior.from(sheet)
             bottomSheetBehavior.skipCollapsed = true
-            bottomSheetBehavior.isHideable = false
-            bottomSheetBehavior.isDraggable = false
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.isGestureInsetBottomIgnored = true
+            if (resources.getBoolean(R.bool.isTablet)) {
+                bottomSheetBehavior.isHideable = false
+                bottomSheetBehavior.isDraggable = false
+            }
         }
+
         val hoursCardView =
             deleteAllLayout.findViewById<MaterialCardView>(R.id.hoursCardView)
         val timeCardsCardView =
